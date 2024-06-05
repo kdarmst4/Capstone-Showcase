@@ -1,0 +1,53 @@
+div.header-wrapper{
+    width: 100%;
+    height: 56px;
+    background-color: white;
+    display: flex;
+    position: sticky !important;
+    top: 0;
+    border-bottom: 1px solid;
+    border-color: #aaaaaa;
+    font-family: 'Open Sans';
+    z-index: 1000;
+}
+
+div.header-wrapper-left{
+    width:510px;
+    white-space: nowrap;
+}
+div.header-wrapper-right{
+    float: right;
+    width: 100%;
+}
+
+ul.ul-nav{
+    text-align: right;
+    
+}
+
+li{
+    list-style-type: none;
+}
+
+#asu-logo{
+    width: auto;
+    height: 100%;
+    max-height: 100%;
+    aspect-ratio: 100/33;
+    float: left;
+}
+
+div.capstone-wrapper{
+    width: auto;
+    height: 100%;
+}
+
+#cse-capstone{
+    font-size: 2em;
+    line-height: 56px;
+    text-align: center;
+    vertical-align: middle;
+    text-wrap: nowrap;
+    margin-left: 20px;
+    margin: 0;
+}

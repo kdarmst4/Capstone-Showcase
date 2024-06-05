@@ -1,0 +1,13 @@
+div.footer-wrapper{
+    position: relative;
+    width: 100%;
+    height: 100px;
+    background-color: rgb(247, 247, 247);
+    text-align: center;
+}
+
+div.footer-wrapper p{
+    font-family: 'Open Sans';
+    font-style: italic;
+    line-height: 100px;
+}

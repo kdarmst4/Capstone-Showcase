@@ -1,0 +1,119 @@
+body{
+    margin: 0px;
+    background-color: #e9e9e9;
+}
+
+div.survey-wrapper{
+    width: 100%;
+    background-color: #e9e9e9;
+}
+
+div.survey-wrapper-content{
+    width: 47%;
+    height: fit-content;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Open Sans';
+}
+
+.info-wrapper{
+    width: auto;
+    height: fit-content;
+    background-color: white;
+    padding: 4%;
+    border-radius: 5px;
+    margin: 1.25% 0%;
+    border: solid;
+    border-color: #aaaaaa;
+    border-width: 1px;
+}
+
+h1.survey-header-title{
+    margin: 0 0;
+}
+
+p.survey-header-description{
+    margin: 0 0;
+}
+
+p.survey-label{
+    margin: 0 auto;
+    font-size: large;
+}
+
+p.survey-description{
+    margin: 0 auto;
+    font-size: small;
+    color: #777777;
+}
+
+input.survey-input{
+    border: none;
+    border-bottom: 2px solid #e9e9e9;
+    font-size: 15px;
+    padding: 5px;
+    background-color: white;
+    margin-top: 5%;
+    transition: border-color 0.2s ease-in;
+}
+
+input.survey-input:focus{
+    border-bottom: 2px solid #ae3450;
+    transition: border-color 0.5s ease-in;
+}
+
+input.survey-input-long{
+    width: 100%;
+}
+
+input.survey-input-short{
+    width: 50%;
+}
+
+ul{
+    padding-left: 0px;
+}
+
+li{
+    list-style-type: none;
+}
+
+input.survey-input-checkbox{
+    vertical-align: middle;
+}
+
+input:focus{
+    outline-width: 0px;
+}
+
+input{
+    margin: auto;
+}
+
+div.survey-submit{
+    width: fit-content;
+}
+#button-submit{
+    background-color: grey;
+    border: 0;
+    border-radius: 5px;
+    padding: 20% 40%;
+    color: white;
+    font-size: 18px;
+    font-style: bold;
+}
+
+#button-submit:hover{
+    background-color: #aaaaaa;
+    cursor: pointer;
+}
+
+span{
+    margin: auto;
+    color:red;
+}
+
+option{
+    font-family: 'Open Sans';
+}

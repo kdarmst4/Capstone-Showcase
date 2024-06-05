@@ -1,0 +1,111 @@
+div{
+    display: block;
+}
+
+div#upper_block{
+    width:100%;
+    height: 5%;
+}
+div#bg_img_block{
+    height: 32%;
+    width: 100%;
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+div#bg_img_block_seminars{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+div#bg_img_block_img{
+    background-image: url("https://lh3.googleusercontent.com/gtPVWNVsOIfzyzIKYatoo6UKXPpS0Vvk05g_CvEgs3hj4yYmAYC-wkJ43mjCR6fwzsGuuw=w16383");
+    opacity: 30%;
+    background-size: cover;
+    background-position: center center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+}
+
+p#bg_img_block_seminars_text{
+    width: 100%;
+    padding-top: 0%;
+    height: auto;
+    text-align: center;
+    font-family: Oswald;
+    font-style: normal;
+    font-optical-sizing: auto;
+    font-weight: 100 100;
+    font-size: 490%;
+}
+
+div#bg_img_block_seminars_bar{
+    background-color: rgba(255, 198, 39, 1);
+    height: 3.8%;
+    width: 40%;
+    position: absolute;
+    top:70%;
+    left: 30%;
+}
+
+div#info_block{
+    width: 60%;
+    height: auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 2%;
+    position: relative;
+    text-align: justify;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+p.info-text{
+    font-size: larger;
+    line-height: 150%;
+}
+
+.tab{
+    display: inline-block;
+    margin-left: 4em;
+}
+
+div#bottom_block{
+    position: relative;
+    width: 100%;
+    height: 17%;
+    background-color: rgb(247, 247, 247);
+    text-align: center;
+}
+
+div#bottom_block p{
+    line-height: 2;
+}
+
+p#bottom_block_first{
+    padding-top: 2.5%;
+}
+
+p.info-text{
+    font-family: 'Open Sans';
+    font-size: 108%;
+}
+
+h2{
+    font-size:157%;
+}
+
+p#bottom_block_first{
+    font-family: Oswald;
+    font-size: 80%;
+}
+
+p#bottom_block_second{
+    font-family: 'Open Sans';
+    font-size: 80%;
+}
