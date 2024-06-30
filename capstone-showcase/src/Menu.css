@@ -1,0 +1,31 @@
+.menu-container {
+  display: flex;
+  height: 100vh;
+}
+
+.menu {
+  width: 200px;
+  padding: 20px;
+  background-color: black;
+}
+
+.menu h1 {
+  margin-bottom: 20px;
+}
+
+.menu-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-list li {
+  margin-bottom: 10px;
+}
+
+.menu-list a {
+  color: white;
+}
+
+.menu-list a:hover {
+  color: #007bff;
+}
