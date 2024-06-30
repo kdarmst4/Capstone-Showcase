@@ -1,12 +1,26 @@
 h1 {
-    background-color: goldenrod;
-    text-align: center;
+  background-color: goldenrod;
+  text-align: center;
 }
-
+h2,
+h3 {
+  text-align: center;
+}
 .reminder {
-    font-size: 50px;
+  font-size: 50px;
 }
 
-.body {
-    background-color: white;
+body {
+  background-color: white;
+}
+
+.pre-event-landing-page {
+  padding: 20px;
+}
+
+.pre-event-landing-page h1,
+.pre-event-landing-page h2,
+.pre-event-landing-page h3,
+.pre-event-landing-page p {
+  color: black;
 }
