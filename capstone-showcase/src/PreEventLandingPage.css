@@ -1,9 +1,4 @@
-h1 {
-  background-color: goldenrod;
-  text-align: center;
-}
-h2,
-h3 {
+h2 {
   text-align: center;
 }
 .reminder {
@@ -18,9 +13,12 @@ body {
   padding: 20px;
 }
 
-.pre-event-landing-page h1,
 .pre-event-landing-page h2,
-.pre-event-landing-page h3,
 .pre-event-landing-page p {
   color: black;
+}
+
+.pre-event-landing-page img {
+  display: block;
+  margin: auto;
 }
