@@ -1,12 +1,14 @@
 import React from "react";
 import "./PreEventLandingPage.css";
+import asuLogo from "./asuLogo.png"; // Assuming this path is correct
 
 const PreEventLandingPage = () => {
   return (
     <div className="pre-event-landing-page">
-      <h1>Arizona State University</h1>
+      <img src={asuLogo} alt="ASU Logo" />
+      <h2>Arizona State University</h2>
       <h2>Ira A. Fulton Schools of Engineering</h2>
-      <h3>Senior Capstone Project Showcase</h3>
+      <h2>Senior Capstone Project Showcase</h2>
       <p className="reminder">
         INSERT: Location, date, time, map
         <br />
