@@ -6,7 +6,7 @@ h2 {
 }
 
 body {
-  background-color: white;
+  background-color: rgb(140, 29, 64);
 }
 
 .pre-event-landing-page {
@@ -15,7 +15,7 @@ body {
 
 .pre-event-landing-page h2,
 .pre-event-landing-page p {
-  color: black;
+  color: white;
 }
 
 .pre-event-landing-page img {
@@ -29,5 +29,3 @@ body {
     border: 1px solid black;
     border-radius: 5px;
     margin-bottom: 15px;
-    margin-left: 500px;
-}
