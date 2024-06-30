@@ -3,7 +3,7 @@ import "./PreEventLandingPage.css";
 
 const PreEventLandingPage = () => {
   return (
-    <div>
+    <div className="pre-event-landing-page">
       <h1>Arizona State University</h1>
       <h2>Ira A. Fulton Schools of Engineering</h2>
       <h3>Senior Capstone Project Showcase</h3>
