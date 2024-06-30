@@ -4,7 +4,9 @@ import "./PreEventLandingPage.css";
 const PreEventLandingPage = () => {
   return (
     <div>
-      <h1>ASU Capstone Showcase</h1>
+      <h1>Arizona State University</h1>
+      <h2>Ira A. Fulton Schools of Engineering</h2>
+      <h3>Senior Capstone Project Showcase</h3>
       <p className="reminder">
         INSERT: Location, date, time, map
         <br />
