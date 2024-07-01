@@ -1,6 +1,6 @@
 // src/Pages/PreEventLandingPage.tsx
 import React from 'react';
-import "./PreEventLandingPage.css";
+import "../CSS/PreEventLandingPage.css";
 import asuLogo from "../assets/asuLogo.png";
 import { 
   capstoneDescription, 

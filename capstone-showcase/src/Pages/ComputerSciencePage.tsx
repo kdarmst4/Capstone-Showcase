@@ -1,5 +1,5 @@
 import React from 'react';
-import './ComputerSciencePage.css'
+import '../CSS/ComputerSciencePage.css'
 
 const ComputerSciencePage: React.FC = () => {
   return (

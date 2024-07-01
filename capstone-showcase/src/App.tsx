@@ -1,7 +1,7 @@
 // src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import "./App.css";
+import "./CSS/App.css";
 import PreEventLandingPage from "./Pages/PreEventLandingPage";
 import Menu from "./Menu"; 
 import ComputerScience from "./Pages/ComputerSciencePage";
