@@ -1,50 +1,43 @@
-import React from "react";
+// src/PreEventLandingPage.tsx
+import React from 'react';
 import "./PreEventLandingPage.css";
 import asuLogo from "./assets/asuLogo.png";
+import { 
+  capstoneDescription, 
+  iraEngineeringText, 
+  landingPageIntro, 
+  navigationInstructions, 
+  projectTitle, 
+  schoolHeader 
+} from "./TextContent";
 
 const PreEventLandingPage = () => {
   return (
     <div className="pre-event-landing-page">
-      <img src={asuLogo} alt="ASU Logo" />
-      <h2>Arizona State University</h2>
-      <h2>Ira A. Fulton Schools of Engineering</h2>
-      <h2>Senior Capstone Project Showcase</h2>
-      <p className="reminder">
-        INSERT: Location, date, time, map
-        <br />
-        MODIFY: the paragraphs below, copied from the Fall 2023 capstone
-        website.
-      </p>
-      <p>
-        For the last two semesters students majoring in Computer Science,
-        Biomedical Engineering, Industrial Engineering, Electrical Engineering,
-        Computer Systems Engineering, Mechanical Engineering, Engineering
-        Management and Informatics have been working hard on industry and
-        faculty sponsored projects to solve real-world problems. Teams work
-        collaboratively to carry ideas from initial design through prototype
-        fabrication, testing and evaluation to validate their solutions. As
-        Changemakers, our seniors also consider issues related to ethics,
-        economics, safety and professional practice in their design solutions.
-      </p>
-      <p>
-        The capstone projects are designed to go beyond the classroom to bridge
-        the gap between industry and education, and is the final educational
-        element that ties to together all the engineering, science, and
-        humanities learnings as our students transition to the next phase of
-        their lives. This event is an opportunity for our students, faculty,
-        sponsors, alumni, and guests to come together to celebrate the
-        completion of the projects. We invite you to meet our students and talk
-        to them about their projects, their teamwork, and their problem-solving
-        strategies.
-      </p>
-      <p>
-        The projects are organized by major and you can navigate through the
-        site via the sidebar. If the sidebar isn't displayed, you can open it by
-        selecting the hamburger menu button (3 horizontal stacked lines) in the
-        upper left corner of this page. There is also a search tool located in
-        the upper right hand corner of the page that can help you locate a
-        specific project or team.
-      </p>
+      <header>
+        <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+        <h1>{schoolHeader}</h1>
+        <h2>{iraEngineeringText}</h2>
+      </header>
+      <main>
+        <h3>{projectTitle}</h3>
+        <section className="event-details">
+          <p className="reminder">
+            INSERT: Location, date, time, map
+            <br />
+            MODIFY: the paragraphs below, copied from the Fall 2023 capstone
+            website.
+          </p>
+          <article>
+            <p>{landingPageIntro}</p>
+            <p>{capstoneDescription}</p>
+            <p>{navigationInstructions}</p>
+          </article>
+        </section>
+      </main>
+      <footer>
+        &copy; 2024 ASU Capstone Projects. All rights reserved.
+      </footer>
     </div>
   );
 };
