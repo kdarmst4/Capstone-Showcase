@@ -1,24 +1,51 @@
-h2 {
-  text-align: center;
-}
-.reminder {
-  font-size: 50px;
-}
+/* src/PreEventLandingPage.css */
 
 body {
-  background-color: white;
+  background-color: rgb(140, 29, 64);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .pre-event-landing-page {
   padding: 20px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.pre-event-landing-page h2,
-.pre-event-landing-page p {
+.asu-logo {
+  margin-bottom: 20px;
+}
+
+header h1, header h2 {
+  color: white;
+  margin: 10px 0;
+}
+
+main h3 {
+  color: white;
+  margin: 20px 0;
+  font-size: 24px;
+}
+
+.event-details .reminder {
+  font-size: 24px;
+  color: white;
+  margin: 20px 0;
+}
+
+.event-details article p {
   color: black;
+  background-color: goldenrod;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
-.pre-event-landing-page img {
-  display: block;
-  margin: auto;
+footer {
+  margin-top: 20px;
+  color: white;
+  font-size: 14px;
 }
