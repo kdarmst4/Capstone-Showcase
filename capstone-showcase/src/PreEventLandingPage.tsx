@@ -1,6 +1,6 @@
 import React from "react";
 import "./PreEventLandingPage.css";
-import asuLogo from "./asuLogo.png"; // Assuming this path is correct
+import asuLogo from "./assets/asuLogo.png";
 
 const PreEventLandingPage = () => {
   return (

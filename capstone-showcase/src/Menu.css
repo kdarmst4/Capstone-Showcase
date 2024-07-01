@@ -4,7 +4,7 @@
 }
 
 .menu {
-  width: 200px;
+  width: 15%;
   padding: 20px;
   background-color: black;
 }
@@ -28,4 +28,6 @@
 
 .menu-list a:hover {
   color: #007bff;
+  border-bottom: 2px solid yellow;
+  padding-bottom: 2px;
 }

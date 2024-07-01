@@ -13,11 +13,6 @@ body {
   padding: 20px;
 }
 
-.pre-event-landing-page h2,
-.pre-event-landing-page p {
-  color: white;
-}
-
 .pre-event-landing-page img {
   display: block;
   margin: auto;
@@ -25,7 +20,8 @@ body {
 
 .pre-event-landing-page p {
     background-color: goldenrod;
-    padding: 15px;
     border: 1px solid black;
-    border-radius: 5px;
+    padding: 15px;
+    border-radius: 15px;
     margin-bottom: 15px;
+}
