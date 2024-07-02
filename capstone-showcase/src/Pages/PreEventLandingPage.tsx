@@ -1,7 +1,7 @@
-// src/PreEventLandingPage.tsx
+// src/Pages/PreEventLandingPage.tsx
 import React from 'react';
-import "./PreEventLandingPage.css";
-import asuLogo from "./asuLogo.png";
+import "../CSS/PreEventLandingPage.css";
+import asuLogo from "../assets/asuLogo.png";
 import { 
   capstoneDescription, 
   iraEngineeringText, 
@@ -9,7 +9,7 @@ import {
   navigationInstructions, 
   projectTitle, 
   schoolHeader 
-} from "./TextContent";
+} from "../TextContent";
 
 const PreEventLandingPage: React.FC = () => {
   return (
