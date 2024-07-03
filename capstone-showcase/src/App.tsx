@@ -7,6 +7,7 @@ import Menu from "./Menu";
 import ComputerScience from "./Pages/ComputerSciencePage";
 import ComputerSystemsEngineering from './Pages/ComputerSystemsEngineeringPage';
 import IndustrialEngineering from './Pages/IndustrialEngineeringPage';
+import Survey from './Pages/Survey';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           <Route path="/computer-science" element={<ComputerScience />} />
           <Route path="/computer-systems-engineering" element={<ComputerSystemsEngineering />} />
           <Route path="/industrial-engineering" element={<IndustrialEngineering />} />
+          <Route path="/survey" element={<Survey />} />
         </Routes>
       </div>
     </Router>
