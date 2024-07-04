@@ -16,10 +16,15 @@ const Menu: React.FC = () => {
             <Link to="/computer-science">Computer Science</Link>
           </li>
           <li>
-            <Link to="/computer-systems-engineering">Computer Systems Engineering</Link>
+            <Link to="/computer-systems-engineering">
+              Computer Systems Engineering
+            </Link>
           </li>
           <li>
             <Link to="/industrial-engineering">Industrial Engineering</Link>
+          </li>
+          <li>
+            <Link to="/interdisciplinary">Interdisciplinary</Link>
           </li>
         </ul>
       </div>
