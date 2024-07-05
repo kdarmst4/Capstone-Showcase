@@ -1,26 +1,22 @@
 /* src/components/Menu.css */
 .menu-container {
   width: 100%;
-  background-color: #333;
-  color: white;
+  background: linear-gradient(to top, black, #333);
   padding: 10px 20px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   position: fixed; /* Fix the menu at the top */
   top: 0;
   left: 0;
-  z-index: 1000; /* Ensure it stays on top */
 }
 
 .menu {
   display: flex;
-  align-items: center;
 }
 
 .menu h1 {
   margin: 0;
-  font-size: 18px; /* Smaller font size */
+  margin-right: 10px;
+  font-size: 18px;
 }
 
 .menu-list {
@@ -36,12 +32,15 @@
 
 .menu-list a {
   color: white;
-  text-decoration: none;
-  font-size: 16px;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
 }
 
 .menu-list a:hover {
   color: rgb(0, 140, 255);
   text-decoration: underline;
   text-decoration-color: yellow;
+  background: black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

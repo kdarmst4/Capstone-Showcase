@@ -1,14 +1,12 @@
 // src/Pages/PreEventLandingPage.tsx
-import React from 'react';
+import React from "react";
 import "../CSS/PreEventLandingPage.css";
 import asuLogo from "../assets/asuLogo.png";
-import { 
-  capstoneDescription, 
-  iraEngineeringText, 
-  landingPageIntro, 
-  navigationInstructions, 
-  projectTitle, 
-  schoolHeader 
+import {
+  capstoneDescription,
+  landingPageIntro,
+  navigationInstructions,
+  projectTitle,
 } from "../TextContent";
 
 const PreEventLandingPage: React.FC = () => {
@@ -16,8 +14,6 @@ const PreEventLandingPage: React.FC = () => {
     <div className="pre-event-landing-page">
       <header>
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-        <h1>{schoolHeader}</h1>
-        <h2>{iraEngineeringText}</h2>
       </header>
       <main>
         <h3>{projectTitle}</h3>
@@ -35,9 +31,7 @@ const PreEventLandingPage: React.FC = () => {
           </article>
         </section>
       </main>
-      <footer>
-        &copy; 2024 ASU Capstone Projects. All rights reserved.
-      </footer>
+      <footer>&copy; 2024 ASU Capstone Projects. All rights reserved.</footer>
     </div>
   );
 };
