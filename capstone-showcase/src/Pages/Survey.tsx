@@ -14,6 +14,7 @@ const Survey: React.FC = () => {
     power: "",
     nda: "",
     youtubeLink: "",
+    selectedCourses: [] as string[],
   });
 
   const handleChange = (
@@ -21,8 +22,26 @@ const Survey: React.FC = () => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type } = e.target;
+
+    if (type === "checkbox") {
+      const isChecked = formData.selectedCourses.includes(value);
+      if (isChecked) {
+        setFormData({
+          ...formData,
+          selectedCourses: formData.selectedCourses.filter(
+            (course) => course !== value
+          ),
+        });
+      } else {
+        setFormData({
+          ...formData,
+          selectedCourses: [...formData.selectedCourses, value],
+        });
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   return (
@@ -93,16 +112,39 @@ const Survey: React.FC = () => {
         />
       </div>
       <div className="form-box">
-        <label>Course Number:</label>
-        <select
-          name="courseNumber"
-          value={formData.courseNumber}
-          onChange={handleChange}
-        >
-          <option value="">Select a course</option>
-          <option value="Course 1">Course 1</option>
-          <option value="Course 2">Course 2</option>
-        </select>
+        <label>Course Number(s):</label>
+        <div className="checkbox-list">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              name="selectedCourses"
+              value="CSE 486"
+              checked={formData.selectedCourses.includes("CSE 486")}
+              onChange={handleChange}
+            />
+            CSE 486
+          </label>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              name="selectedCourses"
+              value="CSE 424"
+              checked={formData.selectedCourses.includes("CSE 424")}
+              onChange={handleChange}
+            />
+            CSE 424
+          </label>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              name="selectedCourses"
+              value="IEE 486"
+              checked={formData.selectedCourses.includes("IEE 486")}
+              onChange={handleChange}
+            />
+            IEE 486
+          </label>
+        </div>
       </div>
       <div className="form-box">
         <label>

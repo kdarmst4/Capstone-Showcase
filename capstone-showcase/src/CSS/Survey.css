@@ -60,3 +60,13 @@ input[type="radio"] {
   background-color: white;
   color: black;
 }
+
+.checkbox-list {
+  display: flex;
+  gap: 15px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
