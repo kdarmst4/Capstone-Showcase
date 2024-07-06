@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./CSS/App.css";
 import PreEventLandingPage from "./Pages/PreEventLandingPage";
 import Menu from "./Menu";
-import ComputerScience from "./Pages/ComputerSciencePage";
-import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineeringPage";
-import IndustrialEngineering from "./Pages/IndustrialEngineeringPage";
+import ComputerScience from "./Pages/ComputerScience";
+import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
+import IndustrialEngineering from "./Pages/IndustrialEngineering";
 import Survey from "./Pages/Survey";
-import Interdisciplinary from "./Pages/InterdisciplinaryPage";
+import Interdisciplinary from "./Pages/Interdisciplinary";
 
 const App: React.FC = () => {
   return (

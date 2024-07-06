@@ -1,5 +1,5 @@
 import React from "react";
-import "../CSS/InterdisciplinaryPage.css";
+import "../CSS/Interdisciplinary.css";
 
 const InterdisciplinaryPage = () => {
   return (
