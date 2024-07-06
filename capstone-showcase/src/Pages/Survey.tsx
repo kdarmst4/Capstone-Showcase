@@ -178,6 +178,11 @@ const Survey: React.FC = () => {
           onChange={handleChange}
         />
       </div>
+      <div className="form-box">
+        <button type="submit" className="submit">
+          Submit
+        </button>
+      </div>
     </div>
   );
 };
