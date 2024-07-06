@@ -1,6 +1,6 @@
 .form-container {
-  background-color: white;
-  color: black;
+  background-color: black;
+  color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -13,7 +13,7 @@
 .form-header {
   margin-bottom: 20px;
   padding: 20px 20px 10px 20px;
-  background-color: #e0e0e0;
+  background-color: green;
   border-radius: 10px;
 }
 
@@ -46,4 +46,17 @@ textarea {
 input[type="radio"] {
   width: auto;
   margin-right: 5px;
+}
+
+.submit {
+  background-color: #1E90FF;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.submit:hover {
+  background-color: white;
+  color: black;
 }
