@@ -1,19 +1,18 @@
 .form-container {
-  background-color: black;
-  color: white;
+  background-color: #f0f8ff;
+  color: black;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 600px;
-  margin-top: 44px;
-  position: relative;
-  left: 50%;
+  margin-top: 35px;
+  text-align: left;
 }
 
 .form-header {
   margin-bottom: 20px;
   padding: 20px 20px 10px 20px;
-  background-color: rgb(50, 197, 109);
+  background-color: lightblue;
   border-radius: 10px;
 }
 
