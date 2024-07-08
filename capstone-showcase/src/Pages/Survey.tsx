@@ -1,3 +1,4 @@
+// src/components/Survey.tsx
 import React, { useState } from "react";
 import "../CSS/Survey.css";
 
@@ -150,65 +151,77 @@ const Survey: React.FC = () => {
         <label>
           Will your group be bringing a demo in addition to your poster?
         </label>
-        <div>
-          <input
-            type="radio"
-            name="demo"
-            value="yes"
-            checked={formData.demo === "yes"}
-            onChange={handleChange}
-          />{" "}
-          Yes
-          <input
-            type="radio"
-            name="demo"
-            value="no"
-            checked={formData.demo === "no"}
-            onChange={handleChange}
-          />{" "}
-          No
+        <div className="radio-group">
+          <label>
+            <input
+              type="radio"
+              name="demo"
+              value="yes"
+              checked={formData.demo === "yes"}
+              onChange={handleChange}
+            />{" "}
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="demo"
+              value="no"
+              checked={formData.demo === "no"}
+              onChange={handleChange}
+            />{" "}
+            No
+          </label>
         </div>
       </div>
       <div className="form-box">
         <label>If so, will your group need power for your demo?</label>
-        <div>
-          <input
-            type="radio"
-            name="power"
-            value="yes"
-            checked={formData.power === "yes"}
-            onChange={handleChange}
-          />{" "}
-          Yes
-          <input
-            type="radio"
-            name="power"
-            value="no"
-            checked={formData.power === "no"}
-            onChange={handleChange}
-          />{" "}
-          No
+        <div className="radio-group">
+          <label>
+            <input
+              type="radio"
+              name="power"
+              value="yes"
+              checked={formData.power === "yes"}
+              onChange={handleChange}
+            />{" "}
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="power"
+              value="no"
+              checked={formData.power === "no"}
+              onChange={handleChange}
+            />{" "}
+            No
+          </label>
         </div>
       </div>
       <div className="form-box">
         <label>Did your group sign an NDA or IP?</label>
-        <div>
-          <input
-            type="radio"
-            name="nda"
-            value="yes"
-            checked={formData.nda === "yes"}
-            onChange={handleChange}
-          />{" "}
-          Yes
-          <input
-            type="radio"
-            name="nda"
-            value="no"
-            checked={formData.nda === "no"}
-            onChange={handleChange}
-          />{" "}
-          No
+        <div className="radio-group">
+          <label>
+            <input
+              type="radio"
+              name="nda"
+              value="yes"
+              checked={formData.nda === "yes"}
+              onChange={handleChange}
+            />{" "}
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="nda"
+              value="no"
+              checked={formData.nda === "no"}
+              onChange={handleChange}
+            />{" "}
+            No
+          </label>
         </div>
       </div>
       <div className="form-box">
