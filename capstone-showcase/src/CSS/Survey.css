@@ -5,7 +5,7 @@
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 600px;
-  margin-top: 35px;
+  margin-top: 32px;
   text-align: left;
 }
 
@@ -44,7 +44,15 @@ textarea {
 
 input[type="radio"] {
   width: auto;
-  margin-right: 5px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+}
+
+.radio-group label {
+  margin-right: 15px;
 }
 
 .submit {
