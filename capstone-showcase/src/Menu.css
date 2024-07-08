@@ -4,7 +4,7 @@
   background: linear-gradient(to top, black, #333);
   padding: 10px 20px;
   display: flex;
-  position: fixed; /* Fix the menu at the top */
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -12,12 +12,6 @@
 
 .menu {
   display: flex;
-}
-
-.menu h1 {
-  margin: 0;
-  margin-right: 10px;
-  font-size: 18px;
 }
 
 .menu-list {
@@ -36,6 +30,8 @@
   padding: 10px 15px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .menu-list a:hover {
@@ -43,5 +39,9 @@
   text-decoration: underline;
   text-decoration-color: yellow;
   background: black;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px 2px white;
+}
+
+.home-icon {
+  margin-right: 5px;
 }
