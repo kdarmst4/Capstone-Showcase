@@ -9,6 +9,7 @@ import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
 import Survey from "./Pages/Survey";
 import Interdisciplinary from "./Pages/Interdisciplinary";
+import Admin from "./Pages/Admin";
 
 const App: React.FC = () => {
   return (
@@ -32,6 +33,7 @@ const App: React.FC = () => {
           />
           <Route path="/interdisciplinary" element={<Interdisciplinary />} />
           <Route path="/survey" element={<Survey />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
     </Router>
