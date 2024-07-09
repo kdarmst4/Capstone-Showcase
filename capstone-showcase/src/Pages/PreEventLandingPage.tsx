@@ -1,4 +1,3 @@
-// src/Pages/PreEventLandingPage.tsx
 import React from "react";
 import "../CSS/PreEventLandingPage.css";
 import asuLogo from "../assets/asuLogo.png";
