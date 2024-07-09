@@ -9,7 +9,7 @@ const Menu: React.FC = () => {
       <div className="menu">
         <ul className="menu-list">
           <li>
-            <Link to="/pre-event-landing-page">
+            <Link to="/">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"

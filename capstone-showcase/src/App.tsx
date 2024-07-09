@@ -17,10 +17,6 @@ const App: React.FC = () => {
         <Menu />
         <Routes>
           <Route path="/" element={<PreEventLandingPage />} />
-          <Route
-            path="/pre-event-landing-page"
-            element={<PreEventLandingPage />}
-          />
           <Route path="/computer-science" element={<ComputerScience />} />
           <Route
             path="/computer-systems-engineering"
