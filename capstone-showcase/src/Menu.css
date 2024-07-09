@@ -4,6 +4,7 @@
   background: linear-gradient(to top, black, #333);
   padding: 10px 20px;
   display: flex;
+  justify-content: center; /* Center the content horizontally */
   position: fixed;
   top: 0;
   left: 0;
@@ -12,6 +13,7 @@
 
 .menu {
   display: flex;
+  justify-content: center; /* Center the menu items */
 }
 
 .menu-list {
