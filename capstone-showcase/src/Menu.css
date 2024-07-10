@@ -1,10 +1,9 @@
-/* src/components/Menu.css */
 .menu-container {
   width: 100%;
   background: linear-gradient(to top, black, #333);
-  padding: 10px 20px;
+  padding: 10px;
   display: flex;
-  justify-content: center; /* Center the content horizontally */
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -13,7 +12,7 @@
 
 .menu {
   display: flex;
-  justify-content: center; /* Center the menu items */
+  justify-content: center;
 }
 
 .menu-list {
