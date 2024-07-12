@@ -33,6 +33,7 @@
   border-radius: 15px;
   display: flex;
   align-items: center;
+  text-decoration: none;
 }
 
 .menu-list a:hover {
@@ -41,4 +42,36 @@
   text-decoration-color: yellow;
   background: black;
   box-shadow: 0 0 5px 2px white;
+}
+
+.submenu-container {
+  position: relative;
+}
+
+.submenu-title {
+  cursor: pointer;
+  color: white;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.submenu-title:hover {
+  background: black;
+  box-shadow: 0 0 5px 2px white;
+}
+
+.arrow {
+  margin-left: 5px;
+}
+
+.submenu-list {
+  list-style-type: none;
+  position: absolute;
+  background: linear-gradient(to top, black, #333);
+  border-radius: 15px;
+  padding: 10px 0;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
 }
