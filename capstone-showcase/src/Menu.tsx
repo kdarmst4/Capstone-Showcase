@@ -23,7 +23,7 @@ const Menu: React.FC = () => {
   const handleMouseLeave = () => {
     const timeout = window.setTimeout(() => {
       setIsPastSemestersOpen(false);
-    }, 200);
+    }, 100);
     setLeaveTimeout(timeout);
   };
 
@@ -49,7 +49,7 @@ const Menu: React.FC = () => {
             <Link to="/">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="darkgrey"
+                fill="black"
                 width="24px"
                 height="24px"
                 className="home-icon"

@@ -1,7 +1,6 @@
-/* src/components/Menu.css */
 .menu-container {
   width: 100%;
-  background: #d3d3d3; /* Light grey background */
+  background: #d3d3d3;
   padding: 10px 5px;
   display: flex;
   justify-content: center;
@@ -28,9 +27,9 @@
 }
 
 .menu-list a {
-  color: black; /* Changed to black */
+  color: black;
   padding: 10px 15px;
-  background: #f0f0f0; /* Slightly darker grey for contrast */
+  background: #f0f0f0;
   border-radius: 15px;
   display: flex;
   align-items: center;
@@ -41,8 +40,12 @@
   color: rgb(0, 140, 255);
   text-decoration: underline;
   text-decoration-color: yellow;
-  background: black; /* Adjusted for better visibility */
-  box-shadow: 0 0 5px 2px black; /* Changed to black */
+  background: black;
+  box-shadow: 0 0 5px 2px black;
+}
+
+.menu-list a:hover .home-icon {
+  fill: white;
 }
 
 .submenu-container {
@@ -51,17 +54,18 @@
 
 .submenu-title {
   cursor: pointer;
-  color: black; /* Changed to black */
+  color: black;
   padding: 10px 15px;
-  background: #f0f0f0; /* Slightly darker grey for contrast */
+  background: #f0f0f0;
   border-radius: 15px;
   display: flex;
   align-items: center;
 }
 
 .submenu-title:hover {
-  background: black; /* Adjusted for better visibility */
-  box-shadow: 0 0 5px 2px black; /* Changed to black */
+  color: rgb(0, 140, 255);
+  background: black;
+  box-shadow: 0 0 5px 2px black;
 }
 
 .arrow {
@@ -71,7 +75,7 @@
 .submenu-list {
   list-style-type: none;
   position: absolute;
-  background: #d3d3d3; /* Light grey background */
+  background: #d3d3d3;
   border-radius: 15px;
   padding: 10px 0;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
@@ -83,19 +87,19 @@
 }
 
 .submenu-list a {
-  color: black; /* Changed to black */
+  color: black;
   padding: 10px 15px;
-  background: #f0f0f0; /* Slightly darker grey for contrast */
+  background: #f0f0f0;
   border-radius: 15px;
   display: flex;
   align-items: center;
   text-decoration: none;
-  margin: 5px 10px; /* Added margin for spacing */
-  transition: background 0.3s, color 0.3s, box-shadow 0.3s; /* Smooth transition */
+  margin: 5px 10px;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .submenu-list a:hover {
-  color: white; /* Changed text color on hover */
-  background: rgb(0, 140, 255); /* Adjusted background color on hover */
-  box-shadow: 0 0 5px 2px rgba(0, 140, 255, 0.5); /* Adjusted box-shadow color */
+  color: white;
+  background: rgb(0, 140, 255);
+  box-shadow: 0 0 5px 2px rgba(0, 140, 255, 0.5);
 }
