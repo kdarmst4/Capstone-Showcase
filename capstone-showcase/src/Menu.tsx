@@ -49,7 +49,7 @@ const Menu: React.FC = () => {
             <Link to="/">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="white"
+                fill="darkgrey"
                 width="24px"
                 height="24px"
                 className="home-icon"
