@@ -5,7 +5,7 @@
 
 .menu-container {
   width: 100%;
-  background: #d3d3d3; 
+  background: #d3d3d3;
   padding: 10px 5px;
   display: flex;
   justify-content: left;
@@ -13,7 +13,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  overflow-x: auto; 
+  overflow-x: auto;
 }
 
 .menu {
@@ -33,15 +33,19 @@
 }
 
 .top-menu .home-link {
-  margin-top: 5px;
-  margin-left: 10px;
-  margin-right: 15px;
-  margin-bottom: 10px;
+  margin: 5px 15px 10px 10px;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background 0.3s, fill 0.3s;
 }
 
-.top-menu .menu-list .home-link:hover {
-  background: none;
-  box-shadow: 0px;
+.top-menu .home-link svg {
+  margin-top: 10px;
+  fill: black;
+}
+
+.top-menu .home-link:hover svg {
+  fill: white;
 }
 
 .top-menu .menu-list {
@@ -75,19 +79,14 @@
 .menu-list a {
   color: black;
   font-size: 16px;
-  font-family: "Palatino";
   font-weight: bold;
   padding: 10px 15px;
   background: none;
   display: flex;
   align-items: left;
   text-decoration: none;
-}
-
-.menu-item.active a {
-  color: white;
-  background: black;
-  box-shadow: 0 0 5px 2px black;
+  border-radius: 5px;
+  transition: background 0.3s, fill 0.3s, color 0.3s;
 }
 
 .menu-list a:hover {
@@ -104,14 +103,13 @@
 .majors-title {
   cursor: pointer;
   color: black;
-  padding: 5px 10px; 
+  padding: 5px 10px;
   background: #f0f0f0;
   border-radius: 15px;
   display: flex;
   align-items: center;
   margin-left: 30px;
   margin-right: 15px;
-  flex-shrink: 0; 
 }
 
 .majors-title:hover {
@@ -138,9 +136,7 @@
   margin-bottom: 14px;
   cursor: pointer;
   color: black;
-  color: black;
   padding: 10px 15px;
-  background: #f0f0f0;
   background: #f0f0f0;
   border-radius: 15px;
   display: flex;
@@ -159,7 +155,7 @@
 .submenu-list {
   list-style-type: none;
   width: 150px;
-  position: absolute;
+  position: fixed;
   background: #d3d3d3;
   border-radius: 15px;
   margin: 5px;
@@ -168,7 +164,6 @@
 }
 
 .submenu-list a {
-  color: black;
   color: black;
   padding: 10px 15px;
   background: #f0f0f0;
@@ -207,7 +202,7 @@
   justify-content: flex-start;
   align-items: center;
   padding-top: 20px;
-  overflow-y: auto; 
+  overflow-y: auto;
   padding-right: 15px;
 }
 
@@ -220,12 +215,12 @@
 
 .side-menu .menu-list {
   flex-direction: column;
-  width: calc(100% - 15px); 
+  width: calc(100% - 15px);
   padding: 0;
 }
 
 .side-menu .menu-list li {
-  margin: 10px 0; 
+  margin: 10px 0;
   text-align: left;
   position: relative;
 }
@@ -259,11 +254,6 @@
 .side-menu .content {
   margin-left: 250px;
   transition: margin-left 0.3s ease;
-}
-
-.top-menu .home-link svg {
-  margin-top: 10px;
-  fill: gray; 
 }
 
 ::-webkit-scrollbar {
