@@ -20,7 +20,7 @@ const PreEventLandingPage: React.FC = () => {
           <h3>{projectTitle}</h3>
         </div>
       </header>
-      <main>
+      <main className="content-area">
         <section className="event-details">
           <article>
             <p>{landingPageIntro}</p>

@@ -1,8 +1,7 @@
 body {
-  background-color: rgb(140, 29, 64);
+  background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
   margin: 0;
-  padding-top: 20px;
   transition: margin-left 0.3s ease;
 }
 
@@ -21,7 +20,7 @@ body {
 }
 
 .header-background {
-  background-image: url('../assets/csBackground.jpeg'); 
+  background-image: url('../assets/background.webp'); 
   background-size: cover;
   background-position: center;
   padding: 40px 20px;
@@ -47,6 +46,10 @@ body {
   margin-top: 20px;
 }
 
+.content-area {
+  background: #d3d3d3; 
+}
+
 .event-details {
   text-align: center; 
 }
@@ -65,8 +68,6 @@ body {
 .event-details article p {
   color: black;
   font-weight: bold;
-  background-color: goldenrod;
-  color: black;
   padding: 15px;
   border: 1px solid black;
   border-radius: 5px;
