@@ -46,11 +46,11 @@ body {
   font-family: "Fjalla One";
   font-weight: bold;
   font-size: 36px;
-  color: black;
+  color: rgb(57, 46, 80);
   background: none;
   position: absolute;
-  top: 140px; 
-  left: 20px;
+  top: 120px; 
+  left: 40px;
   text-align: left;
 }
 

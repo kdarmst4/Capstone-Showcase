@@ -1,87 +1,94 @@
 body {
-    background-color: rgb(72, 69, 70);
-    font-family: Arial, sans-serif;
-    margin: 0;
-    transition: margin-left 0.3s ease;
-  }
-  
-  .computer-science {
-    margin: 0;
-    text-align: center;
-    transition: margin-left 0.3s ease;
-  }
-  
-  .computer-science.compressed {
-    margin-left: 270px;
-  }
-  
-  .computer-science .header-background {
-    background-image: url('../assets/csBackground.jpeg'); 
-    background-size: cover;
-    background-position: center 45%;
-    padding: 40px 20px;
-    color: white; 
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
-    align-items: center;
-    position: relative;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-  }
-  
-  .header-background h1, .header-background h2, .header-background h3 {
-    margin: 10px 0;
-  }
-  
-  .computer-science .title-container {
-    font-family: "Fjalla One";
-    font-weight: bold;
-    font-size: 36px;
-    color: black;
-    background: none;
-    position: absolute;
-    margin-top: 0px;
-    top: 0px; 
-    left: 400px;
-    transform: translateX(-50%);
-  }
-  
-  .content-area {
-    background: #d3d3d3; 
-    width: 100%;
-    overflow-y: auto; 
-    padding-top: 20px;
-    border-top: 5px solid black; 
-  }
-  
-  .event-details {
-    text-align: center; 
-  }
-  
-  .event-details .reminder {
-    font-size: 18px;
-    margin: 20px 0;
-  }
-  
-  .event-details article {
-    display: inline-block;
-    text-align: left; 
-    width: 80%; 
-  }
-  
-  .event-details article p {
-    color: black;
-    font-weight: bold;
-    padding: 15px;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
-  
-  footer {
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  
+  background-color: rgb(72, 69, 70);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  transition: margin-left 0.3s ease;
+}
+
+.computer-science {
+  margin: 0;
+  text-align: center;
+  transition: margin-left 0.3s ease;
+}
+
+.computer-science.compressed {
+  margin-left: 270px;
+}
+
+.computer-science .header-background {
+  background-image: url('../assets/csBackground.jpeg'); 
+  background-size: cover;
+  background-position: center 45%;
+  padding: 40px 20px;
+  color: white; 
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.header-background h1, .header-background h2, .header-background h3 {
+  margin: 10px 0;
+}
+
+.computer-science .title-container {
+  font-family: "Fjalla One";
+  font-weight: bold;
+  font-size: 48px;
+  color: rgb(19, 185, 169);
+  background: none;
+  position: absolute;
+  top: 0%;
+  margin-top: 0px;
+  margin-left: 220px;
+  transform: translateX(-50%);
+}
+
+.computer-science .asu-logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 200px; /* Adjust the size as needed */
+  height: auto;
+}
+
+.content-area {
+  background: #d3d3d3; 
+  width: 100%;
+  overflow-y: auto; 
+  padding-top: 20px;
+  border-top: 5px solid black; 
+}
+
+.event-details {
+  text-align: center; 
+}
+
+.event-details .reminder {
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+.event-details article {
+  display: inline-block;
+  text-align: left; 
+  width: 80%; 
+}
+
+.event-details article p {
+  color: black;
+  font-weight: bold;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+footer {
+  margin-top: 20px;
+  font-size: 14px;
+}
