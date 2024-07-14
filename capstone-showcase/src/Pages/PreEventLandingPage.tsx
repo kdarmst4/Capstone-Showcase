@@ -1,5 +1,5 @@
-// src/Pages/PreEventLandingPage.tsx
 import React from "react";
+import { useMenuContext } from "../MenuContext";
 import "../CSS/PreEventLandingPage.css";
 import asuLogo from "../assets/asuLogo.png";
 import {
@@ -10,20 +10,18 @@ import {
 } from "../TextContent";
 
 const PreEventLandingPage: React.FC = () => {
+  const { isSideMenu } = useMenuContext();
+
   return (
-    <div className="pre-event-landing-page">
-      <header>
+    <div className={`pre-event-landing-page ${isSideMenu ? 'compressed' : ''}`}>
+      <header className="header-background">
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+        <div className="title-container">
+          <h3>{projectTitle}</h3>
+        </div>
       </header>
-      <main>
-        <h3>{projectTitle}</h3>
+      <main className="content-area">
         <section className="event-details">
-          <p className="reminder">
-            INSERT: Location, date, time, map
-            <br />
-            MODIFY: the paragraphs below, copied from the Fall 2023 capstone
-            website.
-          </p>
           <article>
             <p>{landingPageIntro}</p>
             <p>{capstoneDescription}</p>

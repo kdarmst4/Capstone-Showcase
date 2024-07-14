@@ -1,0 +1,10 @@
+.computer-systems-engineering {
+    margin: 0 auto;
+    text-align: center;
+    transition: margin-left 0.3s ease; 
+  }
+  
+  .computer-systems-engineering.compressed {
+    margin-left: 250px; 
+  }
+  
