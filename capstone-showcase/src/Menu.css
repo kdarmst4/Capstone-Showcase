@@ -5,7 +5,7 @@
 
 .menu-container {
   width: 100%;
-  background: #d3d3d3; 
+  background: #d3d3d3;
   padding: 10px 5px;
   display: flex;
   justify-content: left;
@@ -13,7 +13,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  overflow-x: auto; 
+  overflow-x: auto;
 }
 
 .menu {
@@ -36,7 +36,6 @@
 .arrow.revArrow {
   transform: rotate(180deg);
 }
-
 
 .top-menu .home-link {
   margin-top: 5px;
@@ -110,13 +109,13 @@
 .majors-title {
   cursor: pointer;
   color: black;
-  padding: 5px 10px; 
+  padding: 5px 10px;
   border-radius: 15px;
   display: flex;
   align-items: center;
   margin-left: 30px;
   margin-right: 15px;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .majors-title:hover {
@@ -160,7 +159,7 @@
 .submenu-list {
   list-style-type: none;
   width: 150px;
-  position:fixed;
+  position: fixed;
   background: #d3d3d3;
   border-radius: 15px;
   margin: 5px;
@@ -207,7 +206,7 @@
   justify-content: flex-start;
   align-items: center;
   padding-top: 20px;
-  overflow-y: auto; 
+  overflow-y: auto;
   padding-right: 15px;
 }
 
@@ -220,12 +219,12 @@
 
 .side-menu .menu-list {
   flex-direction: column;
-  width: calc(100% - 15px); 
+  width: calc(100% - 15px);
   padding: 0;
 }
 
 .side-menu .menu-list li {
-  margin: 10px 0; 
+  margin: 10px 0;
   text-align: left;
   position: relative;
 }
@@ -263,7 +262,12 @@
 
 .top-menu .home-link svg {
   margin-top: 10px;
-  fill: gray; 
+  fill: black;
+}
+
+.top-menu .home-link:hover svg,
+.menu-item.active .home-link svg {
+  fill: white;
 }
 
 ::-webkit-scrollbar {
