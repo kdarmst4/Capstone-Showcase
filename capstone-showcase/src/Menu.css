@@ -1,3 +1,5 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
 .page-container {
   display: flex;
   flex-direction: column;
@@ -8,7 +10,7 @@
   background: #d3d3d3;
   padding: 10px 5px;
   display: flex;
-  justify-content: left;
+  align-items: center; 
   position: fixed;
   top: 0;
   left: 0;
@@ -21,9 +23,16 @@
   justify-content: left;
 }
 
-.top-menu {
+.top-menu .asu-logo {
+  width: 150px; 
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.side-menu .asu-logo {
+  width: 200px; 
+  height: auto;
+  margin-right: 10px;
 }
 
 .arrow {
@@ -132,7 +141,6 @@
   margin-bottom: 14px;
   cursor: pointer;
   color: black;
-  color: black;
   padding: 10px 15px;
   background: #FAFAFA;
   border-radius: 15px;
@@ -160,7 +168,6 @@
 
 .submenu-list a {
   color: black;
-  color: black;
   padding: 10px 15px;
   background: #f0f0f0;
   border-radius: 15px;
@@ -171,21 +178,32 @@
 }
 
 .toggle-button {
-  width: 150px;
-  padding: 10px 20px;
-  background-color: black;
-  border-radius: 5px;
-  margin-top: 5px;
-  margin-right: 10px;
-  margin-left: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: black;
   color: white;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .toggle-button:hover {
   background-color: rgb(88, 40, 40);
+}
+
+.top-menu .toggle-button {
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.side-menu .toggle-button {
+  margin-top: 20px;
+  width: 20px;
 }
 
 .side-menu .menu-container {
@@ -201,7 +219,8 @@
 }
 
 .side-menu .menu {
-  margin-top: 20px;
+  margin-left: 0px;
+  margin-top: 0px;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -243,7 +262,7 @@
 }
 
 .content {
-  margin-top: 60px;
+  margin-top: 80px;
 }
 
 .side-menu .content {
