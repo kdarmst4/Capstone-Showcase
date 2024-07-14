@@ -20,17 +20,10 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<PreEventLandingPage />} />
             <Route path="/computer-science" element={<ComputerScience />} />
-            <Route
-              path="/computer-systems-engineering"
-              element={<ComputerSystemsEngineering />}
-            />
-            <Route
-              path="/industrial-engineering"
-              element={<IndustrialEngineering />}
-            />
+            <Route path="/computer-systems-engineering" element={<ComputerSystemsEngineering />} />
+            <Route path="/industrial-engineering" element={<IndustrialEngineering />} />
             <Route path="/interdisciplinary" element={<Interdisciplinary />} />
             <Route path="/survey" element={<Survey />} />
-            <Route path="/admin" element={<Admin />} />
           </Routes>
         </div>
       </Router>
