@@ -38,15 +38,10 @@
 }
 
 .top-menu .home-link {
-  margin-top: 5px;
+  margin-top: 10px;
   margin-left: 10px;
-  margin-right: 15px;
+  margin-right: 10px;
   margin-bottom: 10px;
-}
-
-.top-menu .menu-list .home-link:hover {
-  background: black;
-  box-shadow: 0px;
 }
 
 .top-menu .menu-list {
@@ -90,15 +85,14 @@
 }
 
 .menu-item.active a {
-  color: white;
-  background: black;
-  box-shadow: 0 0 5px 2px black;
+  background-color: darkgray;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 .menu-list a:hover {
-  color: white;
-  background: black;
-  box-shadow: 0 0 5px 2px black;
+  color: black;
+  background: #BFBFBF;
 }
 
 .majors-container {
@@ -107,10 +101,11 @@
 }
 
 .majors-title {
+  font-weight: bold;
   cursor: pointer;
   color: black;
-  padding: 5px 10px;
-  border-radius: 15px;
+  padding: 5px 10px; 
+  border-radius: 5px;
   display: flex;
   align-items: center;
   margin-left: 30px;
@@ -119,8 +114,7 @@
 }
 
 .majors-title:hover {
-  background: darkgray;
-  box-shadow: 0 0 5px 2px black;
+  background: #BFBFBF;
 }
 
 .majors-list {
@@ -140,16 +134,14 @@
   color: black;
   color: black;
   padding: 10px 15px;
-  background: #f0f0f0;
-  background: #f0f0f0;
+  background: #FAFAFA;
   border-radius: 15px;
   display: flex;
   align-items: left;
 }
 
 .submenu-title:hover {
-  background: darkgray;
-  box-shadow: 0 0 5px 2px black;
+  background:  #E8E8E8;
 }
 
 .arrow {
@@ -160,11 +152,10 @@
   list-style-type: none;
   width: 150px;
   position: fixed;
-  background: #d3d3d3;
+  background: #FAFAFA;
   border-radius: 15px;
   margin: 5px;
   padding: 10px 0;
-  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
 }
 
 .submenu-list a {
@@ -177,7 +168,6 @@
   display: flex;
   text-decoration: none;
   margin: 5px 0px;
-  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .toggle-button {
@@ -195,7 +185,7 @@
 }
 
 .toggle-button:hover {
-  background-color: red;
+  background-color: rgb(88, 40, 40);
 }
 
 .side-menu .menu-container {
@@ -218,6 +208,7 @@
 }
 
 .side-menu .menu-list {
+  list-style-type: none;
   flex-direction: column;
   width: calc(100% - 15px);
   padding: 0;
@@ -232,13 +223,13 @@
 .side-menu .menu-list a {
   width: 100%;
   text-align: left;
-  padding: 10px 0;
+  padding: 10px 10px;
+  justify-content: left;
 }
 
 .side-menu .menu-list a:hover {
-  color: white;
-  background: black;
-  box-shadow: 0 0 5px 2px black;
+  color: black;
+  background: #BFBFBF;
 }
 
 .top-menu .menu-container {
@@ -258,16 +249,6 @@
 .side-menu .content {
   margin-left: 250px;
   transition: margin-left 0.3s ease;
-}
-
-.top-menu .home-link svg {
-  margin-top: 10px;
-  fill: black;
-}
-
-.top-menu .home-link:hover svg,
-.menu-item.active .home-link svg {
-  fill: white;
 }
 
 ::-webkit-scrollbar {
