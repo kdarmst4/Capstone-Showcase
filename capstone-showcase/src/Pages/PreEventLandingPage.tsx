@@ -16,11 +16,11 @@ const PreEventLandingPage: React.FC = () => {
     <div className={`pre-event-landing-page ${isSideMenu ? 'compressed' : ''}`}>
       <header className="header-background">
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-        <div className="title-container">
+      </header>
+      <main className="content-area">
+      <div className="title-container">
           <h3>{projectTitle}</h3>
         </div>
-      </header>
-      <main>
         <section className="event-details">
           <article>
             <p>{landingPageIntro}</p>

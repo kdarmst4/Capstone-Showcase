@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useMenuContext } from "./MenuContext";
-import arrowIcon from "./assets/arrowIcon.png"
+import arrowIcon from "./assets/newArrow.png"
 import "./Menu.css";
 
 const Menu: React.FC = () => {
@@ -90,7 +90,7 @@ const Menu: React.FC = () => {
                   </>
                 )}
                 <div className="majors-title" onClick={toggleMajors}>
-                <img src={arrowIcon} alt="Arrow Icon" className={`arrow ${isMajorsOpen ? "rotate" : ""}`} />
+                <img src={arrowIcon} alt="Arrow Icon" className={`arrow ${isMajorsOpen ? "revArrow" : ""}`} />
                 </div>
               </>
             )}

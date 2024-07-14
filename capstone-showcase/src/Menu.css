@@ -30,7 +30,13 @@
   margin-left: 5px;
   width: 24px;
   height: 24px;
+  transition: transform 0.3s ease;
 }
+
+.arrow.revArrow {
+  transform: rotate(180deg);
+}
+
 
 .top-menu .home-link {
   margin-top: 5px;
@@ -40,7 +46,7 @@
 }
 
 .top-menu .menu-list .home-link:hover {
-  background: none;
+  background: black;
   box-shadow: 0px;
 }
 
@@ -63,7 +69,7 @@
   right: -10px;
   height: 80%;
   width: 2px;
-  background: rgb(177, 34, 79);
+  background: gray;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -105,7 +111,6 @@
   cursor: pointer;
   color: black;
   padding: 5px 10px; 
-  background: #f0f0f0;
   border-radius: 15px;
   display: flex;
   align-items: center;
@@ -127,10 +132,6 @@
 
 .arrow {
   margin-left: 5px;
-}
-
-.submenu-container {
-  position: relative;
 }
 
 .submenu-title {
@@ -183,20 +184,19 @@
 .toggle-button {
   width: 150px;
   padding: 10px 20px;
-  background-color: rgb(140, 29, 64);
-  border: none;
+  background-color: black;
   border-radius: 5px;
   margin-top: 5px;
   margin-right: 10px;
   margin-left: 10px;
-  color: goldenrod;
+  color: white;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
 }
 
 .toggle-button:hover {
-  background-color: rgb(177, 34, 79);
+  background-color: red;
 }
 
 .side-menu .menu-container {

@@ -9,7 +9,6 @@ import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
 import Survey from "./Pages/Survey";
 import Interdisciplinary from "./Pages/Interdisciplinary";
-import Admin from "./Admin/Admin";
 
 const App: React.FC = () => {
   return (
@@ -20,8 +19,14 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<PreEventLandingPage />} />
             <Route path="/computer-science" element={<ComputerScience />} />
-            <Route path="/computer-systems-engineering" element={<ComputerSystemsEngineering />} />
-            <Route path="/industrial-engineering" element={<IndustrialEngineering />} />
+            <Route
+              path="/computer-systems-engineering"
+              element={<ComputerSystemsEngineering />}
+            />
+            <Route
+              path="/industrial-engineering"
+              element={<IndustrialEngineering />}
+            />
             <Route path="/interdisciplinary" element={<Interdisciplinary />} />
             <Route path="/survey" element={<Survey />} />
           </Routes>

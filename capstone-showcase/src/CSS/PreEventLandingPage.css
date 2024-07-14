@@ -1,8 +1,7 @@
 body {
-  background-color: rgb(140, 29, 64);
+  background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
   margin: 0;
-  padding-top: 20px;
   transition: margin-left 0.3s ease;
 }
 
@@ -13,7 +12,7 @@ body {
 }
 
 .pre-event-landing-page.compressed {
-  margin-left: 250px;
+  margin-left: 270px;
 }
 
 .asu-logo {
@@ -21,17 +20,19 @@ body {
 }
 
 .header-background {
-  background-image: url('../assets/csBackground.jpeg'); 
+  background-image: url('../assets/background.webp'); 
   background-size: cover;
-  background-position: center;
+  background-position: center 5%;
   padding: 40px 20px;
-  border-radius: 10px;
   color: white; 
   min-height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-bottom: 7px solid black; 
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 .header-background h1, .header-background h2, .header-background h3 {
@@ -39,12 +40,15 @@ body {
 }
 
 .title-container {
-  background-color: goldenrod;
   color: rgb(140, 29, 64);
   padding: 10px;
   border-radius: 5px;
   display: inline-block;
   margin-top: 20px;
+}
+
+.content-area {
+  background: #d3d3d3; 
 }
 
 .event-details {
@@ -65,8 +69,6 @@ body {
 .event-details article p {
   color: black;
   font-weight: bold;
-  background-color: goldenrod;
-  color: black;
   padding: 15px;
   border: 1px solid black;
   border-radius: 5px;
