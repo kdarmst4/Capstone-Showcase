@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import PreEventLandingPage from "./Pages/PreEventLandingPage";
+import { MenuProvider } from "./MenuContext";
 import Menu from "./Menu";
+import PreEventLandingPage from "./Pages/PreEventLandingPage";
 import ComputerScience from "./Pages/ComputerScience";
 import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
@@ -11,25 +12,21 @@ import Interdisciplinary from "./Pages/Interdisciplinary";
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <div>
+    <MenuProvider>
+      <Router>
         <Menu />
-        <Routes>
-          <Route path="/" element={<PreEventLandingPage />} />
-          <Route path="/computer-science" element={<ComputerScience />} />
-          <Route
-            path="/computer-systems-engineering"
-            element={<ComputerSystemsEngineering />}
-          />
-          <Route
-            path="/industrial-engineering"
-            element={<IndustrialEngineering />}
-          />
-          <Route path="/interdisciplinary" element={<Interdisciplinary />} />
-          <Route path="/survey" element={<Survey />} />
-        </Routes>
-      </div>
-    </Router>
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<PreEventLandingPage />} />
+            <Route path="/computer-science" element={<ComputerScience />} />
+            <Route path="/computer-systems-engineering" element={<ComputerSystemsEngineering />} />
+            <Route path="/industrial-engineering" element={<IndustrialEngineering />} />
+            <Route path="/interdisciplinary" element={<Interdisciplinary />} />
+            <Route path="/survey" element={<Survey />} />
+          </Routes>
+        </div>
+      </Router>
+    </MenuProvider>
   );
 };
 
