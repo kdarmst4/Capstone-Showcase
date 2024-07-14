@@ -29,7 +29,7 @@ const Menu: React.FC = () => {
   const handleMouseLeave = () => {
     const timeout = window.setTimeout(() => {
       setIsPastSemestersOpen(false);
-    }, 200);
+    }, 100);
     setLeaveTimeout(timeout);
   };
 

@@ -9,6 +9,7 @@ import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
 import Survey from "./Pages/Survey";
 import Interdisciplinary from "./Pages/Interdisciplinary";
+import Admin from "./Admin/Admin";
 
 const App: React.FC = () => {
   return (
