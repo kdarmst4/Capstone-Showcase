@@ -1,0 +1,12 @@
+/* src/CSS/ComputerScience.css */
+
+.computer-science {
+    margin: 0 auto;
+    text-align: center;
+    transition: margin-left 0.3s ease; /* Smooth transition for margin-left */
+  }
+  
+  .computer-science.compressed {
+    margin-left: 250px; /* Adjust based on the width of the side menu */
+  }
+  

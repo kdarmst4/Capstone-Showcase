@@ -1,0 +1,10 @@
+.interdisciplinary {
+    margin: 0 auto;
+    text-align: center;
+    transition: margin-left 0.3s ease; 
+  }
+  
+  .interdisciplinary.compressed {
+    margin-left: 250px; 
+  }
+  

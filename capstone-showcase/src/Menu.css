@@ -1,51 +1,132 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .menu-container {
   width: 100%;
-  background: #d3d3d3;
+  background: #d3d3d3; 
   padding: 10px 5px;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+  overflow-x: auto; 
 }
 
 .menu {
   display: flex;
-  justify-content: center;
+  justify-content: left;
 }
 
-.menu-list {
+.top-menu {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.arrow {
+  margin-left: 5px;
+  width: 24px;
+  height: 24px;
+}
+
+.top-menu .home-link {
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+}
+
+.top-menu .menu-list .home-link:hover {
+  background: none;
+  box-shadow: 0px;
+}
+
+.top-menu .menu-list {
   list-style-type: none;
   display: flex;
   margin: 0;
   padding: 0;
+  align-items: center;
 }
 
-.menu-list li {
+.top-menu .menu-list li {
   margin: 0 10px;
+  position: relative;
+}
+
+.top-menu .menu-list li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  height: 80%;
+  width: 2px;
+  background: rgb(177, 34, 79);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.side-menu .menu-list {
+  align-items: left;
 }
 
 .menu-list a {
   color: black;
+  font-size: 16px;
+  font-family: "Palatino";
+  font-weight: bold;
   padding: 10px 15px;
-  background: #f0f0f0;
-  border-radius: 15px;
+  background: none;
   display: flex;
-  align-items: center;
+  align-items: left;
   text-decoration: none;
 }
 
-.menu-list a:hover {
-  color: rgb(0, 140, 255);
-  text-decoration: underline;
-  text-decoration-color: yellow;
+.menu-item.active a {
+  color: white;
   background: black;
   box-shadow: 0 0 5px 2px black;
 }
 
-.menu-list a:hover .home-icon {
-  fill: white;
+.menu-list a:hover {
+  color: white;
+  background: black;
+  box-shadow: 0 0 5px 2px black;
+}
+
+.majors-container {
+  display: flex;
+  align-items: center;
+}
+
+.majors-title {
+  cursor: pointer;
+  color: black;
+  padding: 5px 10px; 
+  background: #f0f0f0;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+  margin-right: 15px;
+  flex-shrink: 0; 
+}
+
+.majors-title:hover {
+  background: darkgray;
+  box-shadow: 0 0 5px 2px black;
+}
+
+.majors-list {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+
+.arrow {
+  margin-left: 5px;
 }
 
 .submenu-container {
@@ -53,18 +134,21 @@
 }
 
 .submenu-title {
+  margin-top: 10px;
+  margin-bottom: 14px;
   cursor: pointer;
+  color: black;
   color: black;
   padding: 10px 15px;
   background: #f0f0f0;
+  background: #f0f0f0;
   border-radius: 15px;
   display: flex;
-  align-items: center;
+  align-items: left;
 }
 
 .submenu-title:hover {
-  color: rgb(0, 140, 255);
-  background: black;
+  background: darkgray;
   box-shadow: 0 0 5px 2px black;
 }
 
@@ -74,32 +158,124 @@
 
 .submenu-list {
   list-style-type: none;
+  width: 150px;
   position: absolute;
   background: #d3d3d3;
   border-radius: 15px;
+  margin: 5px;
   padding: 10px 0;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
 }
 
-.submenu-list li {
-  margin: 0;
-  padding: 0;
-}
-
 .submenu-list a {
+  color: black;
   color: black;
   padding: 10px 15px;
   background: #f0f0f0;
   border-radius: 15px;
-  display: flex;
   align-items: center;
+  display: flex;
   text-decoration: none;
-  margin: 5px 10px;
+  margin: 5px 0px;
   transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
-.submenu-list a:hover {
+.toggle-button {
+  width: 150px;
+  padding: 10px 20px;
+  background-color: rgb(140, 29, 64);
+  border: none;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-right: 10px;
+  margin-left: 10px;
+  color: goldenrod;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background-color: rgb(177, 34, 79);
+}
+
+.side-menu .menu-container {
+  width: 250px;
+  height: 100%;
+  position: fixed;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 20px;
+  overflow-y: auto; 
+  padding-right: 15px;
+}
+
+.side-menu .menu {
+  margin-top: 20px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.side-menu .menu-list {
+  flex-direction: column;
+  width: calc(100% - 15px); 
+  padding: 0;
+}
+
+.side-menu .menu-list li {
+  margin: 10px 0; 
+  text-align: left;
+  position: relative;
+}
+
+.side-menu .menu-list a {
+  width: 100%;
+  text-align: left;
+  padding: 10px 0;
+}
+
+.side-menu .menu-list a:hover {
   color: white;
-  background: rgb(0, 140, 255);
-  box-shadow: 0 0 5px 2px rgba(0, 140, 255, 0.5);
+  background: black;
+  box-shadow: 0 0 5px 2px black;
+}
+
+.top-menu .menu-container {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.top-menu .submenu-container {
+  margin-top: 13px;
+}
+
+.content {
+  margin-top: 60px;
+}
+
+.side-menu .content {
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+
+.top-menu .home-link svg {
+  margin-top: 10px;
+  fill: gray; 
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #d3d3d3;
 }
