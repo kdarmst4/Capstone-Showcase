@@ -230,17 +230,6 @@
   position: relative;
 }
 
-.side-menu .menu-list li:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  height: 2px;
-  width: 90%;
-  background: rgb(177, 34, 79);
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 .side-menu .menu-list a {
   width: 100%;
   text-align: left;
