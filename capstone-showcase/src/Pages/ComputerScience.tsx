@@ -1,18 +1,27 @@
 import React from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/ComputerScience.css";
+import { capstoneDescription } from "../TextContent";
 
 const ComputerSciencePage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
 
   return (
     <div className={`computer-science ${isSideMenu ? 'compressed' : ''}`}>
-      <header>
-        <h1>Computer Science</h1>
+      <header className="header-background">
+        <div className="title-container">
+          <h3>Computer Science</h3>
+        </div>
       </header>
-      <main>
-        {/* Your content here */}
+      <main className="content-area">
+        <section className="event-details">
+          <article>
+            <p>{capstoneDescription}</p>
+            {/* Add more content specific to Computer Science */}
+          </article>
+        </section>
       </main>
+      <footer>&copy; 2024 ASU Capstone Projects. All rights reserved.</footer>
     </div>
   );
 };

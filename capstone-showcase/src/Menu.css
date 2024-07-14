@@ -5,7 +5,7 @@
 
 .menu-container {
   width: 100%;
-  background: #d3d3d3; 
+  background: #d3d3d3;
   padding: 10px 5px;
   display: flex;
   justify-content: left;
@@ -13,7 +13,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  overflow-x: auto; 
+  overflow-x: auto;
 }
 
 .menu {
@@ -36,7 +36,6 @@
 .arrow.revArrow {
   transform: rotate(180deg);
 }
-
 
 .top-menu .home-link {
   margin-top: 10px;
@@ -64,7 +63,7 @@
   right: -10px;
   height: 80%;
   width: 2px;
-  background: rgb(177, 34, 79);
+  background: gray;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -102,6 +101,7 @@
 }
 
 .majors-title {
+  font-weight: bold;
   cursor: pointer;
   color: black;
   padding: 5px 10px; 
@@ -110,7 +110,7 @@
   align-items: center;
   margin-left: 30px;
   margin-right: 15px;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .majors-title:hover {
@@ -173,20 +173,19 @@
 .toggle-button {
   width: 150px;
   padding: 10px 20px;
-  background-color: rgb(140, 29, 64);
-  border: none;
+  background-color: black;
   border-radius: 5px;
   margin-top: 5px;
   margin-right: 10px;
   margin-left: 10px;
-  color: goldenrod;
+  color: white;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
 }
 
 .toggle-button:hover {
-  background-color: rgb(177, 34, 79);
+  background-color: rgb(88, 40, 40);
 }
 
 .side-menu .menu-container {
@@ -197,7 +196,7 @@
   justify-content: flex-start;
   align-items: center;
   padding-top: 20px;
-  overflow-y: auto; 
+  overflow-y: auto;
   padding-right: 15px;
 }
 
@@ -211,12 +210,13 @@
 .side-menu .menu-list {
   list-style-type: none;
   flex-direction: column;
-  width: calc(100% - 15px); 
+  width: calc(100% - 15px);
   padding: 0;
 }
 
 .side-menu .menu-list li {
-  margin: 10px 0; 
+  margin: 10px 0;
+  text-align: left;
   position: relative;
 }
 
