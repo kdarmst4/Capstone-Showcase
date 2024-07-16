@@ -64,6 +64,9 @@ const Menu: React.FC = () => {
             </li>
             {!isSideMenu && (
               <>
+              <li className={`menu-item ${pathname === "/about" ? "active" : ""}`}>
+                      <Link to="/about">Meet Our <br></br> Team</Link>
+                    </li>
                 <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
                   <Link to="/computer-science">Computer Science<br></br>Teams</Link>
                 </li>
