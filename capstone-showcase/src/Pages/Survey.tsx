@@ -28,7 +28,8 @@ const Survey: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    axios.post('/api/survey', formData)
+    console.log('Submitting form data:', formData); // Log form data before submission
+    axios.post('http://localhost:3000/api/survey', formData)
       .then(response => {
         console.log('Survey data submitted successfully:', response.data);
         setFormData({
