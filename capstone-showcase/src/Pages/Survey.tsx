@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import "../CSS/Survey.css";
 
 const Survey: React.FC = () => {
@@ -27,7 +28,27 @@ const Survey: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    console.log('Submitting form data:', formData); // Log form data before submission
+    axios.post('http://localhost:3000/api/survey', formData)
+      .then(response => {
+        console.log('Survey data submitted successfully:', response.data);
+        setFormData({
+          email: "",
+          name: "",
+          projectTitle: "",
+          projectDescription: "",
+          sponsor: "",
+          teamMembers: "",
+          courseNumber: "",
+          demo: "",
+          power: "",
+          nda: "",
+          youtubeLink: "",
+        });
+      })
+      .catch(error => {
+        console.error('Error submitting survey data:', error);
+      });
   };
 
   return (
