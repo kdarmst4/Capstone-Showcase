@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useMenuContext } from "./MenuContext";
 import arrowIcon from "./assets/newArrow.png";
+import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
 
 const Menu: React.FC = () => {
@@ -50,8 +51,9 @@ const Menu: React.FC = () => {
   return (
     <div className={`page-container ${isSideMenu ? 'side-menu' : 'top-menu'}`}>
       <div className="menu-container">
+      <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         <button className="toggle-button" onClick={toggleMenu}>
-          {isSideMenu ? 'Switch to Top Menu' : 'Switch to Side Menu'}
+          <i className={`fas ${isSideMenu ? 'fa-arrow-up' : 'fa-arrow-left'}`}></i>
         </button>
         <div className="menu">
           <ul className="menu-list">
@@ -67,11 +69,12 @@ const Menu: React.FC = () => {
               <li className={`menu-item ${pathname === "/about" ? "active" : ""}`}>
                       <Link to="/about">Meet Our <br></br> Team</Link>
                     </li>
+
+              <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
+                  <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
+                </li>
                 <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
                   <Link to="/computer-science">Computer Science<br />Teams</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
                     <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
@@ -101,11 +104,11 @@ const Menu: React.FC = () => {
             )}
             {isSideMenu && (
               <>
+               <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
+                  <Link to="/computer-systems-engineering">Computer Systems Engineering<br />Teams</Link>
+                </li>
                 <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
                   <Link to="/computer-science">Computer Science<br />Teams</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems Engineering<br />Teams</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
                   <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
