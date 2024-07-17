@@ -1,13 +1,20 @@
 import React from "react";
+import { useMenuContext } from "../MenuContext";
 import "../CSS/Interdisciplinary.css";
 
-const InterdisciplinaryPage = () => {
+const Interdisciplinary: React.FC = () => {
+  const { isSideMenu } = useMenuContext();
+
   return (
-    <div>
-      <h1>Interdisciplinary</h1>
-      <p>Content for Interdisciplinary page...</p>
+    <div className={`interdisciplinary ${isSideMenu ? 'compressed' : ''}`}>
+      <header>
+        <h1>Interdisciplinary</h1>
+      </header>
+      <main>
+        {/* Your content here */}
+      </main>
     </div>
   );
 };
 
-export default InterdisciplinaryPage;
+export default Interdisciplinary;
