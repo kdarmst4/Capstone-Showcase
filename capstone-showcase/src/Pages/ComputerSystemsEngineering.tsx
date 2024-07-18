@@ -12,7 +12,7 @@ const ComputerSystemsEngineering: React.FC = () => {
       <header className="header-background">
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         <div className="title-container">
-          <h3>Computer Systems Engineering</h3>
+          <h3>Computer<br/>&emsp;&emsp;Systems<br/>&emsp;&emsp;&emsp;&emsp;Engineering</h3>
         </div>
       </header>
       <main className="content-area">
