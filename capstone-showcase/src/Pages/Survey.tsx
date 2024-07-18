@@ -1,8 +1,37 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "../CSS/Survey.css";
 
+interface FormData {
+  email: string;
+  name: string;
+  projectTitle: string;
+  projectDescription: string;
+  sponsor: string;
+  teamMembers: string;
+  courseNumber: string;
+  demo: string;
+  power: string;
+  nda: string;
+  youtubeLink: string;
+}
+
+interface FormErrors {
+  email: string;
+  name: string;
+  projectTitle: string;
+  projectDescription: string;
+  sponsor: string;
+  teamMembers: string;
+  courseNumber: string;
+  demo: string;
+  power: string;
+  nda: string;
+  youtubeLink: string;
+}
+
 const Survey: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const initialFormData: FormData = {
     email: "",
     name: "",
     projectTitle: "",
@@ -14,7 +43,24 @@ const Survey: React.FC = () => {
     power: "",
     nda: "",
     youtubeLink: "",
-  });
+  };
+
+  const initialFormErrors: FormErrors = {
+    email: "",
+    name: "",
+    projectTitle: "",
+    projectDescription: "",
+    sponsor: "",
+    teamMembers: "",
+    courseNumber: "",
+    demo: "",
+    power: "",
+    nda: "",
+    youtubeLink: "",
+  };
+
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [errors, setErrors] = useState<FormErrors>(initialFormErrors);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -23,11 +69,105 @@ const Survey: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "demo" && value === "no") {
+      setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
+    }
+
+    setErrors({ ...errors, [name]: "" });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+
+    const formErrors = validateFormData(formData);
+
+    setErrors(formErrors);
+
+    if (hasErrors(formErrors)) {
+      scrollToFirstError();
+      return;
+    }
+
+    const submissionData = prepareSubmissionData(formData);
+
+    axios
+      .post("http://localhost:3000/api/survey", submissionData)
+      .then(() => {
+        handleSuccessfulSubmission();
+      })
+      .catch((error) => {
+        console.error("Error submitting survey data:", error);
+      });
+  };
+
+  const validateFormData = (formData: FormData) => {
+    const {
+      email,
+      name,
+      projectTitle,
+      projectDescription,
+      sponsor,
+      teamMembers,
+      courseNumber,
+      demo,
+      nda,
+      youtubeLink,
+    } = formData;
+
+    const errors: FormErrors = {
+      email: !email ? "Please enter your ASU email." : "",
+      name: !name ? "Please enter your name." : "",
+      projectTitle: !projectTitle ? "Please select a project title." : "",
+      projectDescription: !projectDescription
+        ? "Please enter a project description."
+        : "",
+      sponsor: !sponsor ? "Please enter the name of your sponsor/mentor." : "",
+      teamMembers: !teamMembers
+        ? "Please enter the number of team members."
+        : "",
+      courseNumber: !courseNumber ? "Please select a course number." : "",
+      demo: !demo
+        ? "Please specify if your group will be bringing a demo."
+        : "",
+      power: "",
+      nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
+      youtubeLink: !youtubeLink ? "Please enter a YouTube link." : "",
+    };
+
+    if (parseInt(teamMembers, 10) <= 0) {
+      errors.teamMembers = "The number of team members must be at least 1.";
+    }
+
+    if (demo === "yes" && !formData.power) {
+      errors.power =
+        "Please specify if your group will need power for your demo.";
+    }
+
+    return errors;
+  };
+
+  const hasErrors = (errors: FormErrors) => {
+    return Object.values(errors).some((error) => error !== "");
+  };
+
+  const scrollToFirstError = () => {
+    const firstErrorElement = document.querySelector(".error-message");
+    if (firstErrorElement) {
+      firstErrorElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const prepareSubmissionData = (formData: FormData) => {
+    const submissionData = { ...formData };
+    if (formData.demo === "no") {
+      delete submissionData.power;
+    }
+    return submissionData;
+  };
+
+  const handleSuccessfulSubmission = () => {
+    setFormData(initialFormData);
   };
 
   return (
@@ -51,6 +191,7 @@ const Survey: React.FC = () => {
             value={formData.email}
             onChange={handleChange}
           />
+          {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
         <div className="form-box">
           <label htmlFor="name">Your Name:</label>
@@ -61,6 +202,7 @@ const Survey: React.FC = () => {
             value={formData.name}
             onChange={handleChange}
           />
+          {errors.name && <p className="error-message">{errors.name}</p>}
         </div>
         <div className="form-box">
           <label htmlFor="projectTitle">Project Title:</label>
@@ -74,6 +216,9 @@ const Survey: React.FC = () => {
             <option value="Project 1">Project 1</option>
             <option value="Project 2">Project 2</option>
           </select>
+          {errors.projectTitle && (
+            <p className="error-message">{errors.projectTitle}</p>
+          )}
         </div>
         <div className="form-box">
           <label htmlFor="projectDescription">Project Description:</label>
@@ -83,6 +228,9 @@ const Survey: React.FC = () => {
             value={formData.projectDescription}
             onChange={handleChange}
           />
+          {errors.projectDescription && (
+            <p className="error-message">{errors.projectDescription}</p>
+          )}
         </div>
         <div className="form-box">
           <label htmlFor="sponsor">Sponsor/Mentor:</label>
@@ -93,6 +241,7 @@ const Survey: React.FC = () => {
             value={formData.sponsor}
             onChange={handleChange}
           />
+          {errors.sponsor && <p className="error-message">{errors.sponsor}</p>}
         </div>
         <div className="form-box">
           <label htmlFor="teamMembers">Number of Team Members:</label>
@@ -103,6 +252,9 @@ const Survey: React.FC = () => {
             value={formData.teamMembers}
             onChange={handleChange}
           />
+          {errors.teamMembers && (
+            <p className="error-message">{errors.teamMembers}</p>
+          )}
         </div>
         <div className="form-box">
           <label htmlFor="courseNumber">Course Number:</label>
@@ -119,8 +271,12 @@ const Survey: React.FC = () => {
             <option value="Diverse majors">Diverse majors</option>
           </select>
           <small>
-            * Note: Select diverse majors if your team members are in different majors
+            * Note: Select diverse majors if your team members are in different
+            majors
           </small>
+          {errors.courseNumber && (
+            <p className="error-message">{errors.courseNumber}</p>
+          )}
         </div>
         <div className="form-box">
           <label>
@@ -148,32 +304,36 @@ const Survey: React.FC = () => {
               No
             </label>
           </div>
+          {errors.demo && <p className="error-message">{errors.demo}</p>}
         </div>
-        <div className="form-box">
-          <label>If so, will your group need power for your demo?</label>
-          <div className="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="power"
-                value="yes"
-                checked={formData.power === "yes"}
-                onChange={handleChange}
-              />{" "}
-              Yes
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="power"
-                value="no"
-                checked={formData.power === "no"}
-                onChange={handleChange}
-              />{" "}
-              No
-            </label>
+        {formData.demo === "yes" && (
+          <div className="form-box">
+            <label>If so, will your group need power for your demo?</label>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="power"
+                  value="yes"
+                  checked={formData.power === "yes"}
+                  onChange={handleChange}
+                />{" "}
+                Yes
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="power"
+                  value="no"
+                  checked={formData.power === "no"}
+                  onChange={handleChange}
+                />{" "}
+                No
+              </label>
+            </div>
+            {errors.power && <p className="error-message">{errors.power}</p>}
           </div>
-        </div>
+        )}
         <div className="form-box">
           <label>Did your group sign an NDA or IP?</label>
           <div className="radio-group">
@@ -198,19 +358,23 @@ const Survey: React.FC = () => {
               No
             </label>
           </div>
+          {errors.nda && <p className="error-message">{errors.nda}</p>}
         </div>
         <div className="form-box">
-          <label htmlFor="youtubeLink">YouTube Video Link:</label>
+          <label htmlFor="youtubeLink">YouTube Link:</label>
           <input
-            type="url"
+            type="text"
             name="youtubeLink"
             id="youtubeLink"
             value={formData.youtubeLink}
             onChange={handleChange}
           />
+          {errors.youtubeLink && (
+            <p className="error-message">{errors.youtubeLink}</p>
+          )}
         </div>
         <div className="form-box">
-          <button type="submit" className="submit">
+          <button type="submit" className="submit-button">
             Submit
           </button>
         </div>

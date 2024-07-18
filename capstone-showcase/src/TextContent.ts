@@ -28,3 +28,9 @@ export const navigationInstructions: string = `The projects are organized by maj
         upper left corner of this page. There is also a search tool located in
         the upper right hand corner of the page that can help you locate a
         specific project or team.`
+
+export const ourTeamDescription: string = `Meet the talented team of developers who brought this web application to 
+        life under the guidance of ASU professor Steven Osburn during the summer and 
+        fall semesters of 2024. This application enables semester teams to upload and 
+        showcase their capstone projects. Additionally, it provides essential information 
+        about capstone presentations at ASU for each term.`
