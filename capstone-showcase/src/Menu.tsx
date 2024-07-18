@@ -9,9 +9,8 @@ const Menu: React.FC = () => {
   const { pathname } = useLocation();
   const { isSideMenu, toggleMenu } = useMenuContext();
   const [isPastSemestersOpen, setIsPastSemestersOpen] = useState(false);
-  const [isMajorsOpen, setIsMajorsOpen] = useState(false); // State for majors collapsible section
+  const [isMajorsOpen, setIsMajorsOpen] = useState(false);
   const submenuRef = useRef<HTMLLIElement>(null);
-  const [leaveTimeout, setLeaveTimeout] = useState<number | null>(null);
 
   const togglePastSemesters = () => {
     setIsPastSemestersOpen((prev) => !prev);
@@ -27,20 +26,6 @@ const Menu: React.FC = () => {
     }
   };
 
-  const handleMouseLeave = () => {
-    const timeout = window.setTimeout(() => {
-      setIsPastSemestersOpen(false);
-    }, 100);
-    setLeaveTimeout(timeout);
-  };
-
-  const handleMouseEnter = () => {
-    if (leaveTimeout) {
-      window.clearTimeout(leaveTimeout);
-      setLeaveTimeout(null);
-    }
-  };
-
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -49,11 +34,11 @@ const Menu: React.FC = () => {
   }, []);
 
   return (
-    <div className={`page-container ${isSideMenu ? 'side-menu' : 'top-menu'}`}>
+    <div className={`page-container ${isSideMenu ? "side-menu" : "top-menu"}`}>
       <div className="menu-container">
-      <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+        <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         <button className="toggle-button" onClick={toggleMenu}>
-          <i className={`fas ${isSideMenu ? 'fa-arrow-up' : 'fa-arrow-left'}`}></i>
+          <i className={`fas ${isSideMenu ? "fa-arrow-up" : "fa-arrow-left"}`}></i>
         </button>
         <div className="menu">
           <ul className="menu-list">
@@ -66,14 +51,14 @@ const Menu: React.FC = () => {
             </li>
             {!isSideMenu && (
               <>
-              <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
+                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
                   <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
                   <Link to="/computer-science">Computer Science<br />Teams</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
-                    <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
+                  <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
                 </li>
                 {isMajorsOpen && (
                   <>
@@ -92,7 +77,7 @@ const Menu: React.FC = () => {
                   </>
                 )}
                 <div className="majors-title" onClick={toggleMajors}>
-                  {isMajorsOpen ? 'Less' : 'More'}
+                  {isMajorsOpen ? "Less" : "More"}
                   <br />
                   <img src={arrowIcon} alt="Arrow Icon" className={`arrow ${isMajorsOpen ? "revArrow" : ""}`} />
                 </div>
@@ -100,7 +85,7 @@ const Menu: React.FC = () => {
             )}
             {isSideMenu && (
               <>
-               <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
+                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
                   <Link to="/computer-systems-engineering">Computer Systems Engineering<br />Teams</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
@@ -123,12 +108,7 @@ const Menu: React.FC = () => {
                 </li>
               </>
             )}
-            <li
-              className="submenu-container"
-              ref={submenuRef}
-              onMouseLeave={handleMouseLeave}
-              onMouseEnter={handleMouseEnter}
-            >
+            <li className="submenu-container" ref={submenuRef}>
               <div className="submenu-title" onClick={togglePastSemesters}>
                 Past Semesters <span className="arrow">{isPastSemestersOpen ? "▲" : "▼"}</span>
               </div>
