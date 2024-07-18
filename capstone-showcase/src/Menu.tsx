@@ -44,13 +44,16 @@ const Menu: React.FC = () => {
           <ul className="menu-list">
             <li className={`menu-item ${pathname === "/" ? "active" : ""}`}>
               <Link to="/" className="home-link">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="black" width="32px" height="32px" className="home-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="black" width="22px" height="27px" className="home-icon">
                   <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                 </svg>
               </Link>
             </li>
             {!isSideMenu && (
               <>
+                <li className={`menu-item ${pathname === "/about" ? "active" : ""}`}>
+                      <Link to="/about">Meet Our <br></br> Team</Link>
+                </li>
                 <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
                   <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
                 </li>
