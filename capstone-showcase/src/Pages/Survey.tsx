@@ -2,22 +2,36 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../CSS/Survey.css";
 
-const Survey: React.FC = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    name: "",
-    projectTitle: "",
-    projectDescription: "",
-    sponsor: "",
-    teamMembers: "",
-    courseNumber: "",
-    demo: "",
-    power: "",
-    nda: "",
-    youtubeLink: "",
-  });
+interface FormData {
+  email: string;
+  name: string;
+  projectTitle: string;
+  projectDescription: string;
+  sponsor: string;
+  teamMembers: string;
+  courseNumber: string;
+  demo: string;
+  power: string;
+  nda: string;
+  youtubeLink: string;
+}
 
-  const [errors, setErrors] = useState({
+interface FormErrors {
+  email: string;
+  name: string;
+  projectTitle: string;
+  projectDescription: string;
+  sponsor: string;
+  teamMembers: string;
+  courseNumber: string;
+  demo: string;
+  power: string;
+  nda: string;
+  youtubeLink: string;
+}
+
+const Survey: React.FC = () => {
+  const initialFormData: FormData = {
     email: "",
     name: "",
     projectTitle: "",
@@ -29,7 +43,24 @@ const Survey: React.FC = () => {
     power: "",
     nda: "",
     youtubeLink: "",
-  });
+  };
+
+  const initialFormErrors: FormErrors = {
+    email: "",
+    name: "",
+    projectTitle: "",
+    projectDescription: "",
+    sponsor: "",
+    teamMembers: "",
+    courseNumber: "",
+    demo: "",
+    power: "",
+    nda: "",
+    youtubeLink: "",
+  };
+
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [errors, setErrors] = useState<FormErrors>(initialFormErrors);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -38,11 +69,39 @@ const Survey: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "demo" && value === "no") {
+      setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
+    }
+
     setErrors({ ...errors, [name]: "" });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const formErrors = validateFormData(formData);
+
+    setErrors(formErrors);
+
+    if (hasErrors(formErrors)) {
+      scrollToFirstError();
+      return;
+    }
+
+    const submissionData = prepareSubmissionData(formData);
+
+    axios
+      .post("http://localhost:3000/api/survey", submissionData)
+      .then(() => {
+        handleSuccessfulSubmission();
+      })
+      .catch((error) => {
+        console.error("Error submitting survey data:", error);
+      });
+  };
+
+  const validateFormData = (formData: FormData) => {
     const {
       email,
       name,
@@ -52,79 +111,63 @@ const Survey: React.FC = () => {
       teamMembers,
       courseNumber,
       demo,
-      power,
       nda,
       youtubeLink,
     } = formData;
 
-    const formErrors = {
-      email: "",
-      name: "",
-      projectTitle: "",
-      projectDescription: "",
-      sponsor: "",
-      teamMembers: "",
-      courseNumber: "",
-      demo: "",
+    const errors: FormErrors = {
+      email: !email ? "Please enter your ASU email." : "",
+      name: !name ? "Please enter your name." : "",
+      projectTitle: !projectTitle ? "Please select a project title." : "",
+      projectDescription: !projectDescription
+        ? "Please enter a project description."
+        : "",
+      sponsor: !sponsor ? "Please enter the name of your sponsor/mentor." : "",
+      teamMembers: !teamMembers
+        ? "Please enter the number of team members."
+        : "",
+      courseNumber: !courseNumber ? "Please select a course number." : "",
+      demo: !demo
+        ? "Please specify if your group will be bringing a demo."
+        : "",
       power: "",
-      nda: "",
-      youtubeLink: "",
+      nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
+      youtubeLink: !youtubeLink ? "Please enter a YouTube link." : "",
     };
 
-    if (!email) formErrors.email = "Please enter your ASU email.";
-    if (!name) formErrors.name = "Please enter your name.";
-    if (!projectTitle)
-      formErrors.projectTitle = "Please select a project title.";
-    if (!projectDescription)
-      formErrors.projectDescription = "Please enter a project description.";
-    if (!sponsor)
-      formErrors.sponsor = "Please enter the name of your sponsor/mentor.";
-    if (!teamMembers)
-      formErrors.teamMembers = "Please enter the number of team members.";
-    if (parseInt(teamMembers, 10) <= 0)
-      formErrors.teamMembers = "The number of team members must be at least 1.";
-    if (!courseNumber)
-      formErrors.courseNumber = "Please select a course number.";
-    if (!demo)
-      formErrors.demo = "Please specify if your group will be bringing a demo.";
-    if (!power)
-      formErrors.power =
-        "Please specify if your group will need power for your demo.";
-    if (!nda)
-      formErrors.nda = "Please specify if your group signed an NDA or IP.";
-    if (!youtubeLink) formErrors.youtubeLink = "Please enter a YouTube link.";
-
-    setErrors(formErrors);
-
-    const hasErrors = Object.values(formErrors).some((error) => error !== "");
-    if (hasErrors) {
-      const firstErrorElement = document.querySelector(".error-message");
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: "smooth" });
-      }
-      return;
+    if (parseInt(teamMembers, 10) <= 0) {
+      errors.teamMembers = "The number of team members must be at least 1.";
     }
 
-    axios
-      .post("http://localhost:3000/api/survey", formData)
-      .then(() => {
-        setFormData({
-          email: "",
-          name: "",
-          projectTitle: "",
-          projectDescription: "",
-          sponsor: "",
-          teamMembers: "",
-          courseNumber: "",
-          demo: "",
-          power: "",
-          nda: "",
-          youtubeLink: "",
-        });
-      })
-      .catch((error) => {
-        console.error("Error submitting survey data:", error);
-      });
+    if (demo === "yes" && !formData.power) {
+      errors.power =
+        "Please specify if your group will need power for your demo.";
+    }
+
+    return errors;
+  };
+
+  const hasErrors = (errors: FormErrors) => {
+    return Object.values(errors).some((error) => error !== "");
+  };
+
+  const scrollToFirstError = () => {
+    const firstErrorElement = document.querySelector(".error-message");
+    if (firstErrorElement) {
+      firstErrorElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const prepareSubmissionData = (formData: FormData) => {
+    const submissionData = { ...formData };
+    if (formData.demo === "no") {
+      delete submissionData.power;
+    }
+    return submissionData;
+  };
+
+  const handleSuccessfulSubmission = () => {
+    setFormData(initialFormData);
   };
 
   return (
@@ -263,32 +306,34 @@ const Survey: React.FC = () => {
           </div>
           {errors.demo && <p className="error-message">{errors.demo}</p>}
         </div>
-        <div className="form-box">
-          <label>If so, will your group need power for your demo?</label>
-          <div className="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="power"
-                value="yes"
-                checked={formData.power === "yes"}
-                onChange={handleChange}
-              />{" "}
-              Yes
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="power"
-                value="no"
-                checked={formData.power === "no"}
-                onChange={handleChange}
-              />{" "}
-              No
-            </label>
+        {formData.demo === "yes" && (
+          <div className="form-box">
+            <label>If so, will your group need power for your demo?</label>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="power"
+                  value="yes"
+                  checked={formData.power === "yes"}
+                  onChange={handleChange}
+                />{" "}
+                Yes
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="power"
+                  value="no"
+                  checked={formData.power === "no"}
+                  onChange={handleChange}
+                />{" "}
+                No
+              </label>
+            </div>
+            {errors.power && <p className="error-message">{errors.power}</p>}
           </div>
-          {errors.power && <p className="error-message">{errors.power}</p>}
-        </div>
+        )}
         <div className="form-box">
           <label>Did your group sign an NDA or IP?</label>
           <div className="radio-group">
