@@ -21,7 +21,10 @@ const Menu: React.FC = () => {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (submenuRef.current && !submenuRef.current.contains(event.target as Node)) {
+    if (
+      submenuRef.current &&
+      !submenuRef.current.contains(event.target as Node)
+    ) {
       setIsPastSemestersOpen(false);
     }
   };
@@ -38,79 +41,204 @@ const Menu: React.FC = () => {
       <div className="menu-container">
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         <button className="toggle-button" onClick={toggleMenu}>
-          <i className={`fas ${isSideMenu ? "fa-arrow-up" : "fa-arrow-left"}`}></i>
+          <i
+            className={`fas ${isSideMenu ? "fa-arrow-up" : "fa-arrow-left"}`}
+          ></i>
         </button>
         <div className="menu">
           <ul className="menu-list">
             <li className={`menu-item ${pathname === "/" ? "active" : ""}`}>
               <Link to="/" className="home-link">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="black" width="32px" height="32px" className="home-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="black"
+                  width="32px"
+                  height="32px"
+                  className="home-icon"
+                >
                   <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                 </svg>
               </Link>
             </li>
             {!isSideMenu && (
               <>
-                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/about" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/about">
+                    Meet Our <br></br> Team
+                  </Link>
                 </li>
-                <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
-                  <Link to="/computer-science">Computer Science<br />Teams</Link>
+
+                <li
+                  className={`menu-item ${
+                    pathname === "/computer-systems-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/computer-systems-engineering">
+                    Computer Systems
+                    <br />
+                    Engineering
+                  </Link>
                 </li>
-                <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
-                  <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/computer-science" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/computer-science">
+                    Computer Science
+                    <br />
+                    Teams
+                  </Link>
+                </li>
+                <li
+                  className={`menu-item ${
+                    pathname === "/biomedical-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/biomedical-engineering">
+                    Biomedical Engineering
+                    <br />
+                    Teams
+                  </Link>
                 </li>
                 {isMajorsOpen && (
                   <>
-                    <li className={`menu-item ${pathname === "/mechanical-engineering" ? "active" : ""}`}>
-                      <Link to="/mechanical-engineering">Mechanical Engineering<br />Teams</Link>
+                    <li
+                      className={`menu-item ${
+                        pathname === "/mechanical-engineering" ? "active" : ""
+                      }`}
+                    >
+                      <Link to="/mechanical-engineering">
+                        Mechanical Engineering
+                        <br />
+                        Teams
+                      </Link>
                     </li>
-                    <li className={`menu-item ${pathname === "/electrical-engineering" ? "active" : ""}`}>
-                      <Link to="/electrical-engineering">Electrical Engineering<br />Teams</Link>
+                    <li
+                      className={`menu-item ${
+                        pathname === "/electrical-engineering" ? "active" : ""
+                      }`}
+                    >
+                      <Link to="/electrical-engineering">
+                        Electrical Engineering
+                        <br />
+                        Teams
+                      </Link>
                     </li>
-                    <li className={`menu-item ${pathname === "/interdisciplinary" ? "active" : ""}`}>
-                      <Link to="/interdisciplinary">Interdisciplinary<br />Teams</Link>
+                    <li
+                      className={`menu-item ${
+                        pathname === "/interdisciplinary" ? "active" : ""
+                      }`}
+                    >
+                      <Link to="/interdisciplinary">
+                        Interdisciplinary
+                        <br />
+                        Teams
+                      </Link>
                     </li>
-                    <li className={`menu-item ${pathname === "/industrial-engineering" ? "active" : ""}`}>
-                      <Link to="/industrial-engineering">Industrial Engineering<br />Teams</Link>
+                    <li
+                      className={`menu-item ${
+                        pathname === "/industrial-engineering" ? "active" : ""
+                      }`}
+                    >
+                      <Link to="/industrial-engineering">
+                        Industrial Engineering
+                        <br />
+                        Teams
+                      </Link>
                     </li>
                   </>
                 )}
                 <div className="majors-title" onClick={toggleMajors}>
                   {isMajorsOpen ? "Less" : "More"}
                   <br />
-                  <img src={arrowIcon} alt="Arrow Icon" className={`arrow ${isMajorsOpen ? "revArrow" : ""}`} />
+                  <img
+                    src={arrowIcon}
+                    alt="Arrow Icon"
+                    className={`arrow ${isMajorsOpen ? "revArrow" : ""}`}
+                  />
                 </div>
               </>
             )}
             {isSideMenu && (
               <>
-                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems Engineering<br />Teams</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/about" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/about">Meet Our Team</Link>
                 </li>
-                <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
-                  <Link to="/computer-science">Computer Science<br />Teams</Link>
+
+                <li
+                  className={`menu-item ${
+                    pathname === "/computer-systems-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/computer-systems-engineering">
+                    Computer Systems Engineering
+                  </Link>
                 </li>
-                <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
-                  <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/computer-science" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/computer-science">Computer Science Teams</Link>
                 </li>
-                <li className={`menu-item ${pathname === "/mechanical-engineering" ? "active" : ""}`}>
-                  <Link to="/mechanical-engineering">Mechanical Engineering<br />Teams</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/biomedical-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/biomedical-engineering">
+                    Biomedical Engineering Teams
+                  </Link>
                 </li>
-                <li className={`menu-item ${pathname === "/electrical-engineering" ? "active" : ""}`}>
-                  <Link to="/electrical-engineering">Electrical Engineering<br />Teams</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/mechanical-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/mechanical-engineering">
+                    Mechanical Engineering Teams
+                  </Link>
                 </li>
-                <li className={`menu-item ${pathname === "/interdisciplinary" ? "active" : ""}`}>
-                  <Link to="/interdisciplinary">Interdisciplinary<br />Teams</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/electrical-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/electrical-engineering">
+                    Electrical Engineering Teams
+                  </Link>
                 </li>
-                <li className={`menu-item ${pathname === "/industrial-engineering" ? "active" : ""}`}>
-                  <Link to="/industrial-engineering">Industrial Engineering<br />Teams</Link>
+                <li
+                  className={`menu-item ${
+                    pathname === "/interdisciplinary" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/interdisciplinary">Interdisciplinary Teams</Link>
+                </li>
+                <li
+                  className={`menu-item ${
+                    pathname === "/industrial-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/industrial-engineering">
+                    Industrial Engineering Teams
+                  </Link>
                 </li>
               </>
             )}
             <li className="submenu-container" ref={submenuRef}>
               <div className="submenu-title" onClick={togglePastSemesters}>
-                Past Semesters <span className="arrow">{isPastSemestersOpen ? "▲" : "▼"}</span>
+                Past Semesters
+                <span className="arrow">{isPastSemestersOpen ? "▲" : "▼"}</span>
               </div>
               {isPastSemestersOpen && (
                 <ul className="submenu-list">
