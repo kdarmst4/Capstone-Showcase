@@ -1,4 +1,4 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
 .page-container {
   display: flex;
@@ -10,7 +10,7 @@
   background: #d3d3d3;
   padding: 10px 5px;
   display: flex;
-  align-items: center; 
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -24,13 +24,13 @@
 }
 
 .top-menu .asu-logo {
-  width: 150px; 
+  width: 150px;
   margin-top: 10px;
   margin-right: 10px;
 }
 
 .side-menu .asu-logo {
-  width: 200px; 
+  width: 200px;
   height: auto;
   margin-right: 10px;
 }
@@ -101,7 +101,7 @@
 
 .menu-list a:hover {
   color: black;
-  background: #BFBFBF;
+  background: #bfbfbf;
 }
 
 .majors-container {
@@ -113,7 +113,7 @@
   font-weight: bold;
   cursor: pointer;
   color: black;
-  padding: 5px 10px; 
+  padding: 5px 10px;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -123,7 +123,7 @@
 }
 
 .majors-title:hover {
-  background: #BFBFBF;
+  background: #bfbfbf;
 }
 
 .majors-list {
@@ -142,14 +142,14 @@
   cursor: pointer;
   color: black;
   padding: 10px 15px;
-  background: #FAFAFA;
+  background: #fafafa;
   border-radius: 15px;
   display: flex;
   align-items: left;
 }
 
 .submenu-title:hover {
-  background:  #E8E8E8;
+  background: #e8e8e8;
 }
 
 .arrow {
@@ -160,7 +160,7 @@
   list-style-type: none;
   width: 150px;
   position: absolute;
-  background: #FAFAFA;
+  background: #fafafa;
   border-radius: 15px;
   margin: 5px;
   padding: 10px 0;
@@ -249,7 +249,7 @@
 
 .side-menu .menu-list a:hover {
   color: black;
-  background: #BFBFBF;
+  background: #bfbfbf;
 }
 
 .top-menu .menu-container {
