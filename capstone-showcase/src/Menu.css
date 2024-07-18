@@ -159,11 +159,12 @@
 .submenu-list {
   list-style-type: none;
   width: 150px;
-  position: fixed;
+  position: absolute;
   background: #FAFAFA;
   border-radius: 15px;
   margin: 5px;
   padding: 10px 0;
+  z-index: 1001;
 }
 
 .submenu-list a {
