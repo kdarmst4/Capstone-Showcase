@@ -1,51 +1,81 @@
-/* src/PreEventLandingPage.css */
-
 body {
-  background-color: rgb(140, 29, 64);
+  background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  transition: margin-left 0.3s ease;
 }
 
 .pre-event-landing-page {
-  padding: 20px;
-  margin: 0 auto;
+  margin: 0;
   text-align: center;
+  transition: margin-left 0.3s ease;
+}
+
+.pre-event-landing-page.compressed {
+  margin-left: 270px;
 }
 
 .asu-logo {
-  margin-top: 24px;
+  margin-top: 0px;
 }
 
-header h1, header h2 {
-  color: white;
+.header-background {
+  background-image: url('../assets/background.webp'); 
+  background-size: cover;
+  background-position: center 5%;
+  padding: 40px 20px;
+  color: white; 
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 7px solid black; 
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.header-background h1, .header-background h2, .header-background h3 {
   margin: 10px 0;
 }
 
-main h3 {
-  color: white;
-  margin: 20px 0;
-  font-size: 24px;
+.title-container {
+  color: rgb(140, 29, 64);
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.content-area {
+  background: #d3d3d3; 
+}
+
+.event-details {
+  text-align: center; 
 }
 
 .event-details .reminder {
-  font-size: 24px;
-  color: white;
+  font-size: 18px;
   margin: 20px 0;
+}
+
+.event-details article {
+  display: inline-block;
+  text-align: left; 
+  width: 80%; 
 }
 
 .event-details article p {
   color: black;
-  background-color: goldenrod;
+  font-weight: bold;
   padding: 15px;
   border: 1px solid black;
   border-radius: 5px;
   margin-bottom: 15px;
-  text-align: left;
 }
 
 footer {
   margin-top: 20px;
-  color: white;
   font-size: 14px;
 }

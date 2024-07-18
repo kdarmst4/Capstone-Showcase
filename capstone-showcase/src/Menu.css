@@ -1,47 +1,285 @@
-/* src/components/Menu.css */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .menu-container {
   width: 100%;
-  background: linear-gradient(to top, black, #333);
-  padding: 10px 20px;
+  background: #d3d3d3;
+  padding: 10px 5px;
   display: flex;
-  position: fixed; /* Fix the menu at the top */
+  align-items: center; 
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+  overflow-x: auto;
 }
 
 .menu {
   display: flex;
+  justify-content: left;
 }
 
-.menu h1 {
-  margin: 0;
+.top-menu .asu-logo {
+  width: 150px; 
+  margin-top: 10px;
   margin-right: 10px;
-  font-size: 18px;
 }
 
-.menu-list {
+.side-menu .asu-logo {
+  width: 200px; 
+  height: auto;
+  margin-right: 10px;
+}
+
+.arrow {
+  margin-left: 5px;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.arrow.revArrow {
+  transform: rotate(180deg);
+}
+
+.top-menu .home-link {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.top-menu .menu-list {
   list-style-type: none;
   display: flex;
   margin: 0;
   padding: 0;
+  align-items: center;
 }
 
-.menu-list li {
+.top-menu .menu-list li {
   margin: 0 10px;
+  position: relative;
+}
+
+.top-menu .menu-list li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  height: 80%;
+  width: 2px;
+  background: gray;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.side-menu .menu-list {
+  align-items: left;
 }
 
 .menu-list a {
-  color: white;
+  color: black;
+  font-size: 16px;
+  font-family: "Palatino";
+  font-weight: bold;
   padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
+  background: none;
+  display: flex;
+  align-items: left;
+  text-decoration: none;
+}
+
+.menu-item.active a {
+  background-color: darkgray;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 .menu-list a:hover {
-  color: rgb(0, 140, 255);
-  text-decoration: underline;
-  text-decoration-color: yellow;
+  color: black;
+  background: #BFBFBF;
+}
+
+.majors-container {
+  display: flex;
+  align-items: center;
+}
+
+.majors-title {
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+  padding: 5px 10px; 
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.majors-title:hover {
+  background: #BFBFBF;
+}
+
+.majors-list {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+
+.arrow {
+  margin-left: 5px;
+}
+
+.submenu-title {
+  margin-top: 10px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  color: black;
+  padding: 10px 15px;
+  background: #FAFAFA;
+  border-radius: 15px;
+  display: flex;
+  align-items: left;
+}
+
+.submenu-title:hover {
+  background:  #E8E8E8;
+}
+
+.arrow {
+  margin-left: 5px;
+}
+
+.submenu-list {
+  list-style-type: none;
+  width: 150px;
+  position: fixed;
+  background: #FAFAFA;
+  border-radius: 15px;
+  margin: 5px;
+  padding: 10px 0;
+}
+
+.submenu-list a {
+  color: black;
+  padding: 10px 15px;
+  background: #f0f0f0;
+  border-radius: 15px;
+  align-items: center;
+  display: flex;
+  text-decoration: none;
+  margin: 5px 0px;
+}
+
+.toggle-button {
+  width: 40px;
+  height: 40px;
+  border: none;
   background: black;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.toggle-button:hover {
+  background-color: rgb(88, 40, 40);
+}
+
+.top-menu .toggle-button {
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.side-menu .toggle-button {
+  margin-top: 20px;
+  width: 20px;
+}
+
+.side-menu .menu-container {
+  width: 250px;
+  height: 100%;
+  position: fixed;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 20px;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+.side-menu .menu {
+  margin-left: 0px;
+  margin-top: 0px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.side-menu .menu-list {
+  list-style-type: none;
+  flex-direction: column;
+  width: calc(100% - 15px);
+  padding: 0;
+}
+
+.side-menu .menu-list li {
+  margin: 10px 0;
+  text-align: left;
+  position: relative;
+}
+
+.side-menu .menu-list a {
+  width: 100%;
+  text-align: left;
+  padding: 10px 10px;
+  justify-content: left;
+}
+
+.side-menu .menu-list a:hover {
+  color: black;
+  background: #BFBFBF;
+}
+
+.top-menu .menu-container {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.top-menu .submenu-container {
+  margin-top: 13px;
+}
+
+.content {
+  margin-top: 80px;
+}
+
+.side-menu .content {
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #d3d3d3;
 }
