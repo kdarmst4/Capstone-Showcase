@@ -66,17 +66,26 @@ const Menu: React.FC = () => {
             </li>
             {!isSideMenu && (
               <>
+              <li
+                  className={`menu-item ${
+                    pathname === "/about" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/about">
+                    Meet Our Team
+                  </Link>
+                </li>
               <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
                   <Link to="/computer-science">Computer Science<br />Teams</Link>
                 </li>
               <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
                   <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
                 </li>
-                <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
-                    <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
-                </li>
                 {isMajorsOpen && (
                   <>
+                  <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
+                    <Link to="/biomedical-engineering">Biomedical Engineering<br />Teams</Link>
+                </li>
                     <li className={`menu-item ${pathname === "/mechanical-engineering" ? "active" : ""}`}>
                       <Link to="/mechanical-engineering">Mechanical Engineering<br />Teams</Link>
                     </li>

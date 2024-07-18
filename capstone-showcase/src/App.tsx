@@ -10,6 +10,7 @@ import IndustrialEngineering from "./Pages/IndustrialEngineering";
 import Survey from "./Pages/Survey";
 import Interdisciplinary from "./Pages/Interdisciplinary";
 import BiomedicalEngineering from "./Pages/BiomedicalEngineering";
+import About from "./Pages/About";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
         <div className="content">
           <Routes>
             <Route path="/" element={<PreEventLandingPage />} />
+            <Route path="/about" element={<About />} />
             <Route path="/computer-science" element={<ComputerScience />} />
             <Route
               path="/computer-systems-engineering"
