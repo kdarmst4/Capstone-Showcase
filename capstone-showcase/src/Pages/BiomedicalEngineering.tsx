@@ -1,25 +1,24 @@
 import React from "react";
 import { useMenuContext } from "../MenuContext";
-import "../CSS/ComputerScience.css";
+import "../CSS/BiomedicalEngineering.css";
 import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png"
 
-const ComputerSciencePage: React.FC = () => {
+const BiomedicalEngineering: React.FC = () => {
   const { isSideMenu } = useMenuContext();
 
   return (
-    <div className={`computer-science ${isSideMenu ? 'compressed' : ''}`}>
+    <div className={`biomedical-engineering ${isSideMenu ? 'compressed' : ''}`}>
       <header className="header-background">
-      <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+        <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         <div className="title-container">
-          <h3>Computer Science</h3>
+          <h3>Biomedical<br />&emsp;&emsp;Engineering</h3>
         </div>
       </header>
       <main className="content-area">
         <section className="event-details">
           <article>
             <p>{capstoneDescription}</p>
-            {/* Add more content specific to Computer Science */}
           </article>
         </section>
       </main>
@@ -28,4 +27,4 @@ const ComputerSciencePage: React.FC = () => {
   );
 };
 
-export default ComputerSciencePage;
+export default BiomedicalEngineering;
