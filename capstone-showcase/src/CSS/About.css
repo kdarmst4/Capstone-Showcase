@@ -1,93 +1,145 @@
 body {
-    background-color: rgb(72, 69, 70);
-    font-family: Arial, sans-serif;
-    margin: 0;
-    transition: margin-left 0.3s ease;
-  }
-  
-  .about {
-    margin: 0 auto;
-    text-align: center;
-    transition: margin-left 0.3s ease; 
-  }
-  
-  .about.compressed {
-    margin-left: 250px; 
-  }
-  
-  .about .header-background {
-    background-image: url('../assets/teamBanner.png'); 
-    background-size: cover;
-    background-position: center;
-    padding: 40px 20px;
-    color: white; 
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
-    position: relative;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-  }
-  
-  .header-background h1, .header-background h2, .header-background h3 {
-    margin: 10px 0;
-  }
-  
-  .about .asu-logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 400px; 
-    height: auto; 
-  }
-  
-  .about .title-container {
-    font-family: "Fjalla One";
-    font-weight: bold;
-    font-size: 36px;
-    color: black;
-    background: none;
-    position: absolute;
-    top: 140px; 
-    left: 20px;
-    text-align: left;
-  }
-  
-  .content-area {
-    background: #d3d3d3; 
-    width: 100%;
-    overflow-y: auto; 
-    padding-top: 20px;
-    border-top: 5px solid black; 
-  }
-  
-  .event-details {
-    text-align: center; 
-  }
-  
-  .event-details .reminder {
-    font-size: 18px;
-    margin: 20px 0;
-  }
-  
-  .event-details article {
-    display: inline-block;
-    text-align: left; 
-    width: 80%; 
-  }
-  
-  .event-details article p {
-    color: black;
-    font-weight: bold;
-    padding: 15px;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
-  
-  footer {
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  
+  background-color: rgb(72, 69, 70);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  transition: margin-left 0.3s ease;
+}
+
+.about {
+  margin: 0 auto;
+  text-align: center;
+  transition: margin-left 0.3s ease;
+}
+
+.about.compressed {
+  margin-left: 250px;
+}
+
+.about .header-background {
+  background-image: url("../assets/teamBanner.png");
+  background-size: cover;
+  background-position: center;
+  padding: 40px 20px;
+  color: white;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.header-background h1,
+.header-background h2,
+.header-background h3 {
+  margin: 10px 0;
+}
+
+.about .asu-logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 400px;
+  height: auto;
+}
+
+.about .title-container {
+  font-family: "Fjalla One";
+  font-weight: bold;
+  font-size: 36px;
+  color: black;
+  background: none;
+  position: absolute;
+  top: 140px;
+  left: 20px;
+  text-align: left;
+}
+
+.content-area {
+  background: #d3d3d3;
+  width: 100%;
+  overflow-y: auto;
+  padding-top: 20px;
+  border-top: 5px solid black;
+}
+
+.event-details {
+  text-align: center;
+}
+
+.event-details .reminder {
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+.event-details article {
+  display: inline-block;
+  text-align: left;
+  width: 80%;
+}
+
+.event-details article p {
+  color: black;
+  font-weight: bold;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.team-header {
+  color: black;
+  font-size: 35px;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.underline {
+  width: 450px;
+  height: 2px;
+  background-color: #213547;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.team-section {
+  margin-top: 35px;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.team-row {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.team-member {
+  width: 150px;
+  text-align: center;
+}
+
+.team-member img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.team-member p {
+  color: black;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  margin: 5px 0;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+footer {
+  margin-top: 20px;
+  font-size: 14px;
+}
