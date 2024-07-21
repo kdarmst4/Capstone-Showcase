@@ -24,7 +24,7 @@ const teamMembers = [
   },
   {
     image: teamMember4,
-    text: [<b>Waleed Briouig</b>, "Computer Science - Software Engineering", "wbriouig@asu.edu"]
+    text: [<b>Waleed Briouig</b>, "Computer Science (Software Engineering)", "wbriouig@asu.edu"]
   },
   {
     image: teamMember5,
