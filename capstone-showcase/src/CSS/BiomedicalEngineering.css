@@ -18,7 +18,7 @@ body {
   background-image: url("../assets/beBanner.webp");
   background-size: cover;
   background-position: center 30%;
-  min-height: 300px;
+  min-height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -37,19 +37,19 @@ body {
   position: absolute;
   top: 10px;
   left: 70px;
-  width: 350px;
+  width: 300px;
   height: auto;
 }
 
 .biomedical-engineering .title-container {
   font-family: "Fjalla One";
   font-weight: bold;
-  font-size: 36px;
+  font-size: 27px;
   color: rgb(57, 46, 80);
   background: none;
   position: absolute;
-  top: 65px;
-  left: 100px;
+  top: 90px;
+  left: 120px;
   text-align: left;
 }
 

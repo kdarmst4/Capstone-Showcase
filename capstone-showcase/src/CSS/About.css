@@ -19,7 +19,7 @@ body {
   background-image: url("../assets/teamBanner.png");
   background-size: cover;
   background-position: center;
-  min-height: 300px;
+  min-height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -37,7 +37,7 @@ body {
 .about .asu-logo {
   position: absolute;
   left: 10px;
-  width: 260px;
+  width: 200px;
   height: auto;
 }
 
@@ -48,7 +48,7 @@ body {
   color: black;
   background: none;
   position: absolute;
-  top: 140px;
+  top: 120px;
   left: 20px;
   text-align: left;
 }
@@ -89,7 +89,7 @@ body {
   color: black;
   font-size: 35px;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 0px;
   margin-bottom: 10px;
 }
 
