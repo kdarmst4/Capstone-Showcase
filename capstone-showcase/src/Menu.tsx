@@ -147,22 +147,22 @@ const Menu: React.FC = () => {
                     </li>
                     <li
                       className={`menu-item ${
-                        pathname === "/interdisciplinary" ? "active" : ""
+                        pathname === "/industrial-engineering" ? "active" : ""
                       }`}
                     >
-                      <Link to="/interdisciplinary">
-                        Interdisciplinary
+                      <Link to="/industrial-engineering">
+                        Industrial Engineering
                         <br />
                         Teams
                       </Link>
                     </li>
                     <li
                       className={`menu-item ${
-                        pathname === "/industrial-engineering" ? "active" : ""
+                        pathname === "/interdisciplinary" ? "active" : ""
                       }`}
                     >
-                      <Link to="/industrial-engineering">
-                        Industrial Engineering
+                      <Link to="/interdisciplinary">
+                        Interdisciplinary
                         <br />
                         Teams
                       </Link>
