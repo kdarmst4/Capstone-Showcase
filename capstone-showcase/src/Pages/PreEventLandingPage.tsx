@@ -13,12 +13,12 @@ const PreEventLandingPage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
 
   return (
-    <div className={`pre-event-landing-page ${isSideMenu ? 'compressed' : ''}`}>
+    <div className={`pre-event-landing-page ${isSideMenu ? "compressed" : ""}`}>
       <header className="header-background">
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
       </header>
       <main className="content-area">
-      <div className="title-container">
+        <div className="title-container">
           <h3>{projectTitle}</h3>
         </div>
         <section className="event-details">

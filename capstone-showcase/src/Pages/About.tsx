@@ -30,6 +30,7 @@ const teamMembers = [
     image: teamMember3,
     text: [<b>Makenzie Rutledge</b>, "Informatics", "mmrutled@gmail.com"],
   },
+
   {
     image: teamMember4,
     text: [
@@ -46,6 +47,7 @@ const teamMembers = [
 
 const About: React.FC = () => {
   const { isSideMenu } = useMenuContext();
+  const midpoint = Math.ceil(teamMembers.length / 2); // Calculate midpoint
 
   return (
     <div className={`about ${isSideMenu ? "compressed" : ""}`}>
@@ -65,9 +67,22 @@ const About: React.FC = () => {
         <div className="underline"></div>
         <section className="team-section">
           <div className="team-row">
-            {teamMembers.map((member, index) => (
+            {teamMembers.slice(0, midpoint).map((member, index) => (
               <div key={index} className="team-member">
                 <img src={member.image} alt={`Team Member ${index + 1}`} />
+                {member.text.map((line, lineIndex) => (
+                  <p key={lineIndex}>{line}</p>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className="team-row">
+            {teamMembers.slice(midpoint).map((member, index) => (
+              <div key={index} className="team-member">
+                <img
+                  src={member.image}
+                  alt={`Team Member ${index + midpoint + 1}`}
+                />
                 {member.text.map((line, lineIndex) => (
                   <p key={lineIndex}>{line}</p>
                 ))}
