@@ -9,6 +9,7 @@ import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
 import Survey from "./Pages/Survey";
 import Interdisciplinary from "./Pages/Interdisciplinary";
+import BiomedicalEngineering from "./Pages/BiomedicalEngineering";
 import About from "./Pages/About";
 
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
               path="/computer-systems-engineering"
               element={<ComputerSystemsEngineering />}
             />
+            <Route path="/biomedical-engineering" element={<BiomedicalEngineering />} />
             <Route
               path="/industrial-engineering"
               element={<IndustrialEngineering />}
