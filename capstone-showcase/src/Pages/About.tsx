@@ -5,9 +5,9 @@ import { ourTeamDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png"
 import teamMember1 from "../assets/naveenHeadshot.jpg";
 import teamMember2 from "../assets/makenzieHeadshot.jpg";
-import teamMember3 from "../assets/profilePlaceholder.png";
-import teamMember4 from "../assets/profilePlaceholder.png";
-import teamMember5 from "../assets/profilePlaceholder.png";
+import teamMember3 from "../assets/anushHeadshot.jpg";
+import teamMember4 from "../assets/waleedHeadshot.jpg";
+import teamMember5 from "../assets/anshHeadshot.jpg";
 
 const teamMembers = [
   {
@@ -20,15 +20,15 @@ const teamMembers = [
   },
   {
     image: teamMember3,
-    text: ["Member 3 Name", "Major", "Email"]
+    text: [<b>Anush Garimella</b>, "Computer Science", "anush.garimella@gmail.com"]
   },
   {
     image: teamMember4,
-    text: ["Member 4 Name", "Major", "Email"]
+    text: [<b>Waleed Briouig</b>, "Computer Science - Software Engineering", "wbriouig@asu.edu"]
   },
   {
     image: teamMember5,
-    text: ["Member 5 Name", "Major", "Email"]
+    text: [<b>Ansh Tiwari</b>, "Computer Science", "atiwar31@asu.edu"]
   }
 ];
 
