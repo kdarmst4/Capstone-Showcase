@@ -4,7 +4,7 @@ import "../CSS/About.css";
 import { ourTeamDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import teamMember1 from "../assets/anushHeadshot.jpg";
-import teamMember2 from "../assets/naveenHeadshot.jpg";
+import teamMember2 from "../assets/naveenProfile.jpg";
 import teamMember3 from "../assets/makenzieHeadshot.jpg";
 import teamMember4 from "../assets/waleedHeadshot.jpg";
 import teamMember5 from "../assets/anshHeadshot.jpg";
@@ -47,7 +47,7 @@ const teamMembers = [
 
 const About: React.FC = () => {
   const { isSideMenu } = useMenuContext();
-  const midpoint = Math.ceil(teamMembers.length / 2); // Calculate midpoint
+  const midpoint = Math.ceil(teamMembers.length / 2);
 
   return (
     <div className={`about ${isSideMenu ? "compressed" : ""}`}>
