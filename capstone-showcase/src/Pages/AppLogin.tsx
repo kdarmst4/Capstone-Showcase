@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
-import '/src/CSS/AdminLogin.css';
-import asuLogoPlain from "/src/assets/asuLogoPlain.png";
+import "../CSS/AdminLogin.css";
+import asuLogoPlain from "../assets/asuLogoPlain.png";
 
 
 const AdminLogin: React.FC = () => {
@@ -25,7 +25,7 @@ const AdminLogin: React.FC = () => {
   return (
     <div className="container">
       <div className="box">
-        <img src={asuLogoPlain} alt="ASU Logo" className="asu-logo" />
+        <img src={asuLogoPlain} alt="ASU Logo" className="logo" />
         <h2 className="admin-login-title">Admin Login</h2>
         <form onSubmit={handleSubmit}>
           <input

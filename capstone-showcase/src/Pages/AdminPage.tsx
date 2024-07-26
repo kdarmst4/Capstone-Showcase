@@ -1,4 +1,3 @@
-// src/AdminPage.tsx
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../AuthContext';
@@ -21,7 +20,6 @@ const AdminPage: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        // Make endpoint
         const response = await axios.get('http://localhost:3000/api/data');
         setData(response.data);
       } catch (error) {
