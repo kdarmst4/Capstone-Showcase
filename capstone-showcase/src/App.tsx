@@ -11,6 +11,8 @@ import Survey from "./Pages/Survey";
 import Interdisciplinary from "./Pages/Interdisciplinary";
 import BiomedicalEngineering from "./Pages/BiomedicalEngineering";
 import About from "./Pages/About";
+import AdminLogin from "./Pages/AppLogin";
+import AdminPage from "./Pages/AdminPage";
 
 const App: React.FC = () => {
   return (
@@ -33,6 +35,8 @@ const App: React.FC = () => {
             />
             <Route path="/interdisciplinary" element={<Interdisciplinary />} />
             <Route path="/survey" element={<Survey />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </div>
       </Router>
