@@ -7,12 +7,12 @@
 
 .content {
   margin-top: 60px;
-  transition: margin-left 0.3s ease; /* Smooth transition */
+  transition: margin-left 0.3s ease;
 }
 
 .side-menu .content {
-  margin-left: 250px; /* Adjust based on the width of the side menu */
-  transition: margin-left 0.3s ease; /* Smooth transition */
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
 }
 
 .logo {

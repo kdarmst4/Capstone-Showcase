@@ -44,15 +44,14 @@ body {
 }
 
 .title-container {
-  color: rgb(140, 29, 64);
+  color: black;
   padding: 10px;
   border-radius: 5px;
   display: inline-block;
-  margin-top: 20px;
 }
 
 .content-area {
-  background: #d3d3d3;
+  background: white !important;
 }
 
 .event-details {
