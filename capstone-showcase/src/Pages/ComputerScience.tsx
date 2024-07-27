@@ -10,16 +10,15 @@ const ComputerSciencePage: React.FC = () => {
   return (
     <div className={`computer-science ${isSideMenu ? 'compressed' : ''}`}>
       <header className="header-background">
-      <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-        <div className="title-container">
-          <h3>Computer Science</h3>
-        </div>
       </header>
       <main className="content-area">
         <section className="event-details">
           <article>
+          <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+            <div className="title-container">
+              <h3>Computer Science</h3>
+            </div>
             <p>{capstoneDescription}</p>
-            {/* Add more content specific to Computer Science */}
           </article>
         </section>
       </main>

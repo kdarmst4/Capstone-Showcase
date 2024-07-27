@@ -6,17 +6,18 @@ body {
 }
 
 .computer-systems-engineering {
-  margin: 0 auto;
+  margin: 0;
+  padding-top: 20px;
   text-align: center;
-  transition: margin-left 0.3s ease; 
+  transition: margin-left 0.3s ease;
 }
 
 .computer-systems-engineering.compressed {
-  margin-left: 250px; 
+  margin-left: 270px; 
 }
 
 .computer-systems-engineering .header-background {
-  background-image: url('../assets/csBanner.jpeg'); 
+  background-image: url('../assets/cseBanner.webp'); 
   background-size: cover;
   background-position: center;
   padding: 40px 20px;
@@ -35,23 +36,14 @@ body {
 }
 
 .computer-systems-engineering .asu-logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 400px; 
+  top: 10px;
+  left: 10px;
+  width: 200px; 
   height: auto; 
 }
 
 .computer-systems-engineering .title-container {
-  font-family: "Fjalla One";
-  font-weight: bold;
-  font-size: 36px;
-  color: rgb(57, 46, 80);
-  background: none;
-  position: absolute;
-  top: 120px; 
-  left: 40px;
-  text-align: left;
+  margin-left: 150px;
 }
 
 .content-area {
