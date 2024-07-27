@@ -17,20 +17,21 @@ body {
 
 .asu-logo {
   margin-top: 0px;
+  width: 400px;
 }
 
 .header-background {
-  background-image: url('../assets/background.webp'); 
+  background-image: url('../assets/mainBack.jpeg'); 
   background-size: cover;
   background-position: center 5%;
-  padding: 40px 20px;
+  padding: 20px 10px; /* Adjusted padding */
   color: white; 
-  min-height: 300px;
+  min-height: 150px; /* Reduced height */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-bottom: 13px solid goldenrod; 
+  border-bottom: 8px solid black; 
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }

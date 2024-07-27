@@ -12,7 +12,7 @@ const BiomedicalEngineering: React.FC = () => {
       <header className="header-background">
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         <div className="title-container">
-          <h3>Biomedical<br />&emsp;&emsp;Engineering</h3>
+          <h3>Biomedical Engineering</h3>
         </div>
       </header>
       <main className="content-area">
