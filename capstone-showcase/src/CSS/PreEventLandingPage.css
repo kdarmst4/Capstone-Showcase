@@ -22,22 +22,24 @@ body {
 }
 
 .header-background {
-  background-image: url('../assets/mainBack.jpeg'); 
+  background-image: url("../assets/mainBack.jpeg");
   background-size: cover;
   background-position: center 5%;
-  padding: 40px 10px; 
-  color: white; 
-  min-height: 150px; 
+  padding: 40px 10px;
+  color: white;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-bottom: 8px solid black; 
+  border-bottom: 8px solid black;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
 
-.header-background h1, .header-background h2, .header-background h3 {
+.header-background h1,
+.header-background h2,
+.header-background h3 {
   margin: 10px 0;
 }
 
@@ -50,11 +52,11 @@ body {
 }
 
 .content-area {
-  background: #d3d3d3; 
+  background: #d3d3d3;
 }
 
 .event-details {
-  text-align: center; 
+  text-align: center;
 }
 
 .event-details .reminder {
@@ -64,8 +66,8 @@ body {
 
 .event-details article {
   display: inline-block;
-  text-align: left; 
-  width: 80%; 
+  text-align: left;
+  width: 80%;
 }
 
 .event-details article p {

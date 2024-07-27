@@ -1,5 +1,5 @@
 .form-container {
-  background-color: #FAFAFA;
+  background-color: white;
   color: black;
   padding: 20px;
   border-radius: 15px;
@@ -55,7 +55,7 @@ input[type="radio"] {
   margin-right: 15px;
 }
 
-.submit {
+.submit-button {
   background-color: #8C1D40;
   color: white;
   padding: 10px 20px;
@@ -64,8 +64,8 @@ input[type="radio"] {
   cursor: pointer;
 }
 
-.submit:hover {
-  background-color: rgb(177, 34, 79);
+.submit-button:hover {
+  background-color: #611029;
 }
 
 .checkbox-list {

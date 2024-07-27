@@ -33,7 +33,6 @@
 
 .side-menu .asu-logo {
   width: 200px;
-  height: auto;
   margin-right: 10px;
 }
 
@@ -49,10 +48,7 @@
 }
 
 .top-menu .home-link {
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  margin: 10px;
 }
 
 .top-menu .menu-list {
@@ -86,8 +82,8 @@
 
 .menu-list a {
   color: black;
-  font-size: 16px;
-  font-family: "Palatino";
+  font-size: 15px;
+  font-family: Trebuchet MS;
   font-weight: bold;
   padding: 10px 15px;
   background: none;
@@ -113,6 +109,7 @@
 }
 
 .majors-title {
+  font-family: Trebuchet MS;
   font-weight: bold;
   cursor: pointer;
   color: black;
@@ -135,13 +132,11 @@
   padding-left: 15px;
 }
 
-.arrow {
-  margin-left: 5px;
-}
-
 .submenu-title {
   margin-top: 10px;
   margin-bottom: 14px;
+  font-family: Trebuchet MS;
+  font-weight: bold;
   cursor: pointer;
   color: black;
   padding: 10px 15px;
@@ -153,10 +148,6 @@
 
 .submenu-title:hover {
   background: #e8e8e8;
-}
-
-.arrow {
-  margin-left: 5px;
 }
 
 .submenu-list {
@@ -207,6 +198,7 @@
 
 .side-menu .toggle-button {
   margin-top: 20px;
+  margin-left: 30px;
   width: 20px;
 }
 

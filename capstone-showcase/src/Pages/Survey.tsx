@@ -271,7 +271,7 @@ const Survey: React.FC = () => {
             <option value="Diverse majors">Diverse majors</option>
           </select>
           <small>
-            * Note: Select diverse majors if your team members are in different
+            * Note: Select Diverse majors if your team members are in different
             majors
           </small>
           {errors.courseNumber && (
