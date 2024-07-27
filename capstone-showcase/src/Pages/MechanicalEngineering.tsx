@@ -1,14 +1,14 @@
 import React from "react";
 import { useMenuContext } from "../MenuContext";
-import "../CSS/ComputerSystemsEngineering.css";
+import "../CSS/MechanicalEngineering.css";
 import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png"
 
-const ComputerSystemsEngineering: React.FC = () => {
+const MechanicalEngineering: React.FC = () => {
   const { isSideMenu } = useMenuContext();
 
   return (
-    <div className={`computer-systems-engineering ${isSideMenu ? 'compressed' : ''}`}>
+    <div className={`mechanical-engineering ${isSideMenu ? 'compressed' : ''}`}>
       <header className="header-background">
       </header>
       <main className="content-area">
@@ -16,7 +16,7 @@ const ComputerSystemsEngineering: React.FC = () => {
           <article>
           <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
             <div className="title-container">
-              <h3>Computer Systems Engineering</h3>
+            <h3>Mechanical Engineering</h3>
             </div>
             <p>{capstoneDescription}</p>
           </article>
@@ -27,4 +27,4 @@ const ComputerSystemsEngineering: React.FC = () => {
   );
 };
 
-export default ComputerSystemsEngineering;
+export default MechanicalEngineering;

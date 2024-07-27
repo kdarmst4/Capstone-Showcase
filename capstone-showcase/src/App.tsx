@@ -11,6 +11,7 @@ import Survey from "./Pages/Survey";
 import Interdisciplinary from "./Pages/Interdisciplinary";
 import BiomedicalEngineering from "./Pages/BiomedicalEngineering";
 import About from "./Pages/About";
+import MechanicalEngineering from "./Pages/MechanicalEngineering";
 import AdminLogin from "./Pages/AppLogin";
 import AdminPage from "./Pages/AdminPage";
 
@@ -29,6 +30,7 @@ const App: React.FC = () => {
               element={<ComputerSystemsEngineering />}
             />
             <Route path="/biomedical-engineering" element={<BiomedicalEngineering />} />
+            <Route path="/mechanical-engineering" element={<MechanicalEngineering />} />
             <Route
               path="/industrial-engineering"
               element={<IndustrialEngineering />}

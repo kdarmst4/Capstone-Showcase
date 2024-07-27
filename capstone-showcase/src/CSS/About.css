@@ -6,20 +6,23 @@ body {
 }
 
 .about {
-  margin: 0 auto;
+  margin: 0;
+  padding-top: 20px;
   text-align: center;
   transition: margin-left 0.3s ease;
 }
 
 .about.compressed {
-  margin-left: 250px;
+  margin-left: 270px;
 }
 
 .about .header-background {
   background-image: url("../assets/teamBanner.png");
   background-size: cover;
   background-position: center;
-  min-height: 250px;
+  padding: 40px 20px;
+  color: white;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -36,8 +39,9 @@ body {
 
 .about .asu-logo {
   position: absolute;
-  left: 10px;
-  width: 200px;
+  margin-top: -14px;
+  left: 8px;
+  width: 415px;
   height: auto;
 }
 

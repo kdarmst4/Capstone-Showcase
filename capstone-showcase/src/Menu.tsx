@@ -110,9 +110,7 @@ const Menu: React.FC = () => {
                     Engineering
                   </Link>
                 </li>
-                {isMajorsOpen && (
-                  <>
-                    <li
+                <li
                       className={`menu-item ${
                         pathname === "/biomedical-engineering" ? "active" : ""
                       }`}
@@ -123,6 +121,8 @@ const Menu: React.FC = () => {
                         Teams
                       </Link>
                     </li>
+                {isMajorsOpen && (
+                  <>
                     <li
                       className={`menu-item ${
                         pathname === "/mechanical-engineering" ? "active" : ""
