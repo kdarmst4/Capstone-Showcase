@@ -9,7 +9,7 @@ const Menu: React.FC = () => {
   const { pathname } = useLocation();
   const { isSideMenu, toggleMenu } = useMenuContext();
   const [isPastSemestersOpen, setIsPastSemestersOpen] = useState(false);
-  const [isMajorsOpen, setIsMajorsOpen] = useState(false); // State for majors collapsible section
+  const [isMajorsOpen, setIsMajorsOpen] = useState(false);
   const submenuRef = useRef<HTMLLIElement>(null);
   const [leaveTimeout, setLeaveTimeout] = useState<number | null>(null);
 
