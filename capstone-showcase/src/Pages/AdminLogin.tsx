@@ -1,24 +1,23 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 import "../CSS/AdminLogin.css";
 import asuLogoPlain from "../assets/asuLogoPlain.png";
 
-
 const AdminLogin: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Placeholder login validation. Replace with actual authentication logic.
-    if (username === 'admin' && password === 'password') {
+    if (username === "admin" && password === "password") {
       setAuth(true);
-      navigate('/admin');
+      navigate("/admin");
     } else {
-      alert('Invalid credentials');
+      alert("Invalid credentials");
     }
   };
 
@@ -44,7 +43,9 @@ const AdminLogin: React.FC = () => {
             required
             className="input"
           />
-          <button type="submit" className="button">Login</button>
+          <button type="submit" className="button">
+            Login
+          </button>
         </form>
       </div>
     </div>
