@@ -18,7 +18,7 @@ const PreEventLandingPage: React.FC = () => {
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
       </header>
       <main className="content-area">
-        <div className="title-container">
+        <div className="home-page-title-container">
           <h3>{projectTitle}</h3>
         </div>
         <section className="event-details">

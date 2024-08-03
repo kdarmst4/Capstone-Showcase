@@ -43,7 +43,7 @@ body {
   margin: 10px 0;
 }
 
-.title-container {
+.home-page-title-container {
   color: black;
   padding: 10px;
   border-radius: 5px;
@@ -52,6 +52,7 @@ body {
 
 .content-area {
   background: white !important;
+  padding-bottom: 25px;
 }
 
 .event-details {

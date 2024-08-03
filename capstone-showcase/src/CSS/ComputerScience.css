@@ -17,11 +17,11 @@ body {
 }
 
 .computer-science .header-background {
-  background-image: url('../assets/csBackground.jpeg'); 
+  background-image: url("../assets/csBackground.jpeg");
   background-size: 80%;
   background-position: center 45%;
   padding: 40px 20px;
-  color: white; 
+  color: white;
   min-height: 150px;
   display: flex;
   flex-direction: column;
@@ -32,30 +32,33 @@ body {
   border-top-left-radius: 10px;
 }
 
-.header-background h1, .header-background h2, .header-background h3 {
+.header-background h1,
+.header-background h2,
+.header-background h3 {
   margin: 10px 0;
 }
 
 .computer-science .title-container {
-  margin-left: 200px;
+  text-align: center;
+  color: black;
 }
 
 .computer-science .asu-logo {
   top: 10px;
   left: 10px;
-  width: 200px; 
+  width: 200px;
   height: auto;
 }
 
 .content-area {
-  background: #d3d3d3; 
+  background: #d3d3d3;
   width: 100%;
-  overflow-y: auto; 
+  overflow-y: auto;
   padding-top: 20px;
 }
 
 .event-details {
-  text-align: center; 
+  text-align: center;
 }
 
 .event-details .reminder {
@@ -65,8 +68,8 @@ body {
 
 .event-details article {
   display: inline-block;
-  text-align: left; 
-  width: 80%; 
+  text-align: left;
+  width: 80%;
 }
 
 .event-details article p {
