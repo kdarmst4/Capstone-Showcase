@@ -52,17 +52,16 @@ body {
   color: black;
   background: none;
   position: absolute;
-  margin-top: 100px;
-  left: 20px;
+  margin-top: 107px;
+  left: 31px;
   text-align: left;
 }
 
-.content-area {
+.about-content-area {
   background-color: white;
   width: 100%;
   overflow-y: auto;
   padding-top: 20px;
-  border-top: 5px solid black;
 }
 
 .event-details {
