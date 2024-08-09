@@ -57,7 +57,7 @@ const About: React.FC = () => {
           <h3>Meet Our Team</h3>
         </div>
       </header>
-      <main className="content-area">
+      <main className="about-content-area">
         <section className="event-details">
           <article>
             <p>{ourTeamDescription}</p>

@@ -10,14 +10,14 @@ const ComputerSystemsEngineering: React.FC = () => {
   return (
     <div className={`computer-systems-engineering ${isSideMenu ? 'compressed' : ''}`}>
       <header className="header-background">
-        <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-        <div className="title-container">
-          <h3>Computer<br/>&emsp;&emsp;Systems<br/>&emsp;&emsp;&emsp;&emsp;Engineering</h3>
-        </div>
       </header>
       <main className="content-area">
         <section className="event-details">
           <article>
+          <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+            <div className="title-container">
+              <h3>Computer Systems Engineering</h3>
+            </div>
             <p>{capstoneDescription}</p>
           </article>
         </section>

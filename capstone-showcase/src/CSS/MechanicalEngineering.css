@@ -5,27 +5,28 @@ body {
   transition: margin-left 0.3s ease;
 }
 
-.biomedical-engineering {
-  padding-top: 20px;
+.mechanical-engineering {
   margin: 0;
+  padding-top: 20px;
   text-align: center;
   transition: margin-left 0.3s ease;
 }
 
-.biomedical-engineering.compressed {
+.mechanical-engineering.compressed {
   margin-left: 270px;
 }
 
-.biomedical-engineering .header-background {
-  background-image: url("../assets/beBanner.png");
+.mechanical-engineering .header-background {
+  background-image: url("../assets/meBanner.jpeg");
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 45%;
   padding: 40px 20px;
   color: white;
   min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   position: relative;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -37,16 +38,16 @@ body {
   margin: 10px 0;
 }
 
-.biomedical-engineering .asu-logo {
-  top: 10;
-  left: 10;
-  width: 200px;
-  height: auto;
-}
-
-.biomedical-engineering .title-container {
+.mechanical-engineering .title-container {
   text-align: center;
   color: black;
+}
+
+.mechanical-engineering .asu-logo {
+  top: 10px;
+  left: 10px;
+  width: 200px;
+  height: auto;
 }
 
 .content-area {
