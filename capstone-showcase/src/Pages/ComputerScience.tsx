@@ -4,7 +4,7 @@ import "../CSS/ComputerScience.css";
 import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 
-const ComputerSciencePage: React.FC = () => {
+const ComputerScience: React.FC = () => {
   const { isSideMenu } = useMenuContext();
 
   return (
@@ -26,4 +26,4 @@ const ComputerSciencePage: React.FC = () => {
   );
 };
 
-export default ComputerSciencePage;
+export default ComputerScience;
