@@ -1,9 +1,9 @@
-.interdisciplinary {
+.informatics {
   margin: 0;
   text-align: center;
   transition: margin-left 0.3s ease;
 }
 
-.interdisciplinary.compressed {
+.informatics.compressed {
   margin-left: 250px;
 }

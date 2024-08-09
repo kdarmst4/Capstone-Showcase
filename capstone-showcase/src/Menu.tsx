@@ -111,16 +111,16 @@ const Menu: React.FC = () => {
                   </Link>
                 </li>
                 <li
-                      className={`menu-item ${
-                        pathname === "/biomedical-engineering" ? "active" : ""
-                      }`}
-                    >
-                      <Link to="/biomedical-engineering">
-                        Biomedical Engineering
-                        <br />
-                        Teams
-                      </Link>
-                    </li>
+                  className={`menu-item ${
+                    pathname === "/biomedical-engineering" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/biomedical-engineering">
+                    Biomedical Engineering
+                    <br />
+                    Teams
+                  </Link>
+                </li>
                 {isMajorsOpen && (
                   <>
                     <li
@@ -152,6 +152,17 @@ const Menu: React.FC = () => {
                     >
                       <Link to="/industrial-engineering">
                         Industrial Engineering
+                        <br />
+                        Teams
+                      </Link>
+                    </li>
+                    <li
+                      className={`menu-item ${
+                        pathname === "/informatics" ? "active" : ""
+                      }`}
+                    >
+                      <Link to="/informatics">
+                        Informatics
                         <br />
                         Teams
                       </Link>
@@ -240,6 +251,13 @@ const Menu: React.FC = () => {
                   <Link to="/industrial-engineering">
                     Industrial Engineering Teams
                   </Link>
+                </li>
+                <li
+                  className={`menu-item ${
+                    pathname === "/informatics" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/informatics">Informatics Teams</Link>
                 </li>
                 <li
                   className={`menu-item ${
