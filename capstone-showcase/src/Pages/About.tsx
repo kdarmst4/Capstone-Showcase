@@ -7,7 +7,8 @@ import teamMember1 from "../assets/anushHeadshot.jpg";
 import teamMember2 from "../assets/naveenProfile.jpg";
 import teamMember3 from "../assets/makenzieHeadshot.jpg";
 import teamMember4 from "../assets/waleedHeadshot.jpg";
-import teamMember5 from "../assets/anshHeadshot.jpg";
+import teamMember5 from "../assets/jiayuanProfile.jpg";
+import teamMember6 from "../assets/anshHeadshot.jpg";
 
 const teamMembers = [
   {
@@ -30,7 +31,6 @@ const teamMembers = [
     image: teamMember3,
     text: [<b>Makenzie Rutledge</b>, "Informatics", "mmrutled@gmail.com"],
   },
-
   {
     image: teamMember4,
     text: [
@@ -41,11 +41,19 @@ const teamMembers = [
   },
   {
     image: teamMember5,
+    text: [
+      <b>Jiayuan Yu</b>,
+      "Computer Science (Cybersecurity)",
+      "jiayuany@asu.edu",
+    ],
+  },
+  {
+    image: teamMember6,
     text: [<b>Ansh Tiwari</b>, "Computer Science", "atiwar31@asu.edu"],
   },
 ];
 
-const About: React.FC = () => {
+const About = () => {
   const { isSideMenu } = useMenuContext();
   const midpoint = Math.ceil(teamMembers.length / 2);
 
