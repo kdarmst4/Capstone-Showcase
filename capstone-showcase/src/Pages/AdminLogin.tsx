@@ -13,9 +13,9 @@ const AdminLogin: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Placeholder login validation. Replace with actual authentication logic.
-    if (username === "admin" && password === "password") {
+    if (username === "admin" && password === "Oh1o4o58vUjp") {
       setAuth(true);
-      navigate("/admin");
+      navigate("/");
     } else {
       alert("Invalid credentials");
     }

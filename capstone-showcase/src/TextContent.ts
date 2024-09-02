@@ -1,7 +1,7 @@
 export const schoolHeader: string = "Arizona State University";
 export const iraEngineeringText: string =
   "Ira A. Fulton Schools of Engineering";
-export const projectTitle: string = "Senior Capstone Project Showcase";
+export const projectTitle: string = "Capstone Project Showcase";
 
 export const landingPageIntro: string = `For the last 2 semesters, students majoring in Computer Science, 
         Biomedical Engineering, Industrial Engineering, Electrical Engineering,

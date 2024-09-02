@@ -8,9 +8,9 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const db = mysql.createConnection({
-  host: "162.241.218.157", //Replace with BlueHost database host
+  host: "162.241.218.157", // Replace with BlueHost database host
   user: "jmtlqnmy_showcase_entries_2024",
-  password: "showcase2024summer", //Replace with BlueHost database password
+  password: "showcase2024summer", // Replace with BlueHost database password
   database: "jntlqnmy_capstone_project_submission", // Replace with BlueHost database name
   authSwitchHandler: function ({ pluginName, pluginData }, cb) {
     if (pluginName === "caching_sha2_password") {
@@ -37,6 +37,7 @@ app.post("/api/survey", (req, res) => {
     projectDescription,
     sponsor,
     teamMembers,
+    teamMemberNames,
     courseNumber,
     demo,
     power,
@@ -44,9 +45,11 @@ app.post("/api/survey", (req, res) => {
     youtubeLink,
   } = req.body;
   console.log("Received survey data:", req.body);
+
   const sql =
-    "INSERT INTO survey_entries (email, name, projectTitle, description, sponsor, teamMembers, courseNumber, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO survey_entries (email, name, projectTitle, description, sponsor, teamMembers, teamMemberNames, courseNumber, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   console.log("Executing SQL:", sql);
+
   db.query(
     sql,
     [
@@ -56,6 +59,7 @@ app.post("/api/survey", (req, res) => {
       projectDescription,
       sponsor,
       teamMembers,
+      teamMemberNames,
       courseNumber,
       demo,
       power,
