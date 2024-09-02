@@ -277,22 +277,36 @@ const Survey: React.FC = () => {
           )}
         </div>
         <div className="form-box">
-          <label htmlFor="courseNumber">Course Number:</label>
+          <label htmlFor="courseNumber">Major:</label>
           <select
             name="courseNumber"
             id="courseNumber"
             value={formData.courseNumber}
             onChange={handleChange}
           >
-            <option value="">Select a course</option>
-            <option value="CSE 486">CSE 486</option>
-            <option value="CSE 424">CSE 424</option>
-            <option value="IEE 486">IEE 486</option>
-            <option value="Diverse majors">Diverse majors</option>
+            <option value="">Select a major</option>
+            <option value="computer-science">Computer Science</option>
+            <option value="computer-systems-engineering">
+              Computer Systems Engineering
+            </option>
+            <option value="biomedical-engineering">
+              Biomedical Engineering
+            </option>
+            <option value="mechanical-engineering">
+              Mechanical Engineering
+            </option>
+            <option value="electrical-engineering">
+              Electrical Engineering
+            </option>
+            <option value="industrial-engineering">
+              Industrial Engineering
+            </option>
+            <option value="informatics">Informatics</option>
+            <option value="interdisciplinary">Interdisciplinary</option>
           </select>
           <small>
-            * Note: Select Diverse majors if your team members are in different
-            majors
+            * Note: Select Interdisciplinary if your team members are in
+            different majors
           </small>
           {errors.courseNumber && (
             <p className="error-message">{errors.courseNumber}</p>

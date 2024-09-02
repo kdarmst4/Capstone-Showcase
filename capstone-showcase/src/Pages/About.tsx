@@ -9,7 +9,7 @@ import teamMember3 from "../assets/naveenProfile.jpg";
 import teamMember4 from "../assets/makenzieHeadshot.jpg";
 import teamMember5 from "../assets/waleedHeadshot.jpg";
 import teamMember6 from "../assets/anshProfile.jpg";
-import teamMember7 from "../assets/profilePlaceholder.png";
+import teamMember7 from "../assets/alexanderProfile.jpg";
 import teamMember8 from "../assets/profilePlaceholder.png";
 import teamMember9 from "../assets/profilePlaceholder.png";
 
@@ -56,7 +56,7 @@ const teamMembers = [
   },
   {
     image: teamMember7,
-    text: [<b>Alexander Trinh</b>, "Major", "Email"],
+    text: [<b>Alexander Trinh</b>, "Computer Science", "atrinh8@asu.edu"],
   },
   {
     image: teamMember8,
@@ -76,9 +76,6 @@ const About = () => {
     <div className={`about ${isSideMenu ? "compressed" : ""}`}>
       <header className="header-background">
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-        <div className="title-container">
-          <h3>Meet Our Team</h3>
-        </div>
       </header>
       <main className="about-content-area">
         <section className="event-details">
@@ -86,7 +83,6 @@ const About = () => {
             <p>{ourTeamDescription}</p>
           </article>
         </section>
-        <h3 className="team-header">Capstone Showcase Team</h3>
         <div className="underline"></div>
         <section className="team-section">
           <div className="team-row">
