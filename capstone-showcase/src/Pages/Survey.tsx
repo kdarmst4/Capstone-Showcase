@@ -9,6 +9,7 @@ interface FormData {
   projectDescription: string;
   sponsor: string;
   teamMembers: string;
+  teamMemberNames: string;
   courseNumber: string;
   demo: string;
   power: string;
@@ -23,6 +24,7 @@ interface FormErrors {
   projectDescription: string;
   sponsor: string;
   teamMembers: string;
+  teamMemberNames: string;
   courseNumber: string;
   demo: string;
   power: string;
@@ -38,6 +40,7 @@ const Survey: React.FC = () => {
     projectDescription: "",
     sponsor: "",
     teamMembers: "",
+    teamMemberNames: "",
     courseNumber: "",
     demo: "",
     power: "",
@@ -52,6 +55,7 @@ const Survey: React.FC = () => {
     projectDescription: "",
     sponsor: "",
     teamMembers: "",
+    teamMemberNames: "",
     courseNumber: "",
     demo: "",
     power: "",
@@ -79,9 +83,7 @@ const Survey: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     const formErrors = validateFormData(formData);
-
     setErrors(formErrors);
 
     if (hasErrors(formErrors)) {
@@ -109,6 +111,7 @@ const Survey: React.FC = () => {
       projectDescription,
       sponsor,
       teamMembers,
+      teamMemberNames,
       courseNumber,
       demo,
       nda,
@@ -125,6 +128,9 @@ const Survey: React.FC = () => {
       sponsor: !sponsor ? "Please enter the name of your sponsor/mentor." : "",
       teamMembers: !teamMembers
         ? "Please enter the number of team members."
+        : "",
+      teamMemberNames: !teamMemberNames
+        ? "Please enter the full names of all team members, including yourself, separated by commas."
         : "",
       courseNumber: !courseNumber ? "Please select a course number." : "",
       demo: !demo
@@ -183,17 +189,6 @@ const Survey: React.FC = () => {
           </p>
         </div>
         <div className="form-box">
-          <label htmlFor="email">ASU Email:</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <p className="error-message">{errors.email}</p>}
-        </div>
-        <div className="form-box">
           <label htmlFor="name">Your Name:</label>
           <input
             type="text"
@@ -203,6 +198,17 @@ const Survey: React.FC = () => {
             onChange={handleChange}
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
+        </div>
+        <div className="form-box">
+          <label htmlFor="email">ASU Email:</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
         <div className="form-box">
           <label htmlFor="projectTitle">Project Title:</label>
@@ -221,7 +227,9 @@ const Survey: React.FC = () => {
           )}
         </div>
         <div className="form-box">
-          <label htmlFor="projectDescription">Project Description:</label>
+          <label htmlFor="projectDescription">
+            Project Description (3 sentences max):
+          </label>
           <textarea
             name="projectDescription"
             id="projectDescription"
@@ -254,6 +262,18 @@ const Survey: React.FC = () => {
           />
           {errors.teamMembers && (
             <p className="error-message">{errors.teamMembers}</p>
+          )}
+        </div>
+        <div className="form-box">
+          <label htmlFor="teamMemberNames">Team Members' Full Names:</label>
+          <textarea
+            name="teamMemberNames"
+            id="teamMemberNames"
+            value={formData.teamMemberNames}
+            onChange={handleChange}
+          />
+          {errors.teamMemberNames && (
+            <p className="error-message">{errors.teamMemberNames}</p>
           )}
         </div>
         <div className="form-box">
@@ -330,7 +350,7 @@ const Survey: React.FC = () => {
                 />{" "}
                 No
               </label>
-            </div>
+            </div>{" "}
             {errors.power && <p className="error-message">{errors.power}</p>}
           </div>
         )}
@@ -361,9 +381,9 @@ const Survey: React.FC = () => {
           {errors.nda && <p className="error-message">{errors.nda}</p>}
         </div>
         <div className="form-box">
-          <label htmlFor="youtubeLink">YouTube Link:</label>
+          <label htmlFor="youtubeLink">YouTube Video Link:</label>
           <input
-            type="text"
+            type="url"
             name="youtubeLink"
             id="youtubeLink"
             value={formData.youtubeLink}
