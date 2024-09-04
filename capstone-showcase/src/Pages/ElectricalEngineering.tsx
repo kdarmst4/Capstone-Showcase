@@ -1,28 +1,28 @@
 import React, { useEffect } from "react";
 import { useMenuContext } from "../MenuContext";
-import "../CSS/ComputerScience.css";
+import "../CSS/ElectricalEngineering.css";
 import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 
-const ComputerScience: React.FC = () => {
+const ElectricalEngineering: React.FC = () => {
   const { isSideMenu } = useMenuContext();
 
   useEffect(() => {
-    document.body.classList.add("computer-science-page-body");
+    document.body.classList.add("electrical-engineering-page-body");
     return () => {
-      document.body.classList.remove("computer-science-page-body");
+      document.body.classList.remove("electrical-engineering-page-body");
     };
   }, []);
 
   return (
-    <div className={`computer-science ${isSideMenu ? "compressed" : ""}`}>
+    <div className={`electrical-engineering ${isSideMenu ? "compressed" : ""}`}>
       <header className="header-background"></header>
       <main className="content-area">
         <section className="event-details">
           <article>
             <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
             <div className="title-container">
-              <h3>Computer Science</h3>
+              <h3>Electrical Engineering</h3>
             </div>
             <p>{capstoneDescription}</p>
           </article>
@@ -33,4 +33,4 @@ const ComputerScience: React.FC = () => {
   );
 };
 
-export default ComputerScience;
+export default ElectricalEngineering;

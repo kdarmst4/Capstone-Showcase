@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/PreEventLandingPage.css";
@@ -13,6 +13,13 @@ import {
 const PreEventLandingPage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.classList.add("pre-event-landing-page-body");
+    return () => {
+      document.body.classList.remove("pre-event-landing-page-body");
+    };
+  }, []);
 
   const handleAdminLoginClick = () => {
     navigate("/admin");

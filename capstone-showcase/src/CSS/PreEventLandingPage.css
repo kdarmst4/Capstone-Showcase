@@ -1,8 +1,6 @@
-body {
+body.pre-event-landing-page-body {
   background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
-  margin: 0;
-  transition: margin-left 0.3s ease;
 }
 
 .pre-event-landing-page {
