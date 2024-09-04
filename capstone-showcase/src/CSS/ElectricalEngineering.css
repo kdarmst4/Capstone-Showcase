@@ -1,20 +1,20 @@
-.informatics-page-body {
+.electrical-engineering-page-body {
   background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
 }
 
-.informatics {
+.electrical-engineering {
   margin: 0;
   padding-top: 20px;
   text-align: center;
   transition: margin-left 0.3s ease;
 }
 
-.informatics.compressed {
+.electrical-engineering.compressed {
   margin-left: 270px;
 }
 
-.informatics .header-background {
+.electrical-engineering .header-background {
   background-image: url("../assets/meBanner.jpeg");
   background-size: cover;
   background-position: center 45%;
@@ -36,14 +36,14 @@
   margin: 10px 0;
 }
 
-.informatics .asu-logo {
+.electrical-engineering .asu-logo {
   top: 10px;
   left: 10px;
   width: 200px;
   height: auto;
 }
 
-.informatics .title-container {
+.electrical-engineering .title-container {
   text-align: center;
   color: black;
 }

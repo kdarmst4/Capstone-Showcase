@@ -1,8 +1,6 @@
-body {
+.biomedical-engineering-page-body {
   background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
-  margin: 0;
-  transition: margin-left 0.3s ease;
 }
 
 .biomedical-engineering {
@@ -38,8 +36,8 @@ body {
 }
 
 .biomedical-engineering .asu-logo {
-  top: 10;
-  left: 10;
+  top: 10px;
+  left: 10px;
   width: 200px;
   height: auto;
 }

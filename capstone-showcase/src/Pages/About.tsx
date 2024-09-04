@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/About.css";
 import { ourTeamDescription } from "../TextContent";
@@ -71,6 +71,13 @@ const teamMembers = [
 const About = () => {
   const { isSideMenu } = useMenuContext();
   const membersPerRow = Math.ceil(teamMembers.length / 3);
+
+  useEffect(() => {
+    document.body.classList.add("about-page-body");
+    return () => {
+      document.body.classList.remove("about-page-body");
+    };
+  }, []);
 
   return (
     <div className={`about ${isSideMenu ? "compressed" : ""}`}>
