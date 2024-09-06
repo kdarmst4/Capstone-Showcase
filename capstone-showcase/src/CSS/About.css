@@ -37,56 +37,11 @@
   height: auto;
 }
 
-.about .title-container {
-  font-family: "Fjalla One", sans-serif;
-  font-weight: bold;
-  font-size: 27px;
-  color: black;
-  background: none;
-  position: absolute;
-  margin-top: 107px;
-  left: 31px;
-  text-align: left;
-}
-
 .about-content-area {
   background-color: white;
   width: 100%;
   overflow-y: auto;
   padding-top: 20px;
-}
-
-.event-details {
-  text-align: center;
-}
-
-.event-details .reminder {
-  font-size: 18px;
-  margin: 20px 0;
-}
-
-.event-details article {
-  display: inline-block;
-  text-align: left;
-  width: 80%;
-}
-
-.event-details article p {
-  color: black;
-  font-weight: bold;
-  padding: 15px;
-  border: 1px solid black;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.team-header {
-  color: black;
-  font-size: 35px;
-  text-align: center;
-  margin-top: 18px;
-  margin-bottom: 0px;
 }
 
 .team-section {
@@ -106,7 +61,7 @@
 }
 
 .team-member {
-  width: 270px;
+  width: 280px;
   height: 270px;
   text-align: center;
   background-color: #f9f9f9;
@@ -144,6 +99,17 @@
 .team-member p b {
   font-size: 14px;
   color: #213547;
+}
+
+.team-icons a {
+  margin: 0 10px;
+  font-size: 20px;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+.team-icons a:hover {
+  color: #0077b5;
 }
 
 footer {

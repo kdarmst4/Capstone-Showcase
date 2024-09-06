@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/PreEventLandingPage.css";
 import asuLogo from "../assets/asuLogo.png";
+import showcase from "../assets/showcase.jpg";
 import {
   capstoneDescription,
   landingPageIntro,
@@ -50,7 +51,7 @@ const PreEventLandingPage: React.FC = () => {
           </button>
         </div>
         <div className="home-page-title-container">
-          <h3>{projectTitle}</h3>
+          <img src={showcase} alt="Showcase Event" className="showcase-image" />
         </div>
         <section className="event-details">
           <article>

@@ -1,6 +1,6 @@
 body.pre-event-landing-page-body {
   background-color: rgb(72, 69, 70);
-  font-family: Arial, sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .pre-event-landing-page {
@@ -33,6 +33,7 @@ body.pre-event-landing-page-body {
   border-bottom: 8px solid black;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .header-background h1,
@@ -57,11 +58,14 @@ body.pre-event-landing-page-body {
   border-radius: 10px;
   cursor: pointer;
   font-size: 18px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .admin-login-button:hover,
 .survey-form-button:hover {
   background-color: #611029;
+  transform: translateY(-3px);
 }
 
 .admin-login-button:focus,
@@ -70,29 +74,30 @@ body.pre-event-landing-page-body {
   box-shadow: none;
 }
 
-.home-page-title-container {
-  color: black;
-  padding: 15px;
-  border-radius: 15px;
-  display: inline-block;
-  margin-top: 20px;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+.showcase-image {
+  width: 26.35%;
+  height: auto;
+  margin-top: 27px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.showcase-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  cursor: default;
 }
 
 .content-area {
   background: white !important;
   padding-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .event-details {
   margin-top: 5px;
   text-align: center;
-}
-
-.event-details .reminder {
-  font-size: 18px;
-  margin: 20px 0;
 }
 
 .event-details article {
@@ -110,6 +115,12 @@ body.pre-event-landing-page-body {
   margin-bottom: 15px;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.event-details article p:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
 }
 
 footer {
