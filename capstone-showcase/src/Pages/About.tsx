@@ -16,55 +16,75 @@ import teamMember9 from "../assets/profilePlaceholder.png";
 const teamMembers = [
   {
     image: teamMember1,
-    text: [
-      <b>Jiayuan Yu</b>,
-      <span className="nowrap">Computer Science (Cybersecurity)</span>,
-      "jiayuany@asu.edu",
-    ],
+    name: "Jiayuan Yu",
+    major: "Computer Science (Cybersecurity)",
+    email: "jiayuany@asu.edu",
+    linkedin: "https://www.linkedin.com/in/jiayuan-yu-77b261262/",
+    github: "https://github.com/jy202050",
   },
   {
     image: teamMember2,
-    text: [
-      <b>Anush Garimella</b>,
-      "Computer Science",
-      "anush.garimella@gmail.com",
-    ],
+    name: "Anush Garimella",
+    major: "Computer Science",
+    email: "anush.garimella@gmail.com",
+    linkedin: "https://www.linkedin.com/in/anush-garimella/",
+    github: "https://github.com/agarimel",
   },
   {
     image: teamMember3,
-    text: [
-      <b>Naveen Ramesh</b>,
-      "Computer Science",
-      "naveenramesh987@gmail.com",
-    ],
+    name: "Naveen Ramesh",
+    major: "Computer Science",
+    email: "naveenramesh987@gmail.com",
+    linkedin: "https://www.linkedin.com/in/naveenramesh987/",
+    github: "https://github.com/naveenramesh987",
   },
   {
     image: teamMember4,
-    text: [<b>Makenzie Rutledge</b>, "Informatics", "mmrutled@gmail.com"],
+    name: "Makenzie Rutledge",
+    major: "Informatics",
+    email: "mmrutled@gmail.com",
+    linkedin: "https://www.linkedin.com/in/makenzie-rutledge/",
+    github: "https://github.com/mmrutled",
   },
   {
     image: teamMember5,
-    text: [
-      <b>Waleed Briouig</b>,
-      <span className="nowrap">Computer Science (Software Engineering)</span>,
-      "wbriouig@asu.edu",
-    ],
+    name: "Waleed Briouig",
+    major: "Computer Science (Software Engineering)",
+    email: "wbriouig@asu.edu",
+    linkedin: "https://www.linkedin.com/in/waleed-briouig-asu/",
+    github: "https://github.com/wbriouig",
   },
   {
     image: teamMember6,
-    text: [<b>Ansh Tiwari</b>, "Computer Science", "atiwar31@asu.edu"],
+    name: "Ansh Tiwari",
+    major: "Computer Science",
+    email: "atiwar31@asu.edu",
+    linkedin: "https://www.linkedin.com/in/ansht99/",
+    github: "https://github.com/ansht9",
   },
   {
     image: teamMember7,
-    text: [<b>Alexander Trinh</b>, "Computer Science", "atrinh8@asu.edu"],
+    name: "Alexander Trinh",
+    major: "Computer Science",
+    email: "atrinh8@asu.edu",
+    linkedin: "https://www.linkedin.com/in/alex-trinh-98a577259/",
+    github: "https://github.com/at-trinh",
   },
   {
     image: teamMember8,
-    text: [<b>Karina Winkelmann</b>, "Major", "Email"],
+    name: "Karina Winkelmann",
+    major: "Major",
+    email: "",
+    linkedin: "",
+    github: "",
   },
   {
     image: teamMember9,
-    text: [<b>Brian Amen</b>, "Major", "Email"],
+    name: "Brian Amen",
+    major: "Computer Science (Cybersecurity)",
+    email: "bamen@asu.edu",
+    linkedin: "https://www.linkedin.com/in/brian-amen-697bab1b5/",
+    github: "https://github.com/brainamen",
   },
 ];
 
@@ -92,44 +112,52 @@ const About = () => {
         </section>
         <div className="underline"></div>
         <section className="team-section">
-          <div className="team-row">
-            {teamMembers.slice(0, membersPerRow).map((member, index) => (
-              <div key={index} className="team-member">
-                <img src={member.image} alt={`Team Member ${index + 1}`} />
-                {member.text.map((line, lineIndex) => (
-                  <p key={lineIndex}>{line}</p>
-                ))}
-              </div>
-            ))}
-          </div>
-          <div className="team-row">
-            {teamMembers
-              .slice(membersPerRow, membersPerRow * 2)
-              .map((member, index) => (
-                <div key={index} className="team-member">
-                  <img
-                    src={member.image}
-                    alt={`Team Member ${index + membersPerRow + 1}`}
-                  />
-                  {member.text.map((line, lineIndex) => (
-                    <p key={lineIndex}>{line}</p>
+          {Array(3)
+            .fill(0)
+            .map((_, rowIndex) => (
+              <div className="team-row" key={rowIndex}>
+                {teamMembers
+                  .slice(
+                    rowIndex * membersPerRow,
+                    (rowIndex + 1) * membersPerRow
+                  )
+                  .map((member, index) => (
+                    <div key={index} className="team-member">
+                      <img
+                        src={member.image}
+                        alt={`Team Member ${index + 1}`}
+                      />
+                      <p>
+                        <b>{member.name}</b>
+                      </p>
+                      <p>{member.major}</p>
+                      <div className="team-icons">
+                        <a
+                          href={`mailto:${member.email}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="fas fa-envelope"></i>
+                        </a>
+                        <a
+                          href={member.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="fab fa-linkedin"></i>
+                        </a>
+                        <a
+                          href={member.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="fab fa-github"></i>
+                        </a>
+                      </div>
+                    </div>
                   ))}
-                </div>
-              ))}
-          </div>
-          <div className="team-row">
-            {teamMembers.slice(membersPerRow * 2).map((member, index) => (
-              <div key={index} className="team-member">
-                <img
-                  src={member.image}
-                  alt={`Team Member ${index + membersPerRow * 2 + 1}`}
-                />
-                {member.text.map((line, lineIndex) => (
-                  <p key={lineIndex}>{line}</p>
-                ))}
               </div>
             ))}
-          </div>
         </section>
       </main>
       <footer>&copy; 2024 ASU Capstone Projects. All rights reserved.</footer>

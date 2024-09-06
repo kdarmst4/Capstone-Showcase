@@ -30,6 +30,6 @@ export const navigationInstructions: string = `The projects are organized by maj
         `;
 
 export const ourTeamDescription: string = `Meet the talented team of developers who brought this web application to 
-        life during the spring, summer, and fall semesters of 2024. This application enables semester teams to 
+        life during the summer and fall semesters of 2024. This application enables semester teams to 
         upload and showcase their capstone projects. Additionally, it provides essential information about 
         capstone presentations at ASU for each term.`;
