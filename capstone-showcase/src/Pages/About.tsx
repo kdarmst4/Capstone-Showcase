@@ -3,14 +3,14 @@ import { useMenuContext } from "../MenuContext";
 import "../CSS/About.css";
 import { ourTeamDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
-import teamMember1 from "../assets/jiayuanProfile.jpg";
+import teamMember1 from "../assets/jiayuanProfile.png";
 import teamMember2 from "../assets/anushHeadshot.jpg";
 import teamMember3 from "../assets/naveenProfile.jpg";
 import teamMember4 from "../assets/makenzieHeadshot.jpg";
 import teamMember5 from "../assets/waleedHeadshot.jpg";
 import teamMember6 from "../assets/anshProfile.jpg";
 import teamMember7 from "../assets/alexanderProfile.jpg";
-import teamMember8 from "../assets/profilePlaceholder.png";
+import teamMember8 from "../assets/karinaProfile.jpg";
 import teamMember9 from "../assets/profilePlaceholder.png";
 
 const teamMembers = [
@@ -73,10 +73,10 @@ const teamMembers = [
   {
     image: teamMember8,
     name: "Karina Winkelmann",
-    major: "Major",
-    email: "",
-    linkedin: "",
-    github: "",
+    major: "Computer Systems Engineering",
+    email: "kwinkel2@asu.edu",
+    linkedin: "https://www.linkedin.com/in/karina-winkelmann-122055235/",
+    github: "https://github.com/Karina528",
   },
   {
     image: teamMember9,
