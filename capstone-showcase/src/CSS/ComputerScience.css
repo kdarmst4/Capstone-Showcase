@@ -1,12 +1,10 @@
-body {
+.computer-science-page-body {
   background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
-  margin: 0;
-  transition: margin-left 0.3s ease;
 }
-
 .computer-science {
   margin: 0;
+  padding-top: 20px;
   text-align: center;
   transition: margin-left 0.3s ease;
 }
@@ -16,12 +14,12 @@ body {
 }
 
 .computer-science .header-background {
-  background-image: url('../assets/csBackground.jpeg'); 
-  background-size: cover;
+  background-image: url("../assets/csBackground.png");
+  background-size: 80%;
   background-position: center 45%;
   padding: 40px 20px;
-  color: white; 
-  min-height: 300px;
+  color: white;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -31,40 +29,33 @@ body {
   border-top-left-radius: 10px;
 }
 
-.header-background h1, .header-background h2, .header-background h3 {
+.header-background h1,
+.header-background h2,
+.header-background h3 {
   margin: 10px 0;
 }
 
 .computer-science .title-container {
-  font-family: "Fjalla One";
-  font-weight: bold;
-  font-size: 48px;
-  color: rgb(19, 185, 169);
-  background: none;
-  position: absolute;
-  top: 0%;
-  margin-top: 0px;
-  margin-left: 170px;
-  transform: translateX(-50%);
+  text-align: center;
+  color: black;
 }
 
 .computer-science .asu-logo {
-  position: absolute;
   top: 10px;
   left: 10px;
-  width: 200px; /* Adjust the size as needed */
+  width: 200px;
   height: auto;
 }
 
 .content-area {
-  background: #d3d3d3; 
+  background: #d3d3d3;
   width: 100%;
-  overflow-y: auto; 
+  overflow-y: auto;
   padding-top: 20px;
 }
 
 .event-details {
-  text-align: center; 
+  text-align: center;
 }
 
 .event-details .reminder {
@@ -74,8 +65,8 @@ body {
 
 .event-details article {
   display: inline-block;
-  text-align: left; 
-  width: 80%; 
+  text-align: left;
+  width: 80%;
 }
 
 .event-details article p {

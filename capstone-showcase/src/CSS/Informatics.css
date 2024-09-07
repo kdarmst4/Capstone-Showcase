@@ -1,0 +1,85 @@
+.informatics-page-body {
+  background-color: rgb(72, 69, 70);
+  font-family: Arial, sans-serif;
+}
+
+.informatics {
+  margin: 0;
+  padding-top: 20px;
+  text-align: center;
+  transition: margin-left 0.3s ease;
+}
+
+.informatics.compressed {
+  margin-left: 270px;
+}
+
+.informatics .header-background {
+  background-image: url("../assets/meBanner.jpeg");
+  background-size: cover;
+  background-position: center 45%;
+  padding: 40px 20px;
+  color: white;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.header-background h1,
+.header-background h2,
+.header-background h3 {
+  margin: 10px 0;
+}
+
+.informatics .asu-logo {
+  top: 10px;
+  left: 10px;
+  width: 200px;
+  height: auto;
+}
+
+.informatics .title-container {
+  text-align: center;
+  color: black;
+}
+
+.content-area {
+  background: #d3d3d3;
+  width: 100%;
+  overflow-y: auto;
+  padding-top: 20px;
+}
+
+.event-details {
+  text-align: center;
+}
+
+.event-details .reminder {
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+.event-details article {
+  display: inline-block;
+  text-align: left;
+  width: 80%;
+}
+
+.event-details article p {
+  color: black;
+  font-weight: bold;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+footer {
+  margin-top: 20px;
+  font-size: 14px;
+}

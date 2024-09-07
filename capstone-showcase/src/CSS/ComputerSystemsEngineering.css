@@ -1,68 +1,61 @@
-body {
+.computer-systems-engineering-page-body {
   background-color: rgb(72, 69, 70);
   font-family: Arial, sans-serif;
-  margin: 0;
-  transition: margin-left 0.3s ease;
 }
 
 .computer-systems-engineering {
-  margin: 0 auto;
+  margin: 0;
+  padding-top: 20px;
   text-align: center;
-  transition: margin-left 0.3s ease; 
+  transition: margin-left 0.3s ease;
 }
 
 .computer-systems-engineering.compressed {
-  margin-left: 250px; 
+  margin-left: 270px;
 }
 
 .computer-systems-engineering .header-background {
-  background-image: url('../assets/csBanner.jpeg'); 
+  background-image: url("../assets/cseBanner.webp");
   background-size: cover;
   background-position: center;
   padding: 40px 20px;
-  color: white; 
-  min-height: 300px;
+  color: white;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   position: relative;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
 
-.header-background h1, .header-background h2, .header-background h3 {
+.header-background h1,
+.header-background h2,
+.header-background h3 {
   margin: 10px 0;
 }
 
 .computer-systems-engineering .asu-logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 400px; 
-  height: auto; 
+  top: 10px;
+  left: 10px;
+  width: 200px;
+  height: auto;
 }
 
 .computer-systems-engineering .title-container {
-  font-family: "Fjalla One";
-  font-weight: bold;
-  font-size: 36px;
-  color: rgb(57, 46, 80);
-  background: none;
-  position: absolute;
-  top: 120px; 
-  left: 40px;
-  text-align: left;
+  text-align: center;
+  color: black;
 }
 
 .content-area {
-  background: #d3d3d3; 
+  background: #d3d3d3;
   width: 100%;
-  overflow-y: auto; 
+  overflow-y: auto;
   padding-top: 20px;
 }
 
 .event-details {
-  text-align: center; 
+  text-align: center;
 }
 
 .event-details .reminder {
@@ -72,8 +65,8 @@ body {
 
 .event-details article {
   display: inline-block;
-  text-align: left; 
-  width: 80%; 
+  text-align: left;
+  width: 80%;
 }
 
 .event-details article p {
