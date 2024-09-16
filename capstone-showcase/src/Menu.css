@@ -7,7 +7,7 @@
 
 .menu-container {
   width: 100%;
-  height: 80px;
+  height: auto;
   background: #d3d3d3;
   padding: 10px 5px;
   display: flex;
@@ -19,15 +19,10 @@
   overflow-x: auto;
 }
 
-.menu {
-  display: flex;
-  justify-content: left;
-}
-
 .top-menu .asu-logo {
   width: 150px;
   margin-top: 10px;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .side-menu .asu-logo {
@@ -59,7 +54,7 @@
 }
 
 .top-menu .menu-list li {
-  margin: 0 10px;
+  margin: 0 6px;
   position: relative;
   white-space: nowrap;
 }
@@ -67,7 +62,7 @@
 .top-menu .menu-list li:not(:last-child)::after {
   content: "";
   position: absolute;
-  right: -10px;
+  right: -6px;
   height: 80%;
   width: 2px;
   background: gray;
@@ -76,7 +71,7 @@
 }
 
 .side-menu .menu-list {
-  align-items: left;
+  align-items: flex-start;
 }
 
 .menu-list a {
@@ -87,14 +82,31 @@
   padding: 10px 15px;
   background: none;
   display: flex;
-  align-items: left;
+  align-items: center;
   text-decoration: none;
 }
 
 .menu-item.active a {
-  background-color: darkgray;
+  background-color: black;
+  color: white;
   font-weight: bold;
   border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-item.active a:hover {
+  background-color: white;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.menu-item.active .home-icon {
+  fill: white;
+}
+
+.menu-item.active:hover .home-icon,
+.menu-item.active .home-icon:hover {
+  fill: black;
 }
 
 .menu-list a:hover {
@@ -132,8 +144,6 @@
 }
 
 .submenu-title {
-  margin-top: 10px;
-  margin-bottom: 14px;
   font-family: Trebuchet MS;
   font-weight: bold;
   cursor: pointer;
@@ -155,7 +165,7 @@
   position: absolute;
   background: #fafafa;
   border-radius: 15px;
-  margin: 5px;
+  margin: 5px 0;
   padding: 10px 0;
   z-index: 1001;
 }
@@ -168,7 +178,7 @@
   align-items: center;
   display: flex;
   text-decoration: none;
-  margin: 5px 0px;
+  margin: 5px 0;
 }
 
 .toggle-button {
@@ -190,14 +200,11 @@
 }
 
 .top-menu .toggle-button {
-  margin-top: 15px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 15px 10px 0 10px;
 }
 
 .side-menu .toggle-button {
-  margin-top: 20px;
-  margin-left: 30px;
+  margin: 20px 0 0 30px;
   width: 20px;
 }
 
@@ -214,8 +221,7 @@
 }
 
 .side-menu .menu {
-  margin-left: 0px;
-  margin-top: 0px;
+  margin: 0;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -254,10 +260,6 @@
 
 .top-menu .submenu-container {
   margin-top: 13px;
-}
-
-.content {
-  margin-top: 80px;
 }
 
 .side-menu .content {
