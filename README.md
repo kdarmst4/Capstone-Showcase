@@ -2,7 +2,7 @@
 
 # Website Tools Used
 - Front-end: TypeScript + React
-- Back-end: JavaScript + ExpressJS
+- Back-end: JavaScript + ExpressJS + MySQL
 - API: REST
 
 # Running the Website Locally
