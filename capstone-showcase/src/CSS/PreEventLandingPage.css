@@ -16,6 +16,11 @@ body.pre-event-landing-page-body {
 .asu-logo {
   margin-top: 0px;
   width: 400px;
+  transition: transform 0.3s ease;
+}
+
+.asu-logo:hover {
+  transform: scale(1.05);
 }
 
 .header-background {
@@ -54,23 +59,25 @@ body.pre-event-landing-page-body {
   color: white;
   padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 25px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: bold;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .admin-login-button:hover,
 .survey-form-button:hover {
   background-color: #611029;
   transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .admin-login-button:focus,
 .survey-form-button:focus {
   outline: none;
-  box-shadow: none;
+  box-shadow: 0 0 0 3px rgba(140, 29, 64, 0.5);
 }
 
 .showcase-image {
