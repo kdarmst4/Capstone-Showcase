@@ -184,8 +184,12 @@ const Survey: React.FC = () => {
           <p className="form-description">
             Read all questions and descriptions carefully. If you encounter
             issues with this form that prohibit you from submitting accurate
-            information, email showcasewebsite@asu.edu with a detailed
-            description of the problem.
+            information, email{" "}
+            <a href="mailto:showcasewebsite@asu.edu">
+              {" "}
+              showcasewebsite@asu.edu{" "}
+            </a>
+            with a detailed description of the problem.
           </p>
         </div>
         <div className="form-box">

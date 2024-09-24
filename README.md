@@ -2,7 +2,7 @@
 
 # Website Tools Used
 - Front-end: TypeScript + React
-- Back-end: JavaScript + ExpressJS
+- Back-end: JavaScript + ExpressJS + MySQL
 - API: REST
 
 # Running the Website Locally
@@ -10,9 +10,10 @@
 - Ex. cd Downloads
 
 2. git clone https://github.com/mmrutled/Capstone-Showcase.git
-3. In Visual Studio Code, open the new folder created by line 2
+   
+4. In Visual Studio Code, open the new folder created by line 2
 
-4. Npm create vite@latest capstone-showcase
+5. Npm create vite@latest capstone-showcase
 - Choose Ignore files and continue
 - Choose React
 - Choose TypeScript
@@ -22,12 +23,13 @@
 
 6. npm install
 
-7. Troubleshoot if the latest version of the website is not showing. If not, skip to next step
-- git fetch --all
-- git reset --hard origin/main
+7. git fetch --all
 
-8. npm install react-router-dom@latest
-9. Run the website
+8. git reset --hard origin/main
+
+9. npm install react-router-dom@latest
+
+10. Run the website
 - npm run dev
 
 # Testing Frontend-Backend connection locally:

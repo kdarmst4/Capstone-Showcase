@@ -57,7 +57,7 @@ const Menu: React.FC = () => {
         <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         <button className="toggle-button" onClick={toggleMenu}>
           <i
-            className={`fas ${isSideMenu ? "fa-arrow-up" : "fa-arrow-left"}`}
+            className={`fas ${isSideMenu ? "fa-arrow-left" : "fa-bars"}`}
           ></i>
         </button>
         <div className="menu">
