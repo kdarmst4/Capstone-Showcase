@@ -15,10 +15,11 @@
 }
 
 .informatics .header-background {
-  background-image: url("../assets/meBanner.jpeg");
-  background-size: cover;
+  background-image: url("../assets/infBanner.jpeg");
+  background-size: contain;
+  background-repeat: 3;
   background-position: center 45%;
-  padding: 40px 20px;
+  padding: 50px 20px;
   color: white;
   min-height: 150px;
   display: flex;

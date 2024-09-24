@@ -15,8 +15,8 @@
 }
 
 .computer-systems-engineering .header-background {
-  background-image: url("../assets/cseBanner.webp");
-  background-size: cover;
+  background-image: url("../assets/cseBanner1.jpeg");
+  background-size: contain;
   background-position: center;
   padding: 40px 20px;
   color: white;

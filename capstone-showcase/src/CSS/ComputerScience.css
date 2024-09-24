@@ -14,9 +14,9 @@
 }
 
 .computer-science .header-background {
-  background-image: url("../assets/csBackground.png");
-  background-size: 80%;
-  background-position: center 45%;
+  background-image: url("../assets/csBanner1.jpeg");
+  background-size: cover;
+  background-position: center 70%;
   padding: 40px 20px;
   color: white;
   min-height: 150px;
