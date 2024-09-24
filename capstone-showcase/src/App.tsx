@@ -15,6 +15,7 @@ import BiomedicalEngineering from "./Pages/BiomedicalEngineering";
 import About from "./Pages/About";
 import MechanicalEngineering from "./Pages/MechanicalEngineering";
 import AdminLogin from "./Pages/AdminLogin";
+import AdminDashboard from "./Pages/AdminDashboard";
 
 const App: React.FC = () => {
   return (
@@ -50,6 +51,9 @@ const App: React.FC = () => {
             <Route path="/interdisciplinary" element={<Interdisciplinary />} />
             <Route path="/survey" element={<Survey />} />
             <Route path="/admin" element={<AdminLogin />} />
+            <Route path="admin-dashboard" element={<AdminDashboard pageTitle="Dashboard" />} />
+            <Route path="admin-dashboard/edit" element={<AdminDashboard pageTitle="Edit" />} />
+            <Route path="admin-dashboard/settings" element={<AdminDashboard pageTitle="Settings" />} />
           </Routes>
         </div>
       </Router>
