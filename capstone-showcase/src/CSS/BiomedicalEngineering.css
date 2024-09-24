@@ -14,9 +14,9 @@
 }
 
 .biomedical-engineering .header-background {
-  background-image: url("../assets/beBanner.png");
-  background-size: cover;
-  background-position: center 30%;
+  background-image: url("../assets/bioBanner.jpeg");
+  background-size: 100%;
+  background-position: center 43%;
   padding: 40px 20px;
   color: white;
   min-height: 150px;

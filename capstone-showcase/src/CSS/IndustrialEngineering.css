@@ -14,9 +14,9 @@
 }
 
 .industrial-engineering .header-background {
-  background-image: url("../assets/meBanner.jpeg");
+  background-image: url("../assets/ieBanner.jpeg");
   background-size: cover;
-  background-position: center 45%;
+  background-position: center 75%;
   padding: 40px 20px;
   color: white;
   min-height: 150px;

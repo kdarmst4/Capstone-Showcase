@@ -14,9 +14,9 @@
 }
 
 .interdisciplinary .header-background {
-  background-image: url("../assets/meBanner.jpeg");
+  background-image: url("../assets/idtBanner.jpeg");
   background-size: cover;
-  background-position: center 45%;
+  background-position: center 99%;
   padding: 40px 20px;
   color: white;
   min-height: 150px;
