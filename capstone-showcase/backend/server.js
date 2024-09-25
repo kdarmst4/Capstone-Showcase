@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 const mysql = require(process.env.PRODUCTION_DB_MYSQL_PACKAGE);
 
@@ -10,10 +10,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const db = mysql.createConnection({
-  host: process.env.PRODUCTION_DB_HOST, 
+  host: process.env.PRODUCTION_DB_HOST,
   user: process.env.PRODUCTION_DB_USERNAME,
   password: process.env.PRODUCTION_DB_PASSWORD,
-  database: process.env.PRODUCTION_DB_DATABASE, 
+  database: process.env.PRODUCTION_DB_DATABASE,
   // authSwitchHandler: function ({ pluginName, pluginData }, cb) {
   //   if (pluginName === "caching_sha2_password") {
   //     const password = "test"; // Replace with BlueHost MySQL root password
@@ -54,16 +54,16 @@ app.post("/api/survey", (req, res) => {
 
   // We have to change `nda` and `demo` to either 1 (True) or 0 (False) since the DB stores these fields
   // as TINYINT(1) and the survey gives us either 'yes' or 'no' Strings.
-  if (nda == 'yes') {
-    ndaValue = 1
+  if (nda == "yes") {
+    ndaValue = 1;
   } else {
-    ndaValue = 0
+    ndaValue = 0;
   }
 
-  if (demo == 'yes') {
-    demoValue = 1
+  if (demo == "yes") {
+    demoValue = 1;
   } else {
-    demoValue = 0
+    demoValue = 0;
   }
 
   db.query(

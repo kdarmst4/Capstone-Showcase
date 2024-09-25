@@ -22,7 +22,7 @@ const AdminLogin: React.FC = () => {
     // Placeholder login validation. Replace with actual authentication logic.
     if (username === "admin" && password === "Oh1o4o58vUjp") {
       setAuth(true);
-      navigate("/");
+      navigate("/admin-dashboard");
     } else {
       alert("Invalid credentials");
     }
