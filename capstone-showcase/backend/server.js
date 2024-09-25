@@ -1,24 +1,26 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mysql = require("mysql");
 const cors = require("cors");
 const app = express();
+const dotenv = require('dotenv');
+dotenv.config();
+const mysql = require(process.env.PRODUCTION_DB_MYSQL_PACKAGE);
 
 app.use(bodyParser.json());
 app.use(cors());
 
 const db = mysql.createConnection({
-  host: "162.241.218.157", // Replace with BlueHost database host
-  user: "jmtlqnmy_showcase_entries_2024",
-  password: "showcase2024summer", // Replace with BlueHost database password
-  database: "jntlqnmy_capstone_project_submission", // Replace with BlueHost database name
-  authSwitchHandler: function ({ pluginName, pluginData }, cb) {
-    if (pluginName === "caching_sha2_password") {
-      const password = "showcase2024summer"; // Replace with BlueHost MySQL root password
-      const securePassword = Buffer.from(password + "\0");
-      cb(null, securePassword);
-    }
-  },
+  host: process.env.PRODUCTION_DB_HOST, 
+  user: process.env.PRODUCTION_DB_USERNAME,
+  password: process.env.PRODUCTION_DB_PASSWORD,
+  database: process.env.PRODUCTION_DB_DATABASE, 
+  // authSwitchHandler: function ({ pluginName, pluginData }, cb) {
+  //   if (pluginName === "caching_sha2_password") {
+  //     const password = "test"; // Replace with BlueHost MySQL root password
+  //     const securePassword = Buffer.from(password + "\0");
+  //     cb(null, securePassword);
+  //   }
+  // },
 });
 
 db.connect((err) => {
@@ -36,7 +38,7 @@ app.post("/api/survey", (req, res) => {
     projectTitle,
     projectDescription,
     sponsor,
-    teamMembers,
+    numberOfTeamMembers,
     teamMemberNames,
     courseNumber,
     demo,
@@ -47,8 +49,22 @@ app.post("/api/survey", (req, res) => {
   console.log("Received survey data:", req.body);
 
   const sql =
-    "INSERT INTO survey_entries (email, name, projectTitle, description, sponsor, teamMembers, teamMemberNames, courseNumber, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, courseNumber, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   console.log("Executing SQL:", sql);
+
+  // We have to change `nda` and `demo` to either 1 (True) or 0 (False) since the DB stores these fields
+  // as TINYINT(1) and the survey gives us either 'yes' or 'no' Strings.
+  if (nda == 'yes') {
+    ndaValue = 1
+  } else {
+    ndaValue = 0
+  }
+
+  if (demo == 'yes') {
+    demoValue = 1
+  } else {
+    demoValue = 0
+  }
 
   db.query(
     sql,
@@ -58,12 +74,12 @@ app.post("/api/survey", (req, res) => {
       projectTitle,
       projectDescription,
       sponsor,
-      teamMembers,
+      numberOfTeamMembers,
       teamMemberNames,
       courseNumber,
-      demo,
+      demoValue,
       power,
-      nda,
+      ndaValue,
       youtubeLink,
     ],
     (err, result) => {
