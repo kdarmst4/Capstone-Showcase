@@ -51,7 +51,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
           </ul>
         </nav>
 
-        <div className="content">
+        <div className="admin-dashboard-content">
           <h1>{pageTitle}</h1>
 
           {showButtons && (
