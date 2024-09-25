@@ -40,7 +40,7 @@ app.post("/api/survey", (req, res) => {
     sponsor,
     numberOfTeamMembers,
     teamMemberNames,
-    courseNumber,
+    major,
     demo,
     power,
     nda,
@@ -49,7 +49,7 @@ app.post("/api/survey", (req, res) => {
   console.log("Received survey data:", req.body);
 
   const sql =
-    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, courseNumber, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   console.log("Executing SQL:", sql);
 
   // We have to change `nda` and `demo` to either 1 (True) or 0 (False) since the DB stores these fields
@@ -76,7 +76,7 @@ app.post("/api/survey", (req, res) => {
       sponsor,
       numberOfTeamMembers,
       teamMemberNames,
-      courseNumber,
+      major,
       demoValue,
       power,
       ndaValue,
