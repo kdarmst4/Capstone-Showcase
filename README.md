@@ -1,7 +1,7 @@
 # Capstone Showcase Website
 
 # Website Tools Used
-- Front-end: TypeScript + React
+- Front-end: TypeScript + React + CSS
 - Back-end: JavaScript + ExpressJS + MySQL
 - API: REST
 
