@@ -14,6 +14,7 @@ interface FormData {
   demo: string;
   power: string;
   nda: string;
+  showDemoVideo: string;
   youtubeLink: string;
 }
 
@@ -29,6 +30,7 @@ interface FormErrors {
   demo: string;
   power: string;
   nda: string;
+  showDemoVideo: string;
   youtubeLink: string;
 }
 
@@ -45,6 +47,7 @@ const Survey: React.FC = () => {
     demo: "",
     power: "",
     nda: "",
+    showDemoVideo: "",
     youtubeLink: "",
   };
 
@@ -60,6 +63,7 @@ const Survey: React.FC = () => {
     demo: "",
     power: "",
     nda: "",
+    showDemoVideo: "",
     youtubeLink: "",
   };
 
@@ -76,6 +80,10 @@ const Survey: React.FC = () => {
 
     if (name === "demo" && value === "no") {
       setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
+    }
+
+    if (name === "showDemoVideo" && value === "no") {
+      setFormData((prevFormData) => ({ ...prevFormData, youtubeLink: "" }));
     }
 
     setErrors({ ...errors, [name]: "" });
@@ -115,6 +123,7 @@ const Survey: React.FC = () => {
       courseNumber,
       demo,
       nda,
+      showDemoVideo,
       youtubeLink,
     } = formData;
 
@@ -138,7 +147,13 @@ const Survey: React.FC = () => {
         : "",
       power: "",
       nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
-      youtubeLink: !youtubeLink ? "Please enter a YouTube link." : "",
+      showDemoVideo: !showDemoVideo
+        ? "Please specify if you'd like your demo video to be shown on the website."
+        : "",
+      youtubeLink:
+        showDemoVideo === "yes" && !youtubeLink
+          ? "Please enter a YouTube link."
+          : "",
     };
 
     if (parseInt(teamMembers, 10) <= 0) {
@@ -168,6 +183,9 @@ const Survey: React.FC = () => {
     const submissionData = { ...formData };
     if (formData.demo === "no") {
       delete submissionData.power;
+    }
+    if (formData.showDemoVideo === "no") {
+      delete submissionData.youtubeLink;
     }
     return submissionData;
   };
@@ -368,8 +386,7 @@ const Survey: React.FC = () => {
                 />{" "}
                 No
               </label>
-            </div>{" "}
-            {errors.power && <p className="error-message">{errors.power}</p>}
+            </div>
           </div>
         )}
         <div className="form-box">
@@ -395,22 +412,54 @@ const Survey: React.FC = () => {
               />{" "}
               No
             </label>
+            {errors.nda && <p className="error-message">{errors.nda}</p>}
           </div>
-          {errors.nda && <p className="error-message">{errors.nda}</p>}
         </div>
         <div className="form-box">
-          <label htmlFor="youtubeLink">YouTube Video Link:</label>
-          <input
-            type="url"
-            name="youtubeLink"
-            id="youtubeLink"
-            value={formData.youtubeLink}
-            onChange={handleChange}
-          />
-          {errors.youtubeLink && (
-            <p className="error-message">{errors.youtubeLink}</p>
+          <label>
+            Would you like your demo video to be shown on the website?
+          </label>
+          <div className="radio-group">
+            <label>
+              <input
+                type="radio"
+                name="showDemoVideo"
+                value="yes"
+                checked={formData.showDemoVideo === "yes"}
+                onChange={handleChange}
+              />{" "}
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="showDemoVideo"
+                value="no"
+                checked={formData.showDemoVideo === "no"}
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
+          </div>
+          {errors.showDemoVideo && (
+            <p className="error-message">{errors.showDemoVideo}</p>
           )}
         </div>
+        {formData.showDemoVideo === "yes" && (
+          <div className="form-box">
+            <label htmlFor="youtubeLink">YouTube Video Link:</label>
+            <input
+              type="url"
+              name="youtubeLink"
+              id="youtubeLink"
+              value={formData.youtubeLink}
+              onChange={handleChange}
+            />
+            {errors.youtubeLink && (
+              <p className="error-message">{errors.youtubeLink}</p>
+            )}
+          </div>
+        )}
         <div className="form-box">
           <button type="submit" className="submit-button">
             Submit
