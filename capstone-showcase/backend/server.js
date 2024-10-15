@@ -44,10 +44,15 @@ app.post("/api/survey", (req, res) => {
     demo,
     power,
     nda,
+    showDemo,
     youtubeLink,
   } = req.body;
   console.log("Received survey data:", req.body);
 
+  let youtubeLinkValue = null;
+  if (showDemo == "yes" && youtubeLink) {
+    youtubeLinkValue = youtubeLink;
+  }
   const sql =
     "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   console.log("Executing SQL:", sql);
@@ -66,6 +71,12 @@ app.post("/api/survey", (req, res) => {
     demoValue = 0;
   }
 
+  if (power == "yes") {
+    powerValue = 1;
+  } else {
+    powerValue = 0;
+  }
+  
   db.query(
     sql,
     [
@@ -78,9 +89,9 @@ app.post("/api/survey", (req, res) => {
       teamMemberNames,
       major,
       demoValue,
-      power,
+      powerValue,
       ndaValue,
-      youtubeLink,
+      youtubeLinkValue,
     ],
     (err, result) => {
       if (err) {
