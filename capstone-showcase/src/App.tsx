@@ -53,7 +53,7 @@ const App: React.FC = () => {
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="admin-dashboard" element={<AdminDashboard pageTitle="Dashboard" />} />
             <Route path="admin-dashboard/edit" element={<AdminDashboard pageTitle="Edit" />} />
-            <Route path="admin-dashboard/settings" element={<AdminDashboard pageTitle="Settings" />} />
+            <Route path="admin-dashboard/support" element={<AdminDashboard pageTitle="Support" />} />
           </Routes>
         </div>
       </Router>

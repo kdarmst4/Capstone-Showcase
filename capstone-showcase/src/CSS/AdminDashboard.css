@@ -117,3 +117,10 @@ h1 {
 .dashboard-button:hover {
   background-color: #541227;
 }
+
+.edit-button-row {
+  display: flex;
+  justify-content: center; 
+  gap: 100px; 
+  margin-top: 60px; 
+}

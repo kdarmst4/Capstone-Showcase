@@ -17,7 +17,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
     navigate('/admin');
   };
 
-  const showButtons = location.pathname === '/admin-dashboard';
+  // Check if the current path is admin-dashboard or admin-dashboard/edit
+  const isDashboardPage = location.pathname === '/admin-dashboard';
+  const isEditPage = location.pathname === '/admin-dashboard/edit';
+  const isSupportPage= location.pathname === '/admin-dashboard/support';
 
   return (
     <div className="admin-dashboard-container">
@@ -39,8 +42,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
               </Link>
             </li>
             <li>
-              <Link to="/admin-dashboard/settings">
-                <i className="fa-solid fa-gear"></i> Settings
+              <Link to="/admin-dashboard/support">
+                <i className="fa-solid fa-envelope-open"></i> Support
               </Link>
             </li>
             <li>
@@ -54,14 +57,34 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
         <div className="admin-dashboard-content">
           <h1>{pageTitle}</h1>
 
-          {showButtons && (
+          {/* Render buttons specific to the dashboard */}
+          {isDashboardPage && (
             <div className="button-row">
-              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit')}>
+              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/presentation')}>
                 Edit Capstone Presentation Information
               </div>
-              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit')}>
+              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/submissions')}>
                 Edit Student Capstone Submissions
               </div>
+              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/contact-support')}>
+                Contact Support
+              </div>
+            </div>
+          )}
+
+          {isEditPage && (
+            <div className="edit-button-row">
+              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/presentation')}>
+                Edit Capstone Presentation Information
+              </div>
+              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/submissions')}>
+                Edit Student Capstone Submissions
+              </div>
+            </div>
+          )}
+
+          {isSupportPage && (
+            <div className="edit-button-row">
               <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/contact-support')}>
                 Contact Support
               </div>
