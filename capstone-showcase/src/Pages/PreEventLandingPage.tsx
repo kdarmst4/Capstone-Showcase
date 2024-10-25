@@ -9,6 +9,8 @@ import {
   landingPageIntro,
   navigationInstructions,
 } from "../TextContent";
+import Footer from './Footer';
+
 
 const PreEventLandingPage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
@@ -73,11 +75,10 @@ const PreEventLandingPage: React.FC = () => {
             </article>
           </section>
         </main>
-        <footer aria-label="Footer">
-          &copy; {new Date().getFullYear()} ASU Capstone Projects. All rights
-          reserved.
-        </footer>
-      </div>
+        
+        <Footer />
+    </div>
+      
     </>
   );
 };

@@ -12,6 +12,7 @@ import teamMember6 from "../assets/anshProfile.jpg";
 import teamMember7 from "../assets/alexanderProfile.jpg";
 import teamMember8 from "../assets/karinaProfile.jpg";
 import teamMember9 from "../assets/profilePlaceholder.png";
+import Footer from './Footer';
 
 const teamMembers = [
   {
@@ -160,7 +161,7 @@ const About = () => {
             ))}
         </section>
       </main>
-      <footer>&copy; 2024 ASU Capstone Projects. All rights reserved.</footer>
+      <Footer />
     </div>
   );
 };

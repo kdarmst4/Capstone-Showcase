@@ -3,6 +3,8 @@ import { useMenuContext } from "../MenuContext";
 import "../CSS/ComputerScience.css";
 import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
+import Footer from './Footer';
+
 
 const ComputerScience: React.FC = () => {
   const { isSideMenu } = useMenuContext();
@@ -28,7 +30,7 @@ const ComputerScience: React.FC = () => {
           </article>
         </section>
       </main>
-      <footer>&copy; 2024 ASU Capstone Projects. All rights reserved.</footer>
+      <Footer />
     </div>
   );
 };

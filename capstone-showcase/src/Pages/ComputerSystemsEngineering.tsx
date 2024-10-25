@@ -3,6 +3,8 @@ import { useMenuContext } from "../MenuContext";
 import "../CSS/ComputerSystemsEngineering.css";
 import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
+import Footer from './Footer';
+
 
 const ComputerSystemsEngineering: React.FC = () => {
   const { isSideMenu } = useMenuContext();
@@ -32,7 +34,7 @@ const ComputerSystemsEngineering: React.FC = () => {
           </article>
         </section>
       </main>
-      <footer>&copy; 2024 ASU Capstone Projects. All rights reserved.</footer>
+      <Footer />
     </div>
   );
 };
