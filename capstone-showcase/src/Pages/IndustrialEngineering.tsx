@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/IndustrialEngineering.css";
-import { capstoneDescription } from "../TextContent";
+// import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from './Footer';
 
