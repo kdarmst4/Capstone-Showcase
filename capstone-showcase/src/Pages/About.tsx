@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/About.css";
 import { ourTeamDescription } from "../TextContent";
