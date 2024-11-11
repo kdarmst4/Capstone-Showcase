@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/PreEventLandingPage.css";
@@ -15,11 +15,19 @@ import Footer from './Footer';
 const PreEventLandingPage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
   const navigate = useNavigate();
-
+  const [savedTime, setSavedTime] = useState<string | null>(null);
+  const [savedDate, setSavedDate] = useState<string | null>(null);
+  const [savedImage, setSavedImage] = useState<string | null>(null);
   useEffect(() => {
     document.body.classList.add("pre-event-landing-page-body");
     return () => {
       document.body.classList.remove("pre-event-landing-page-body");
+      const time = localStorage.getItem('savedTime');
+      setSavedTime(time);
+      const date = localStorage.getItem('savedDate');
+      setSavedDate(date);
+      const image = localStorage.getItem('savedImage');
+      setSavedImage(image);
     };
   }, []);
 
@@ -69,6 +77,14 @@ const PreEventLandingPage: React.FC = () => {
           </div>
           <section className="event-details" aria-label="Event Details Section">
             <article>
+              <p>
+                <div className="showcase-info">
+                      <h2>Capstone Showcase Information:</h2>Showcase Time: {savedTime || "No current time."} 
+                      <br/>Showcase Date: {savedDate || "No current date."}
+                      <img src={savedImage || "No current map"} alt="UploadedImage" className="uploaded-image" />
+                      </div>
+                
+                </p>
               <p>{landingPageIntro}</p>
               <p>{capstoneDescription}</p>
               <p>{navigationInstructions}</p>
