@@ -12,10 +12,11 @@ interface FormData {
   teamMemberNames: string;
   courseNumber: string;
   demo: string;
-  power: string;
+  power?: string;
   nda: string;
   showDemoVideo: string;
-  youtubeLink: string;
+  youtubeLink?: string;
+
 }
 
 interface FormErrors {
