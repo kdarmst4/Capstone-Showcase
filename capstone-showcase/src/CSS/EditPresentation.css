@@ -3,7 +3,12 @@
     top: -200px; 
     
   }
-  
+h1 {
+  color: white;
+}
+label {
+  color: white;
+}
 .sub {
     background-color: #8C1D40;
     padding: 14px 40px;
