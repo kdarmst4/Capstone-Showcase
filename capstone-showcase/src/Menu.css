@@ -46,6 +46,10 @@
   margin-left: 8px;
 }
 
+.home-link .home-icon {
+  fill: white;
+}
+
 .top-menu .menu-list {
   list-style-type: none;
   display: flex;
@@ -175,6 +179,7 @@
   width: 40px;
   height: 40px;
   border: none;
+  color: white;
   border-radius: 50%;
   display: flex;
   justify-content: center;
