@@ -2,7 +2,7 @@ version: '3'
 services:
   frontend:
     build:
-      context: ./ # our frontend is in the root directory so ?
+      context: . # our frontend is in the root directory so ?
       dockerfile: Dockerfile
     ports:
       - "80:80" 
