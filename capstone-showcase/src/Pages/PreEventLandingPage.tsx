@@ -9,8 +9,7 @@ import {
   landingPageIntro,
   navigationInstructions,
 } from "../TextContent";
-import Footer from './Footer';
-
+import Footer from "./Footer";
 
 const PreEventLandingPage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
@@ -22,11 +21,11 @@ const PreEventLandingPage: React.FC = () => {
     document.body.classList.add("pre-event-landing-page-body");
     return () => {
       document.body.classList.remove("pre-event-landing-page-body");
-      const time = localStorage.getItem('savedTime');
+      const time = localStorage.getItem("savedTime");
       setSavedTime(time);
-      const date = localStorage.getItem('savedDate');
+      const date = localStorage.getItem("savedDate");
       setSavedDate(date);
-      const image = localStorage.getItem('savedImage');
+      const image = localStorage.getItem("savedImage");
       setSavedImage(image);
     };
   }, []);
@@ -72,23 +71,22 @@ const PreEventLandingPage: React.FC = () => {
           <section className="event-details" aria-label="Event Details Section">
             <article>
               <p>
-                <div className="showcase-info">
-                      <h2>Capstone Showcase Information:</h2>Showcase Time: {savedTime || "No current time."} 
-                      <br/>Showcase Date: {savedDate || "No current date."}
-                      <img src={savedImage || "No current map"} alt="UploadedImage" className="uploaded-image" />
-                      </div>
-                
-                </p>
+                <strong>Showcase Date:</strong> Friday, December 6th
+                <br />
+                <strong>Location:</strong> Memorial Union - Second floor
+                <br />
+                <strong>Event Time:</strong> 12:30pm - 3:00pm
+                <br />
+              </p>
               <p>{landingPageIntro}</p>
               <p>{capstoneDescription}</p>
               <p>{navigationInstructions}</p>
             </article>
           </section>
         </main>
-        
+
         <Footer />
-    </div>
-      
+      </div>
     </>
   );
 };

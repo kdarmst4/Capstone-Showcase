@@ -14,9 +14,7 @@ interface FormData {
   demo: string;
   power?: string;
   nda: string;
-  showDemoVideo: string;
-  youtubeLink?: string;
-
+  youtubeLink: string;
 }
 
 interface FormErrors {
@@ -31,7 +29,6 @@ interface FormErrors {
   demo: string;
   power: string;
   nda: string;
-  showDemoVideo: string;
   youtubeLink: string;
 }
 
@@ -48,7 +45,6 @@ const Survey: React.FC = () => {
     demo: "",
     power: "",
     nda: "",
-    showDemoVideo: "",
     youtubeLink: "",
   };
 
@@ -64,7 +60,6 @@ const Survey: React.FC = () => {
     demo: "",
     power: "",
     nda: "",
-    showDemoVideo: "",
     youtubeLink: "",
   };
 
@@ -81,10 +76,6 @@ const Survey: React.FC = () => {
 
     if (name === "demo" && value === "no") {
       setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
-    }
-
-    if (name === "showDemoVideo" && value === "no") {
-      setFormData((prevFormData) => ({ ...prevFormData, youtubeLink: "" }));
     }
 
     setErrors({ ...errors, [name]: "" });
@@ -124,7 +115,6 @@ const Survey: React.FC = () => {
       courseNumber,
       demo,
       nda,
-      showDemoVideo,
       youtubeLink,
     } = formData;
 
@@ -148,13 +138,7 @@ const Survey: React.FC = () => {
         : "",
       power: "",
       nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
-      showDemoVideo: !showDemoVideo
-        ? "Please specify if you'd like your demo video to be shown on the website."
-        : "",
-      youtubeLink:
-        showDemoVideo === "yes" && !youtubeLink
-          ? "Please enter a YouTube link."
-          : "",
+      youtubeLink: "",
     };
 
     if (parseInt(teamMembers, 10) <= 0) {
@@ -184,9 +168,6 @@ const Survey: React.FC = () => {
     const submissionData = { ...formData };
     if (formData.demo === "no") {
       delete submissionData.power;
-    }
-    if (formData.showDemoVideo === "no") {
-      delete submissionData.youtubeLink;
     }
     return submissionData;
   };
@@ -242,8 +223,341 @@ const Survey: React.FC = () => {
             onChange={handleChange}
           >
             <option value="">Select a project</option>
-            <option value="Project 1">Project 1</option>
-            <option value="Project 2">Project 2</option>
+            <option value="CS/E-001 - ABC Academy of Music - ABC Academy of Music • Custom Business Management Software">
+              CS/E-001 - ABC Academy of Music - ABC Academy of Music • Custom
+              Business Management Software
+            </option>
+            <option value="CS/E-002 - ABC Academy of Music - CLIENT SELF-MANAGEMENT • Hinna: Small Business Management Software">
+              CS/E-002 - ABC Academy of Music - CLIENT SELF-MANAGEMENT • Hinna:
+              Small Business Management Software
+            </option>
+            <option value="CS/E-003 - Ada Analytics - Website Development">
+              CS/E-003 - Ada Analytics - Website Development
+            </option>
+            <option value="CS/E-004 - Alcove Ridge Consulting LLC - Unique experience to work on a cutting edge Fintech platform">
+              CS/E-004 - Alcove Ridge Consulting LLC - Unique experience to work
+              on a cutting edge Fintech platform
+            </option>
+            <option value="CS/E-005 - Allennials at Work Inc. - Apple API Development for Publishing a WordPress Digital Magazine">
+              CS/E-005 - Allennials at Work Inc. - Apple API Development for
+              Publishing a WordPress Digital Magazine
+            </option>
+            <option value="CS/E-006 - AOKMarketing.com - Chattable">
+              CS/E-006 - AOKMarketing.com - Chattable
+            </option>
+            <option value="CS/E-007 - Arizona State University - Quantum Computing Tool for Education">
+              CS/E-007 - Arizona State University - Quantum Computing Tool for
+              Education
+            </option>
+            <option value="CS/E-008 - ASU - Smart Knowledge Navigation and Discovery Platform">
+              CS/E-008 - ASU - Smart Knowledge Navigation and Discovery Platform
+            </option>
+            <option value="CS/E-009 - ASU Capstone Showcase">
+              CS/E-009 - ASU Capstone Showcase
+            </option>
+            <option value="CS/E-010 - ASU ECEE - Logic Tutor for the Web Phase 2">
+              CS/E-010 - ASU ECEE - Logic Tutor for the Web Phase 2
+            </option>
+            <option value="CS/E-011 - ASU SCAI - Web-Based RISC V Architecture Emulator in VIPLE Environment">
+              CS/E-011 - ASU SCAI - Web-Based RISC V Architecture Emulator in
+              VIPLE Environment
+            </option>
+            <option value="CS/E-012 - BetterEDU - BetterEDU">
+              CS/E-012 - BetterEDU - BetterEDU
+            </option>
+            <option value="CS/E-013 - Bit Space Development">
+              CS/E-013 - Bit Space Development
+            </option>
+            <option value="CS/E-014 - BizBridge.io - BizBridge: Building out an AI-Agentic Workflow to Sell Small Businesses!">
+              CS/E-014 - BizBridge.io - BizBridge: Building out an AI-Agentic
+              Workflow to Sell Small Businesses!
+            </option>
+            <option value="CS/E-015 - Capstone Project Submission Group - ASU">
+              CS/E-015 - Capstone Project Submission Group - ASU
+            </option>
+            <option value="CS/E-016 - Capstone Project Ticketing System">
+              CS/E-016 - Capstone Project Ticketing System
+            </option>
+            <option value="CS/E-017 - Carnival Guide - Carnival Guide">
+              CS/E-017 - Carnival Guide - Carnival Guide
+            </option>
+            <option value="CS/E-018 - Center for Entrepreneurship and New Business Design - Housing Coordination">
+              CS/E-018 - Center for Entrepreneurship and New Business Design -
+              Housing Coordination
+            </option>
+            <option value="CS/E-019 - Coconut CubeSat Software - Student Project">
+              CS/E-019 - Coconut CubeSat Software - Student Project
+            </option>
+            <option value="CS/E-020 - Contak - Kinda Famous: Music Adventure Role Playing Video Game">
+              CS/E-020 - Contak - Kinda Famous: Music Adventure Role Playing
+              Video Game
+            </option>
+            <option value="CS/E-021 - DigiClips - DEBUG OPTION EMAIL ALERTS FRONT END SEARCH ENGINE TESTING">
+              CS/E-021 - DigiClips - DEBUG OPTION EMAIL ALERTS FRONT END SEARCH
+              ENGINE TESTING
+            </option>
+            <option value="CS/E-022 - DigiClips - DigiClips Media Search Engine">
+              CS/E-022 - DigiClips - DigiClips Media Search Engine
+            </option>
+            <option value="CS/E-023 - DigiClips - Media Search Engine - Team 1">
+              CS/E-023 - DigiClips - Media Search Engine - Team 1
+            </option>
+            <option value="CS/E-024 - DigiClips - Media Search Engine - Team 2">
+              CS/E-024 - DigiClips - Media Search Engine - Team 2
+            </option>
+            <option value="CS/E-025 - Expeditise - Website Development: Streamlining Access to Information and Services">
+              CS/E-025 - Expeditise - Website Development: Streamlining Access
+              to Information and Services
+            </option>
+            <option value="CS/E-026 - Favoland - AI-driven beauty ingredient database and rating system">
+              CS/E-026 - Favoland - AI-driven beauty ingredient database and
+              rating system
+            </option>
+            <option value="CS/E-027 - Fourcher Technologies - Tracking bees using AI">
+              CS/E-027 - Fourcher Technologies - Tracking bees using AI
+            </option>
+            <option value="CS/E-028 - Fourcher Technologies - Using AR to simulate the visual symptoms of dementia">
+              CS/E-028 - Fourcher Technologies - Using AR to simulate the visual
+              symptoms of dementia
+            </option>
+            <option value="CS/E-029 - General Dynamics Mission Systems - Prototyping alternate GIS solutions for real-time scenarios">
+              CS/E-029 - General Dynamics Mission Systems - Prototyping
+              alternate GIS solutions for real-time scenarios
+            </option>
+            <option value="CS/E-030 - General Dynamics Mission Systems - Quantum Image Denoising using computational basis states">
+              CS/E-030 - General Dynamics Mission Systems - Quantum Image
+              Denoising using computational basis states
+            </option>
+            <option value="CS/E-031 - GLOBAL SENSOR SYSTEMS INC - Trade Show Display">
+              CS/E-031 - GLOBAL SENSOR SYSTEMS INC - Trade Show Display
+            </option>
+            <option value="CS/E-032 - Hawkeye Early Detection System - Hawkeye Early Detection System">
+              CS/E-032 - Hawkeye Early Detection System - Hawkeye Early
+              Detection System
+            </option>
+            <option value="CS/E-033 - Honeywell International - Adaptive Announcement System">
+              CS/E-033 - Honeywell International - Adaptive Announcement System
+            </option>
+            <option value="CS/E-034 - Honeywell International - Build a block chain-based solution for UAM Data management.">
+              CS/E-034 - Honeywell International - Build a block chain-based
+              solution for UAM Data management.
+            </option>
+            <option value="CS/E-035 - Honeywell International - CICT Code migration from Visual Basic to Python using Gen AI">
+              CS/E-035 - Honeywell International - CICT Code migration from
+              Visual Basic to Python using Gen AI
+            </option>
+            <option value="CS/E-036 - InnC LLC - ArtVision Renderer">
+              CS/E-036 - InnC LLC - ArtVision Renderer
+            </option>
+            <option value="CS/E-037 - InnC LLC - ArtVision Visualizer">
+              CS/E-037 - InnC LLC - ArtVision Visualizer
+            </option>
+            <option value="CS/E-038 - IT Partner LLC.-Software Development - Licensing Recommendation Tool for Microsoft 365">
+              CS/E-038 - IT Partner LLC.-Software Development - Licensing
+              Recommendation Tool for Microsoft 365
+            </option>
+            <option value="CS/E-039 - Jo Clark, CEO - Circle.ooo AI Initiative">
+              CS/E-039 - Jo Clark, CEO - Circle.ooo AI Initiative
+            </option>
+            <option value="CS/E-040 - Judy.ai - Judy.ai for Healthcare">
+              CS/E-040 - Judy.ai - Judy.ai for Healthcare
+            </option>
+            <option value="CS/E-041 - KnowQuest Inc. - Web or Native App UI/UX Development">
+              CS/E-041 - KnowQuest Inc. - Web or Native App UI/UX Development
+            </option>
+            <option value="CS/E-042 - Local Grow Salads - Agronomist">
+              CS/E-042 - Local Grow Salads - Agronomist
+            </option>
+            <option value="CS/E-043 - Local Grow Salads - Assembly">
+              CS/E-043 - Local Grow Salads - Assembly
+            </option>
+            <option value="CS/E-044 - Local Grow Salads - Director">
+              CS/E-044 - Local Grow Salads - Director
+            </option>
+            <option value="CS/E-045 - Local Grow Salads - Grower">
+              CS/E-045 - Local Grow Salads - Grower
+            </option>
+            <option value="CS/E-046 - Local Grow Salads - Inspector">
+              CS/E-046 - Local Grow Salads - Inspector
+            </option>
+            <option value="CS/E-047 - Local Grown Salads - LGS EcoSystem - Network">
+              CS/E-047 - Local Grown Salads - LGS EcoSystem - Network
+            </option>
+            <option value="CS/E-048 - Local Grown Salads - LGS EcoSystem Customer Layer">
+              CS/E-048 - Local Grown Salads - LGS EcoSystem Customer Layer
+            </option>
+            <option value="CS/E-049 - Lotus - Addiction Therapy Inc - web / mobile development">
+              CS/E-049 - Lotus - Addiction Therapy Inc - web / mobile
+              development
+            </option>
+            <option value="CS/E-050 - Lotus Addiction Therapy Inc - Lotus">
+              CS/E-050 - Lotus Addiction Therapy Inc - Lotus
+            </option>
+            <option value="CS/E-051 - Lower 22 Foundation Inc - Foxhole Lounge Mobile App Redesign">
+              CS/E-051 - Lower 22 Foundation Inc - Foxhole Lounge Mobile App
+              Redesign
+            </option>
+            <option value="CS/E-052 - Naralytics - iOS / Android App New Features">
+              CS/E-052 - Naralytics - iOS / Android App New Features
+            </option>
+            <option value="CS/E-053 - Naralytics - Mobile App Re-Design (React Native)">
+              CS/E-053 - Naralytics - Mobile App Re-Design (React Native)
+            </option>
+            <option value="CS/E-054 - Naralytics - NLP & Classification Model Optimization">
+              CS/E-054 - Naralytics - NLP & Classification Model Optimization
+            </option>
+            <option value="CS/E-055 - Northrop Grumman - Finance Reporting Tool">
+              CS/E-055 - Northrop Grumman - Finance Reporting Tool
+            </option>
+            <option value="CS/E-056 - Nowhere Collective - A Circular Marketplace for Upcycling Makers and Conscious Consumers">
+              CS/E-056 - Nowhere Collective - A Circular Marketplace for
+              Upcycling Makers and Conscious Consumers
+            </option>
+            <option value="CS/E-057 - Ofori - Enhancing Ofori's Website and Expanding Services">
+              CS/E-057 - Ofori - Enhancing Ofori's Website and Expanding
+              Services
+            </option>
+            <option value="CS/E-058 - Omega Pediatrics - Mobile Messaging App for Doctors - AWS/ReactNative/DynamoDB">
+              CS/E-058 - Omega Pediatrics - Mobile Messaging App for Doctors -
+              AWS/ReactNative/DynamoDB
+            </option>
+            <option value="CS/E-059 - OneDrug Inc. - Smart Mobile and Web Health Application for Integrated Healthcare">
+              CS/E-059 - OneDrug Inc. - Smart Mobile and Web Health Application
+              for Integrated Healthcare
+            </option>
+            <option value="CS/E-060 - Pathscape - Pathscape Mobile App Development">
+              CS/E-060 - Pathscape - Pathscape Mobile App Development
+            </option>
+            <option value="CS/E-061 - Personal Project - Works for Northrop Grumman Corp - Digital Video Manipulation">
+              CS/E-061 - Personal Project - Works for Northrop Grumman Corp -
+              Digital Video Manipulation
+            </option>
+            <option value="CS/E-062 - Points Africa - Points Africa Mobile App Development">
+              CS/E-062 - Points Africa - Points Africa Mobile App Development
+            </option>
+            <option value="CS/E-063 - Prescott Electric Motors - Electric Motor Monitoring System">
+              CS/E-063 - Prescott Electric Motors - Electric Motor Monitoring
+              System
+            </option>
+            <option value="CS/E-064 - QuestStone LLC. - Slack App + Microsoft Teams App Development">
+              CS/E-064 - QuestStone LLC. - Slack App + Microsoft Teams App
+              Development
+            </option>
+            <option value="CS/E-065 - Reality Articulated - Empath-Dashboard">
+              CS/E-065 - Reality Articulated - Empath-Dashboard
+            </option>
+            <option value="CS/E-066 - Reality Articulated - Empath-iOS">
+              CS/E-066 - Reality Articulated - Empath-iOS
+            </option>
+            <option value="CS/E-067 - Rock Climbing Routemaking AI - Student Project">
+              CS/E-067 - Rock Climbing Routemaking AI - Student Project
+            </option>
+            <option value="CS/E-068 - SCAI - ASU Capstone Judging Application">
+              CS/E-068 - SCAI - ASU Capstone Judging Application
+            </option>
+            <option value="CS/E-069 - SCAI - ASU Capstone Time Management">
+              CS/E-069 - SCAI - ASU Capstone Time Management
+            </option>
+            <option value="CS/E-070 - School of Computing and Augmented Intelligence - Interactive 3D Data Analytics Learning Environment">
+              CS/E-070 - School of Computing and Augmented Intelligence -
+              Interactive 3D Data Analytics Learning Environment
+            </option>
+            <option value="CS/E-071 - School of Computing and Augmented Intelligence - Smart Sound-to-Speech Interpreter for Security and Notification Systems">
+              CS/E-071 - School of Computing and Augmented Intelligence - Smart
+              Sound-to-Speech Interpreter for Security and Notification Systems
+            </option>
+            <option value="CS/E-072 - School of Geog Science & Urban Planning, ASU - Automated Detection of Traffic and Street Environments">
+              CS/E-072 - School of Geog Science & Urban Planning, ASU -
+              Automated Detection of Traffic and Street Environments
+            </option>
+            <option value="CS/E-073 - Self Justice Inc. - WordPress Website Development">
+              CS/E-073 - Self Justice Inc. - WordPress Website Development
+            </option>
+            <option value="CS/E-074 - Sense Science Lab LTD - Human AI Collaborative Drawing Tool Development">
+              CS/E-074 - Sense Science Lab LTD - Human AI Collaborative Drawing
+              Tool Development
+            </option>
+            <option value="CS/E-075 - Shoptaki - CEO">
+              CS/E-075 - Shoptaki - CEO
+            </option>
+            <option value="CS/E-076 - Shoptaki - Smartchain next evolution of distributed network">
+              CS/E-076 - Shoptaki - Smartchain next evolution of distributed
+              network
+            </option>
+            <option value="CS/E-077 - Shoptaki - Smartid universal identity">
+              CS/E-077 - Shoptaki - Smartid universal identity
+            </option>
+            <option value="CS/E-078 - StayWell - StayWell Medical Habit Tracker Mobile App">
+              CS/E-078 - StayWell - StayWell Medical Habit Tracker Mobile App
+            </option>
+            <option value="CS/E-079 - Table Ready - AI-enhanced social media post generator and Infra Red seating detection system">
+              CS/E-079 - Table Ready - AI-enhanced social media post generator
+              and Infra Red seating detection system
+            </option>
+            <option value="CS/E-080 - Tech Diversified - MARS Mobile Addiction Recovery System">
+              CS/E-080 - Tech Diversified - MARS Mobile Addiction Recovery
+              System
+            </option>
+            <option value="CS/E-081 - The Clean Divorce - Use technology to simplify & modernize divorce to support families">
+              CS/E-081 - The Clean Divorce - Use technology to simplify &
+              modernize divorce to support families
+            </option>
+            <option value="CS/E-082 - Toyz Electronics - Game Developer for Online Learning Platform">
+              CS/E-082 - Toyz Electronics - Game Developer for Online Learning
+              Platform
+            </option>
+            <option value="CS/E-083 - VariableAI - VariableAI - Data Team">
+              CS/E-083 - VariableAI - VariableAI - Data Team
+            </option>
+            <option value="CS/E-084 - VariableAI - VariableAI - Full Stack Team">
+              CS/E-084 - VariableAI - VariableAI - Full Stack Team
+            </option>
+            <option value="CS/E-085 - VariableAI - VariableAI - Group A">
+              CS/E-085 - VariableAI - VariableAI - Group A
+            </option>
+            <option value="CS/E-086 - VariableAI - VariableAI - Model Team">
+              CS/E-086 - VariableAI - VariableAI - Model Team
+            </option>
+            <option value="CS/E-087 - Velocified - Lean Enterprise LMS & Tracking Platform">
+              CS/E-087 - Velocified - Lean Enterprise LMS & Tracking Platform
+            </option>
+            <option value="CS/E-088 - Velocity Tech Inc. - Zinio TalentHub">
+              CS/E-088 - Velocity Tech Inc. - Zinio TalentHub
+            </option>
+            <option value="CS/E-089 - Yanbor LLC - Develop testing system for the site OUReports.com">
+              CS/E-089 - Yanbor LLC - Develop testing system for the site
+              OUReports.com
+            </option>
+            <option value="IEE-001 - Goodyear 1: COI">
+              IEE-001 - Goodyear 1: COI
+            </option>
+            <option value="IEE-002 - Goodyear 2: TraCtion">
+              IEE-002 - Goodyear 2: TraCtion
+            </option>
+            <option value="IEE-003 - Goodyear 3: Process Modeling">
+              IEE-003 - Goodyear 3: Process Modeling
+            </option>
+            <option value="IEE-004 - Abbott: Equipment Changeover">
+              IEE-004 - Abbott: Equipment Changeover
+            </option>
+            <option value="IEE-005 - L3Harris: Power Supply">
+              IEE-005 - L3Harris: Power Supply
+            </option>
+            <option value="IEE-006 - ASU Athletics 1: Readiness Score">
+              IEE-006 - ASU Athletics 1: Readiness Score
+            </option>
+            <option value="IEE-007 - ASU Athletics 2: Data Analysis">
+              IEE-007 - ASU Athletics 2: Data Analysis
+            </option>
+            <option value="IEE-008 - ASU Earth and Space: Social Media">
+              IEE-008 - ASU Earth and Space: Social Media
+            </option>
+            <option value="IEE-009 - ASU Earth and Space: Exhibit Planning">
+              IEE-009 - ASU Earth and Space: Exhibit Planning
+            </option>
+            <option value="IEE-010 - Amkor Material Cost Estimator">
+              IEE-010 - Amkor Material Cost Estimator
+            </option>
           </select>
           {errors.projectTitle && (
             <p className="error-message">{errors.projectTitle}</p>
@@ -435,6 +749,7 @@ const Survey: React.FC = () => {
           </div>
         </div>
         <div className="form-box">
+
           <button type="submit" className="submit-button">
             Submit
           </button>
