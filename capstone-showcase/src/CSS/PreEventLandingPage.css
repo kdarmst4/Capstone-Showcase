@@ -53,8 +53,7 @@ body.pre-event-landing-page-body {
   margin-top: 5px;
 }
 
-.admin-login-button,
-.survey-form-button {
+.admin-login-button {
   background-color: #8c1d40;
   color: white;
   padding: 12px 24px;

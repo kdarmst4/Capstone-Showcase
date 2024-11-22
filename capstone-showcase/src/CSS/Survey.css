@@ -28,6 +28,15 @@
 .form-box {
   padding: 10px 28px 0px 10px;
   margin: 5px auto;
+  
+}
+
+.form-box-youtube {
+  display: block;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: -68px;
+  padding-left: 0;
 }
 
 label {

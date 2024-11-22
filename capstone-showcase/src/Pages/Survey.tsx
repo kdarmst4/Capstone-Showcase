@@ -726,24 +726,30 @@ const Survey: React.FC = () => {
                 onChange={handleChange}
               />{" "}
               No
+              <div>
+                {formData.nda === "no" && (
+                  <div className="form-box-youtube">
+                  <label htmlFor="youtubeLink">YouTube Video Link:</label>
+                  <input
+                    type="url"
+                    name="youtubeLink"
+                    id="youtubeLink"
+                    value={formData.youtubeLink}
+                    onChange={handleChange}
+                  />
+                  {errors.youtubeLink && (
+                    <p className="error-message">{errors.youtubeLink}</p>
+                  )}
+                  </div>
+              )}
+              </div>
+              
             </label>
             {errors.nda && <p className="error-message">{errors.nda}</p>}
           </div>
         </div>
         <div className="form-box">
-          <label htmlFor="youtubeLink">YouTube Video Link:</label>
-          <input
-            type="url"
-            name="youtubeLink"
-            id="youtubeLink"
-            value={formData.youtubeLink}
-            onChange={handleChange}
-          />
-          {errors.youtubeLink && (
-            <p className="error-message">{errors.youtubeLink}</p>
-          )}
-        </div>
-        <div className="form-box">
+
           <button type="submit" className="submit-button">
             Submit
           </button>
