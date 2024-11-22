@@ -3,8 +3,13 @@
     top: -200px; 
     
   }
-  
-.sub {
+h1 {
+  color: white;
+}
+label {
+  color: white;
+}
+.submit-button {
     background-color: #8C1D40;
     padding: 14px 40px;
 }

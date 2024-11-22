@@ -60,13 +60,7 @@ const PreEventLandingPage: React.FC = () => {
             >
               Admin Login
             </button>
-            <button
-              className="survey-form-button"
-              onClick={handleSurveyFormClick}
-              aria-label="Survey Form Button"
-            >
-              Survey Form
-            </button>
+            
           </div>
           <div className="home-page-title-container">
             <img

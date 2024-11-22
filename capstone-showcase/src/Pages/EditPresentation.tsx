@@ -21,7 +21,8 @@ const EditPresentation: React.FC = () => {
                 reader.readAsDataURL(file);
             } 
         };
-        const submitInfo = () => {
+
+        const submitChangesClick = () => {
             localStorage.setItem('savedTime', time);
             localStorage.setItem('savedDate', date);
             
@@ -36,7 +37,7 @@ const EditPresentation: React.FC = () => {
                 <input type="text" id="userInputDate" name="userInputDate" placeholder="Change the Date..." value = {date} onChange = {(e) => setDate(e.target.value)}></input>
                 <label>Choose Image for Map</label>
                 <input type="file" accept="image/*" onChange={savedImage} />
-                <button className="submit-button" onClick={submitInfo}>Submit Changes</button>
+                <button className="submit-button" onClick={submitChangesClick}>Submit Changes</button>
                 
                 
             </div>

@@ -35,6 +35,20 @@
   margin: 10px 0;
 }
 
+
+.survey-form-button {
+  background-color: #8c1d40;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
 .interdisciplinary .asu-logo {
   top: 10px;
   left: 10px;

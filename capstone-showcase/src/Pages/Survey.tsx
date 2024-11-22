@@ -412,55 +412,28 @@ const Survey: React.FC = () => {
                 onChange={handleChange}
               />{" "}
               No
+              <div>
+                {formData.nda === "no" && (
+                  <div className="form-box-youtube">
+                  <label htmlFor="youtubeLink">YouTube Video Link:</label>
+                  <input
+                    type="url"
+                    name="youtubeLink"
+                    id="youtubeLink"
+                    value={formData.youtubeLink}
+                    onChange={handleChange}
+                  />
+                  {errors.youtubeLink && (
+                    <p className="error-message">{errors.youtubeLink}</p>
+                  )}
+                  </div>
+              )}
+              </div>
+              
             </label>
             {errors.nda && <p className="error-message">{errors.nda}</p>}
           </div>
         </div>
-        <div className="form-box">
-          <label>
-            Would you like your demo video to be shown on the website?
-          </label>
-          <div className="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="showDemoVideo"
-                value="yes"
-                checked={formData.showDemoVideo === "yes"}
-                onChange={handleChange}
-              />{" "}
-              Yes
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="showDemoVideo"
-                value="no"
-                checked={formData.showDemoVideo === "no"}
-                onChange={handleChange}
-              />{" "}
-              No
-            </label>
-          </div>
-          {errors.showDemoVideo && (
-            <p className="error-message">{errors.showDemoVideo}</p>
-          )}
-        </div>
-        {formData.showDemoVideo === "yes" && (
-          <div className="form-box">
-            <label htmlFor="youtubeLink">YouTube Video Link:</label>
-            <input
-              type="url"
-              name="youtubeLink"
-              id="youtubeLink"
-              value={formData.youtubeLink}
-              onChange={handleChange}
-            />
-            {errors.youtubeLink && (
-              <p className="error-message">{errors.youtubeLink}</p>
-            )}
-          </div>
-        )}
         <div className="form-box">
           <button type="submit" className="submit-button">
             Submit
