@@ -18,8 +18,8 @@ services:
     environment:
       - NODE_ENV=production
       - DB_HOST=mysql
-      - DB_USER=root
-      - DB_PASSWORD=yourpassword # with our info
+      - DB_USER=${PRODUCTION_DB_USERNAME}
+      - DB_PASSWORD=${PRODUCTION_DB_PASSWORD} # with our info
     depends_on:
       - mysql  
 
@@ -28,8 +28,8 @@ services:
     ports:
       - "3306:3306" # not sure which port so double check
     environment:
-      MYSQL_ROOT_PASSWORD: yourpassword # with our info
-      MYSQL_DATABASE: yourdatabase
+      MYSQL_ROOT_PASSWORD: ${PRODUCTION_DB_PASSWORD} # with our info
+      MYSQL_DATABASE: ${PRODUCTION_DB_DATABASE}
     volumes:
       - db_data:/var/lib/mysql  
 
