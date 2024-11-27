@@ -8,9 +8,9 @@ interface FormData {
   projectTitle: string;
   projectDescription: string;
   sponsor: string;
-  teamMembers: string;
+  numberOfTeamMembers: string;
   teamMemberNames: string;
-  courseNumber: string;
+  major: string;
   demo: string;
   power?: string;
   nda: string;
@@ -23,9 +23,9 @@ interface FormErrors {
   projectTitle: string;
   projectDescription: string;
   sponsor: string;
-  teamMembers: string;
+  numberOfTeamMembers: string;
   teamMemberNames: string;
-  courseNumber: string;
+  major: string;
   demo: string;
   power: string;
   nda: string;
@@ -39,9 +39,9 @@ const Survey: React.FC = () => {
     projectTitle: "",
     projectDescription: "",
     sponsor: "",
-    teamMembers: "",
+    numberOfTeamMembers: "",
     teamMemberNames: "",
-    courseNumber: "",
+    major: "",
     demo: "",
     power: "",
     nda: "",
@@ -54,9 +54,9 @@ const Survey: React.FC = () => {
     projectTitle: "",
     projectDescription: "",
     sponsor: "",
-    teamMembers: "",
+    numberOfTeamMembers: "",
     teamMemberNames: "",
-    courseNumber: "",
+    major: "",
     demo: "",
     power: "",
     nda: "",
@@ -110,9 +110,9 @@ const Survey: React.FC = () => {
       projectTitle,
       projectDescription,
       sponsor,
-      teamMembers,
+      numberOfTeamMembers,
       teamMemberNames,
-      courseNumber,
+      major,
       demo,
       nda,
       youtubeLink,
@@ -126,13 +126,13 @@ const Survey: React.FC = () => {
         ? "Please enter a project description."
         : "",
       sponsor: !sponsor ? "Please enter the name of your sponsor/mentor." : "",
-      teamMembers: !teamMembers
+      numberOfTeamMembers: !numberOfTeamMembers
         ? "Please enter the number of team members."
         : "",
       teamMemberNames: !teamMemberNames
         ? "Please enter the full names of all team members, including yourself, separated by commas."
         : "",
-      courseNumber: !courseNumber ? "Please select a course number." : "",
+      major: !major ? "Please select a course number." : "",
       demo: !demo
         ? "Please specify if your group will be bringing a demo."
         : "",
@@ -141,8 +141,8 @@ const Survey: React.FC = () => {
       youtubeLink: "",
     };
 
-    if (parseInt(teamMembers, 10) <= 0) {
-      errors.teamMembers = "The number of team members must be at least 1.";
+    if (parseInt(numberOfTeamMembers, 10) <= 0) {
+      errors.numberOfTeamMembers = "The number of team members must be at least 1.";
     }
 
     if (demo === "yes" && !formData.power) {
@@ -589,16 +589,16 @@ const Survey: React.FC = () => {
           {errors.sponsor && <p className="error-message">{errors.sponsor}</p>}
         </div>
         <div className="form-box">
-          <label htmlFor="teamMembers">Number of Team Members:</label>
+          <label htmlFor="numberOfTeamMembers">Number of Team Members:</label>
           <input
             type="number"
-            name="teamMembers"
-            id="teamMembers"
-            value={formData.teamMembers}
+            name="numberOfTeamMembers"
+            id="numberOfTeamMembers"
+            value={formData.numberOfTeamMembers}
             onChange={handleChange}
           />
-          {errors.teamMembers && (
-            <p className="error-message">{errors.teamMembers}</p>
+          {errors.numberOfTeamMembers && (
+            <p className="error-message">{errors.numberOfTeamMembers}</p>
           )}
         </div>
         <div className="form-box">
@@ -614,11 +614,11 @@ const Survey: React.FC = () => {
           )}
         </div>
         <div className="form-box">
-          <label htmlFor="courseNumber">Major:</label>
+          <label htmlFor="major">Major:</label>
           <select
-            name="courseNumber"
-            id="courseNumber"
-            value={formData.courseNumber}
+            name="major"
+            id="major"
+            value={formData.major}
             onChange={handleChange}
           >
             <option value="">Select a major</option>
@@ -645,8 +645,8 @@ const Survey: React.FC = () => {
             * Note: Select Interdisciplinary if your team members are in
             different majors
           </small>
-          {errors.courseNumber && (
-            <p className="error-message">{errors.courseNumber}</p>
+          {errors.major && (
+            <p className="error-message">{errors.major}</p>
           )}
         </div>
         <div className="form-box">
