@@ -4,16 +4,16 @@ const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
-const mysql = require(process.env.PRODUCTION_DB_MYSQL_PACKAGE);
+const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE);
 
 app.use(bodyParser.json());
 app.use(cors());
 
 const db = mysql.createConnection({
-  host: process.env.PRODUCTION_DB_HOST,
-  user: process.env.PRODUCTION_DB_USERNAME,
-  password: process.env.PRODUCTION_DB_PASSWORD,
-  database: process.env.PRODUCTION_DB_DATABASE,
+  host: process.env.LOCAL_DB_HOST,
+  user: process.env.LOCAL_DB_USERNAME,
+  password: process.env.LOCAL_DB_PASSWORD,
+  database: process.env.LOCAL_DB_DATABASE,
   // authSwitchHandler: function ({ pluginName, pluginData }, cb) {
   //   if (pluginName === "caching_sha2_password") {
   //     const password = "test"; // Replace with BlueHost MySQL root password
