@@ -75,9 +75,35 @@ footer {
     border-radius: 5px; 
   }
   
-  
+
   .row2 .column1 {
     font-size: 15px;
     padding: 10px;
     border-top: 1px solid #FFFFFF;
   }
+
+  .email-box {
+    background-color: black; 
+    color: white; 
+    padding: 1px 12px; 
+    border-radius: 4px; 
+    display: inline-block; 
+    margin-top: 2px; 
+    text-align: center; 
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+  }
+  
+  .email-box:hover {
+    background-color: #FFC627; /* Change background to gold on hover */
+    transform: scale(1.15); /* Slight zoom-in effect on hover */
+  }
+  
+  .email-box a {
+    color: white; 
+    text-decoration: none; 
+  }
+  
+  .email-box:hover a {
+    color: black; /* Black text when background changes to gold */
+  }
+  
