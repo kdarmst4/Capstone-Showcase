@@ -17,29 +17,29 @@ const Footer: React.FC = () => {
                     <td className="col2">
                     <h4>Website</h4>
                     <ul>
-                      <li><a href="https://www.google.com/">Home</a></li>
-                      <li><a href="fill in">TBD</a></li>
-                      <li><a href="fill in">TBD</a></li>
-                      <li><a href="fill in">Meet the Team</a></li>
+                      <li><a href="https://www.asu.edu/">Arizona State University</a></li>
+                      <li><a href="http://localhost:5173/survey">Showcase Proposal</a></li>
+                      <li><a href="https://betasubmission.asucapstone.com/student-proposal-form">Student Project Proposal</a></li>
+                      <li><a href="https://betasubmission.asucapstone.com/sponsor-proposal-form">Sponsor Proposal</a></li>
                     </ul>
                     </td>
                      
                     <td className = "col3">
                     <h4>get help</h4>
                     <ul>
-                      <li><a href="fill in">FAQ</a></li>
-                      <li><a href="fill in">TBD</a></li>
-                      <li><a href="fill in">TBD</a></li>
-                      <li><a href="fill in">TBD</a></li>
+                      <li><a href="https://asura.asu.edu/tech-support-asu">IT Support</a></li>
+                      <li><a href="https://degrees.apps.asu.edu/bachelors">Undergraduate Programs</a></li>
+                      <li><a href="https://degrees.apps.asu.edu/masters-phd">Graduate Programs</a></li>
+                      <li><a href="https://degrees.apps.asu.edu/bachelors/major-list/accelerated-programs">Accelerated Programs</a></li>
                     </ul>
                       </td>  
 
                       <td className = "col4">
                     <h4>contact us</h4>
                     <ul>
-                    <label className="email">Email Us:</label>
-                    <input type="email" id="email" name="email" placeholder="Email us at (email here) "></input>
-                      
+                      <div className="email-box">
+                        <p><a href="mailto:sdosburn@asu.edu">sdosburn@asu.edu</a></p>
+                      </div>          
                     </ul>
                       </td>  
                     </table>
