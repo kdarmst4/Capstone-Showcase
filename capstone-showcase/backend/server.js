@@ -49,10 +49,8 @@ app.post("/api/survey", (req, res) => {
   } = req.body;
   console.log("Received survey data:", req.body);
 
-  let youtubeLinkValue = null;
-  if (showDemo == "yes" && youtubeLink) {
-    youtubeLinkValue = youtubeLink;
-  }
+  let youtubeLinkValue = youtubeLink || null;
+  
   const sql =
     "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   console.log("Executing SQL:", sql);
