@@ -122,4 +122,70 @@ app.get("/api/survey/:major", (req, res) => {
   });
 });
 
+//Endpoint to fetch submissions for Admin Page
+app.get("/api/admin/submissions", (req, res) => {
+  const sql = "SELECT * FROM survey_entries";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching submissions:", err);
+      return res.status(500).send("Server error");
+    }
+    res.json(results);
+  });
+});
 
+
+app.put("/api/admin/submissions/:id", (req, res) => {
+  const { id } = req.params;
+  const {
+    email,
+    name,
+    projectTitle,
+    projectDescription,
+    sponsor,
+    numberOfTeamMembers,
+    teamMemberNames,
+    major,
+    demo,
+    power,
+    nda,
+    youtubeLink,
+  } = req.body;
+
+  let youtubeLinkValue = youtubeLink || null;
+  let ndaValue = nda === "yes" ? 1 : 0;
+  let demoValue = demo === "yes" ? 1 : 0;
+  let powerValue = power === "yes" ? 1 : 0;
+
+  console.log("Updating survey data:", req.body); // Ensure data is logged
+
+  const sql =
+    "UPDATE survey_entries SET email = ?, name = ?, projectTitle = ?, projectDescription = ?, sponsor = ?, numberOfTeamMembers = ?, teamMemberNames = ?, major = ?, demo = ?, power = ?, nda = ?, youtubeLink = ? WHERE id = ?";
+
+  db.query(
+    sql,
+    [
+      email,
+      name,
+      projectTitle,
+      projectDescription,
+      sponsor,
+      numberOfTeamMembers,
+      teamMemberNames,
+      major,
+      demoValue,
+      powerValue,
+      ndaValue,
+      youtubeLinkValue,
+      id,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating survey data:", err);
+        return res.status(500).send("Server error");
+      }
+      console.log("Survey data updated successfully");
+      res.status(200).send("Survey data updated");
+    }
+  );
+});
