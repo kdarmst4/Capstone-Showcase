@@ -11,7 +11,7 @@ import teamMember5 from "../assets/waleedHeadshot.jpg";
 import teamMember6 from "../assets/anshProfile.jpg";
 import teamMember7 from "../assets/alexanderProfile.jpg";
 import teamMember8 from "../assets/karinaProfile.jpg";
-import teamMember9 from "../assets/profilePlaceholder.png";
+import teamMember9 from "../assets/brianProfile.jpg";
 import Footer from './Footer';
 
 const teamMembers = [
