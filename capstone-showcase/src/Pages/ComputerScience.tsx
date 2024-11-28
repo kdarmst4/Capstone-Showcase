@@ -11,20 +11,30 @@ const ComputerScience: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
   const navigate = useNavigate();
 
-  // Fetch projects based on major when component mounts
   useEffect(() => {
     document.body.classList.add("computer-science-page-body");
-    
-    // Fetch data for Computer Science major
-    fetch("/api/survey/computer-science")
-      .then((response) => response.json())
-      .then((data) => setProjects(data)) // Update state with fetched projects
+
+    // Fetch projects for the Computer Science major
+    fetch("http://localhost:3000/api/survey/computer-science")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => setProjects(data)) // Populate the state with fetched projects
       .catch((error) => console.error("Error fetching projects:", error));
 
     return () => {
       document.body.classList.remove("computer-science-page-body");
     };
   }, []);
+
+  const extractYouTubeThumbnail = (url: string): string | null => {
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i;
+    const match = url.match(regex);
+    return match ? `https://img.youtube.com/vi/${match[1]}/0.jpg` : null;
+  };
 
   const handleSurveyFormClick = () => {
     navigate("/survey");
@@ -56,13 +66,46 @@ const ComputerScience: React.FC = () => {
           {projects.length === 0 ? (
             <p>No projects available for Computer Science.</p>
           ) : (
-            projects.map((project) => (
-              <div key={project.id} className="project-card">
-                <h4>{project.projectTitle}</h4>
-                <p>{project.projectDescription}</p>
-                <p>Team Members: {project.teamMemberNames}</p>
-                <p>Sponsor: {project.sponsor}</p>
-                {project.youtubeLink && <a href={project.youtubeLink}>Watch Demo</a>}
+            projects.map((project, index) => (
+              <div
+                key={project.id}
+                className={`project-card ${
+                  index % 2 === 0 ? "zigzag-left" : "zigzag-right"
+                }`}
+              >
+                {index % 2 === 0 && project.youtubeLink && (
+                  <a
+                    href={project.youtubeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube Video Link"
+                  >
+                    <img
+                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                      alt={`${project.projectTitle} Thumbnail`}
+                      className="youtube-thumbnail"
+                    />
+                  </a>
+                )}
+                <div className="project-details">
+                  <h4 className="project-title">{project.projectTitle}</h4>
+                  <p className="project-description">{project.projectDescription}</p>
+                  <p><strong>Team Members:</strong> {project.teamMemberNames}</p>
+                </div>
+                {index % 2 !== 0 && project.youtubeLink && (
+                  <a
+                    href={project.youtubeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube Video Link"
+                  >
+                    <img
+                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                      alt={`${project.projectTitle} Thumbnail`}
+                      className="youtube-thumbnail"
+                    />
+                  </a>
+                )}
               </div>
             ))
           )}

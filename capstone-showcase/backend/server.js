@@ -50,7 +50,7 @@ app.post("/api/survey", (req, res) => {
   console.log("Received survey data:", req.body);
 
   let youtubeLinkValue = youtubeLink || null;
-  
+
   const sql =
     "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   console.log("Executing SQL:", sql);
@@ -102,18 +102,24 @@ app.post("/api/survey", (req, res) => {
   );
 });
 
+app.listen(3000, () => {
+  console.log("Server started on port 3000");
+});
+
+// Endpoint to fetch projects by major
 app.get("/api/survey/:major", (req, res) => {
-  const major = req.params.major;
+  const { major } = req.params;
+  console.log("Major requested:", major); // Log the requested major
+
   const sql = "SELECT * FROM survey_entries WHERE major = ?";
   db.query(sql, [major], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
       return res.status(500).send("Server error");
     }
+    console.log("Query results:", results); // Log the query results
     res.json(results);
   });
 });
 
-app.listen(3000, () => {
-  console.log("Server started on port 3000");
-});
+
