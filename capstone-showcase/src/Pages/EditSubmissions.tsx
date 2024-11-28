@@ -243,7 +243,7 @@ const EditSubmissions: React.FC = () => {
           </div>
 
           <div className="form-field">
-            <label>PowerPoint Available:</label>
+            <label>Power available:</label>
             <input
               type="checkbox"
               checked={updatedSubmission.power}
