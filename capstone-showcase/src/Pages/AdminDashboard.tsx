@@ -3,7 +3,6 @@ import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import "../CSS/AdminDashboard.css";
 import asuLogoPlain from "../assets/asuSquareLogo.png";
 
-
 interface AdminDashboardProps {
   pageTitle: string;
 }
@@ -18,10 +17,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
     navigate('/admin');
   };
 
-  // Check if the current path is admin-dashboard or admin-dashboard/edit
   const isDashboardPage = location.pathname === '/admin-dashboard';
   const isEditPage = location.pathname === '/admin-dashboard/edit';
-  const isSupportPage= location.pathname === '/admin-dashboard/support';
+  const isSupportPage = location.pathname === '/admin-dashboard/support';
 
   return (
     <div className="admin-dashboard-container">
@@ -58,7 +56,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
         <div className="admin-dashboard-content">
           <h1>{pageTitle}</h1>
 
-          {/* Render buttons specific to the dashboard */}
           {isDashboardPage && (
             <div className="button-row">
               <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/presentation')}>
@@ -67,7 +64,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
               <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/submissions')}>
                 Edit Student Capstone Submissions
               </div>
-              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/contact-support')}>
+              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/support')}>
                 Contact Support
               </div>
             </div>
@@ -85,10 +82,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
           )}
 
           {isSupportPage && (
-            <div className="edit-button-row">
-              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/contact-support')}>
-                Contact Support
-              </div>
+            <div className="support-content">
+              <p>Need help? Fill out the form below or contact us directly!</p>
             </div>
           )}
 
