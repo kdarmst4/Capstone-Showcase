@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const ComputerScience: React.FC = () => {
   const { isSideMenu } = useMenuContext();
-  const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
   const navigate = useNavigate();
+  const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
 
   useEffect(() => {
     document.body.classList.add("computer-science-page-body");
@@ -57,7 +57,6 @@ const ComputerScience: React.FC = () => {
                 Survey Form
               </button>
             </div>
-            <p>{capstoneDescription}</p>
           </article>
         </section>
 

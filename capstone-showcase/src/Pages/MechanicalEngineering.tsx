@@ -9,12 +9,11 @@ import { useNavigate } from "react-router-dom";
 const MechanicalEngineering: React.FC = () => {
   const { isSideMenu } = useMenuContext();
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
+  const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
     document.body.classList.add("mechanical-engineering-page-body");
 
-    // Fetch projects for the Mechanical Engineering major
     fetch("http://localhost:3000/api/survey/mechanical-engineering")
       .then((response) => {
         if (!response.ok) {
@@ -22,13 +21,19 @@ const MechanicalEngineering: React.FC = () => {
         }
         return response.json();
       })
-      .then((data) => setProjects(data)) // Populate the state with fetched projects
+      .then((data) => setProjects(data))
       .catch((error) => console.error("Error fetching projects:", error));
 
     return () => {
       document.body.classList.remove("mechanical-engineering-page-body");
     };
   }, []);
+
+  const extractYouTubeThumbnail = (url: string): string | null => {
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i;
+    const match = url.match(regex);
+    return match ? `https://img.youtube.com/vi/${match[1]}/0.jpg` : null;
+  };
 
   const handleSurveyFormClick = () => {
     navigate("/survey");
@@ -54,26 +59,48 @@ const MechanicalEngineering: React.FC = () => {
           </article>
         </section>
 
-        {/* Render the list of projects */}
         <section className="projects-list">
           {projects.length === 0 ? (
             <p>No projects available for Mechanical Engineering.</p>
           ) : (
-            projects.map((project) => (
-              <div key={project.id} className="project-card">
-                <h4 className="project-title">{project.projectTitle}</h4>
-                <p className="project-description">{project.projectDescription}</p>
-                <div className="project-details">
-                  <p><strong>Team Members:</strong> {project.teamMemberNames}</p>
-                </div>
-                {project.youtubeLink && (
+            projects.map((project, index) => (
+              <div
+                key={project.id}
+                className={`project-card ${
+                  index % 2 === 0 ? "zigzag-left" : "zigzag-right"
+                }`}
+              >
+                {index % 2 === 0 && project.youtubeLink && (
                   <a
-                    className="project-demo-link"
                     href={project.youtubeLink}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="YouTube Video Link"
                   >
-                    Watch Demo
+                    <img
+                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                      alt={`${project.projectTitle} Thumbnail`}
+                      className="youtube-thumbnail"
+                    />
+                  </a>
+                )}
+                <div className="project-details">
+                  <h4 className="project-title">{project.projectTitle}</h4>
+                  <p className="project-description">{project.projectDescription}</p>
+                  <p><strong>Team Members:</strong> {project.teamMemberNames}</p>
+                </div>
+                {index % 2 !== 0 && project.youtubeLink && (
+                  <a
+                    href={project.youtubeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube Video Link"
+                  >
+                    <img
+                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                      alt={`${project.projectTitle} Thumbnail`}
+                      className="youtube-thumbnail"
+                    />
                   </a>
                 )}
               </div>
