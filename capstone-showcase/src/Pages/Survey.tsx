@@ -69,7 +69,7 @@ const Survey: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const navigate = useNavigate();
-
+  
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -180,13 +180,14 @@ const Survey: React.FC = () => {
 
   const handleSuccessfulSubmission = () => {
     setFormData(initialFormData);
-    setIsSubmitted(true); 
+    setIsSubmitted(true);
 
     setTimeout(() => {
       setIsSubmitted(false);
       navigate("/");
-    }, 10000); 
-};
+    }, 3000); 
+  };
+
   const handleCloseSuccessMessage = () => {
     setIsSubmitted(false); 
     navigate("/"); 
@@ -196,12 +197,8 @@ const Survey: React.FC = () => {
     <div className="form-container">
       {isSubmitted && (
         <div className="success-message">
-          <p>
-            Thank you for submitting your survey! Your responses have been recorded successfully.
-          </p>
-          <button onClick={handleCloseSuccessMessage} className="ok-button">
-            OK
-          </button>
+          <p>Thank you for submitting your survey! Your responses have been recorded successfully.</p>
+          <button onClick={handleCloseSuccessMessage} className="ok-button">OK</button>
         </div>
       )}
       <form onSubmit={handleSubmit}>
@@ -775,11 +772,11 @@ const Survey: React.FC = () => {
           </div>
         </div>
         <div className="form-box">
-
           <button type="submit" className="submit-button">
             Submit
           </button>
         </div>
+
       </form>
     </div>
   );
