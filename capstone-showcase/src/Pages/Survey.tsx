@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../CSS/Survey.css";
 
@@ -65,6 +66,9 @@ const Survey: React.FC = () => {
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>(initialFormErrors);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -82,6 +86,7 @@ const Survey: React.FC = () => {
     console.log(`Field: ${name}, Value: ${value}`);
   };
 
+    
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const formErrors = validateFormData(formData);
@@ -175,10 +180,30 @@ const Survey: React.FC = () => {
 
   const handleSuccessfulSubmission = () => {
     setFormData(initialFormData);
-  };
+    setIsSubmitted(true); 
 
+    setTimeout(() => {
+      setIsSubmitted(false);
+      navigate("/");
+    }, 10000); 
+};
+  const handleCloseSuccessMessage = () => {
+    setIsSubmitted(false); 
+    navigate("/"); 
+  };
+ 
   return (
     <div className="form-container">
+      {isSubmitted && (
+        <div className="success-message">
+          <p>
+            Thank you for submitting your survey! Your responses have been recorded successfully.
+          </p>
+          <button onClick={handleCloseSuccessMessage} className="ok-button">
+            OK
+          </button>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-header">
           <h1 className="form-title">Capstone Showcase Information Form</h1>
