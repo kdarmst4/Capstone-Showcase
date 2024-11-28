@@ -1,96 +1,62 @@
-.computer-science-page-body {
-  font-family: Arial, sans-serif;
-}
-.computer-science {
-  margin: 0;
-  padding-top: 20px;
-  text-align: center;
-  transition: margin-left 0.3s ease;
+.project-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.computer-science.compressed {
-  margin-left: 270px;
+.project-card.zigzag-left {
+  flex-direction: row;
 }
 
-.computer-science .header-background {
-  background-image: url("../assets/csBanner1.jpeg");
-  background-size: cover;
-  background-position: center 70%;
-  padding: 40px 20px;
-  color: white;
-  min-height: 150px;
+.project-card.zigzag-right {
+  flex-direction: row-reverse;
+}
+
+.youtube-thumbnail {
+  width: 240px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.youtube-thumbnail:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.project-title {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #8c1d40;
+}
+
+.project-description {
+  margin-bottom: 10px;
+  font-style: italic;
+  color: #555;
+}
+
+.project-details p {
+  margin: 5px 0;
+  text-align: left;
+}
+
+.projects-list {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  position: relative;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-}
-
-.header-background h1,
-.header-background h2,
-.header-background h3 {
-  margin: 10px 0;
-}
-
-.survey-form-button {
-  background-color: #8c1d40;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 17px;
-  font-weight: bold;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-}
-
-.computer-science .title-container {
-  text-align: center;
-  color: black;
-}
-
-.computer-science .asu-logo {
-  top: 10px;
-  left: 10px;
-  width: 200px;
-  height: auto;
-}
-
-.content-area {
-  background: #d3d3d3;
-  width: 100%;
-  overflow-y: auto;
-  padding-top: 20px;
-}
-
-.event-details {
-  text-align: center;
-}
-
-.event-details .reminder {
-  font-size: 18px;
-  margin: 20px 0;
-}
-
-.event-details article {
-  display: inline-block;
-  text-align: left;
-  width: 80%;
-}
-
-.event-details article p {
-  color: black;
-  font-weight: bold;
-  padding: 15px;
-  border: 1px solid black;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-
-footer {
+  gap: 20px;
   margin-top: 20px;
-  font-size: 14px;
 }

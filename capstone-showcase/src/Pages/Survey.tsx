@@ -79,6 +79,7 @@ const Survey: React.FC = () => {
     }
 
     setErrors({ ...errors, [name]: "" });
+    console.log(`Field: ${name}, Value: ${value}`);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

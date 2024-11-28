@@ -1,20 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/IndustrialEngineering.css";
-// import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from './Footer';
-
+import { useNavigate } from "react-router-dom";
 
 const IndustrialEngineering: React.FC = () => {
   const { isSideMenu } = useMenuContext();
+  const navigate = useNavigate();
+  const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
 
   useEffect(() => {
     document.body.classList.add("industrial-engineering-page-body");
+
+    // Fetch projects for the Industrial Engineering major
+    fetch("http://localhost:3000/api/survey/industrial-engineering")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => setProjects(data)) // Populate the state with fetched projects
+      .catch((error) => console.error("Error fetching projects:", error));
+
     return () => {
       document.body.classList.remove("industrial-engineering-page-body");
     };
   }, []);
+
+  const handleSurveyFormClick = () => {
+    navigate("/survey");
+  };
 
   return (
     <div className={`industrial-engineering ${isSideMenu ? "compressed" : ""}`}>
@@ -25,18 +42,42 @@ const IndustrialEngineering: React.FC = () => {
             <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
             <div className="title-container">
               <h3>Industrial Engineering</h3>
+              <button
+                className="survey-form-button"
+                onClick={handleSurveyFormClick}
+                aria-label="Survey Form Button"
+              >
+                Survey Form
+              </button>
             </div>
-            <p>The Capstone project courses for the Industrial Engineering and Engineering Management
-                programs provide students an opportunity to apply their technical skill and knowledge of
-                engineering principles to the development of a complex, team-oriented project on software,
-                systems, or devices over a two-semester sequence. In their senior year, students work in teams of
-                three to develop a product or process from concept to implementation. As they work on their
-                Capstone project, students manage the project from beginning to end, and experience various
-                development processes and challenges along the way. An excellent training ground for working in
-                industry, the Capstone project mirrors the type of experiences graduates will face after graduating,
-                when they begin their careers in engineering.
-            </p>
           </article>
+        </section>
+
+        {/* Render the list of projects */}
+        <section className="projects-list">
+          {projects.length === 0 ? (
+            <p>No projects available for Industrial Engineering.</p>
+          ) : (
+            projects.map((project) => (
+              <div key={project.id} className="project-card">
+                <h4 className="project-title">{project.projectTitle}</h4>
+                <p className="project-description">{project.projectDescription}</p>
+                <div className="project-details">
+                  <p><strong>Team Members:</strong> {project.teamMemberNames}</p>
+                </div>
+                {project.youtubeLink && (
+                  <a
+                    className="project-demo-link"
+                    href={project.youtubeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Watch Demo
+                  </a>
+                )}
+              </div>
+            ))
+          )}
         </section>
       </main>
       <Footer />
