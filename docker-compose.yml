@@ -1,37 +1,42 @@
 version: '3'
+
 services:
   frontend:
     build:
-      context: . # our frontend is in the root directory so ?
+      context: ./capstone-showcase
       dockerfile: Dockerfile
     ports:
-      - "80:3000" 
+      - "80:3000"
     depends_on:
-      - backend  
+      - backend
 
   backend:
     build:
-      context: ./backend
+      context: ./capstone-showcase/backend
       dockerfile: Dockerfile
     ports:
-      - "3200:3000"  
+      - "3201:3200"
     environment:
       - NODE_ENV=production
       - DB_HOST=mysql
       - DB_USER=${LOCAL_DB_USERNAME}
-      - DB_PASSWORD=${LOCAL_DB_PASSWORD} # with our info
+      - DB_PASSWORD=${LOCAL_DB_PASSWORD}
+    env_file:
+    - ./capstone-showcase/backend/.env
     depends_on:
-      - mysql  
+      - mysql
 
   mysql:
-    image: mysql:8.0  
+    image: mysql:8.0
     ports:
-      - "3307:3306" # not sure which port so double check
+      - "3307:3306"  # Double-check the correct port
     environment:
-      MYSQL_ROOT_PASSWORD: ${LOCAL_DB_PASSWORD} # with our info
+      MYSQL_ROOT_PASSWORD: ${LOCAL_DB_PASSWORD}
       MYSQL_DATABASE: ${LOCAL_DB_DATABASE}
+    env_file:
+    - ./capstone-showcase/backend/.env
     volumes:
-      - db_data:/var/lib/mysql  
+      - ./new_showcase_db.sql:/docker-entrypoint-initdb.d/new_showcase_db.sql
 
 volumes:
-  db_data:  
+  db_data:
