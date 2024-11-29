@@ -53,7 +53,7 @@ const EditSubmissions: React.FC = () => {
   }, []);
 
   // Handle field changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Submission) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => {
     if (updatedSubmission) {
       setUpdatedSubmission({ ...updatedSubmission, [field]: e.target.value });
     }
@@ -66,7 +66,7 @@ const EditSubmissions: React.FC = () => {
   };
 
   // Save changes
-  const [successMessage, setSuccessMessage] = useState("");
+  const [, setSuccessMessage] = useState("");
 
   const handleSave = async (id: number) => {
     try {

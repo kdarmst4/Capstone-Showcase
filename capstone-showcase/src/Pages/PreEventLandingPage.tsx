@@ -14,9 +14,9 @@ import Footer from "./Footer";
 const PreEventLandingPage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
   const navigate = useNavigate();
-  const [savedTime, setSavedTime] = useState<string | null>(null);
-  const [savedDate, setSavedDate] = useState<string | null>(null);
-  const [savedImage, setSavedImage] = useState<string | null>(null);
+  const [, setSavedTime] = useState<string | null>(null);
+  const [, setSavedDate] = useState<string | null>(null);
+  const [, setSavedImage] = useState<string | null>(null);
   useEffect(() => {
     document.body.classList.add("pre-event-landing-page-body");
     return () => {
@@ -34,9 +34,9 @@ const PreEventLandingPage: React.FC = () => {
     navigate("/admin");
   };
 
-  const handleSurveyFormClick = () => {
-    navigate("/survey");
-  };
+  // const handleSurveyFormClick = () => {
+  //   navigate("/survey");
+  // };
 
   return (
     <>

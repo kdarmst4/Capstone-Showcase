@@ -104,7 +104,7 @@ const Survey: React.FC = () => {
       .then(() => {
         handleSuccessfulSubmission();
       })
-      .catch((error) => {
+      .catch((error: { message: string }) => {
         console.error("Error submitting survey data:", error);
       });
   };
@@ -121,7 +121,7 @@ const Survey: React.FC = () => {
       major,
       demo,
       nda,
-      youtubeLink,
+      // youtubeLink,
     } = formData;
 
     const errors: FormErrors = {

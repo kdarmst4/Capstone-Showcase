@@ -5,7 +5,7 @@ services:
       context: . # our frontend is in the root directory so ?
       dockerfile: Dockerfile
     ports:
-      - "3200:3000" 
+      - "80:3000" 
     depends_on:
       - backend  
 
@@ -14,12 +14,12 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "3100:3000"  
+      - "3200:3000"  
     environment:
       - NODE_ENV=production
       - DB_HOST=mysql
-      - DB_USER=${PRODUCTION_DB_USERNAME}
-      - DB_PASSWORD=${PRODUCTION_DB_PASSWORD} # with our info
+      - DB_USER=${LOCAL_DB_USERNAME}
+      - DB_PASSWORD=${LOCAL_DB_PASSWORD} # with our info
     depends_on:
       - mysql  
 
@@ -28,8 +28,8 @@ services:
     ports:
       - "3307:3306" # not sure which port so double check
     environment:
-      MYSQL_ROOT_PASSWORD: ${PRODUCTION_DB_PASSWORD} # with our info
-      MYSQL_DATABASE: ${PRODUCTION_DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${LOCAL_DB_PASSWORD} # with our info
+      MYSQL_DATABASE: ${LOCAL_DB_DATABASE}
     volumes:
       - db_data:/var/lib/mysql  
 
