@@ -2,18 +2,17 @@
 
 # Website Tools Used
 - Front-end: TypeScript + React + CSS
-- Back-end: JavaScript + ExpressJS + MySQL
-- API: REST
+- Back-end: ExpressJS + MySQL
 
 # Running the Website Locally
 1. Change directories into the desired folder to store the folders from the repo
 - Ex. cd Downloads
 
-2. git clone https://github.com/mmrutled/Capstone-Showcase.git
+2. git clone https://github.com/Karina528/Capstone-Showcase.git
    
-4. In Visual Studio Code, open the new folder created by line 2
+3. In Visual Studio Code, open the new folder created by line 2
 
-5. Npm create vite@latest capstone-showcase
+4. npm create vite@latest capstone-showcase
 - Choose Ignore files and continue
 - Choose React
 - Choose TypeScript
@@ -35,11 +34,12 @@
 # Testing Frontend-Backend connection locally:
 
 1. Open terminal in VS Code and navigate to the directory of the project
-2. cd capstone-showcase << backend
-3. Once in 'backend' directory, run command "node server.js"
-4. Open 2nd terminal on VS Code and navigate to the directory of the project
-5. cd capstone-showcase
-6. Once in the 'capstone-showcase' directory, run command "npm run dev"
-7. Launch web application on browser and navigate to Survey page
-8. Enter information as appropriate and click “Submit”
-9. Check the ‘backend’ terminal console for submission information
+2. cd capstone-showcase
+3. cd backend
+4. Once in 'backend' directory, run command "node server.js"
+5. Open 2nd terminal on VS Code and navigate to the directory of the project
+6. cd capstone-showcase
+7. Once in the 'capstone-showcase' directory, run command "npm run dev"
+8. Launch web application on browser and navigate to Survey page
+9. Enter information as appropriate and click “Submit”
+10. Check the ‘backend’ terminal console for submission information
