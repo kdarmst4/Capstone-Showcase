@@ -18,7 +18,7 @@
 - TypeScript
 
 5. Change directories into the capstone-showcase subfolder by using `cd capstone-showcase`.
-- Note: This is the subfolder inside the repo and **NOT** the main folder of the repo.
+- <ins>Note:</ins> This is the subfolder inside the repo and **NOT** the main folder of the repo.
 
 6. Run the following commands:
    ```
