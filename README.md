@@ -20,7 +20,7 @@
 5. Change directories into the capstone-showcase subfolder by using `cd capstone-showcase`.
 - Note: This is the subfolder inside the repo and **NOT** the main folder of the repo.
 
-7. Run the following commands:
+6. Run the following commands:
    ```
    npm install
    git fetch --all
@@ -28,9 +28,9 @@
    npm install react-router-dom@latest
    ```
 
-8. Run the website by using `npm run dev`.
+7. Run the website by using `npm run dev`.
    
-9. Open the website in your browser using the Local url.
+8. Open the website in your browser using the Local url.
 
 # Testing Frontend-Backend connection locally:
 
