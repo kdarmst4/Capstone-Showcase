@@ -27,20 +27,31 @@
    git reset --hard origin/main
    npm install react-router-dom@latest
    ```
-
 7. Run the website by using `npm run dev`.
    
 8. Open the website in your browser using the Local url.
 
 # Testing Frontend-Backend connection locally:
 
-1. Open terminal in VS Code and navigate to the directory of the project
-2. `cd capstone-showcase`
-3. `cd backend`
-4. Once in 'backend' directory, run command `node server.js`
-5. Open 2nd terminal on VS Code and navigate to the directory of the project
-6. `cd capstone-showcase`
-7. Once in the 'capstone-showcase' directory, run command `npm run dev`
-8. Launch web application on browser and navigate to Survey page
-9. Enter information as appropriate and click “Submit”
-10. Check the ‘backend’ terminal console for submission information
+1. Open a terminal in VS Code and navigate to the directory of the project.
+   
+2. Run the following commands:
+   ```
+   cd capstone-showcase
+   cd backend
+   ```
+3. Once in the 'backend' directory, run the command `node server.js`.
+   
+4. Open a 2nd terminal in VS Code and navigate to the directory of the project.
+   
+5. Run the command `cd capstone-showcase`.
+   
+6. Once in the 'capstone-showcase' directory, run the command `npm run dev`.
+    
+7. Launch the web application in your browser and navigate to any one of the major tabs.
+    
+13. Click on the "Survey Form" button to open a new capstone submission form.
+    
+15. Enter information as appropriate and click “Submit”.
+   
+17. Check the ‘backend’ terminal console for a submission confirmation.
