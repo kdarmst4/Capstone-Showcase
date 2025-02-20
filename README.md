@@ -33,7 +33,7 @@
 
 # Testing Frontend-Backend connection locally:
 
-1. Open a terminal in VS Code and navigate to the directory of the project.
+1. Open a terminal in VS Code and navigate to the project directory.
    
 2. Run the following commands:
    ```
@@ -42,7 +42,7 @@
    ```
 3. Once in the 'backend' directory, run the command `node server.js`.
    
-4. Open a 2nd terminal in VS Code and navigate to the directory of the project.
+4. Open a 2nd terminal in VS Code and navigate to the project directory.
    
 5. Run the command `cd capstone-showcase`.
    
