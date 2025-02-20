@@ -111,29 +111,40 @@ const Menu: React.FC = () => {
                   </Link>
                 </li>
                 <li
-                      className={`menu-item ${
-                        pathname === "/interdisciplinary" ? "active" : ""
-                      }`}
-                    >
-                      <Link to="/interdisciplinary">
-                        Interdisciplinary
-                        <br />
-                        Teams
-                      </Link>
-                    </li>
-                <li
                   className={`menu-item ${
-                    pathname === "/biomedical-engineering" ? "active" : ""
+                    pathname === "/industrial-engineering" ? "active" : ""
                   }`}
                 >
-                  <Link to="/biomedical-engineering">
-                    Biomedical Engineering
+                  <Link to="/industrial-engineering">
+                    Industrial Engineering
+                    <br />
+                    Teams
+                  </Link>
+                </li>
+                <li
+                  className={`menu-item ${
+                    pathname === "/interdisciplinary" ? "active" : ""
+                  }`}
+                >
+                  <Link to="/interdisciplinary">
+                    Interdisciplinary
                     <br />
                     Teams
                   </Link>
                 </li>
                 {isMajorsOpen && (
                   <>
+                    <li
+                      className={`menu-item ${
+                        pathname === "/biomedical-engineering" ? "active" : ""
+                      }`}
+                    >
+                      <Link to="/biomedical-engineering">
+                        Biomedical Engineering
+                        <br />
+                        Teams
+                      </Link>
+                    </li>
                     <li
                       className={`menu-item ${
                         pathname === "/mechanical-engineering" ? "active" : ""
@@ -152,17 +163,6 @@ const Menu: React.FC = () => {
                     >
                       <Link to="/electrical-engineering">
                         Electrical Engineering
-                        <br />
-                        Teams
-                      </Link>
-                    </li>
-                    <li
-                      className={`menu-item ${
-                        pathname === "/industrial-engineering" ? "active" : ""
-                      }`}
-                    >
-                      <Link to="/industrial-engineering">
-                        Industrial Engineering
                         <br />
                         Teams
                       </Link>
