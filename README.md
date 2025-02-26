@@ -40,7 +40,7 @@
    cd capstone-showcase
    cd backend
    ```
-3. Once in the 'backend' directory, run the command `node server.js`.
+3. Once in the 'backend' directory, run the command `node localServer.js`.
    
 4. Open a 2nd terminal in VS Code and navigate to the project directory.
    
