@@ -13,8 +13,8 @@ const Interdisciplinary: React.FC = () => {
 
   useEffect(() => {
     document.body.classList.add("interdisciplinary-page-body");
-    //fetch("https://asucapstone.com:3000/api/survey/interdisciplinary")
-    fetch("http://localhost:3000/api/survey/interdisciplinary")
+    fetch("https://asucapstone.com:3000/api/survey/interdisciplinary")
+    //fetch("http://localhost:3000/api/survey/interdisciplinary")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);

@@ -100,8 +100,8 @@ const Survey: React.FC = () => {
     const submissionData = prepareSubmissionData(formData);
 
     axios
-    //.post("https://asucapstone.com:3000/api/survey", submissionData)
-      .post("http://localhost:3000/api/survey", submissionData)
+    .post("https://asucapstone.com:3000/api/survey", submissionData)
+      //.post("http://localhost:3000/api/survey", submissionData)
       .then(() => {
         handleSuccessfulSubmission();
       })

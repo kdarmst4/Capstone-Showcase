@@ -13,8 +13,8 @@ const IndustrialEngineering: React.FC = () => {
 
   useEffect(() => {
     document.body.classList.add("industrial-engineering-page-body");
-    //fetch("https://asucapstone.com:3000/api/survey/industrial-engineering")
-    fetch("http://localhost:3000/api/survey/industrial-engineering")
+    fetch("https://asucapstone.com:3000/api/survey/industrial-engineering")
+    //fetch("http://localhost:3000/api/survey/industrial-engineering")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);

@@ -13,8 +13,8 @@ const Informatics: React.FC = () => {
 
   useEffect(() => {
     document.body.classList.add("informatics-page-body");
-    //fetch("https://asucapstone.com:3000/api/survey/informatics")
-    fetch("http://localhost:3000/api/survey/informatics")
+    fetch("https://asucapstone.com:3000/api/survey/informatics")
+    //fetch("http://localhost:3000/api/survey/informatics")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
