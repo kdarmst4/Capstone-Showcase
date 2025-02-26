@@ -13,8 +13,8 @@ const ComputerSystemsEngineering: React.FC = () => {
 
   useEffect(() => {
     document.body.classList.add("computer-systems-engineering-page-body");
-    //fetch("https://asucapstone.com:3000/api/survey/computer-systems-engineering")
-    fetch("http://localhost:3000/api/survey/computer-systems-engineering")
+    fetch("https://asucapstone.com:3000/api/survey/computer-systems-engineering")
+    //fetch("http://localhost:3000/api/survey/computer-systems-engineering")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
