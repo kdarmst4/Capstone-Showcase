@@ -55,3 +55,6 @@
 15. Enter information as appropriate and click “Submit”.
    
 17. Check the ‘backend’ terminal console for a submission confirmation.
+
+-------------------------------------------------------------------------------------------------------------------------------------
+When Uploading code for Production, make sure to switch out all localhost URLs for production URL
