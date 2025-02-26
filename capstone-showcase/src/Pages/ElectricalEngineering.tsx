@@ -13,7 +13,7 @@ const ElectricalEngineering: React.FC = () => {
 
   useEffect(() => {
     document.body.classList.add("electrical-engineering-page-body");
-
+    //fetch("https://asucapstone.com:3000/api/survey/electrical-engineering")
     fetch("http://localhost:3000/api/survey/electrical-engineering")
       .then((response) => {
         if (!response.ok) {
