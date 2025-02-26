@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000", // Backend server
+        target: "https://asucapstone.com:3000", // Backend server
         changeOrigin: true,
       },
     },

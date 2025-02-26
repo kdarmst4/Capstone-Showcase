@@ -41,6 +41,7 @@ const EditSubmissions: React.FC = () => {
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
+        //const response = await axios.get('https://asucapstone.com:3000/api/admin/submissions');
         const response = await axios.get('http://localhost:3000/api/admin/submissions'); // Ensure this matches your server URL
         console.log('Fetched submissions:', response.data); // Debug: Log the fetched data
         setSubmissions(response.data);
@@ -67,19 +68,21 @@ const EditSubmissions: React.FC = () => {
 
   // Save changes
   const [, setSuccessMessage] = useState("");
-
+  
   const handleSave = async (id: number) => {
     try {
       // Ensure updatedSubmission is being passed correctly
       console.log("Saving updated data:", updatedSubmission);
   
       // Send the updated data to the backend
+      //await axios.put(`https://asucapstone.com/api/admin/submissions/${id}`, updatedSubmission);
       await axios.put(`http://localhost:3000/api/admin/submissions/${id}`, updatedSubmission);
   
       // After successful save, show success message
       setSuccessMessage("Change successful!");
   
       // Optionally, refresh the data after save to update the list of submissions
+      //const response = await axios.get('https://asucapstone.com:3000/api/admin/submissions');
       const response = await axios.get('http://localhost:3000/api/admin/submissions');
       setSubmissions(response.data);
     } catch (error) {
