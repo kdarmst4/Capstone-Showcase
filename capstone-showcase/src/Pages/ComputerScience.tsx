@@ -31,11 +31,11 @@ const ComputerScience: React.FC = () => {
     };
   }, []);
 
-  /*const extractYouTubeThumbnail = (url: string): string | null => {
+  const extractYouTubeThumbnail = (url: string): string | null => {
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i;
     const match = url.match(regex);
     return match ? `https://img.youtube.com/vi/${match[1]}/0.jpg` : null;
-  };*/
+  };
 
   const handleSurveyFormClick = () => {
     navigate("/survey");
@@ -69,15 +69,43 @@ const ComputerScience: React.FC = () => {
             projects.map((project, index) => (
               <div
                 key={project.id}
-                className={`project-card `}
+                className={`project-card ${
+                  index % 2 === 0 ? "zigzag-left" : "zigzag-right"
+                }`}
               >
-                
+                {index % 2 === 0 && project.youtubeLink && (
+                  <a
+                    href={project.youtubeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube Video Link"
+                  >
+                    <img
+                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                      alt={`${project.projectTitle} Thumbnail`}
+                      className="youtube-thumbnail"
+                    />
+                  </a>
+                )}
                 <div className="project-details">
                   <h4 className="project-title">{project.projectTitle}</h4>
-                  
+                  <p className="project-description">{project.projectDescription}</p>
                   <p><strong>Team Members:</strong> {project.teamMemberNames}</p>
                 </div>
-               
+                {index % 2 !== 0 && project.youtubeLink && (
+                  <a
+                    href={project.youtubeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube Video Link"
+                  >
+                    <img
+                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                      alt={`${project.projectTitle} Thumbnail`}
+                      className="youtube-thumbnail"
+                    />
+                  </a>
+                )}
               </div>
             ))
           )}

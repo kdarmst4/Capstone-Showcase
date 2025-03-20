@@ -82,31 +82,55 @@
   display: flex;
   gap: 20px;
   align-items: center;
-  height: 200px;
-  width: 800px;
   margin-bottom: 30px;
   background-color: #ffffff;
   color: #333;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }
 
+.project-card:hover{
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.project-card.zigzag-left {
+  flex-direction: row;
+}
+
+.project-card.zigzag-right {
+  flex-direction: row-reverse;
+}
+
+.youtube-thumbnail {
+  width: 240px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.youtube-thumbnail:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
 
 .project-title {
-  margin-bottom: 0px;
-  text-align: start;
+  margin-bottom: 10px;
   font-size: 1.5rem;
   font-weight: bold;
   color: #8c1d40;
 }
 
 .project-description {
-  margin-bottom: 0px;
+  margin-bottom: 10px;
   font-style: italic;
   color: #555;
 }
