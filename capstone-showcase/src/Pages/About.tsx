@@ -12,6 +12,9 @@ import teamMember6 from "../assets/anshProfile.jpg";
 import teamMember7 from "../assets/alexanderProfile.jpg";
 import teamMember8 from "../assets/karinaProfile.jpg";
 import teamMember9 from "../assets/brianProfile.jpg";
+import teamMember10 from "../assets/austinProfile.jpg";
+import teamMember11 from "../assets/cameronProfile.jpg";
+import teamMember12 from "../assets/kaliProfile.jpg";
 import Footer from './Footer';
 
 const teamMembers = [
@@ -86,6 +89,30 @@ const teamMembers = [
     email: "bamen@asu.edu",
     linkedin: "https://www.linkedin.com/in/brian-amen-697bab1b5/",
     github: "https://github.com/brainamen",
+  },
+  {
+    image: teamMember10,
+    name: "Austin Mayhew",
+    major: "Computer Science (Software Engineering)",
+    email: "atmayhew@asu.edu",
+    linkedin: "https://www.linkedin.com/in/austin-mayhew-a54a88352/",
+    github: "https://github.com/Austin-Mayhew",
+  },
+  {
+    image: teamMember11,
+    name: "Cameron Mendez",
+    major: "Computer Science (Cybersecurity)",
+    email: "cameronbrianmendez@gmail",
+    linkedin: "https://www.linkedin.com/in/cameron-mendez-92b749216",
+    github: "https://github.com/cameronbmendez",
+  },
+  {
+    image: teamMember12,
+    name: "Kali Armstrong",
+    major: "Computer Science",
+    email: "kdarms5@gmail.com",
+    linkedin: "https://www.linkedin.com/in/kali-armstrong/",
+    github: "https://github.com/kdarmst4",
   },
 ];
 
