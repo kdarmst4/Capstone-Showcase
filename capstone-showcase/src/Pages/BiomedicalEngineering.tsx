@@ -13,8 +13,8 @@ const BiomedicalEngineering: React.FC = () => {
 
   useEffect(() => {
     document.body.classList.add("biomedical-engineering-page-body");
-    fetch("https://asucapstone.com:3000/api/survey/biomedical-engineering")
-    //fetch("http://localhost:3000/api/survey/biomedical-engineering")
+
+    fetch("http://localhost:3000/api/survey/biomedical-engineering")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
