@@ -143,6 +143,7 @@
   display: flex;
   align-items: left;
   transition: background 0.3s ease;
+  z-index: 2000;
 }
 
 .submenu-title:hover {
@@ -153,11 +154,11 @@
   list-style-type: none;
   width: 150px;
   position: absolute;
-  background: #fafafa;
   border-radius: 15px;
   margin: 5px 0;
   padding: 10px 0;
-  z-index: 1001;
+  z-index: 3000;
+
 }
 
 .submenu-list a {
@@ -169,6 +170,7 @@
   display: flex;
   text-decoration: none;
   margin: 5px 0;
+  z-index: 2000;
 }
 
 .toggle-button {
@@ -270,4 +272,75 @@
 
 ::-webkit-scrollbar-track {
   background: #d3d3d3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8a8a8a;
+}
+
+.majors-list {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  overflow-x: auto; 
+  white-space: nowrap; 
+  max-width: 950px; 
+  scrollbar-width: none; 
+}
+
+.majors-list::-webkit-scrollbar {
+  width: 6px;
+  height: 6px; 
+  background: transparent; 
+}
+
+.majors-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  visibility: hidden; 
+}
+
+.majors-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.locked {
+  color: gray;
+  font-size: 15px;
+  font-family: Trebuchet MS;
+  font-weight: bold;
+  padding: 10px 15px;
+  background: none;
+  pointer-events: none;
+  text-decoration: none;
+  cursor: not-allowed;
+  display: inline-flex;
+  align-items: center;
+}
+
+.user-status {
+  color: rgb(0, 0, 0);
+  font-size: 15px;
+  font-family: Trebuchet MS;
+  font-weight: bold;
+  padding: 10px 15px;
+  background: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.logout-button {
+  background-color: #601020;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  background-color: #601020;
 }
