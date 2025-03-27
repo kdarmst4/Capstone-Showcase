@@ -1,0 +1,178 @@
+*::before, *::after {
+
+box-sizing: border-box;
+
+}
+
+.img-slider-img {
+
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+    flex-shrink: 0;
+    flex-grow: 0;
+    transition: translate 800ms ease-in-out;
+
+}
+
+.img-slider-btn {
+
+all: unset;
+display: block;
+position: absolute;
+top: 0;
+bottom: 0;
+padding: 1rem;
+cursor: pointer;
+transition: background-color 100ms ease-in-out;
+
+}
+
+.img-slider-btn:hover,
+.img-slider-btn:focus-visible {
+
+    background-color: rgba(84, 3, 3, 0.651);
+    
+    }
+
+.img-slider-btn:hover > *,
+.img-slider-btn:focus-visible > * {
+
+animation: squish 200ms ease-in-out;
+
+}
+
+.img-slider-btn > * {
+
+stroke: rgba(255, 255, 255, 0.927);
+fill: rgb(148, 10, 10);
+width: 2rem;
+height: 2rem;
+
+}
+
+@keyframes squish {
+    50% {
+
+        scale: 1.4 0.6;
+    }
+}
+
+.img-slider-dot-btn {
+
+all: unset;
+display: block;
+cursor: pointer;
+width: 1rem;
+height: 1rem;
+transition: scale 100ms ease-in-out;
+}
+
+.img-slider-dot-btn:hover,
+.img-slider-btn:focus-visible {
+
+   scale: 1.2;
+    }
+
+.img-slider-dot-btn > * {
+
+    stroke: white;
+    fill: rgb(91, 14, 14);
+    width: 100%;
+    height: 100%;
+    
+    }
+
+    .img-slider-dot-btn:focus-visible,
+    .img-slider-btn:focus-visible {
+
+        outline: auto;
+
+    }
+    .modal-overlay {
+        position: "fixed";
+        top: 0;
+        left: 0;
+        width: "100vw";
+        height: "100vh";
+        z-Index: 1001;
+        display: "flex";
+        justify-Content: "center";
+        align-Items: "center";
+        pointer-Events: "all";
+    }
+
+    .modal-overlay:hover {
+        position: "fixed";
+        top: 0;
+        left: 0;
+        width: "100vw";
+        height: "100vh";
+        z-Index: 1001;
+        display: "flex";
+        justify-Content: "center";
+        align-Items: "center";
+        pointer-Events: "all";
+    }
+
+    .modal-content {
+        background: white;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      
+      .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      
+      .close-modal:hover {
+        background-color: #611029;
+      }
+      
+      .modal-content h3 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+      
+      .modal-content p {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+
+      .modal-header-background {
+        background-image: url("../assets/mainBack.jpeg");
+        background-size: 1800px;
+        background-position: center 5%;
+        padding: 40px 10px;
+        color: white;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 8px solid black;
+
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-asu-logo {
+        top: 10px;
+        left: 10px;
+        padding-left: 1000px;
+        width: 200px;
+        height: auto;
+        flex-direction: column;
+      }
+
+
