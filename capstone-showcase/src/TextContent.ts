@@ -26,10 +26,10 @@ export const capstoneDescription: string = `The capstone projects are designed t
 export const navigationInstructions: string = `The projects are organized by major and you can navigate through the
         site via the menu on the top or the left side. You can open the sidebar
         by clicking on the left arrow icon in the upper left corner of this page.
-        You can also see more projects in the expanded menu by clicking on More ->.
+        You can also see more projects in the expanded menu by scrolling with your mouse over a major.
         `;
 
 export const ourTeamDescription: string = `Meet the talented team of developers who brought this web application to 
-        life during the summer and fall semesters of 2024. This application enables semester teams to 
+        life! This application enables semester teams to 
         upload and showcase their capstone projects. Additionally, it provides essential information about 
-        capstone presentations at ASU for each term.`;
+        capstone presentations at ASU for each semester.`;
