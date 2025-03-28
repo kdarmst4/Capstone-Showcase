@@ -148,6 +148,10 @@ const Survey: React.FC = () => {
       youtubeLink: "",
     };
 
+    if (!email.endsWith("@asu.edu")) {
+      errors.email = "Please enter your ASU email.";
+    }
+
     if (parseInt(numberOfTeamMembers, 10) <= 0) {
       errors.numberOfTeamMembers = "The number of team members must be at least 1.";
     }
