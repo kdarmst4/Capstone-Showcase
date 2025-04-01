@@ -10,11 +10,13 @@ const Interdisciplinary: React.FC = () => {
   const { isSideMenu } = useMenuContext();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<any[]>([]);
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("interdisciplinary-page-body");
-    //fetch("https://asucapstone.com:3000/api/survey/interdisciplinary")
-    fetch("http://localhost:3000/api/survey/interdisciplinary")
+    fetch("https://asucapstone.com:3000/api/survey/interdisciplinary")
+    //fetch("http://localhost:3000/api/survey/interdisciplinary")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -37,6 +39,16 @@ const Interdisciplinary: React.FC = () => {
 
   const handleSurveyFormClick = () => {
     navigate("/survey");
+  };
+
+  const handleProjectClick = (project: any) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
   };
 
   return (
@@ -66,17 +78,11 @@ const Interdisciplinary: React.FC = () => {
             projects.map((project, index) => (
               <div
                 key={project.id}
-                className={`project-card ${
-                  index % 2 === 0 ? "zigzag-left" : "zigzag-right"
-                }`}
+                className={`project-card ${index % 2 === 0 ? "zigzag-left" : "zigzag-right"}`}
+                onClick={() => handleProjectClick(project)}
               >
                 {index % 2 === 0 && project.youtubeLink && (
-                  <a
-                    href={project.youtubeLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="YouTube Video Link"
-                  >
+                  <a href={project.youtubeLink} target="_blank" rel="noopener noreferrer">
                     <img
                       src={extractYouTubeThumbnail(project.youtubeLink) || ""}
                       alt={`${project.projectTitle} Thumbnail`}
@@ -86,16 +92,12 @@ const Interdisciplinary: React.FC = () => {
                 )}
                 <div className="project-details">
                   <h4 className="project-title">{project.projectTitle}</h4>
-                  <p className="project-description">{project.projectDescription}</p>
-                  <p><strong>Team Members:</strong> {project.teamMemberNames}</p>
+                  <p>
+                    
+                  </p>
                 </div>
                 {index % 2 !== 0 && project.youtubeLink && (
-                  <a
-                    href={project.youtubeLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="YouTube Video Link"
-                  >
+                  <a href={project.youtubeLink} target="_blank" rel="noopener noreferrer">
                     <img
                       src={extractYouTubeThumbnail(project.youtubeLink) || ""}
                       alt={`${project.projectTitle} Thumbnail`}
@@ -106,8 +108,72 @@ const Interdisciplinary: React.FC = () => {
               </div>
             ))
           )}
+                              
         </section>
       </main>
+
+      {isModalOpen && selectedProject && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-modal" onClick={closeModal}>X</button>
+            <div className="project-menu">
+              <header className="modal-header-background" >
+              </header>
+            </div>           
+            <div className="project-header">
+              <div className="project-image">
+                {selectedProject.youtubeLink && (
+                  <a 
+                    href={selectedProject.youtubeLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    aria-label="Project Video"
+                  >
+                    <img 
+                      src={extractYouTubeThumbnail(selectedProject.youtubeLink) || ""} 
+                      alt={`${selectedProject.projectTitle} Thumbnail`}
+                    />
+                  </a>
+                )}
+              </div>
+
+              <div className="project-info">
+                <span className="semester-tag">Fall 2024</span>
+                <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
+                <h2 className="project-title">
+                  {selectedProject.projectTitle}
+                </h2>
+                <p className="project-category">
+                
+                Computer Science</p>
+
+                <p className="team-members">
+                  
+                  {selectedProject.teamMemberNames}
+                </p>
+              </div>
+            </div>
+            <div className="project-details">
+              <div className="left-section">
+                <h3>Team Mentors</h3>
+                <p>TBA</p>
+              <div className="right-section">
+                <div className="poster-container">
+                  <p>
+                    <i className="fas fa-file-pdf poster-icon"></i> <strong>Poster</strong>
+                  </p>
+                  <a href={selectedProject.posterLink} target="_blank" rel="noopener noreferrer">
+                    <button className="poster-button">View the poster</button>
+                  </a>
+                </div>
+              </div>
+                <h3>Abstract</h3>
+                <p>{selectedProject.projectDescription}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   );
