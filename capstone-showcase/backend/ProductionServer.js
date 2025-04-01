@@ -32,13 +32,7 @@ const db = mysql.createConnection({
   user: process.env.PRODUCTION_DB_USERNAME,
   password: process.env.PRODUCTION_DB_PASSWORD,
   database: process.env.PRODUCTION_DB_DATABASE,
-  // authSwitchHandler: function ({ pluginName, pluginData }, cb) {
-  //   if (pluginName === "caching_sha2_password") {
-  //     const password = "test"; // Replace with BlueHost MySQL root password
-  //     const securePassword = Buffer.from(password + "\0");
-  //     cb(null, securePassword);
-  //   }
-  // },
+  
 });
 
 db.connect((err) => {

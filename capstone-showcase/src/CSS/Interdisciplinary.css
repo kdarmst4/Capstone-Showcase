@@ -130,6 +130,226 @@
 }
 
 .project-details p {
-  margin: 5px 0;
+  margin: 5px;
   text-align: left;
+  flex-wrap: wrap;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  background-color: #611029;
+}
+
+.modal-content h3 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.modal-content p {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.project-summary-container {
+  width: 100%;
+  background: #d3d3d3;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.project-image-container {
+  flex-shrink: 0;
+  margin-left: 20px;
+}
+
+.project-image:hover {
+  transform: scale(1.05);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #d3d3d3;
+  padding: 20px;
+  width: 100%;
+}
+
+.project-image img {
+  width: 250px;
+  height: auto;
+  border-radius: 8px;
+  margin-right: 20px;
+  margin-left: 100px;
+}
+
+.project-details {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; 
+  text-align: left;
+}
+
+.project-info {
+  flex: 1;
+  text-align: left;
+}
+
+.semester-tag {
+  background-color: #FFC107;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  display: inline-block;
+  text-align: left;
+}
+
+.project-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: left;
+  flex-wrap: wrap;
+}
+
+.project-category {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.team-members {
+  font-size: 1rem;
+  color: #555;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+.poster-button {
+  background: #8c1d40;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.poster-button:hover {
+  background-color: #611029;
+}
+
+.project-details h3 {
+  font-size: 2rem;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+.project-details p {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.left-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 50px;
+  margin-left: 150px;
+  margin-right: 500px;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-right: 100px;
+  margin-top: 50px;
+}
+
+.vertical-bar {
+  width: 2px; 
+  background-color: #ccc; 
+  height: 100%; 
+  margin: 0 20px;
+}
+
+.locked {
+  color: gray;
+  font-size: 18px;
+  font-family: Trebuchet MS;
+  font-weight: bold;
+  padding: 10px 15px;
+  background: none;
+  pointer-events: none;
+  text-decoration: none;
+  cursor: not-allowed;
+  display: inline-flex;
+  align-items: center;
+}
+
+.survey-form-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+} 
+
+.more-projects-button{
+    background-color: #8c1d40;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.more-projects-button:hover {
+  background-color: #611029;
 }
