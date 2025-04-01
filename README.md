@@ -55,3 +55,6 @@
 15. Enter information as appropriate and click “Submit”.
    
 17. Check the ‘backend’ terminal console for a submission confirmation.
+
+-----------------------------------------------------------------------------------------------------
+When testing code with backend make sure you use the localhost address, make sure to switch to production address when pushing code to Github
