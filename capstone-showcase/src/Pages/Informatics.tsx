@@ -77,7 +77,7 @@ const Informatics: React.FC = () => {
 
         <section className="projects-list">
           {projects.length === 0 ? (
-            <p>No projects available for Computer Science.</p>
+            <p>No projects available for Informatics.</p>
           ) : (
             projects.map((project, index) => (
               <div

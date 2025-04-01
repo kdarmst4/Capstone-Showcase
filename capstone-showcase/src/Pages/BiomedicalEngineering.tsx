@@ -77,7 +77,7 @@ const BiomedicalEngineering: React.FC = () => {
 
         <section className="projects-list">
           {projects.length === 0 ? (
-            <p>No projects available for Computer Science.</p>
+            <p>No projects available for Biomedical Engineering.</p>
           ) : (
             projects.map((project, index) => (
               <div
