@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./capstone-showcase
+      dockerfile: Dockerfile
+    ports:
+      - "80:3000"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./capstone-showcase/backend
+      dockerfile: Dockerfile
+    ports:
+      - "3201:3200"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mysql
+      - DB_USER=${LOCAL_DB_USERNAME}
+      - DB_PASSWORD=${LOCAL_DB_PASSWORD}
+    env_file:
+    - ./capstone-showcase/backend/.env
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"  # Double-check the correct port
+    environment:
+      MYSQL_ROOT_PASSWORD: ${LOCAL_DB_PASSWORD}
+      MYSQL_DATABASE: ${LOCAL_DB_DATABASE}
+    env_file:
+    - ./capstone-showcase/backend/.env
+    volumes:
+      - ./new_showcase_db.sql:/docker-entrypoint-initdb.d/new_showcase_db.sql
+
+volumes:
+  db_data:
