@@ -1,0 +1,126 @@
+.sponsor-dashboard-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #d3d3d3;
+    margin-top: 70px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .sponsor-dashboard {
+    display: flex;
+    width: 1200px;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    background-color: rgb(72, 69, 70);
+    color: white;
+    width: 200px;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .sponsor-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .sponsor-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 3px solid white;
+  }
+  
+  .sponsor-info p {
+    margin: 0;
+    font-size: 18px;
+    color: white;
+  }
+  
+  .dashboard-header {
+    font-weight: bold;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  
+  .sidebar ul li i {
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .sidebar ul li a:hover {
+    color: #d0d0d0;
+  }
+  
+  .sponsor-dashboard-content {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    margin: 25px;
+    box-sizing: border-box;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black;
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+  }
+  
+  .dashboard-button {
+    width: 200px;
+    height: 200px;
+    background-color: #8c1d40;
+    color: white;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  
+  .dashboard-button:hover {
+    background-color: #541227;
+  }
+  
+  .edit-button-row {
+    display: flex;
+    justify-content: center; 
+    gap: 100px; 
+    margin-top: 60px; 
+  }

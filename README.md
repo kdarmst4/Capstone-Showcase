@@ -1,60 +1,30 @@
-# Capstone Showcase Website
+# React + TypeScript + Vite
 
-# Website Tools Used
-- Front-end: TypeScript + React + CSS
-- Back-end: ExpressJS + MySQL
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-# Running the Website Locally
-1. Change directories into the desired folder to store the files from the repo.
-- Ex. `cd Downloads`
+Currently, two official plugins are available:
 
-2. Run the command `git clone https://github.com/Karina528/Capstone-Showcase.git`.
-   
-3. Change directories into the new folder you've just created by using `cd Capstone-Showcase`.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-5. Run the command `npm create vite@latest capstone-showcase` and then select the following options:
-- Ignore files and continue
-- React
-- TypeScript
+## Expanding the ESLint configuration
 
-5. Change directories into the capstone-showcase subfolder by using `cd capstone-showcase`.
-- <ins>Note:</ins> This is the subfolder inside the repo and **NOT** the main folder of the repo.
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-6. Run the following commands:
-   ```
-   npm install
-   git fetch --all
-   git reset --hard origin/main
-   npm install react-router-dom@latest
-   ```
-7. Run the website by using `npm run dev`.
-   
-8. Open the website in your browser using the Local url.
+- Configure the top-level `parserOptions` property like this:
 
-# Testing Frontend-Backend connection locally:
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: ["./tsconfig.json", "./tsconfig.node.json"],
+    tsconfigRootDir: __dirname,
+  },
+};
+```
 
-1. Open a terminal in VS Code and navigate to the project directory.
-   
-2. Run the following commands:
-   ```
-   cd capstone-showcase
-   cd backend
-   ```
-3. Once in the 'backend' directory, run the command `node server.js`.
-   
-4. Open a 2nd terminal in VS Code and navigate to the project directory.
-   
-5. Run the command `cd capstone-showcase`.
-   
-6. Once in the 'capstone-showcase' directory, run the command `npm run dev`.
-    
-7. Launch the web application in your browser and navigate to any one of the major tabs.
-    
-13. Click on the "Survey Form" button to open a new capstone submission form.
-    
-15. Enter information as appropriate and click “Submit”.
-   
-17. Check the ‘backend’ terminal console for a submission confirmation.
-
------------------------------------------------------------------------------------------------------
-When testing code with backend make sure you use the localhost address, make sure to switch to production address when pushing code to Github
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
