@@ -45,7 +45,7 @@ app.post("/api/survey/uploads", upload.single("poster"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
-  const filePath = `/uploads/${req.file.filename}`;
+  const filePath = `/posterUploads/${req.file.filename}`;
   console.log("Uploaded file:", req.file.filename);
   console.log("Picture Path:", filePath);
   res.json({ path:filePath });
