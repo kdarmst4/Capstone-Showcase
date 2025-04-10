@@ -163,6 +163,17 @@ app.get("/api/admin/submissions", (req, res) => {
   });
 });
 
+//Endpoint to get a list of all the project titles for Survey Page
+app.get('/api/projects', (req, res) => {
+  db.query('SELECT project_id, project_title FROM project_entries', (err, results) => {
+    if (err) {
+      res.status(500).json({ error: 'Database query failed' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 
 app.put("/api/admin/submissions/:id", (req, res) => {
   const { id } = req.params;
