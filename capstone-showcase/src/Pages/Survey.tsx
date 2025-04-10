@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../CSS/Survey.css";
@@ -16,6 +16,9 @@ interface FormData {
   power?: string;
   nda: string;
   youtubeLink: string;
+  teamPicturePath?: string;
+  posterPicturePath: string;
+
 }
 
 interface FormErrors {
@@ -31,6 +34,13 @@ interface FormErrors {
   power: string;
   nda: string;
   youtubeLink: string;
+  teamPicturePath?: string;
+  posterPicturePath?: string;
+}
+
+interface Project {
+  project_id: string;
+  project_title: string;
 }
 
 const Survey: React.FC = () => {
@@ -47,6 +57,8 @@ const Survey: React.FC = () => {
     power: "",
     nda: "",
     youtubeLink: "",
+    teamPicturePath: "",
+    posterPicturePath: "",
   };
 
   const initialFormErrors: FormErrors = {
@@ -62,53 +74,134 @@ const Survey: React.FC = () => {
     power: "",
     nda: "",
     youtubeLink: "",
+    teamPicturePath: "",
+    posterPicturePath: "",
   };
+
+  
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>(initialFormErrors);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const navigate = useNavigate();
+  const [selectedFile, setSelectedFile] = useState<File | undefined>();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<string>('');
   
+  const navigate = useNavigate();
+
+
+
+  useEffect(() => {
+    // Fetch the list of projects from the backend API
+    //fetch('https://asucapstone.com:3000/api/projects')
+    fetch('http://localhost:3000/api/projects')
+      .then((response) => response.json())
+      .then((data) => setProjects(data))
+      .catch((error) => console.error('Error fetching projects:', error));
+  }, []);
+
+
+
+
+
+
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type } = e.target;
+    if (type === "file") {
+      const fileInput = e.target as HTMLInputElement & {
+        files: FileList;
+      };
+      setSelectedFile(fileInput.files[0]);
+      console.log(`File selected: ${fileInput.files[0].name}`);
+    } else {
+      setFormData({ ...formData, [name]: value });
+  
+      if (name === "demo" && value === "no") {
+        setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
+      }
+  
+      const selectedProjectId = e.target.value;
 
-    if (name === "demo" && value === "no") {
-      setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
+  // Finds the project based on selected project ID
+  const project = projects.find(project => project.project_id === selectedProjectId);
+
+  if (project) {
+    const fullProjectName = `${project.project_id} - ${project.project_title}`;
+    setSelectedProject(fullProjectName); // Set the full project name
+  }
     }
-
+  
     setErrors({ ...errors, [name]: "" });
     console.log(`Field: ${name}, Value: ${value}`);
   };
 
-    
+  
+ 
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const formErrors = validateFormData(formData);
     setErrors(formErrors);
-
+  
     if (hasErrors(formErrors)) {
       scrollToFirstError();
       return;
     }
+  
+    if (selectedFile) {
+      const fileData = new FormData();
+      // Ensure that selectedFile is defined and then append it to the FormData
+      fileData.append("poster", selectedFile);
+  
+      axios
+        .post("http://localhost:3000/api/survey/uploads", fileData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          const uploadedPath = res.data.path;
+  
+          // Prevent async
+          const updatedFormData = { ...formData, posterPicturePath: uploadedPath };
+  
 
-    const submissionData = prepareSubmissionData(formData);
-
-    axios
-    .post("https://asucapstone.com:3000/api/survey", submissionData)
-      //.post("http://localhost:3000/api/survey", submissionData)
-      .then(() => {
-        handleSuccessfulSubmission();
-      })
-      .catch((error: { message: string }) => {
-        console.error("Error submitting survey data:", error);
-      });
+          const submissionData = prepareSubmissionData(updatedFormData);
+  
+          // Submit info with the uploaded file path
+          axios
+            .post("http://localhost:3000/api/survey", submissionData)
+            .then(() => {
+              handleSuccessfulSubmission();
+            })
+            .catch((error) => {
+              console.error("Error submitting survey data:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error submitting poster image:", error);
+        });
+    } else {
+      console.error("No file selected!");
+    }
   };
+
+    const prepareSubmissionData = (formData: FormData) => {
+      const submissionData = { ...formData };
+      if (formData.demo === "no") {
+        delete submissionData.power;
+      }
+      return submissionData;
+    };
+    
+
+    
+  
 
   const validateFormData = (formData: FormData) => {
     const {
@@ -122,7 +215,8 @@ const Survey: React.FC = () => {
       major,
       demo,
       nda,
-      // youtubeLink,
+      youtubeLink,
+      posterPicturePath,
     } = formData;
 
     const errors: FormErrors = {
@@ -140,9 +234,7 @@ const Survey: React.FC = () => {
         ? "Please enter the full names of all team members, including yourself, separated by commas."
         : "",
       major: !major ? "Please select a course number." : "",
-      demo: !demo
-        ? "Please specify if your group will be bringing a demo."
-        : "",
+      demo: !demo ? "Please specify if your group will be bringing a demo." : "",
       power: "",
       nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
       youtubeLink: "",
@@ -175,28 +267,22 @@ const Survey: React.FC = () => {
     }
   };
 
-  const prepareSubmissionData = (formData: FormData) => {
-    const submissionData = { ...formData };
-    if (formData.demo === "no") {
-      delete submissionData.power;
-    }
-    return submissionData;
-  };
-
   const handleSuccessfulSubmission = () => {
     setFormData(initialFormData);
+    setSelectedFile(undefined);
     setIsSubmitted(true);
 
-    setTimeout(() => {
-      setIsSubmitted(false);
-      navigate("/");
-    }, 3000); 
+    //  setTimeout(() => {
+    //    setIsSubmitted(false);
+    //    navigate("/");
+    //  }, 3000);
   };
 
   const handleCloseSuccessMessage = () => {
-    setIsSubmitted(false); 
-    navigate("/"); 
+    setIsSubmitted(false);
+    navigate("/");
   };
+
  
   return (
     <div className="form-container">
@@ -251,341 +337,11 @@ const Survey: React.FC = () => {
             onChange={handleChange}
           >
             <option value="">Select a project</option>
-            <option value="CS/E-001 - ABC Academy of Music - ABC Academy of Music • Custom Business Management Software">
-              CS/E-001 - ABC Academy of Music - ABC Academy of Music • Custom
-              Business Management Software
-            </option>
-            <option value="CS/E-002 - ABC Academy of Music - CLIENT SELF-MANAGEMENT • Hinna: Small Business Management Software">
-              CS/E-002 - ABC Academy of Music - CLIENT SELF-MANAGEMENT • Hinna:
-              Small Business Management Software
-            </option>
-            <option value="CS/E-003 - Ada Analytics - Website Development">
-              CS/E-003 - Ada Analytics - Website Development
-            </option>
-            <option value="CS/E-004 - Alcove Ridge Consulting LLC - Unique experience to work on a cutting edge Fintech platform">
-              CS/E-004 - Alcove Ridge Consulting LLC - Unique experience to work
-              on a cutting edge Fintech platform
-            </option>
-            <option value="CS/E-005 - Allennials at Work Inc. - Apple API Development for Publishing a WordPress Digital Magazine">
-              CS/E-005 - Allennials at Work Inc. - Apple API Development for
-              Publishing a WordPress Digital Magazine
-            </option>
-            <option value="CS/E-006 - AOKMarketing.com - Chattable">
-              CS/E-006 - AOKMarketing.com - Chattable
-            </option>
-            <option value="CS/E-007 - Arizona State University - Quantum Computing Tool for Education">
-              CS/E-007 - Arizona State University - Quantum Computing Tool for
-              Education
-            </option>
-            <option value="CS/E-008 - ASU - Smart Knowledge Navigation and Discovery Platform">
-              CS/E-008 - ASU - Smart Knowledge Navigation and Discovery Platform
-            </option>
-            <option value="CS/E-009 - ASU Capstone Showcase">
-              CS/E-009 - ASU Capstone Showcase
-            </option>
-            <option value="CS/E-010 - ASU ECEE - Logic Tutor for the Web Phase 2">
-              CS/E-010 - ASU ECEE - Logic Tutor for the Web Phase 2
-            </option>
-            <option value="CS/E-011 - ASU SCAI - Web-Based RISC V Architecture Emulator in VIPLE Environment">
-              CS/E-011 - ASU SCAI - Web-Based RISC V Architecture Emulator in
-              VIPLE Environment
-            </option>
-            <option value="CS/E-012 - BetterEDU - BetterEDU">
-              CS/E-012 - BetterEDU - BetterEDU
-            </option>
-            <option value="CS/E-013 - Bit Space Development">
-              CS/E-013 - Bit Space Development
-            </option>
-            <option value="CS/E-014 - BizBridge.io - BizBridge: Building out an AI-Agentic Workflow to Sell Small Businesses!">
-              CS/E-014 - BizBridge.io - BizBridge: Building out an AI-Agentic
-              Workflow to Sell Small Businesses!
-            </option>
-            <option value="CS/E-015 - Capstone Project Submission Group - ASU">
-              CS/E-015 - Capstone Project Submission Group - ASU
-            </option>
-            <option value="CS/E-016 - Capstone Project Ticketing System">
-              CS/E-016 - Capstone Project Ticketing System
-            </option>
-            <option value="CS/E-017 - Carnival Guide - Carnival Guide">
-              CS/E-017 - Carnival Guide - Carnival Guide
-            </option>
-            <option value="CS/E-018 - Center for Entrepreneurship and New Business Design - Housing Coordination">
-              CS/E-018 - Center for Entrepreneurship and New Business Design -
-              Housing Coordination
-            </option>
-            <option value="CS/E-019 - Coconut CubeSat Software - Student Project">
-              CS/E-019 - Coconut CubeSat Software - Student Project
-            </option>
-            <option value="CS/E-020 - Contak - Kinda Famous: Music Adventure Role Playing Video Game">
-              CS/E-020 - Contak - Kinda Famous: Music Adventure Role Playing
-              Video Game
-            </option>
-            <option value="CS/E-021 - DigiClips - DEBUG OPTION EMAIL ALERTS FRONT END SEARCH ENGINE TESTING">
-              CS/E-021 - DigiClips - DEBUG OPTION EMAIL ALERTS FRONT END SEARCH
-              ENGINE TESTING
-            </option>
-            <option value="CS/E-022 - DigiClips - DigiClips Media Search Engine">
-              CS/E-022 - DigiClips - DigiClips Media Search Engine
-            </option>
-            <option value="CS/E-023 - DigiClips - Media Search Engine - Team 1">
-              CS/E-023 - DigiClips - Media Search Engine - Team 1
-            </option>
-            <option value="CS/E-024 - DigiClips - Media Search Engine - Team 2">
-              CS/E-024 - DigiClips - Media Search Engine - Team 2
-            </option>
-            <option value="CS/E-025 - Expeditise - Website Development: Streamlining Access to Information and Services">
-              CS/E-025 - Expeditise - Website Development: Streamlining Access
-              to Information and Services
-            </option>
-            <option value="CS/E-026 - Favoland - AI-driven beauty ingredient database and rating system">
-              CS/E-026 - Favoland - AI-driven beauty ingredient database and
-              rating system
-            </option>
-            <option value="CS/E-027 - Fourcher Technologies - Tracking bees using AI">
-              CS/E-027 - Fourcher Technologies - Tracking bees using AI
-            </option>
-            <option value="CS/E-028 - Fourcher Technologies - Using AR to simulate the visual symptoms of dementia">
-              CS/E-028 - Fourcher Technologies - Using AR to simulate the visual
-              symptoms of dementia
-            </option>
-            <option value="CS/E-029 - General Dynamics Mission Systems - Prototyping alternate GIS solutions for real-time scenarios">
-              CS/E-029 - General Dynamics Mission Systems - Prototyping
-              alternate GIS solutions for real-time scenarios
-            </option>
-            <option value="CS/E-030 - General Dynamics Mission Systems - Quantum Image Denoising using computational basis states">
-              CS/E-030 - General Dynamics Mission Systems - Quantum Image
-              Denoising using computational basis states
-            </option>
-            <option value="CS/E-031 - GLOBAL SENSOR SYSTEMS INC - Trade Show Display">
-              CS/E-031 - GLOBAL SENSOR SYSTEMS INC - Trade Show Display
-            </option>
-            <option value="CS/E-032 - Hawkeye Early Detection System - Hawkeye Early Detection System">
-              CS/E-032 - Hawkeye Early Detection System - Hawkeye Early
-              Detection System
-            </option>
-            <option value="CS/E-033 - Honeywell International - Adaptive Announcement System">
-              CS/E-033 - Honeywell International - Adaptive Announcement System
-            </option>
-            <option value="CS/E-034 - Honeywell International - Build a block chain-based solution for UAM Data management.">
-              CS/E-034 - Honeywell International - Build a block chain-based
-              solution for UAM Data management.
-            </option>
-            <option value="CS/E-035 - Honeywell International - CICT Code migration from Visual Basic to Python using Gen AI">
-              CS/E-035 - Honeywell International - CICT Code migration from
-              Visual Basic to Python using Gen AI
-            </option>
-            <option value="CS/E-036 - InnC LLC - ArtVision Renderer">
-              CS/E-036 - InnC LLC - ArtVision Renderer
-            </option>
-            <option value="CS/E-037 - InnC LLC - ArtVision Visualizer">
-              CS/E-037 - InnC LLC - ArtVision Visualizer
-            </option>
-            <option value="CS/E-038 - IT Partner LLC.-Software Development - Licensing Recommendation Tool for Microsoft 365">
-              CS/E-038 - IT Partner LLC.-Software Development - Licensing
-              Recommendation Tool for Microsoft 365
-            </option>
-            <option value="CS/E-039 - Jo Clark, CEO - Circle.ooo AI Initiative">
-              CS/E-039 - Jo Clark, CEO - Circle.ooo AI Initiative
-            </option>
-            <option value="CS/E-040 - Judy.ai - Judy.ai for Healthcare">
-              CS/E-040 - Judy.ai - Judy.ai for Healthcare
-            </option>
-            <option value="CS/E-041 - KnowQuest Inc. - Web or Native App UI/UX Development">
-              CS/E-041 - KnowQuest Inc. - Web or Native App UI/UX Development
-            </option>
-            <option value="CS/E-042 - Local Grow Salads - Agronomist">
-              CS/E-042 - Local Grow Salads - Agronomist
-            </option>
-            <option value="CS/E-043 - Local Grow Salads - Assembly">
-              CS/E-043 - Local Grow Salads - Assembly
-            </option>
-            <option value="CS/E-044 - Local Grow Salads - Director">
-              CS/E-044 - Local Grow Salads - Director
-            </option>
-            <option value="CS/E-045 - Local Grow Salads - Grower">
-              CS/E-045 - Local Grow Salads - Grower
-            </option>
-            <option value="CS/E-046 - Local Grow Salads - Inspector">
-              CS/E-046 - Local Grow Salads - Inspector
-            </option>
-            <option value="CS/E-047 - Local Grown Salads - LGS EcoSystem - Network">
-              CS/E-047 - Local Grown Salads - LGS EcoSystem - Network
-            </option>
-            <option value="CS/E-048 - Local Grown Salads - LGS EcoSystem Customer Layer">
-              CS/E-048 - Local Grown Salads - LGS EcoSystem Customer Layer
-            </option>
-            <option value="CS/E-049 - Lotus - Addiction Therapy Inc - web / mobile development">
-              CS/E-049 - Lotus - Addiction Therapy Inc - web / mobile
-              development
-            </option>
-            <option value="CS/E-050 - Lotus Addiction Therapy Inc - Lotus">
-              CS/E-050 - Lotus Addiction Therapy Inc - Lotus
-            </option>
-            <option value="CS/E-051 - Lower 22 Foundation Inc - Foxhole Lounge Mobile App Redesign">
-              CS/E-051 - Lower 22 Foundation Inc - Foxhole Lounge Mobile App
-              Redesign
-            </option>
-            <option value="CS/E-052 - Naralytics - iOS / Android App New Features">
-              CS/E-052 - Naralytics - iOS / Android App New Features
-            </option>
-            <option value="CS/E-053 - Naralytics - Mobile App Re-Design (React Native)">
-              CS/E-053 - Naralytics - Mobile App Re-Design (React Native)
-            </option>
-            <option value="CS/E-054 - Naralytics - NLP & Classification Model Optimization">
-              CS/E-054 - Naralytics - NLP & Classification Model Optimization
-            </option>
-            <option value="CS/E-055 - Northrop Grumman - Finance Reporting Tool">
-              CS/E-055 - Northrop Grumman - Finance Reporting Tool
-            </option>
-            <option value="CS/E-056 - Nowhere Collective - A Circular Marketplace for Upcycling Makers and Conscious Consumers">
-              CS/E-056 - Nowhere Collective - A Circular Marketplace for
-              Upcycling Makers and Conscious Consumers
-            </option>
-            <option value="CS/E-057 - Ofori - Enhancing Ofori's Website and Expanding Services">
-              CS/E-057 - Ofori - Enhancing Ofori's Website and Expanding
-              Services
-            </option>
-            <option value="CS/E-058 - Omega Pediatrics - Mobile Messaging App for Doctors - AWS/ReactNative/DynamoDB">
-              CS/E-058 - Omega Pediatrics - Mobile Messaging App for Doctors -
-              AWS/ReactNative/DynamoDB
-            </option>
-            <option value="CS/E-059 - OneDrug Inc. - Smart Mobile and Web Health Application for Integrated Healthcare">
-              CS/E-059 - OneDrug Inc. - Smart Mobile and Web Health Application
-              for Integrated Healthcare
-            </option>
-            <option value="CS/E-060 - Pathscape - Pathscape Mobile App Development">
-              CS/E-060 - Pathscape - Pathscape Mobile App Development
-            </option>
-            <option value="CS/E-061 - Personal Project - Works for Northrop Grumman Corp - Digital Video Manipulation">
-              CS/E-061 - Personal Project - Works for Northrop Grumman Corp -
-              Digital Video Manipulation
-            </option>
-            <option value="CS/E-062 - Points Africa - Points Africa Mobile App Development">
-              CS/E-062 - Points Africa - Points Africa Mobile App Development
-            </option>
-            <option value="CS/E-063 - Prescott Electric Motors - Electric Motor Monitoring System">
-              CS/E-063 - Prescott Electric Motors - Electric Motor Monitoring
-              System
-            </option>
-            <option value="CS/E-064 - QuestStone LLC. - Slack App + Microsoft Teams App Development">
-              CS/E-064 - QuestStone LLC. - Slack App + Microsoft Teams App
-              Development
-            </option>
-            <option value="CS/E-065 - Reality Articulated - Empath-Dashboard">
-              CS/E-065 - Reality Articulated - Empath-Dashboard
-            </option>
-            <option value="CS/E-066 - Reality Articulated - Empath-iOS">
-              CS/E-066 - Reality Articulated - Empath-iOS
-            </option>
-            <option value="CS/E-067 - Rock Climbing Routemaking AI - Student Project">
-              CS/E-067 - Rock Climbing Routemaking AI - Student Project
-            </option>
-            <option value="CS/E-068 - SCAI - ASU Capstone Judging Application">
-              CS/E-068 - SCAI - ASU Capstone Judging Application
-            </option>
-            <option value="CS/E-069 - SCAI - ASU Capstone Time Management">
-              CS/E-069 - SCAI - ASU Capstone Time Management
-            </option>
-            <option value="CS/E-070 - School of Computing and Augmented Intelligence - Interactive 3D Data Analytics Learning Environment">
-              CS/E-070 - School of Computing and Augmented Intelligence -
-              Interactive 3D Data Analytics Learning Environment
-            </option>
-            <option value="CS/E-071 - School of Computing and Augmented Intelligence - Smart Sound-to-Speech Interpreter for Security and Notification Systems">
-              CS/E-071 - School of Computing and Augmented Intelligence - Smart
-              Sound-to-Speech Interpreter for Security and Notification Systems
-            </option>
-            <option value="CS/E-072 - School of Geog Science & Urban Planning, ASU - Automated Detection of Traffic and Street Environments">
-              CS/E-072 - School of Geog Science & Urban Planning, ASU -
-              Automated Detection of Traffic and Street Environments
-            </option>
-            <option value="CS/E-073 - Self Justice Inc. - WordPress Website Development">
-              CS/E-073 - Self Justice Inc. - WordPress Website Development
-            </option>
-            <option value="CS/E-074 - Sense Science Lab LTD - Human AI Collaborative Drawing Tool Development">
-              CS/E-074 - Sense Science Lab LTD - Human AI Collaborative Drawing
-              Tool Development
-            </option>
-            <option value="CS/E-075 - Shoptaki - CEO">
-              CS/E-075 - Shoptaki - CEO
-            </option>
-            <option value="CS/E-076 - Shoptaki - Smartchain next evolution of distributed network">
-              CS/E-076 - Shoptaki - Smartchain next evolution of distributed
-              network
-            </option>
-            <option value="CS/E-077 - Shoptaki - Smartid universal identity">
-              CS/E-077 - Shoptaki - Smartid universal identity
-            </option>
-            <option value="CS/E-078 - StayWell - StayWell Medical Habit Tracker Mobile App">
-              CS/E-078 - StayWell - StayWell Medical Habit Tracker Mobile App
-            </option>
-            <option value="CS/E-079 - Table Ready - AI-enhanced social media post generator and Infra Red seating detection system">
-              CS/E-079 - Table Ready - AI-enhanced social media post generator
-              and Infra Red seating detection system
-            </option>
-            <option value="CS/E-080 - Tech Diversified - MARS Mobile Addiction Recovery System">
-              CS/E-080 - Tech Diversified - MARS Mobile Addiction Recovery
-              System
-            </option>
-            <option value="CS/E-081 - The Clean Divorce - Use technology to simplify & modernize divorce to support families">
-              CS/E-081 - The Clean Divorce - Use technology to simplify &
-              modernize divorce to support families
-            </option>
-            <option value="CS/E-082 - Toyz Electronics - Game Developer for Online Learning Platform">
-              CS/E-082 - Toyz Electronics - Game Developer for Online Learning
-              Platform
-            </option>
-            <option value="CS/E-083 - VariableAI - VariableAI - Data Team">
-              CS/E-083 - VariableAI - VariableAI - Data Team
-            </option>
-            <option value="CS/E-084 - VariableAI - VariableAI - Full Stack Team">
-              CS/E-084 - VariableAI - VariableAI - Full Stack Team
-            </option>
-            <option value="CS/E-085 - VariableAI - VariableAI - Group A">
-              CS/E-085 - VariableAI - VariableAI - Group A
-            </option>
-            <option value="CS/E-086 - VariableAI - VariableAI - Model Team">
-              CS/E-086 - VariableAI - VariableAI - Model Team
-            </option>
-            <option value="CS/E-087 - Velocified - Lean Enterprise LMS & Tracking Platform">
-              CS/E-087 - Velocified - Lean Enterprise LMS & Tracking Platform
-            </option>
-            <option value="CS/E-088 - Velocity Tech Inc. - Zinio TalentHub">
-              CS/E-088 - Velocity Tech Inc. - Zinio TalentHub
-            </option>
-            <option value="CS/E-089 - Yanbor LLC - Develop testing system for the site OUReports.com">
-              CS/E-089 - Yanbor LLC - Develop testing system for the site
-              OUReports.com
-            </option>
-            <option value="IEE-001 - Goodyear 1: COI">
-              IEE-001 - Goodyear 1: COI
-            </option>
-            <option value="IEE-002 - Goodyear 2: TraCtion">
-              IEE-002 - Goodyear 2: TraCtion
-            </option>
-            <option value="IEE-003 - Goodyear 3: Process Modeling">
-              IEE-003 - Goodyear 3: Process Modeling
-            </option>
-            <option value="IEE-004 - Abbott: Equipment Changeover">
-              IEE-004 - Abbott: Equipment Changeover
-            </option>
-            <option value="IEE-005 - L3Harris: Power Supply">
-              IEE-005 - L3Harris: Power Supply
-            </option>
-            <option value="IEE-006 - ASU Athletics 1: Readiness Score">
-              IEE-006 - ASU Athletics 1: Readiness Score
-            </option>
-            <option value="IEE-007 - ASU Athletics 2: Data Analysis">
-              IEE-007 - ASU Athletics 2: Data Analysis
-            </option>
-            <option value="IEE-008 - ASU Earth and Space: Social Media">
-              IEE-008 - ASU Earth and Space: Social Media
-            </option>
-            <option value="IEE-009 - ASU Earth and Space: Exhibit Planning">
-              IEE-009 - ASU Earth and Space: Exhibit Planning
-            </option>
-            <option value="IEE-010 - Amkor Material Cost Estimator">
-              IEE-010 - Amkor Material Cost Estimator
-            </option>
+          {projects.map((project) => (
+            <option key={project.project_id} value={project.project_id}>
+              {project.project_id} {project.project_title} 
+          </option>
+            ))}
           </select>
           {errors.projectTitle && (
             <p className="error-message">{errors.projectTitle}</p>
@@ -754,7 +510,7 @@ const Survey: React.FC = () => {
                 onChange={handleChange}
               />{" "}
               No
-              <div>
+               <div>
                 {formData.nda === "no" && (
                   <div className="form-box-youtube">
                   <label htmlFor="youtubeLink">YouTube Video Link:</label>
@@ -770,12 +526,40 @@ const Survey: React.FC = () => {
                   )}
                   </div>
               )}
-              </div>
+              </div> 
               
+                    <div className="content">
+              <span className="title">Upload Your Poster Image</span>
+              <p className="message">Select a file to upload from your computer or device.</p>
+
+              <div className="image-upload">
+                <label htmlFor="file" className="button upload-btn">
+                  Choose File
+                  <input 
+                    type="file" 
+                    id = "file"
+                    hidden 
+                    onChange={handleChange} 
+                  />
+                </label>
+              </div>
+
+              <div className="result">
+                {selectedFile ? (
+                  <div className="file-uploaded"><p>{selectedFile.name}</p></div>
+                ) : (
+                  <div className="file-uploaded"><p>No file selected</p></div>
+                )}
+              </div>
+            </div>
+            
             </label>
             {errors.nda && <p className="error-message">{errors.nda}</p>}
           </div>
         </div>
+        <div className="form-box">
+      
+    </div>
         <div className="form-box">
           <button type="submit" className="submit-button">
             Submit

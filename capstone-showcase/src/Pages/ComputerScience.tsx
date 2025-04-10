@@ -17,8 +17,8 @@ const ComputerScience: React.FC = () => {
     document.body.classList.add("computer-science-page-body");
 
     // Fetch projects for the Computer Science major
-    fetch("https://asucapstone.com:3000/api/survey/computer-science")
-    //fetch("http://localhost:3000/api/survey/computer-science")
+    //fetch("https://asucapstone.com:3000/api/survey/computer-science")
+    fetch("http://localhost:3000/api/survey/computer-science")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
