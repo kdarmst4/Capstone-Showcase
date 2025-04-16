@@ -12,6 +12,8 @@ dist
 dist-ssr
 dist.zip
 *.local
+dist.zip
+backend/posterUploads/
 
 # Editor directories and files
 .vscode/*

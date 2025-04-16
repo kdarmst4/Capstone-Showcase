@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
+const multer = require("multer");
 const app = express();
 
 const dotenv = require("dotenv");
@@ -41,6 +42,8 @@ const db = mysql.createConnection({
   // },
 });
 
+
+
 db.connect((err) => {
   if (err) {
     console.error("Error connecting to MySQL:", err);
@@ -49,11 +52,16 @@ db.connect((err) => {
   console.log("MySQL Connected...");
 });
 
+//PERMS to Connect/Create Server
 const privateKey = fs.readFileSync("./keySSL.pem", "utf8")
 const certificate = fs.readFileSync("./certSSL.pem", "utf8")
 
 const credentials = {key: privateKey, cert: certificate};
 
+
+app.use("/posterUploads", express.static("posterUploads"));
+
+//Server Start
 https.createServer(credentials, app).listen(3000, '0.0.0.0', () => {
   console.log("HTTPS Server started on port 3000");
 });
@@ -62,6 +70,40 @@ https.createServer(credentials, app).listen(3000, '0.0.0.0', () => {
   console.log("Server started on port 3000");
 });*/
 
+
+
+//Image Upload And Storgae API
+
+//File Directory Check
+const uploadDir = "./posterUploads";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+//File Storage and Naming
+const storage = multer.diskStorage({
+  destination: "./posterUploads/",
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
+
+//API call to upload poster image
+app.post("/api/survey/uploads", upload.single("poster"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+  const filePath = `/posterUploads/${req.file.filename}`;
+  console.log("Uploaded file:", req.file.filename);
+  console.log("Picture Path:", filePath);
+  res.json({ path:filePath });
+});
+
+
+
+
+//Survey Upload API
 app.post("/api/survey", (req, res) => {
   const {
     email,
@@ -75,36 +117,21 @@ app.post("/api/survey", (req, res) => {
     demo,
     power,
     nda,
-    showDemo,
     youtubeLink,
+    posterPicturePath,
   } = req.body;
-  console.log("Received survey data:", req.body);
+
+
 
   let youtubeLinkValue = youtubeLink || null;
+  let ndaValue = nda === "yes" ? 1 : 0;
+  let demoValue = demo === "yes" ? 1 : 0;
+  let powerValue = power === "yes" ? 1 : 0;
+
+  console.log("Received survey data:", req.body);
 
   const sql =
-    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  console.log("Executing SQL:", sql);
-
-  // We have to change `nda` and `demo` to either 1 (True) or 0 (False) since the DB stores these fields
-  // as TINYINT(1) and the survey gives us either 'yes' or 'no' Strings.
-  if (nda == "yes") {
-    ndaValue = 1;
-  } else {
-    ndaValue = 0;
-  }
-
-  if (demo == "yes") {
-    demoValue = 1;
-  } else {
-    demoValue = 0;
-  }
-
-  if (power == "yes") {
-    powerValue = 1;
-  } else {
-    powerValue = 0;
-  }
+    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink, posterPicturePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   
   db.query(
     sql,
@@ -121,6 +148,8 @@ app.post("/api/survey", (req, res) => {
       powerValue,
       ndaValue,
       youtubeLinkValue,
+      posterPicturePath,
+      
     ],
     (err, result) => {
       if (err) {
@@ -158,6 +187,17 @@ app.get("/api/admin/submissions", (req, res) => {
     if (err) {
       console.error("Error fetching submissions:", err);
       return res.status(500).send("Server error");
+    }
+    res.json(results);
+  });
+});
+
+//Endpoint to get a list of all the project titles for Survey Page
+app.get('/api/projects', (req, res) => {
+  db.query('SELECT project_id, project_title FROM project_entries', (err, results) => {
+    if (err) {
+      res.status(500).json({ error: 'Database query failed' });
+      return;
     }
     res.json(results);
   });

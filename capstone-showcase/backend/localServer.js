@@ -2,7 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const path = require("path");
 const dotenv = require("dotenv");
+const multer = require("multer");
+const fs = require("fs");
 dotenv.config();
 const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE);
 
@@ -14,13 +17,7 @@ const db = mysql.createConnection({
   user: process.env.LOCAL_DB_USERNAME,
   password: process.env.LOCAL_DB_PASSWORD,
   database: process.env.LOCAL_DB_DATABASE,
-  // authSwitchHandler: function ({ pluginName, pluginData }, cb) {
-  //   if (pluginName === "caching_sha2_password") {
-  //     const password = "test"; // Replace with BlueHost MySQL root password
-  //     const securePassword = Buffer.from(password + "\0");
-  //     cb(null, securePassword);
-  //   }
-  // },
+  
 });
 
 db.connect((err) => {
@@ -30,6 +27,33 @@ db.connect((err) => {
   }
   console.log("MySQL Connected...");
 });
+
+const uploadDir = "./posterUploads";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+  destination: "./posterUploads/",
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
+
+app.post("/api/survey/uploads", upload.single("poster"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+  const filePath = `/posterUploads/${req.file.filename}`;
+  console.log("Uploaded file:", req.file.filename);
+  console.log("Picture Path:", filePath);
+  res.json({ path:filePath });
+});
+
+
+
+
 
 app.post("/api/survey", (req, res) => {
   const {
@@ -44,36 +68,21 @@ app.post("/api/survey", (req, res) => {
     demo,
     power,
     nda,
-    showDemo,
     youtubeLink,
+    posterPicturePath,
   } = req.body;
-  console.log("Received survey data:", req.body);
+
+
 
   let youtubeLinkValue = youtubeLink || null;
+  let ndaValue = nda === "yes" ? 1 : 0;
+  let demoValue = demo === "yes" ? 1 : 0;
+  let powerValue = power === "yes" ? 1 : 0;
+
+  console.log("Received survey data:", req.body);
 
   const sql =
-    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  console.log("Executing SQL:", sql);
-
-  // We have to change `nda` and `demo` to either 1 (True) or 0 (False) since the DB stores these fields
-  // as TINYINT(1) and the survey gives us either 'yes' or 'no' Strings.
-  if (nda == "yes") {
-    ndaValue = 1;
-  } else {
-    ndaValue = 0;
-  }
-
-  if (demo == "yes") {
-    demoValue = 1;
-  } else {
-    demoValue = 0;
-  }
-
-  if (power == "yes") {
-    powerValue = 1;
-  } else {
-    powerValue = 0;
-  }
+    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink, posterPicturePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   
   db.query(
     sql,
@@ -90,6 +99,8 @@ app.post("/api/survey", (req, res) => {
       powerValue,
       ndaValue,
       youtubeLinkValue,
+      posterPicturePath,
+      
     ],
     (err, result) => {
       if (err) {
@@ -101,6 +112,8 @@ app.post("/api/survey", (req, res) => {
     }
   );
 });
+
+app.use("/posterUploads", express.static("posterUploads"));
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
@@ -197,6 +210,17 @@ app.get("/api/admin/submissions/term=:semester-:year", (req, res) => {
   });
 });
 
+//Endpoint to get a list of all the project titles for Survey Page
+app.get('/api/projects', (req, res) => {
+  db.query('SELECT project_id, project_title FROM project_entries', (err, results) => {
+    if (err) {
+      res.status(500).json({ error: 'Database query failed' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 app.put("/api/admin/submissions/:id", (req, res) => {
   const { id } = req.params;
   const {
@@ -212,6 +236,7 @@ app.put("/api/admin/submissions/:id", (req, res) => {
     power,
     nda,
     youtubeLink,
+    posterImage,
   } = req.body;
 
   let youtubeLinkValue = youtubeLink || null;
@@ -239,6 +264,7 @@ app.put("/api/admin/submissions/:id", (req, res) => {
       powerValue,
       ndaValue,
       youtubeLinkValue,
+      posterImage,
       id,
     ],
     (err, result) => {
