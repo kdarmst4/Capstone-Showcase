@@ -135,6 +135,39 @@ app.get("/api/survey/:major", (req, res) => {
   });
 });
 
+// Endpoint to fetch projects by major and semester
+app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
+  const { major, semester, year } = req.params;
+  console.log("Major requested:", major); // Log the requested major
+  console.log("Semester requested:", semester, year); // Log the requested semester and year
+
+  if (semester === "sp") {
+    var startMonth = "04"
+    var endMonth = "05"
+  }
+  else if (semester === "fa") {
+    var startMonth = "11"
+    var endMonth = "12"
+  }
+  else {
+    console.error("Error: Invalid semester");
+    return res.status(400).send("Bad request");
+  }
+  
+  const startDate = `${year}-${startMonth}-01 00:00:00`
+  const endDate = `${year}-${endMonth}-01 00:00:00`
+
+  const sql = "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ?";
+  db.query(sql, [major], (err, results) => {
+    if (err) {
+      console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results); // Log the query results
+    res.json(results);
+  });
+});
+
 //Endpoint to fetch submissions for Admin Page
 app.get("/api/admin/submissions", (req, res) => {
   const sql = "SELECT * FROM survey_entries";
@@ -143,6 +176,36 @@ app.get("/api/admin/submissions", (req, res) => {
       console.error("Error fetching submissions:", err);
       return res.status(500).send("Server error");
     }
+    res.json(results);
+  });
+});
+
+// Endpoint to fetch submissions by semester
+app.get("/api/admin/submissions/term=:semester-:year", (req, res) => {
+  const { semester, year } = req.params;
+  console.log("Semester requested:", semester, year); // Log the requested semester and year
+
+  if (semester === "sp") {
+    var month = "04"
+  }
+  else if (semester === "fa") {
+    var month = "11"
+  }
+  else {
+    console.error("Error: Invalid semester");
+    return res.status(400).send("Bad request");
+  }
+  
+  const startDate = `${year}-${month}-01 00:00:00`
+  const endDate = `${year}-${month}-30 23:59:59`
+
+  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
+  db.query(sql, [startDate, endDate], (err, results) => {
+    if (err) {
+      console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results); // Log the query results
     res.json(results);
   });
 });
@@ -157,7 +220,6 @@ app.get('/api/projects', (req, res) => {
     res.json(results);
   });
 });
-
 
 app.put("/api/admin/submissions/:id", (req, res) => {
   const { id } = req.params;
