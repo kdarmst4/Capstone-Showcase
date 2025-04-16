@@ -32,6 +32,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
     'power',
     'nda',
     'youtubeLink',
+    'submitDate',
   ];
 
   const downloadCSV = (csvString: any, filename: string) => {
@@ -146,7 +147,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
               </div>
               <div className="button-row">
                 <div className="dashboard-button" onClick={handleDownloadClick}>
-                  Download Database as CSV
+                  Download Database
                 </div>
                 <div className="dashboard-button" onClick={() => window.location.replace('https://betasubmission.asucapstone.com/login')}>
                   Go to Sponsor Page
