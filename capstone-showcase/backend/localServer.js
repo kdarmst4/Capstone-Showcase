@@ -28,20 +28,37 @@ db.connect((err) => {
   console.log("MySQL Connected...");
 });
 
+//Poster Image Directory
 const uploadDir = "./posterUploads";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-const storage = multer.diskStorage({
+//Team Images Directory
+const uploadTeamDir = "./teamUploads";
+if (!fs.existsSync(uploadTeamDir)) {
+  fs.mkdirSync(uploadTeamDir);
+}
+
+//Poster Image Upload Storage
+const storagePoster = multer.diskStorage({
   destination: "./posterUploads/",
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
   },
 });
-const upload = multer({ storage });
+const upload = multer({ storage: storagePoster });
 
-app.post("/api/survey/uploads", upload.single("poster"), (req, res) => {
+//Team Images Upload Storage
+const storageTeam = multer.diskStorage({
+  destination: "./teamUploads/",
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+const uploadTeam = multer({ storage: storageTeam });
+
+app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
@@ -49,6 +66,16 @@ app.post("/api/survey/uploads", upload.single("poster"), (req, res) => {
   console.log("Uploaded file:", req.file.filename);
   console.log("Picture Path:", filePath);
   res.json({ path:filePath });
+});
+
+app.post("/api/survey/uploadsTeam", uploadTeam.array("contentTeamFiles", 10), (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: "No team images uploaded" });
+  }
+
+  const paths = req.files.map(file => `/teamUploads/${file.filename}`);
+  console.log("Uploaded team files:", paths);
+  res.json({ paths });
 });
 
 
@@ -68,22 +95,34 @@ app.post("/api/survey", (req, res) => {
     demo,
     power,
     nda,
+    posterApproved,
+    attendance,
+    zoomLink,
     youtubeLink,
     posterPicturePath,
+    teamPicturePath,
   } = req.body;
 
-
-
+  // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
+  let zoomLinkValue = zoomLink || null;
   let ndaValue = nda === "yes" ? 1 : 0;
   let demoValue = demo === "yes" ? 1 : 0;
   let powerValue = power === "yes" ? 1 : 0;
+  let attendanceValue = attendance === "inPerson" ? 1 : 0;
+  let posterNDA = posterApproved === "yes" ? 1 : 0;
+
+  // Get the current date and time for submitDate
+  let submitDate = new Date().toISOString().slice(0, 19).replace("T", " ");
 
   console.log("Received survey data:", req.body);
 
   const sql =
-    "INSERT INTO survey_entries (email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, youtubeLink, posterPicturePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  
+    `INSERT INTO survey_entries (
+      email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
+      posterPicturePath, teamPicturePath
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
   db.query(
     sql,
     [
@@ -92,15 +131,19 @@ app.post("/api/survey", (req, res) => {
       projectTitle,
       projectDescription,
       sponsor,
-      numberOfTeamMembers,
+      Number(numberOfTeamMembers),
       teamMemberNames,
       major,
       demoValue,
       powerValue,
       ndaValue,
+      posterNDA,
+      attendanceValue,
+      zoomLinkValue,
       youtubeLinkValue,
       posterPicturePath,
-      
+      teamPicturePath,
+      submitDate,  // Include the current date and time for submitDate
     ],
     (err, result) => {
       if (err) {
@@ -114,6 +157,8 @@ app.post("/api/survey", (req, res) => {
 });
 
 app.use("/posterUploads", express.static("posterUploads"));
+app.use("/teamUploads", express.static("teamUploads"));
+
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
@@ -138,32 +183,39 @@ app.get("/api/survey/:major", (req, res) => {
 // Endpoint to fetch projects by major and semester
 app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const { major, semester, year } = req.params;
-  console.log("Major requested:", major); // Log the requested major
-  console.log("Semester requested:", semester, year); // Log the requested semester and year
+  console.log("Request parameters:", req.params); // Log all parameters
 
+  console.log("Major requested:", major);
+  console.log("Semester requested:", semester);
+  console.log("Year requested:", year);
+
+  if (!semester || !year) {
+    console.error("Error: Invalid semester or year");
+    return res.status(400).send("Bad request");
+  }
+
+  let startMonth, endMonth;
   if (semester === "sp") {
-    var startMonth = "04"
-    var endMonth = "05"
-  }
-  else if (semester === "fa") {
-    var startMonth = "11"
-    var endMonth = "12"
-  }
-  else {
+    startMonth = "04";
+    endMonth = "05";
+  } else if (semester === "fa") {
+    startMonth = "11";
+    endMonth = "12";
+  } else {
     console.error("Error: Invalid semester");
     return res.status(400).send("Bad request");
   }
-  
-  const startDate = `${year}-${startMonth}-01 00:00:00`
-  const endDate = `${year}-${endMonth}-01 00:00:00`
+
+  const startDate = `${year}-${startMonth}-01 00:00:00`;
+  const endDate = `${year}-${endMonth}-01 00:00:00`;
 
   const sql = "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ?";
-  db.query(sql, [major], (err, results) => {
+  db.query(sql, [major, startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
       return res.status(500).send("Server error");
     }
-    console.log("Query results:", results); // Log the query results
+    console.log("Query results:", results);
     res.json(results);
   });
 });

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect,useState } from "react";
+import { useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../CSS/Survey.css";
+
+
 
 interface FormData {
   email: string;
@@ -13,12 +15,14 @@ interface FormData {
   teamMemberNames: string;
   major: string;
   demo: string;
-  power?: string;
+  power ? : string;
   nda: string;
+  posterApproved ?: string;
+  attendance: string;
+  zoomLink ?: string;
   youtubeLink: string;
-  teamPicturePath?: string;
-  posterPicturePath: string;
-
+  teamPicturePath ?:string;
+  posterPicturePath ?: string;
 }
 
 interface FormErrors {
@@ -33,259 +37,277 @@ interface FormErrors {
   demo: string;
   power: string;
   nda: string;
+  posterApproved: string;
+  attendance: string;
+  zoomLink ?: string;
   youtubeLink: string;
-  teamPicturePath?: string;
-  posterPicturePath?: string;
+  teamPicturePath ?: string;
+  posterPicturePath ?: string;
 }
 
 interface Project {
   project_id: string;
   project_title: string;
 }
-
 const Survey: React.FC = () => {
-  const initialFormData: FormData = {
-    email: "",
-    name: "",
-    projectTitle: "",
-    projectDescription: "",
-    sponsor: "",
-    numberOfTeamMembers: "",
-    teamMemberNames: "",
-    major: "",
-    demo: "",
-    power: "",
-    nda: "",
-    youtubeLink: "",
-    teamPicturePath: "",
-    posterPicturePath: "",
-  };
 
-  const initialFormErrors: FormErrors = {
-    email: "",
-    name: "",
-    projectTitle: "",
-    projectDescription: "",
-    sponsor: "",
-    numberOfTeamMembers: "",
-    teamMemberNames: "",
-    major: "",
-    demo: "",
-    power: "",
-    nda: "",
-    youtubeLink: "",
-    teamPicturePath: "",
-    posterPicturePath: "",
-  };
+    const initialFormData: FormData = {
+        email: "",
+        name: "",
+        projectTitle: "",
+        projectDescription: "",
+        sponsor: "",
+        numberOfTeamMembers: "",
+        teamMemberNames: "",
+        major: "",
+        demo: "",
+        power: "",
+        nda: "",
+        posterApproved: "",
+        attendance: "",
+        zoomLink: "",
+        youtubeLink: "",
+        teamPicturePath: "",
+        posterPicturePath: "",
+    };
+    const initialFormErrors: FormErrors = {
+        email: "",
+        name: "",
+        projectTitle: "",
+        projectDescription: "",
+        sponsor: "",
+        numberOfTeamMembers: "",
+        teamMemberNames: "",
+        major: "",
+        demo: "",
+        power: "",
+        nda: "",
+        posterApproved: "",
+        attendance: "",
+        zoomLink: "",
+        youtubeLink: "",
+        teamPicturePath: "",
+        posterPicturePath: "",
+    };
+    const [formData, setFormData] = useState < FormData > (initialFormData);
+    const [errors, setErrors] = useState < FormErrors > (initialFormErrors);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [selectedFile, setSelectedFile] = useState < File | undefined > ();
+    const [projects, setProjects] = useState < Project[] > ([]);
+    const [, setSelectedProject] = useState < string > ('');
+    const [contentTeamFiles, setContentTeamFiles] = useState<File[]>([]);
+    //const [teamImageFile, setTeamImageFile] = useState<File | undefined>();
 
-  
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        // Fetch the list of projects from the backend API
+        //fetch('https://asucapstone.com:3000/api/projects')
+        fetch('http://localhost:3000/api/projects'
 
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [errors, setErrors] = useState<FormErrors>(initialFormErrors);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | undefined>();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [selectedProject, setSelectedProject] = useState<string>('');
-  
-  const navigate = useNavigate();
-
-
-
-  useEffect(() => {
-    // Fetch the list of projects from the backend API
-    //fetch('https://asucapstone.com:3000/api/projects')
-    fetch('http://localhost:3000/api/projects')
-      .then((response) => response.json())
-      .then((data) => setProjects(data))
-      .catch((error) => console.error('Error fetching projects:', error));
-  }, []);
+        ).then((response) => 
+            response.json()).then((data) =>
+            setProjects(data)).catch((error) => 
+            console.error('Error fetching projects:', error));
+    }, []);
 
 
-
-
-
-
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value, type } = e.target;
-    if (type === "file") {
-      const fileInput = e.target as HTMLInputElement & {
-        files: FileList;
-      };
-      setSelectedFile(fileInput.files[0]);
-      console.log(`File selected: ${fileInput.files[0].name}`);
-    } else {
-      setFormData({ ...formData, [name]: value });
-  
-      if (name === "demo" && value === "no") {
-        setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
+    const handleChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+      const { name, value, type } = e.target;
+    
+      if (type === "file") {
+        const fileInput = e.target as HTMLInputElement & { files: FileList };
+    
+        // Handling different file inputs based on 'name'
+        if (name === "poster" && fileInput.files.length > 0) {
+          // Handling single file input for poster
+          setSelectedFile(fileInput.files[0]);
+          console.log(`Poster file selected: ${fileInput.files[0].name}`);
+        } else if (name === "contentTeam" && fileInput.files.length > 0) {
+          // Handling multiple file input for team photos
+          const selectedFiles = Array.from(fileInput.files);
+          setContentTeamFiles((prevFiles) => {
+            const existingNames = new Set(prevFiles.map(f => f.name));
+            const newFiles = selectedFiles.filter(f => !existingNames.has(f.name));
+            return [...prevFiles, ...newFiles];
+          });
+          console.log("Team headshots selected:", selectedFiles.map(file => file.name));
+        }
+      } else {
+        // Handling non-file inputs
+        setFormData({ ...formData, [name]: value });
+    
+        if (name === "demo" && value === "no") {
+          setFormData((prevFormData) => ({ ...prevFormData, power: "" }));
+        }
+    
+        const selectedProjectId = e.target.value;
+        const project = projects.find((project) => project.project_id === selectedProjectId);
+        
+        if (project) {
+          const fullProjectName = `${project.project_id} - ${project.project_title}`;
+          setSelectedProject(fullProjectName);
+        }
       }
-  
-      const selectedProjectId = e.target.value;
-
-  // Finds the project based on selected project ID
-  const project = projects.find(project => project.project_id === selectedProjectId);
-
-  if (project) {
-    const fullProjectName = `${project.project_id} - ${project.project_title}`;
-    setSelectedProject(fullProjectName); // Set the full project name
-  }
-    }
-  
-    setErrors({ ...errors, [name]: "" });
-    console.log(`Field: ${name}, Value: ${value}`);
-  };
-
-  
- 
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const formErrors = validateFormData(formData);
-    setErrors(formErrors);
-  
-    if (hasErrors(formErrors)) {
-      scrollToFirstError();
-      return;
-    }
-  
-    if (selectedFile) {
-      const fileData = new FormData();
-      // Ensure that selectedFile is defined and then append it to the FormData
-      fileData.append("poster", selectedFile);
-  
-      axios
-        .post("http://localhost:3000/api/survey/uploads", fileData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          const uploadedPath = res.data.path;
-  
-          // Prevent async
-          const updatedFormData = { ...formData, posterPicturePath: uploadedPath };
-  
-
-          const submissionData = prepareSubmissionData(updatedFormData);
-  
-          // Submit info with the uploaded file path
-          axios
-            .post("http://localhost:3000/api/survey", submissionData)
-            .then(() => {
-              handleSuccessfulSubmission();
-            })
-            .catch((error) => {
-              console.error("Error submitting survey data:", error);
-            });
-        })
-        .catch((error) => {
-          console.error("Error submitting poster image:", error);
-        });
-    } else {
-      console.error("No file selected!");
-    }
-  };
-
+    
+      // Clear error for this field
+      setErrors({ ...errors, [name]: "" });
+      console.log(`Field: ${name}, Value: ${value}`);
+    };
+      
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      console.log("Form submitted");
+    
+      const formErrors = validateFormData(formData);
+      setErrors(formErrors);
+    
+      if (hasErrors(formErrors)) {
+        scrollToFirstError();
+        return;
+      }
+      console.log("Calling API");
+      try {
+        console.log("here1")
+        let posterPath = "";
+        let teamImagePaths: string[] = [];
+    
+       
+        if (selectedFile) {
+          const posterData = new FormData();
+          posterData.append("poster", selectedFile);
+    
+          const posterRes = await axios.post("http://localhost:3000/api/survey/uploadsPoster", posterData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+    
+          posterPath = posterRes.data.path;
+        }
+    
+        
+        if (contentTeamFiles.length > 0) {
+          const teamData = new FormData();
+          contentTeamFiles.forEach(file => {
+            teamData.append("contentTeamFiles", file); 
+          });
+    
+          const teamRes = await axios.post("http://localhost:3000/api/survey/uploadsTeam", teamData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+    
+          teamImagePaths = teamRes.data.paths;
+        }
+    
+        
+        const updatedFormData = {
+          ...formData,
+          posterPicturePath: posterPath,
+          teamPicturePath: teamImagePaths.join(", "), 
+        };
+    
+        const submissionData = prepareSubmissionData(updatedFormData);
+    
+        // Final survey data submission
+        await axios.post("http://localhost:3000/api/survey", submissionData);
+    
+        handleSuccessfulSubmission();
+      } catch (error) {
+        console.error("Error during form submission:", error);
+        alert("An error occurred while submitting. Please try again.");
+      }
+    };
     const prepareSubmissionData = (formData: FormData) => {
-      const submissionData = { ...formData };
-      if (formData.demo === "no") {
-        delete submissionData.power;
+        const submissionData = {
+            ...formData
+        };
+        if (formData.demo === "no") {
+            delete submissionData.power;
+        }
+        return submissionData;
+    };
+    const validateFormData = (formData: FormData) => {
+      const {
+        email,
+        name,
+        projectTitle,
+        projectDescription,
+        sponsor,
+        numberOfTeamMembers,
+        teamMemberNames,
+        major,
+        demo,
+        nda,
+        attendance,
+        posterApproved,
+        youtubeLink,
+      } = formData;
+    
+      const errors: FormErrors = {
+        email: !email ? "Please enter your ASU email." : "",
+        name: !name ? "Please enter your name." : "",
+        projectTitle: !projectTitle ? "Please select a project title." : "",
+        projectDescription: !projectDescription ? "Please enter a project description." : "",
+        sponsor: !sponsor ? "Please enter the name of your sponsor/mentor." : "",
+        numberOfTeamMembers: !numberOfTeamMembers ? "Please enter the number of team members." : "",
+        teamMemberNames: !teamMemberNames ? "Please enter the full names of all team members, including yourself, separated by commas." : "",
+        major: !major ? "Please select a course number." : "",
+        demo: !demo ? "Please specify if your group will be bringing a demo." : "",
+        power: "",
+        nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
+        attendance: !attendance ? "Please specify your attendance type." : "",
+        posterApproved: nda === "yes" && !posterApproved ? "Please specify if your sponsor approved your poster or not." : "",
+        youtubeLink: !youtubeLink ? "Please include the YouTube link of your presentation video." : "",
+      };
+    
+      if (!email.endsWith("@asu.edu")) {
+        errors.email = "Please enter your ASU email.";
       }
-      return submissionData;
+      if (parseInt(numberOfTeamMembers, 10) <= 0) {
+        errors.numberOfTeamMembers = "The number of team members must be at least 1.";
+      }
+      if (demo === "yes" && !formData.power) {
+        errors.power = "Please specify if your group will need power for your demo.";
+      }
+      if (attendance === "Online" && !formData.zoomLink) {
+        errors.zoomLink = "Zoom link is required for online attendance.";
+      }
+    
+      const file = selectedFile;
+      if (!file) {
+        errors.posterPicturePath = "Please upload your poster image.";
+      } else if (!["image/png", "image/jpeg"].includes(file.type)) {
+        errors.posterPicturePath = "Only PNG or JPEG images are allowed.";
+      }
+    
+      return errors;
     };
-    
 
-    
+    const hasErrors = (errors: FormErrors) => {
+      return Object.values(errors).some((error) => error !== "");
+    };
   
-
-  const validateFormData = (formData: FormData) => {
-    const {
-      email,
-      name,
-      projectTitle,
-      projectDescription,
-      sponsor,
-      numberOfTeamMembers,
-      teamMemberNames,
-      major,
-      demo,
-      nda,
-      youtubeLink,
-      posterPicturePath,
-    } = formData;
-
-    const errors: FormErrors = {
-      email: !email ? "Please enter your ASU email." : "",
-      name: !name ? "Please enter your name." : "",
-      projectTitle: !projectTitle ? "Please select a project title." : "",
-      projectDescription: !projectDescription
-        ? "Please enter a project description."
-        : "",
-      sponsor: !sponsor ? "Please enter the name of your sponsor/mentor." : "",
-      numberOfTeamMembers: !numberOfTeamMembers
-        ? "Please enter the number of team members."
-        : "",
-      teamMemberNames: !teamMemberNames
-        ? "Please enter the full names of all team members, including yourself, separated by commas."
-        : "",
-      major: !major ? "Please select a course number." : "",
-      demo: !demo ? "Please specify if your group will be bringing a demo." : "",
-      power: "",
-      nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
-      youtubeLink: "",
+    const scrollToFirstError = () => {
+      const firstErrorElement = document.querySelector(".error-message");
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: "smooth" });
+      }
     };
-
-    if (!email.endsWith("@asu.edu")) {
-      errors.email = "Please enter your ASU email.";
-    }
-
-    if (parseInt(numberOfTeamMembers, 10) <= 0) {
-      errors.numberOfTeamMembers = "The number of team members must be at least 1.";
-    }
-
-    if (demo === "yes" && !formData.power) {
-      errors.power =
-        "Please specify if your group will need power for your demo.";
-    }
-
-    return errors;
-  };
-
-  const hasErrors = (errors: FormErrors) => {
-    return Object.values(errors).some((error) => error !== "");
-  };
-
-  const scrollToFirstError = () => {
-    const firstErrorElement = document.querySelector(".error-message");
-    if (firstErrorElement) {
-      firstErrorElement.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const handleSuccessfulSubmission = () => {
-    setFormData(initialFormData);
-    setSelectedFile(undefined);
-    setIsSubmitted(true);
-
-    //  setTimeout(() => {
-    //    setIsSubmitted(false);
-    //    navigate("/");
-    //  }, 3000);
-  };
-
-  const handleCloseSuccessMessage = () => {
-    setIsSubmitted(false);
-    navigate("/");
-  };
-
- 
-  return (
-    <div className="form-container">
+    const handleSuccessfulSubmission = () => {
+        setFormData(initialFormData);
+        setSelectedFile(undefined);
+        setIsSubmitted(true);
+        //  setTimeout(() => {
+        //    setIsSubmitted(false);
+        //    navigate("/");
+        //  }, 3000);
+    };
+    const handleCloseSuccessMessage = () => {
+        setIsSubmitted(false);
+        navigate("/");
+    };
+    return (<div className="form-container">
       {isSubmitted && (
         <div className="success-message">
           <p>Thank you for submitting your survey! Your responses have been recorded successfully.</p>
@@ -328,25 +350,22 @@ const Survey: React.FC = () => {
           />
           {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
-        <div className="form-box">
-          <label htmlFor="projectTitle">Project Title:</label>
-          <select
-            name="projectTitle"
-            id="projectTitle"
-            value={formData.projectTitle}
-            onChange={handleChange}
-          >
-            <option value="">Select a project</option>
-          {projects.map((project) => (
-            <option key={project.project_id} value={project.project_id}>
-              {project.project_id} {project.project_title} 
-          </option>
-            ))}
-          </select>
-          {errors.projectTitle && (
-            <p className="error-message">{errors.projectTitle}</p>
-          )}
-        </div>
+        <select
+          name="projectTitle"
+          id="projectTitle"
+          value={formData.projectTitle}
+          onChange={handleChange}
+        >
+          <option value="">Select a project</option>
+          {projects.map((project) => {
+            const fullName = `${project.project_id} - ${project.project_title}`;
+            return (
+              <option key={project.project_id} value={fullName}>
+                {fullName}
+              </option>
+            );
+          })}
+        </select>
         <div className="form-box">
           <label htmlFor="projectDescription">
             Project Description (3 sentences max):
@@ -434,36 +453,69 @@ const Survey: React.FC = () => {
           )}
         </div>
         <div className="form-box">
-          <label>
-            Will your group be bringing a demo in addition to your poster?
-          </label>
-          <div className="radio-group">
+    <label>Are you an online or in-person?</label>
+    <select
+      name="attendance"
+      id="attendance"
+      value={formData.attendance}
+      onChange={handleChange}
+    >
+      <option value="">Select an option</option>
+      <option value="online">Online</option>
+      <option value="inPerson">In-Person</option>
+    </select>
+    {errors.attendance && (<p className="error-message">{errors.attendance}</p>)}
+  </div>
+        <div>
+        {formData.attendance === "online" && (
+        <div className="form-box">
+          <label htmlFor="zoomLink">Zoom link for your online presentation:</label>
+          <input
+            type="url"
+            name="zoomLink"
+            id="zoomLink"
+            value={formData.zoomLink}
+            onChange={handleChange}
+            placeholder="https://zoom.us/..."
+          />
+          {errors.zoomLink && (
+            <p className="error-message">{errors.zoomLink}</p>
+          )}
+        </div>
+        )}
+        </div>
+        
+        <div className="form-box">
             <label>
-              <input
-                type="radio"
-                name="demo"
-                value="yes"
-                checked={formData.demo === "yes"}
-                onChange={handleChange}
-              />{" "}
-              Yes
+              Will your group be bringing a demo in addition to your poster?
             </label>
-            <label>
-              <input
-                type="radio"
-                name="demo"
-                value="no"
-                checked={formData.demo === "no"}
-                onChange={handleChange}
-              />{" "}
-              No
-            </label>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="demo"
+                  value="yes"
+                  checked={formData.demo === "yes"}
+                  onChange={handleChange}
+                />{" "}
+                Yes
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="demo"
+                  value="no"
+                  checked={formData.demo === "no"}
+                  onChange={handleChange}
+                />{" "}
+                No
+              </label>
           </div>
           {errors.demo && <p className="error-message">{errors.demo}</p>}
         </div>
         {formData.demo === "yes" && (
           <div className="form-box">
-            <label>If so, will your group need power for your demo?</label>
+              <label>If so, will your group need power for your demo?</label>
             <div className="radio-group">
               <label>
                 <input
@@ -489,86 +541,157 @@ const Survey: React.FC = () => {
           </div>
         )}
         <div className="form-box">
-          <label>Did your group sign an NDA or IP?</label>
-          <div className="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="nda"
-                value="yes"
-                checked={formData.nda === "yes"}
-                onChange={handleChange}
-              />{" "}
-              Yes
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="nda"
-                value="no"
-                checked={formData.nda === "no"}
-                onChange={handleChange}
-              />{" "}
-              No
-               <div>
-                {formData.nda === "no" && (
-                  <div className="form-box-youtube">
-                  <label htmlFor="youtubeLink">YouTube Video Link:</label>
-                  <input
-                    type="url"
-                    name="youtubeLink"
-                    id="youtubeLink"
-                    value={formData.youtubeLink}
-                    onChange={handleChange}
-                  />
-                  {errors.youtubeLink && (
-                    <p className="error-message">{errors.youtubeLink}</p>
-                  )}
-                  </div>
-              )}
-              </div> 
-              
-                    <div className="content">
-              <span className="title">Upload Your Poster Image</span>
-              <p className="message">Select a file to upload from your computer or device.</p>
+    <label>Did your group sign an NDA or IP?</label>
+    <div className="radio-group">
+      <label>
+        <input
+          type="radio"
+          name="nda"
+          value="yes"
+          checked={formData.nda === "yes"}
+          onChange={handleChange}
+        />{" "}
+        Yes
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="nda"
+          value="no"
+          checked={formData.nda === "no"}
+          onChange={handleChange}
+        />{" "}
+        No
 
-              <div className="image-upload">
-                <label htmlFor="file" className="button upload-btn">
-                  Choose File
-                  <input 
-                    type="file" 
-                    id = "file"
-                    hidden 
-                    onChange={handleChange} 
-                  />
-                </label>
-              </div>
+        <div>
+  {formData.nda === "no" && (
+    <div className="form-box form-box-youtube">
+      <label htmlFor="youtubeLink">YouTube Video Link:</label>
+      <input
+        type="url"
+        name="youtubeLink"
+        id="youtubeLink"
+        value={formData.youtubeLink}
+        onChange={handleChange}
+        className="youtube-input"
+      />
+      {errors.youtubeLink && (
+        <p className="error-message">{errors.youtubeLink}</p>
+      )}
+    </div>
+  )}
+  </div>
+      </label>
+    </div>
+    {errors.nda && <p className="error-message">{errors.nda}</p>}
+  </div>
 
-              <div className="result">
-                {selectedFile ? (
-                  <div className="file-uploaded"><p>{selectedFile.name}</p></div>
-                ) : (
-                  <div className="file-uploaded"><p>No file selected</p></div>
-                )}
-              </div>
-            </div>
-            
-            </label>
-            {errors.nda && <p className="error-message">{errors.nda}</p>}
-          </div>
-        </div>
-        <div className="form-box">
+
+  {formData.nda === "yes" && (
+    <div className="form-box">
+      <label>Was your poster approved by the sponsor?</label>
+      <div className="radio-group">
+        <label>
+          <input
+            type="radio"
+            name="posterApproved"
+            value="yes"
+            checked={formData.posterApproved === "yes"}
+            onChange={handleChange}
+          />{" "}
+          Yes
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="posterApproved"
+            value="no"
+            checked={formData.posterApproved === "no"}
+            onChange={handleChange}
+          />{" "}
+          No
+        </label>
+      </div>
       
     </div>
-        <div className="form-box">
-          <button type="submit" className="submit-button">
-            Submit
-          </button>
-        </div>
+  )}
 
-      </form>
-    </div>
-  );
+
+<div className="contentPoster">
+  <span className="title">Upload Your Poster Image</span>
+  <p className="message">Select a file to upload from your computer or device.</p>
+
+  <div className="image-upload">
+    <label htmlFor="posterFile" className="button upload-btn">
+      Choose File
+      <input
+        type="file"
+        id="posterFile"
+        name="poster"
+        hidden
+        onChange={handleChange}
+      />
+    </label>
+  </div>
+
+  <div className="result">
+    {selectedFile ? (
+      <div className="file-uploaded"><p>{selectedFile.name}</p></div>
+    ) : (
+      <div className="file-uploaded"><p>No file selected</p></div>
+    )}
+  </div>
+
+  {errors.posterPicturePath && (
+    <p className="error-message">{errors.posterPicturePath}</p>
+  )}
+</div>
+
+<div className="contentTeam">
+  <span className="title">Upload Your Team's Images</span>
+  <p className="message">Select files to upload from your computer or device.</p>
+
+  <div className="image-upload">
+    <label htmlFor="teamFiles" className="button upload-btn">
+      Choose Files
+      <input
+        type="file"
+        id="teamFiles"
+        name="contentTeam"
+        multiple
+        hidden
+        onChange={handleChange}
+      />
+    </label>
+  </div>
+
+  <div className="result">
+    {contentTeamFiles.length > 0 ? (
+      <div className="file-uploaded">
+        {contentTeamFiles.map((file, index) => (
+          <p key={index}>{file.name}</p>
+        ))}
+      </div>
+    ) : (
+      <div className="file-uploaded"><p>No files selected</p></div>
+    )}
+  </div>
+
+        {errors.teamPicturePath && (
+          <p className="error-message">{errors.teamPicturePath}</p>
+        )}
+      </div>
+
+      <div className="form-box">
+            <button type="submit" className="submit-button">
+              Submit
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+
+      );
 };
-
 export default Survey;

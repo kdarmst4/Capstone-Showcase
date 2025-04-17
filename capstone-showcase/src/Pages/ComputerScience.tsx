@@ -4,22 +4,30 @@ import "../CSS/ComputerScience.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from './Footer';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 
 const ComputerScience: React.FC = () => {
   const { isSideMenu } = useMenuContext();
+  const [searchParams] = useSearchParams();
+  const selectedSemester = searchParams.get("semester");
+  const selectedYear = searchParams.get("year");
   const navigate = useNavigate();
   const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("computer-science-page-body");
 
     // Fetch projects for the Computer Science major
     //fetch("https://asucapstone.com:3000/api/survey/computer-science")
-    fetch("http://localhost:3000/api/survey/computer-science")
+    fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
+    //fetch("http://localhost:3000/api/survey/computer-science")
+    
       .then((response) => {
+        console.log("http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}");
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
@@ -31,7 +39,7 @@ const ComputerScience: React.FC = () => {
     return () => {
       document.body.classList.remove("computer-science-page-body");
     };
-  }, []);
+  }, [selectedSemester, selectedYear]);
 
   const extractYouTubeThumbnail = (url: string): string | null => {
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i;
@@ -45,6 +53,11 @@ const ComputerScience: React.FC = () => {
 
   const handleMoreProjectsClick = () => {
     navigate("/interdisciplinary");
+  };
+  const getSemesterLabel = () => {
+    if (selectedSemester === "fa") return `Fall ${selectedYear}`;
+    if (selectedSemester === "sp") return `Spring ${selectedYear}`;
+    return "";
   };
 
   const handleProjectClick = (project: any) => {
@@ -151,7 +164,7 @@ const ComputerScience: React.FC = () => {
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">Fall 2024</span>
+                <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}

@@ -4,19 +4,24 @@ import "../CSS/Informatics.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from './Footer';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 
 const Informatics: React.FC = () => {
   const { isSideMenu } = useMenuContext();
+  const [searchParams] = useSearchParams();
+  const selectedSemester = searchParams.get("semester");
+  const selectedYear = searchParams.get("year");
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("informatics-page-body");
-    fetch("https://asucapstone.com:3000/api/survey/informatics")
-    //fetch("http://localhost:3000/api/survey/informatics")
+
+    fetch(`https://asucapstone.com:3000/api/survey/informatics/term=${selectedSemester}-${selectedYear}`)
+    //fetch(`http://localhost:3000/api/surveyinformatics/term=${selectedSemester}-${selectedYear}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);

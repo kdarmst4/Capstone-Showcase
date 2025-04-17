@@ -4,10 +4,13 @@ import "../CSS/BiomedicalEngineering.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from './Footer';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const BiomedicalEngineering: React.FC = () => {
   const { isSideMenu } = useMenuContext();
+  const [searchParams] = useSearchParams();
+  const selectedSemester = searchParams.get("semester");
+  const selectedYear = searchParams.get("year");
   const navigate = useNavigate();
   const [projects, setProjects] = useState<any[]>([]);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
@@ -15,8 +18,8 @@ const BiomedicalEngineering: React.FC = () => {
 
   useEffect(() => {
     document.body.classList.add("biomedical-engineering-page-body");
-    fetch("https://asucapstone.com:3000/api/survey/biomedical-engineering")
-    //fetch("http://localhost:3000/api/survey/biomedical-engineering")
+    fetch(`https://asucapstone.com:3000/api/survey/biomedical-engineering/term=${selectedSemester}-${selectedYear}`)
+    //fetch(`http://localhost:3000/api/survey/biomedical-engineering/term=${selectedSemester}-${selectedYear}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
