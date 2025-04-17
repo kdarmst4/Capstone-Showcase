@@ -132,6 +132,18 @@ small {
   margin-top: -5px;
   font-weight: bold;
 }
+.form-box-youtube {
+  max-width: 100%;
+  margin-top: 1rem;
+}
+
+.youtube-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
 
 
 .success-message {

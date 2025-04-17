@@ -3,6 +3,9 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface MenuContextProps {
   isSideMenu: boolean;
   toggleMenu: () => void;
+  selectedSemester: string | null;
+  selectedYear: string | null;
+  setSelectedSemester: (semester: string, year: string) => void;
 }
 
 const MenuContext = createContext<MenuContextProps | undefined>(undefined);
@@ -21,13 +24,20 @@ interface MenuProviderProps {
 
 export const MenuProvider: React.FC<MenuProviderProps> = ({ children }) => {
   const [isSideMenu, setIsSideMenu] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
 
   const toggleMenu = () => {
     setIsSideMenu(!isSideMenu);
   };
 
+  const setSelectedSemesterHandler = (semester: string, year: string) => {
+    setSelectedSemester(semester);
+    setSelectedYear(year);
+  };
+
   return (
-    <MenuContext.Provider value={{ isSideMenu, toggleMenu }}>
+    <MenuContext.Provider value={{ isSideMenu, toggleMenu, selectedSemester, selectedYear, setSelectedSemester: setSelectedSemesterHandler }}>
       {children}
     </MenuContext.Provider>
   );
