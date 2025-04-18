@@ -20,9 +20,9 @@ const ComputerSystemsEngineering: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("computer-systems-engineering-page-body");
-    fetch(`http://https://asucapstone.com:3000/api/survey/computer-systems-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the ComputerSystemsEngineering major
+    fetch(`https://asucapstone.com:3000/api/survey/computer-systems-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the ComputerSystemsEngineering major
       .then((response) => {
-        console.log("http://https://asucapstone.com:3000/api/survey/computer-systems-engineering/term=${selectedSemester}-${selectedYear}");
+        
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
@@ -187,7 +187,7 @@ const ComputerSystemsEngineering: React.FC = () => {
   <div className="poster-container">
     
     <img
-      src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+      src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
       alt="Project Poster"
       style={{ maxWidth: '100%', maxHeight: 600 }}
     />
@@ -199,7 +199,7 @@ const ComputerSystemsEngineering: React.FC = () => {
   <div className="team-container">
     <p><strong>Team Photo</strong></p>
     <img
-      src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+      src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
       alt="Team Photo"
       style={{ maxWidth: '100%', maxHeight: 400 }}
     />

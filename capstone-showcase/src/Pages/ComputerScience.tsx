@@ -20,9 +20,11 @@ const ComputerScience: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("computer-science-page-body");
-    fetch(`http://https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+
+    // Fetch projects for the Computer Science major
+    fetch(`https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
+    //fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
       .then((response) => {
-        console.log("http://https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}");
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
@@ -128,7 +130,7 @@ const ComputerScience: React.FC = () => {
                   onClick={handleMoreProjectsClick}
                   aria-label="More Projects Button"
                 >
-                  Click here to see interdisciplinary projects!
+                  Like what you see? Click here to see interdisciplinary projects!
                 </button>
         </section>
       </main>
@@ -181,113 +183,61 @@ const ComputerScience: React.FC = () => {
               <div className="right-section">
                 <div className="poster-container">
                   <p>
+                    
                   </p>
                   {selectedProject.posterPicturePath ? (
-
  
+                    <div className="poster-container">
+                    <img
+                      src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+                      alt="Project Poster"
+                      style={{ maxWidth: '100%', maxHeight: 600 }}
+                    />
+                    </div>
 
-<div className="poster-container">
+                    ) : (
 
-<img
+                    <p>No poster uploaded.</p>
 
-  src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+                    )}
 
-  alt="Project Poster"
+                    {selectedProject.teamPicturePath ? (
 
-  style={{ maxWidth: '100%', maxHeight: 600 }}
+                    <div className="team-container">
 
-/>
+                      <p><strong>Team Photo</strong></p>
 
-</div>
+                      <img
 
+                        src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
 
+                        alt="Team Photo"
 
-) : (
+                        style={{ maxWidth: '100%', maxHeight: 400 }}
 
+                      />
 
+                    </div>
 
-<p>No poster uploaded.</p>
+                    ) : (
 
+                    <p>No team image uploaded.</p>
 
+                    )}
 
-)}
-
-
-
-{selectedProject.teamPicturePath ? (
-
-
-
-<div className="team-container">
-
-
-
-  <p><strong>Team Photo</strong></p>
-
-
-
-  <img
-
-
-
-    src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
-
-
-
-    alt="Team Photo"
-
-
-
-    style={{ maxWidth: '100%', maxHeight: 400 }}
-
-
-
-  />
-
-
-
-</div>
-
-
-
-) : (
-
-
-
-<p>No team image uploaded.</p>
-
-
-
-)}
-
-
-
-
-
-                </div>
 
               </div>
-
-                <h3>Abstract</h3>
-
-                <p>{selectedProject.projectDescription}</p>
-
-              </div>
-
+             </div>
+              <h3>Abstract</h3>
+              <p>{selectedProject.projectDescription}</p>
             </div>
-
           </div>
-
         </div>
-
-      )}
-
-      <Footer />
-
-    </div>
-
-  );
-
+      </div>
+    )}
+    <Footer />
+  </div>
+);
 };
 
 export default ComputerScience;

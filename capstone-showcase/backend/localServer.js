@@ -9,6 +9,7 @@ const fs = require("fs");
 dotenv.config();
 const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE);
 
+//Local DB Different
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -27,6 +28,8 @@ db.connect((err) => {
   }
   console.log("MySQL Connected...");
 });
+
+//SAME AS PROD DB
 
 //Poster Image Directory
 const uploadDir = "./posterUploads";
@@ -120,7 +123,7 @@ app.post("/api/survey", (req, res) => {
   const sql =
     `INSERT INTO survey_entries (
       email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
-      posterPicturePath, teamPicturePath
+      posterPicturePath, teamPicturePath,
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   db.query(

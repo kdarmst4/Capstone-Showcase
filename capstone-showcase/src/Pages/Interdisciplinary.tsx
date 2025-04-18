@@ -20,9 +20,9 @@ const Interdisciplinary: React.FC = () => {
   useEffect(() => {
       console.log("Selected semseter:", selectedSemester, selectedYear)
       document.body.classList.add("interdisciplinary-page-body");
-      fetch(`http://https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+      fetch(`https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
         .then((response) => {
-          console.log("http://https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}");
+          
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
           }
@@ -181,7 +181,7 @@ Click here to see interdisciplinary projects!
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">Fall 2024</span>
+                <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}
@@ -215,7 +215,7 @@ Click here to see interdisciplinary projects!
 
     <img
 
-      src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+      src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
 
       alt="Project Poster"
 
@@ -239,7 +239,7 @@ Click here to see interdisciplinary projects!
 
     <img
 
-      src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+      src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
 
       alt="Team Photo"
 

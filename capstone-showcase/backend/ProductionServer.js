@@ -4,6 +4,7 @@ const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
 const multer = require("multer");
+const path = require("path");
 const app = express();
 
 const dotenv = require("dotenv");
@@ -15,31 +16,29 @@ const mysql = require(process.env.PRODUCTION_DB_MYSQL_PACKAGE);
 app.use(bodyParser.json());
 const corsOptions = {
   origin: (origin, callback) => {
-    // Check if origin is from any subdomain of asucapstone.com
-    if (origin && origin.endsWith('.asucapstone.com')) {
-      callback(null, true); // Allow the origin
+    if (
+      !origin || // allow non-browser tools like curl/postman
+      origin === 'https://asucapstone.com:3000' ||
+      origin.endsWith('.asucapstone.com')
+    ) {
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS')); // Deny the origin
+      console.log("CORS blocked origin:", origin);
+      callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true, // Allow credentials (cookies, etc.)
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
-
+app.options('*', cors(corsOptions));
 
 const db = mysql.createConnection({
   host: process.env.PRODUCTION_DB_HOST,
   user: process.env.PRODUCTION_DB_USERNAME,
   password: process.env.PRODUCTION_DB_PASSWORD,
   database: process.env.PRODUCTION_DB_DATABASE,
-  // authSwitchHandler: function ({ pluginName, pluginData }, cb) {
-  //   if (pluginName === "caching_sha2_password") {
-  //     const password = "test"; // Replace with BlueHost MySQL root password
-  //     const securePassword = Buffer.from(password + "\0");
-  //     cb(null, securePassword);
-  //   }
-  // },
+  
 });
 
 
@@ -52,6 +51,9 @@ db.connect((err) => {
   console.log("MySQL Connected...");
 });
 
+
+
+
 //PERMS to Connect/Create Server
 const privateKey = fs.readFileSync("./keySSL.pem", "utf8")
 const certificate = fs.readFileSync("./certSSL.pem", "utf8")
@@ -63,14 +65,9 @@ app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
 
 
-//Server Start
-https.createServer(credentials, app).listen(3000, '0.0.0.0', () => {
-  console.log("HTTPS Server started on port 3000");
-});
 
-/*app.listen(3000,'0.0.0.0', () => {
-  console.log("Server started on port 3000");
-});*/
+
+
 
 
 
@@ -169,8 +166,8 @@ app.post("/api/survey", (req, res) => {
   const sql =
     `INSERT INTO survey_entries (
       email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
-      posterPicturePath, teamPicturePath,
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      posterPicturePath, teamPicturePath, submitDate
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   db.query(
     sql,
@@ -203,6 +200,12 @@ app.post("/api/survey", (req, res) => {
       res.status(200).send("Survey data inserted");
     }
   );
+});
+
+
+//Server Start
+https.createServer(credentials, app).listen(3000, '0.0.0.0', () => {
+  console.log("HTTPS Server started on port 3000");
 });
 
 
@@ -317,7 +320,6 @@ app.get('/api/projects', (req, res) => {
 });
 
 app.put("/api/admin/submissions/:id", (req, res) => {
-  const { id } = req.params;
   const {
     email,
     name,
@@ -330,19 +332,32 @@ app.put("/api/admin/submissions/:id", (req, res) => {
     demo,
     power,
     nda,
+    posterApproved,
+    attendance,
+    zoomLink,
     youtubeLink,
-    posterImage,
+    posterPicturePath,
+    teamPicturePath,
   } = req.body;
 
+  // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
+  let zoomLinkValue = zoomLink || null;
   let ndaValue = nda === "yes" ? 1 : 0;
   let demoValue = demo === "yes" ? 1 : 0;
   let powerValue = power === "yes" ? 1 : 0;
+  let attendanceValue = attendance === "inPerson" ? 1 : 0;
+  let posterNDA = posterApproved === "yes" ? 1 : 0;
 
-  console.log("Updating survey data:", req.body); // Ensure data is logged
+  const id = req.params.id;
 
-  const sql =
-    "UPDATE survey_entries SET email = ?, name = ?, projectTitle = ?, projectDescription = ?, sponsor = ?, numberOfTeamMembers = ?, teamMemberNames = ?, major = ?, demo = ?, power = ?, nda = ?, youtubeLink = ? WHERE id = ?";
+  const sql = `
+    UPDATE survey_entries SET
+      email = ?, name = ?, projectTitle = ?, projectDescription = ?, sponsor = ?,
+      numberOfTeamMembers = ?, teamMemberNames = ?, major = ?, demo = ?, power = ?, nda = ?, posterNDA = ?,
+      attendance = ?, zoomLink = ?, youtubeLink = ?, posterPicturePath = ?, teamPicturePath = ?
+    WHERE id = ?
+  `;
 
   db.query(
     sql,
@@ -352,23 +367,27 @@ app.put("/api/admin/submissions/:id", (req, res) => {
       projectTitle,
       projectDescription,
       sponsor,
-      numberOfTeamMembers,
+      Number(numberOfTeamMembers),
       teamMemberNames,
       major,
       demoValue,
       powerValue,
       ndaValue,
+      posterNDA,
+      attendanceValue,
+      zoomLinkValue,
       youtubeLinkValue,
-      posterImage,
+      posterPicturePath,
+      teamPicturePath,
       id,
     ],
     (err, result) => {
       if (err) {
-        console.error("Error updating survey data:", err);
+        console.error("Error updating submission:", err);
         return res.status(500).send("Server error");
       }
-      console.log("Survey data updated successfully");
-      res.status(200).send("Survey data updated");
+      console.log("Submission updated successfully");
+      res.status(200).send("Submission updated");
     }
   );
 });

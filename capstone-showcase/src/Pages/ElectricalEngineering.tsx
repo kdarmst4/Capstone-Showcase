@@ -20,7 +20,7 @@ const ElectricalEngineering: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("electrical-engineering-page-body");
-    fetch(`http://https://asucapstone.com:3000/api/survey/electrical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+    fetch(`https://asucapstone.com:3000/api/survey/electrical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -161,7 +161,7 @@ const ElectricalEngineering: React.FC = () => {
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">Fall 2024</span>
+                <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}
@@ -190,7 +190,7 @@ const ElectricalEngineering: React.FC = () => {
 <div className="poster-container">
   
   <img
-    src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+    src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
     alt="Project Poster"
     style={{ maxWidth: '100%', maxHeight: 600 }}
   />
@@ -202,7 +202,7 @@ const ElectricalEngineering: React.FC = () => {
 <div className="team-container">
   <p><strong>Team Photo</strong></p>
   <img
-    src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+    src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
     alt="Team Photo"
     style={{ maxWidth: '100%', maxHeight: 400 }}
   />
