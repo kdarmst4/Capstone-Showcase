@@ -270,13 +270,16 @@
   margin-top: 20px;
 }
 
-.poster-button {
-  background: #8c1d40;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
+.poster-container,
+.team-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.poster-container img,
+.team-container img {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .poster-button:hover {

@@ -18,10 +18,9 @@ const Informatics: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("informatics-page-body");
-
-    fetch(`https://asucapstone.com:3000/api/survey/informatics/term=${selectedSemester}-${selectedYear}`)
-    //fetch(`http://localhost:3000/api/surveyinformatics/term=${selectedSemester}-${selectedYear}`)
+    fetch(`http://https://asucapstone.com:3000/api/survey/informatics/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -34,7 +33,7 @@ const Informatics: React.FC = () => {
     return () => {
       document.body.classList.remove("informatics-page-body");
     };
-  }, []);
+  }, [selectedSemester, selectedYear]);
 
   const extractYouTubeThumbnail = (url: string): string | null => {
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i;
@@ -50,6 +49,23 @@ const Informatics: React.FC = () => {
     navigate("/interdisciplinary");
   };
 
+  const getSemesterLabel = () => {
+
+
+
+    if (selectedSemester === "fa") return `Fall ${selectedYear}`;
+
+
+
+    if (selectedSemester === "sp") return `Spring ${selectedYear}`;
+
+
+
+    return "";
+
+
+
+  };
   const handleProjectClick = (project: any) => {
     setSelectedProject(project);
     setIsModalOpen(true);
@@ -122,7 +138,7 @@ const Informatics: React.FC = () => {
                   onClick={handleMoreProjectsClick}
                   aria-label="More Projects Button"
                 >
-                  Like what you see? Click here to see interdisciplinary projects!
+                  Click here to see interdisciplinary projects!
                 </button>
         </section>
       </main>
@@ -153,7 +169,7 @@ const Informatics: React.FC = () => {
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">Fall 2024</span>
+              <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}
@@ -170,16 +186,62 @@ const Informatics: React.FC = () => {
             </div>
             <div className="project-details">
               <div className="left-section">
-                <h3>Team Mentors</h3>
-                <p>TBA</p>
+                <h3>Poster</h3>
+                
               <div className="right-section">
                 <div className="poster-container">
                   <p>
-                    <i className="fas fa-file-pdf poster-icon"></i> <strong>Poster</strong>
+                    
                   </p>
-                  <a href={selectedProject.posterLink} target="_blank" rel="noopener noreferrer">
-                    <button className="poster-button">View the poster</button>
-                  </a>
+                  {selectedProject.posterPicturePath ? (
+
+
+
+<div className="poster-container">
+
+    
+
+    <img
+
+      src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+
+      alt="Project Poster"
+
+      style={{ maxWidth: '100%', maxHeight: 600 }}
+
+    />
+
+  </div>
+
+) : (
+
+  <p>No poster uploaded.</p>
+
+)}
+
+{selectedProject.teamPicturePath ? (
+
+  <div className="team-container">
+
+    <p><strong>Team Photo</strong></p>
+
+    <img
+
+      src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+
+      alt="Team Photo"
+
+      style={{ maxWidth: '100%', maxHeight: 400 }}
+
+    />
+
+  </div>
+
+) : (
+
+  <p>No team image uploaded.</p>
+
+)}
                 </div>
               </div>
                 <h3>Abstract</h3>

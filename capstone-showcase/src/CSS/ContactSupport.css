@@ -1,144 +1,53 @@
-.admin-dashboard-container {
-    display: flex;
-    height: 100vh;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .admin-dashboard {
-    display: flex;
-    flex: 1;
-    background-color: #f4f4f4;
-  }
-  
-  .sidebar {
-    width: 250px;
-    background-color: #333;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-  }
-  
-  .sidebar .admin-info {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .sidebar .admin-info img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-  }
-  
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .sidebar ul li {
-    margin-bottom: 20px;
-  }
-  
-  .sidebar ul li a,
-  .sidebar ul li button {
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-  
-  .sidebar ul li a:hover,
-  .sidebar ul li button:hover {
-    background-color: #555;
-    border-radius: 5px;
-  }
-  
-  .logout-button {
-    background-color: #e74c3c;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .admin-dashboard-content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  
-  /* Contact Support Page Styles */
-  .support-content {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 20px auto;
-  }
-  
-  .support-content p {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .support-content form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .support-content input[type="text"],
-  .support-content input[type="email"],
-  .support-content textarea {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .support-content textarea {
-    height: 120px;
-    resize: vertical;
-  }
-  
-  .support-content button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .support-content button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .admin-dashboard-container {
-      flex-direction: column;
-    }
-  
-    .sidebar {
-      width: 100%;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  
-    .admin-dashboard-content {
-      padding: 10px;
-    }
-  }
-  
+// ContactSupport.tsx
+import React, { useState } from "react";
+import "../CSS/ContactSupport.css";
+
+const ContactSupport: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Support request submitted:", { email, message });
+    alert("Your request has been submitted!");
+    setEmail("");
+    setMessage("");
+  };
+
+  return (
+    <div className="contact-support-container">
+      <h1>Contact Support</h1>
+      <form onSubmit={handleFormSubmit} className="support-form">
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            rows={5}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            required
+            className="form-input"
+          ></textarea>
+        </div>
+        <button type="submit" className="submit-button">
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default ContactSupport;

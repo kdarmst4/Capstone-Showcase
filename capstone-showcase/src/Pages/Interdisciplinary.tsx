@@ -18,23 +18,23 @@ const Interdisciplinary: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    document.body.classList.add("interdisciplinary-page-body");
-
-    fetch(`https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)
-    //fetch(`http://localhost:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => setProjects(data))
-      .catch((error) => console.error("Error fetching projects:", error));
-
-    return () => {
-      document.body.classList.remove("interdisciplinary-page-body");
-    };
-  }, []);
+      console.log("Selected semseter:", selectedSemester, selectedYear)
+      document.body.classList.add("interdisciplinary-page-body");
+      fetch(`http://https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+        .then((response) => {
+          console.log("http://https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}");
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((data) => setProjects(data)) // Populate the state with fetched projects
+        .catch((error) => console.error("Error fetching projects:", error));
+  
+      return () => {
+        document.body.classList.remove("interdisciplinary-page-body");
+      };
+    }, [selectedSemester, selectedYear]);
 
   const extractYouTubeThumbnail = (url: string): string | null => {
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i;
@@ -44,6 +44,32 @@ const Interdisciplinary: React.FC = () => {
 
   const handleSurveyFormClick = () => {
     navigate("/survey");
+  };
+
+  const handleMoreProjectsClick = () => {
+
+    navigate("/interdisciplinary");
+
+  };
+
+
+
+  const getSemesterLabel = () => {
+
+
+
+    if (selectedSemester === "fa") return `Fall ${selectedYear}`;
+
+
+
+    if (selectedSemester === "sp") return `Spring ${selectedYear}`;
+
+
+
+    return "";
+
+
+
   };
 
   const handleProjectClick = (project: any) => {
@@ -113,7 +139,19 @@ const Interdisciplinary: React.FC = () => {
               </div>
             ))
           )}
-                              
+       <button
+
+className="more-projects-button"
+
+onClick={handleMoreProjectsClick}
+
+aria-label="More Projects Button"
+
+>
+
+Click here to see interdisciplinary projects!
+
+</button>                    
         </section>
       </main>
 
@@ -160,16 +198,62 @@ const Interdisciplinary: React.FC = () => {
             </div>
             <div className="project-details">
               <div className="left-section">
-                <h3>Team Mentors</h3>
-                <p>TBA</p>
+                <h3>Poster</h3>
+                
               <div className="right-section">
                 <div className="poster-container">
                   <p>
-                    <i className="fas fa-file-pdf poster-icon"></i> <strong>Poster</strong>
+                    
                   </p>
-                  <a href={selectedProject.posterLink} target="_blank" rel="noopener noreferrer">
-                    <button className="poster-button">View the poster</button>
-                  </a>
+                  {selectedProject.posterPicturePath ? (
+
+
+
+<div className="poster-container">
+
+    
+
+    <img
+
+      src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+
+      alt="Project Poster"
+
+      style={{ maxWidth: '100%', maxHeight: 600 }}
+
+    />
+
+  </div>
+
+) : (
+
+  <p>No poster uploaded.</p>
+
+)}
+
+{selectedProject.teamPicturePath ? (
+
+  <div className="team-container">
+
+    <p><strong>Team Photo</strong></p>
+
+    <img
+
+      src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+
+      alt="Team Photo"
+
+      style={{ maxWidth: '100%', maxHeight: 400 }}
+
+    />
+
+  </div>
+
+) : (
+
+  <p>No team image uploaded.</p>
+
+)}
                 </div>
               </div>
                 <h3>Abstract</h3>

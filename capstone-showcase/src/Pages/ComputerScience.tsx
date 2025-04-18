@@ -20,14 +20,9 @@ const ComputerScience: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("computer-science-page-body");
-
-    // Fetch projects for the Computer Science major
-    //fetch("https://asucapstone.com:3000/api/survey/computer-science")
-    fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
-    //fetch("http://localhost:3000/api/survey/computer-science")
-    
+    fetch(`http://https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
       .then((response) => {
-        console.log("http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}");
+        console.log("http://https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}");
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
@@ -133,7 +128,7 @@ const ComputerScience: React.FC = () => {
                   onClick={handleMoreProjectsClick}
                   aria-label="More Projects Button"
                 >
-                  Like what you see? Click here to see interdisciplinary projects!
+                  Click here to see interdisciplinary projects!
                 </button>
         </section>
       </main>
@@ -181,28 +176,118 @@ const ComputerScience: React.FC = () => {
             </div>
             <div className="project-details">
               <div className="left-section">
-                <h3>Team Mentors</h3>
-                <p>TBA</p>
+                <h3>Poster</h3>
+                
               <div className="right-section">
                 <div className="poster-container">
                   <p>
-                    <i className="fas fa-file-pdf poster-icon"></i> <strong>Poster</strong>
                   </p>
-                  <a href={selectedProject.posterLink} target="_blank" rel="noopener noreferrer">
-                    <button className="poster-button">View the poster</button>
-                  </a>
+                  {selectedProject.posterPicturePath ? (
+
+ 
+
+<div className="poster-container">
+
+<img
+
+  src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+
+  alt="Project Poster"
+
+  style={{ maxWidth: '100%', maxHeight: 600 }}
+
+/>
+
+</div>
+
+
+
+) : (
+
+
+
+<p>No poster uploaded.</p>
+
+
+
+)}
+
+
+
+{selectedProject.teamPicturePath ? (
+
+
+
+<div className="team-container">
+
+
+
+  <p><strong>Team Photo</strong></p>
+
+
+
+  <img
+
+
+
+    src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+
+
+
+    alt="Team Photo"
+
+
+
+    style={{ maxWidth: '100%', maxHeight: 400 }}
+
+
+
+  />
+
+
+
+</div>
+
+
+
+) : (
+
+
+
+<p>No team image uploaded.</p>
+
+
+
+)}
+
+
+
+
+
                 </div>
+
               </div>
+
                 <h3>Abstract</h3>
+
                 <p>{selectedProject.projectDescription}</p>
+
               </div>
+
             </div>
+
           </div>
+
         </div>
+
       )}
+
       <Footer />
+
     </div>
+
   );
+
 };
 
 export default ComputerScience;

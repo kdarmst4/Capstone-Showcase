@@ -102,10 +102,9 @@ const Survey: React.FC = () => {
     
     useEffect(() => {
         // Fetch the list of projects from the backend API
-        //fetch('https://asucapstone.com:3000/api/projects')
-        fetch('http://localhost:3000/api/projects'
-
-        ).then((response) => 
+        fetch('https://asucapstone.com:3000/api/projects')
+        //fetch('http://localhost:3000/api/projects')
+        .then((response) => 
             response.json()).then((data) =>
             setProjects(data)).catch((error) => 
             console.error('Error fetching projects:', error));
@@ -179,7 +178,7 @@ const Survey: React.FC = () => {
           const posterData = new FormData();
           posterData.append("poster", selectedFile);
     
-          const posterRes = await axios.post("http://localhost:3000/api/survey/uploadsPoster", posterData, {
+          const posterRes = await axios.post("http://https://asucapstone.com:3000/api/survey/uploadsPoster", posterData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
     
@@ -193,7 +192,7 @@ const Survey: React.FC = () => {
             teamData.append("contentTeamFiles", file); 
           });
     
-          const teamRes = await axios.post("http://localhost:3000/api/survey/uploadsTeam", teamData, {
+          const teamRes = await axios.post("http://https://asucapstone.com:3000/api/survey/uploadsTeam", teamData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
     
@@ -210,7 +209,7 @@ const Survey: React.FC = () => {
         const submissionData = prepareSubmissionData(updatedFormData);
     
         // Final survey data submission
-        await axios.post("http://localhost:3000/api/survey", submissionData);
+        await axios.post("http://https://asucapstone.com:3000/api/survey", submissionData);
     
         handleSuccessfulSubmission();
       } catch (error) {
