@@ -20,7 +20,7 @@ interface FormData {
   posterApproved ?: string;
   attendance: string;
   zoomLink ?: string;
-  youtubeLink: string;
+  youtubeLink ?: string;
   teamPicturePath ?:string;
   posterPicturePath ?: string;
 }
@@ -258,7 +258,7 @@ const Survey: React.FC = () => {
         nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
         attendance: !attendance ? "Please specify your attendance type." : "",
         posterApproved: nda === "yes" && !posterApproved ? "Please specify if your sponsor approved your poster or not." : "",
-        youtubeLink: !youtubeLink ? "Please include the YouTube link of your presentation video." : "",
+        youtubeLink: "",
       };
     
       if (!email.endsWith("@asu.edu")) {
@@ -269,6 +269,10 @@ const Survey: React.FC = () => {
       }
       if (demo === "yes" && !formData.power) {
         errors.power = "Please specify if your group will need power for your demo.";
+      }
+      if (nda === "no" && !formData.youtubeLink)
+      {
+        errors.youtubeLink = "Please include the YouTube link of your presentation video.";
       }
       if (attendance === "Online" && !formData.zoomLink) {
         errors.zoomLink = "Zoom link is required for online attendance.";
