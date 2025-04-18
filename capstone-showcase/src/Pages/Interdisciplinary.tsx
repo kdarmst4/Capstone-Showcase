@@ -22,7 +22,7 @@ const Interdisciplinary: React.FC = () => {
       document.body.classList.add("interdisciplinary-page-body");
       fetch(`https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
         .then((response) => {
-          
+
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
           }
@@ -188,7 +188,7 @@ Click here to see interdisciplinary projects!
                 </h2>
                 <p className="project-category">
                 
-                Computer Science</p>
+                Interdiciplinary</p>
 
                 <p className="team-members">
                   
@@ -217,6 +217,9 @@ Click here to see interdisciplinary projects!
 
       src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
 
+      //src={`http://localhost:3000${selectedProject.posterPicturePath}`}
+
+
       alt="Project Poster"
 
       style={{ maxWidth: '100%', maxHeight: 600 }}
@@ -239,7 +242,11 @@ Click here to see interdisciplinary projects!
 
     <img
 
+
       src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+
+      //src={`http://localhost:3000${selectedProject.teamPicturePath}`}
+
 
       alt="Team Photo"
 

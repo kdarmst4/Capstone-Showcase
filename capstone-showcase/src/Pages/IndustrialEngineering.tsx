@@ -170,7 +170,7 @@ const IndustrialEngineering: React.FC = () => {
                 </h2>
                 <p className="project-category">
                 
-                Computer Science</p>
+                Industrial Engineering</p>
 
                 <p className="team-members">
                   

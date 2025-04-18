@@ -168,7 +168,7 @@ const ElectricalEngineering: React.FC = () => {
                 </h2>
                 <p className="project-category">
                 
-                Computer Science</p>
+                Electrical Engineering</p>
 
                 <p className="team-members">
                   
