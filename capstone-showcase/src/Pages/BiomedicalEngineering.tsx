@@ -20,9 +20,9 @@ const BiomedicalEngineering: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("biomedical-engineering-page-body");
-    fetch(`http://https://asucapstone.com:3000/api/survey/biomedical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+    fetch(`https://asucapstone.com:3000/api/survey/biomedical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
       .then((response) => {
-        console.log(`http://https://asucapstone.com:3000/api/survey/biomedical-engineering/term=${selectedSemester}-${selectedYear}`);
+        
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
@@ -191,7 +191,7 @@ const BiomedicalEngineering: React.FC = () => {
  
 <div className="poster-container">
 <img
-  src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+  src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
   alt="Project Poster"
   style={{ maxWidth: '100%', maxHeight: 600 }}
 />
@@ -211,7 +211,7 @@ const BiomedicalEngineering: React.FC = () => {
 
   <img
 
-    src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+    src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
 
     alt="Team Photo"
 

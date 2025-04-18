@@ -20,9 +20,9 @@ const Interdisciplinary: React.FC = () => {
   useEffect(() => {
       console.log("Selected semseter:", selectedSemester, selectedYear)
       document.body.classList.add("interdisciplinary-page-body");
-      fetch(`http://localhost:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+      fetch(`https://asucapstone.com:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
         .then((response) => {
-          console.log("http://localhost:3000/api/survey/interdisciplinary/term=${selectedSemester}-${selectedYear}");
+
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
           }
@@ -215,7 +215,10 @@ Click here to see interdisciplinary projects!
 
     <img
 
-      src={`http://localhost:3000${selectedProject.posterPicturePath}`}
+      src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+
+      //src={`http://localhost:3000${selectedProject.posterPicturePath}`}
+
 
       alt="Project Poster"
 
@@ -239,7 +242,11 @@ Click here to see interdisciplinary projects!
 
     <img
 
-      src={`http://localhost:3000${selectedProject.teamPicturePath}`}
+
+      src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+
+      //src={`http://localhost:3000${selectedProject.teamPicturePath}`}
+
 
       alt="Team Photo"
 

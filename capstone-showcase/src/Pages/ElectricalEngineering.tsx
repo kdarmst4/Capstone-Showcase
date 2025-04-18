@@ -20,7 +20,7 @@ const ElectricalEngineering: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("electrical-engineering-page-body");
-    fetch(`http://https://asucapstone.com:3000/api/survey/electrical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+    fetch(`https://asucapstone.com:3000/api/survey/electrical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);

@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "clean": "rimraf ./dist && del-cli ./dist.zip",
+    "clean": "rimraf ./dist ./build .vite tsconfig.tsbuildinfo node_modules/.vite && del-cli ./dist.zip",
+    "build": "tsc -b && vite build",
+    "rebuild": "npm run clean && npm install && npm run build",
     "start": "react-scripts start"
   },
   "dependencies": {

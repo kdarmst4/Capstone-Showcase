@@ -20,7 +20,7 @@ const MechanicalEngineering: React.FC = () => {
   useEffect(() => {
       console.log("Selected semseter:", selectedSemester, selectedYear)
       document.body.classList.add("mechanical-engineering-page-body");
-      fetch(`http://https://asucapstone.com:3000/api/survey/mechanical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+      fetch(`https://asucapstone.com:3000/api/survey/mechanical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
         .then((response) => {
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
@@ -203,7 +203,7 @@ const MechanicalEngineering: React.FC = () => {
 
 <img
 
-  src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+  src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
 
   alt="Project Poster"
 
@@ -227,7 +227,7 @@ const MechanicalEngineering: React.FC = () => {
 
     <img
 
-      src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+      src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
 
       alt="Team Photo"
 
