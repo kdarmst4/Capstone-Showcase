@@ -170,14 +170,14 @@ const MechanicalEngineering: React.FC = () => {
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">Fall 2024</span>
+                <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}
                 </h2>
                 <p className="project-category">
                 
-                Computer Science</p>
+                Mechanical Engineering</p>
 
                 <p className="team-members">
                   

@@ -176,7 +176,7 @@ const Informatics: React.FC = () => {
                 </h2>
                 <p className="project-category">
                 
-                Computer Science</p>
+                Informatics</p>
 
                 <p className="team-members">
                   
