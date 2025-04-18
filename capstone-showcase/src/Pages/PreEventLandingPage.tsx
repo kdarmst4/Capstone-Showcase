@@ -71,11 +71,13 @@ const PreEventLandingPage: React.FC = () => {
           <section className="event-details" aria-label="Event Details Section">
             <article>
               <p>
-                <strong>Showcase Date:</strong> Friday, December 6th
+                <strong>Showcase Date:</strong> Friday, May 2nd
                 <br />
                 <strong>Location:</strong> Memorial Union - Second floor
                 <br />
-                <strong>Event Time:</strong> 12:30pm - 3:00pm
+                <strong>Check In & Poster Pickup Time:</strong> 10:00am - 10:30am
+                <br />
+                <strong>Event Time:</strong> 10:30am - 1:30pm
                 <br />
               </p>
               <p>{landingPageIntro}</p>
