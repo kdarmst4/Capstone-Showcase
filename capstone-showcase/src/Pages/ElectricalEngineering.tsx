@@ -161,14 +161,14 @@ const ElectricalEngineering: React.FC = () => {
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">Fall 2024</span>
+                <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}
                 </h2>
                 <p className="project-category">
                 
-                Computer Science</p>
+                Electrical Engineering</p>
 
                 <p className="team-members">
                   
@@ -190,7 +190,7 @@ const ElectricalEngineering: React.FC = () => {
 <div className="poster-container">
   
   <img
-    src={`http://https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+    src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
     alt="Project Poster"
     style={{ maxWidth: '100%', maxHeight: 600 }}
   />
@@ -202,7 +202,7 @@ const ElectricalEngineering: React.FC = () => {
 <div className="team-container">
   <p><strong>Team Photo</strong></p>
   <img
-    src={`http://https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
+    src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
     alt="Team Photo"
     style={{ maxWidth: '100%', maxHeight: 400 }}
   />
