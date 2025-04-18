@@ -240,7 +240,7 @@ const Survey: React.FC = () => {
         nda,
         attendance,
         posterApproved,
-        //youtubeLink,
+        youtubeLink,
       } = formData;
     
       const errors: FormErrors = {
@@ -257,7 +257,7 @@ const Survey: React.FC = () => {
         nda: !nda ? "Please specify if your group signed an NDA or IP." : "",
         attendance: !attendance ? "Please specify your attendance type." : "",
         posterApproved: nda === "yes" && !posterApproved ? "Please specify if your sponsor approved your poster or not." : "",
-        youtubeLink: "",
+        youtubeLink: !youtubeLink ? "Please include the YouTube link of your presentation video." : "",
       };
     
       if (!email.endsWith("@asu.edu")) {
@@ -268,10 +268,6 @@ const Survey: React.FC = () => {
       }
       if (demo === "yes" && !formData.power) {
         errors.power = "Please specify if your group will need power for your demo.";
-      }
-      if (nda === "no" && !formData.youtubeLink)
-      {
-        errors.youtubeLink = "Please include the YouTube link of your presentation video.";
       }
       if (attendance === "Online" && !formData.zoomLink) {
         errors.zoomLink = "Zoom link is required for online attendance.";
@@ -456,7 +452,7 @@ const Survey: React.FC = () => {
           )}
         </div>
         <div className="form-box">
-    <label>Are you an online or in-person?</label>
+    <label>Are you online or in-person?</label>
     <select
       name="attendance"
       id="attendance"
@@ -543,7 +539,7 @@ const Survey: React.FC = () => {
             </div>
           </div>
         )}
-        <div className="form-box">
+  <div className="form-box">
     <label>Did your group sign an NDA or IP?</label>
     <div className="radio-group">
       <label>
@@ -565,34 +561,14 @@ const Survey: React.FC = () => {
           onChange={handleChange}
         />{" "}
         No
-
-        <div>
-  {formData.nda === "no" && (
-    <div className="form-box form-box-youtube">
-      <label htmlFor="youtubeLink">YouTube Video Link:</label>
-      <input
-        type="url"
-        name="youtubeLink"
-        id="youtubeLink"
-        value={formData.youtubeLink}
-        onChange={handleChange}
-        className="youtube-input"
-      />
-      {errors.youtubeLink && (
-        <p className="error-message">{errors.youtubeLink}</p>
-      )}
-    </div>
-  )}
-  </div>
       </label>
     </div>
     {errors.nda && <p className="error-message">{errors.nda}</p>}
   </div>
 
-
   {formData.nda === "yes" && (
     <div className="form-box">
-      <label>Was your poster approved by the sponsor?</label>
+      <label>Was your poster and video approved by the sponsor?</label>
       <div className="radio-group">
         <label>
           <input
@@ -615,10 +591,26 @@ const Survey: React.FC = () => {
           No
         </label>
       </div>
-      
+      {formData.posterApproved === "no" && (
+        <label>Please verify with your sponsor before submitting.</label>
+      )}
     </div>
   )}
 
+  <div className="form-box">
+    <label htmlFor="youtubeLink">YouTube Video Link:</label>
+      <input
+        type="url"
+        name="youtubeLink"
+        id="youtubeLink"
+        value={formData.youtubeLink}
+        onChange={handleChange}
+        className="youtube-input"
+      />
+    {errors.youtubeLink && (
+      <p className="error-message">{errors.youtubeLink}</p>
+    )}
+  </div>
 
 <div className="contentPoster">
   <span className="title">Upload Your Poster Image</span>
