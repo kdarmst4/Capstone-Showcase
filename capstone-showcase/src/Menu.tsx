@@ -150,7 +150,7 @@ const Menu: React.FC = () => {
                   <Link to="/computer-science">Computer Science Teams</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems Engineering</Link>
+                  <Link to="/computer-systems-engineering">Computer Systems Engineering Teams</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/interdisciplinary" ? "active" : ""}`}>
                   <Link to="/interdisciplinary">Interdisciplinary Teams</Link>
@@ -180,7 +180,7 @@ const Menu: React.FC = () => {
                   <Link to="/computer-science">Computer Science<br />Teams</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
+                  <Link to="/computer-systems-engineering">Computer Systems<br />Engineering Teams</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/industrial-engineering" ? "active" : ""}`}>
                   <Link to="/industrial-engineering">Industrial Engineering<br />Teams</Link>

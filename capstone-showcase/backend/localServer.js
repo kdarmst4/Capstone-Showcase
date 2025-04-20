@@ -61,6 +61,7 @@ const storageTeam = multer.diskStorage({
 });
 const uploadTeam = multer({ storage: storageTeam });
 
+//Poster Images Upload Poster And Return Photo Path
 app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
@@ -71,6 +72,7 @@ app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   res.json({ path:filePath });
 });
 
+//Team Images Upload Poster And Return Photo Path
 app.post("/api/survey/uploadsTeam", uploadTeam.array("contentTeamFiles", 10), (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ error: "No team images uploaded" });
@@ -100,15 +102,14 @@ app.post("/api/survey", (req, res) => {
     nda,
     posterApproved,
     attendance,
-    zoomLink,
     youtubeLink,
     posterPicturePath,
-    teamPicturePath,
+    teamPicturePath
   } = req.body;
 
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
-  let zoomLinkValue = zoomLink || null;
+  
   let ndaValue = nda === "yes" ? 1 : 0;
   let demoValue = demo === "yes" ? 1 : 0;
   let powerValue = power === "yes" ? 1 : 0;
@@ -122,9 +123,9 @@ app.post("/api/survey", (req, res) => {
 
   const sql =
     `INSERT INTO survey_entries (
-      email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
-      posterPicturePath, teamPicturePath,
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, youtubeLink,
+      posterPicturePath, teamPicturePath
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   db.query(
     sql,
@@ -142,7 +143,6 @@ app.post("/api/survey", (req, res) => {
       ndaValue,
       posterNDA,
       attendanceValue,
-      zoomLinkValue,
       youtubeLinkValue,
       posterPicturePath,
       teamPicturePath,

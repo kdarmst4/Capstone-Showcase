@@ -143,15 +143,14 @@ app.post("/api/survey", (req, res) => {
     nda,
     posterApproved,
     attendance,
-    zoomLink,
     youtubeLink,
     posterPicturePath,
-    teamPicturePath,
+    teamPicturePath
   } = req.body;
 
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
-  let zoomLinkValue = zoomLink || null;
+  
   let ndaValue = nda === "yes" ? 1 : 0;
   let demoValue = demo === "yes" ? 1 : 0;
   let powerValue = power === "yes" ? 1 : 0;
@@ -165,9 +164,9 @@ app.post("/api/survey", (req, res) => {
 
   const sql =
     `INSERT INTO survey_entries (
-      email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
+      email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, youtubeLink,
       posterPicturePath, teamPicturePath, submitDate
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   db.query(
     sql,
@@ -185,7 +184,6 @@ app.post("/api/survey", (req, res) => {
       ndaValue,
       posterNDA,
       attendanceValue,
-      zoomLinkValue,
       youtubeLinkValue,
       posterPicturePath,
       teamPicturePath,
@@ -320,6 +318,7 @@ app.get('/api/projects', (req, res) => {
 });
 
 app.put("/api/admin/submissions/:id", (req, res) => {
+  const { id } = req.params;
   const {
     email,
     name,
@@ -332,32 +331,19 @@ app.put("/api/admin/submissions/:id", (req, res) => {
     demo,
     power,
     nda,
-    posterApproved,
-    attendance,
-    zoomLink,
     youtubeLink,
-    posterPicturePath,
-    teamPicturePath,
+    posterImage,
   } = req.body;
 
-  // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
-  let zoomLinkValue = zoomLink || null;
   let ndaValue = nda === "yes" ? 1 : 0;
   let demoValue = demo === "yes" ? 1 : 0;
   let powerValue = power === "yes" ? 1 : 0;
-  let attendanceValue = attendance === "inPerson" ? 1 : 0;
-  let posterNDA = posterApproved === "yes" ? 1 : 0;
 
-  const id = req.params.id;
+  console.log("Updating survey data:", req.body); // Ensure data is logged
 
-  const sql = `
-    UPDATE survey_entries SET
-      email = ?, name = ?, projectTitle = ?, projectDescription = ?, sponsor = ?,
-      numberOfTeamMembers = ?, teamMemberNames = ?, major = ?, demo = ?, power = ?, nda = ?, posterNDA = ?,
-      attendance = ?, zoomLink = ?, youtubeLink = ?, posterPicturePath = ?, teamPicturePath = ?
-    WHERE id = ?
-  `;
+  const sql =
+    "UPDATE survey_entries SET email = ?, name = ?, projectTitle = ?, projectDescription = ?, sponsor = ?, numberOfTeamMembers = ?, teamMemberNames = ?, major = ?, demo = ?, power = ?, nda = ?, youtubeLink = ? WHERE id = ?";
 
   db.query(
     sql,
@@ -367,27 +353,23 @@ app.put("/api/admin/submissions/:id", (req, res) => {
       projectTitle,
       projectDescription,
       sponsor,
-      Number(numberOfTeamMembers),
+      numberOfTeamMembers,
       teamMemberNames,
       major,
       demoValue,
       powerValue,
       ndaValue,
-      posterNDA,
-      attendanceValue,
-      zoomLinkValue,
       youtubeLinkValue,
-      posterPicturePath,
-      teamPicturePath,
+      posterImage,
       id,
     ],
     (err, result) => {
       if (err) {
-        console.error("Error updating submission:", err);
+        console.error("Error updating survey data:", err);
         return res.status(500).send("Server error");
       }
-      console.log("Submission updated successfully");
-      res.status(200).send("Submission updated");
+      console.log("Survey data updated successfully");
+      res.status(200).send("Survey data updated");
     }
   );
 });

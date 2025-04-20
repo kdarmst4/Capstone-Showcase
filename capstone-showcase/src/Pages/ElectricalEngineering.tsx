@@ -20,14 +20,17 @@ const ElectricalEngineering: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("electrical-engineering-page-body");
+    //fetch(`http://localhost:3000/api/survey/electrical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
     fetch(`https://asucapstone.com:3000/api/survey/electrical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
       .then((response) => {
+
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
         return response.json();
       })
       .then((data) => setProjects(data))
+      
       .catch((error) => console.error("Error fetching projects:", error));
 
     return () => {
@@ -168,7 +171,7 @@ const ElectricalEngineering: React.FC = () => {
                 </h2>
                 <p className="project-category">
                 
-                Electrical Engineering</p>
+                Computer Science</p>
 
                 <p className="team-members">
                   
@@ -187,29 +190,40 @@ const ElectricalEngineering: React.FC = () => {
                   </p>
                   {selectedProject.posterPicturePath ? (
 
-<div className="poster-container">
-  
-  <img
-    src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
-    alt="Project Poster"
-    style={{ maxWidth: '100%', maxHeight: 600 }}
-  />
-</div>
-) : (
-<p>No poster uploaded.</p>
-)}
-{selectedProject.teamPicturePath ? (
-<div className="team-container">
-  <p><strong>Team Photo</strong></p>
-  <img
-    src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
-    alt="Team Photo"
-    style={{ maxWidth: '100%', maxHeight: 400 }}
-  />
-</div>
-) : (
-<p>No team image uploaded.</p>
-)}
+                    <div className="poster-container">
+                      
+                      <img
+                      //src={`http://localhost:3000${selectedProject.posterPicturePath}`}
+                        src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
+                        alt="Project Poster"
+                        style={{ maxWidth: '100%', maxHeight: 600 }}
+                      />
+                    </div>
+                    ) : (
+                    <p>No poster uploaded.</p>
+                    )}
+                    {selectedProject.teamPicturePath ? (
+                    <div>
+                      <h3 style={{ marginBottom: '1rem' }}>Team Photos</h3>
+
+                      {(selectedProject.teamPicturePath || "")
+                        .split(",")
+                        .map((path: string, index: number) => {
+                          const trimmedPath = path.trim();
+                          return (
+                            <img
+                              key={index}
+                              //src={`http://localhost:3000${trimmedPath}`}
+                              src={`https://asucapstone.com:3000${trimmedPath}`}
+                              alt={`Team Photo ${index + 1}`}
+                              style={{ maxWidth: '100%', maxHeight: 400, marginBottom: '1rem' }}
+                            />
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <p>No team image uploaded.</p>
+                  )}
                 </div>
               </div>
                 <h3>Abstract</h3>

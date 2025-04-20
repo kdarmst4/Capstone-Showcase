@@ -19,7 +19,7 @@ interface FormData {
   nda: string;
   posterApproved ?: string;
   attendance: string;
-  zoomLink ?: string;
+  //zoomLink ?: string;
   youtubeLink ?: string;
   teamPicturePath ?:string;
   posterPicturePath ?: string;
@@ -39,7 +39,7 @@ interface FormErrors {
   nda: string;
   posterApproved: string;
   attendance: string;
-  zoomLink ?: string;
+  //zoomLink ?: string;
   youtubeLink: string;
   teamPicturePath ?: string;
   posterPicturePath ?: string;
@@ -65,7 +65,7 @@ const Survey: React.FC = () => {
         nda: "",
         posterApproved: "",
         attendance: "",
-        zoomLink: "",
+        //zoomLink: "",
         youtubeLink: "",
         teamPicturePath: "",
         posterPicturePath: "",
@@ -84,7 +84,7 @@ const Survey: React.FC = () => {
         nda: "",
         posterApproved: "",
         attendance: "",
-        zoomLink: "",
+        //zoomLink: "",
         youtubeLink: "",
         teamPicturePath: "",
         posterPicturePath: "",
@@ -96,14 +96,14 @@ const Survey: React.FC = () => {
     const [projects, setProjects] = useState < Project[] > ([]);
     const [, setSelectedProject] = useState < string > ('');
     const [contentTeamFiles, setContentTeamFiles] = useState<File[]>([]);
-    //const [teamImageFile, setTeamImageFile] = useState<File | undefined>();
+    
 
     const navigate = useNavigate();
     
     useEffect(() => {
         // Fetch the list of projects from the backend API
         fetch('https://asucapstone.com:3000/api/projects')
-        //fetch('http://localhost:3000/api/projects')
+        // fetch('http://localhost:3000/api/projects')
         .then((response) => 
             response.json()).then((data) =>
             setProjects(data)).catch((error) => 
@@ -177,8 +177,9 @@ const Survey: React.FC = () => {
         if (selectedFile) {
           const posterData = new FormData();
           posterData.append("poster", selectedFile);
-    
-          const posterRes = await axios.post("https://asucapstone.com:3000/api/survey/uploadsPoster", posterData, {
+
+          // const posterRes = await axios.post("http://localhost:3000/api/survey/uploadsPoster", posterData, {
+           const posterRes = await axios.post("https://asucapstone.com:3000/api/survey/uploadsPoster", posterData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
     
@@ -191,8 +192,9 @@ const Survey: React.FC = () => {
           contentTeamFiles.forEach(file => {
             teamData.append("contentTeamFiles", file); 
           });
-    
-          const teamRes = await axios.post("https://asucapstone.com:3000/api/survey/uploadsTeam", teamData, {
+          
+          // const teamRes = await axios.post("http://localhost:3000/api/survey/uploadsTeam", teamData, {
+           const teamRes = await axios.post("https://asucapstone.com:3000/api/survey/uploadsTeam", teamData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
     
@@ -209,7 +211,8 @@ const Survey: React.FC = () => {
         const submissionData = prepareSubmissionData(updatedFormData);
     
         // Final survey data submission
-        await axios.post("https://asucapstone.com:3000/api/survey", submissionData);
+        // await axios.post("http://localhost:3000/api/survey", submissionData);
+         await axios.post("https://asucapstone.com:3000/api/survey", submissionData);
     
         handleSuccessfulSubmission();
       } catch (error) {
@@ -269,9 +272,7 @@ const Survey: React.FC = () => {
       if (demo === "yes" && !formData.power) {
         errors.power = "Please specify if your group will need power for your demo.";
       }
-      if (attendance === "Online" && !formData.zoomLink) {
-        errors.zoomLink = "Zoom link is required for online attendance.";
-      }
+      
     
       const file = selectedFile;
       if (!file) {
@@ -297,10 +298,10 @@ const Survey: React.FC = () => {
         setFormData(initialFormData);
         setSelectedFile(undefined);
         setIsSubmitted(true);
-        //  setTimeout(() => {
-        //    setIsSubmitted(false);
-        //    navigate("/");
-        //  }, 3000);
+          setTimeout(() => {
+           setIsSubmitted(false);
+            navigate("/");
+          }, 3000);
     };
     const handleCloseSuccessMessage = () => {
         setIsSubmitted(false);
@@ -465,24 +466,7 @@ const Survey: React.FC = () => {
     </select>
     {errors.attendance && (<p className="error-message">{errors.attendance}</p>)}
   </div>
-        <div>
-        {formData.attendance === "online" && (
-        <div className="form-box">
-          <label htmlFor="zoomLink">Zoom link for your online presentation:</label>
-          <input
-            type="url"
-            name="zoomLink"
-            id="zoomLink"
-            value={formData.zoomLink}
-            onChange={handleChange}
-            placeholder="https://zoom.us/..."
-          />
-          {errors.zoomLink && (
-            <p className="error-message">{errors.zoomLink}</p>
-          )}
-        </div>
-        )}
-        </div>
+        
         
         <div className="form-box">
             <label>
