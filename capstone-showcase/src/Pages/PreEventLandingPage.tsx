@@ -55,7 +55,7 @@ const PreEventLandingPage: React.FC = () => {
           <section className="event-details" aria-label="Event Details Section">
             <article>
               <p>
-                <strong>Showcase Date:</strong> Friday, May 2nd
+                <strong>Showcase Date:</strong> Friday, May 2nd 2025
                 <br />
                 <strong>Location:</strong> Memorial Union - Second floor
                 <br />

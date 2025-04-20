@@ -134,7 +134,7 @@ const IndustrialEngineering: React.FC = () => {
                   onClick={handleMoreProjectsClick}
                   aria-label="More Projects Button"
                 >
-                  Click here to see interdisciplinary projects!
+                  Like what you see or don't see your project? Click here to see interdisciplinary projects!
                 </button>
         </section>
       </main>
@@ -156,6 +156,7 @@ const IndustrialEngineering: React.FC = () => {
                     rel="noopener noreferrer"
                     aria-label="Project Video"
                   >
+                    <p style={{ color: "#555" }}>Click Video to View</p>
                     <img 
                       src={extractYouTubeThumbnail(selectedProject.youtubeLink) || ""} 
                       alt={`${selectedProject.projectTitle} Thumbnail`}

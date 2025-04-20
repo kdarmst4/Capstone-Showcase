@@ -48,11 +48,6 @@ const Interdisciplinary: React.FC = () => {
     navigate("/survey");
   };
 
-  const handleMoreProjectsClick = () => {
-
-    navigate("/interdisciplinary");
-
-  };
 
 
 
@@ -141,19 +136,11 @@ const Interdisciplinary: React.FC = () => {
               </div>
             ))
           )}
-       <button
+      
 
-className="more-projects-button"
 
-onClick={handleMoreProjectsClick}
 
-aria-label="More Projects Button"
-
->
-
-Click here to see interdisciplinary projects!
-
-</button>                    
+                   
         </section>
       </main>
 
@@ -174,6 +161,7 @@ Click here to see interdisciplinary projects!
                     rel="noopener noreferrer"
                     aria-label="Project Video"
                   >
+                    <p style={{ color: "#555" }}>Click Video to View</p>
                     <img 
                       src={extractYouTubeThumbnail(selectedProject.youtubeLink) || ""} 
                       alt={`${selectedProject.projectTitle} Thumbnail`}

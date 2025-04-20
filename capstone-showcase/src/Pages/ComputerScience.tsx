@@ -23,7 +23,7 @@ const ComputerScience: React.FC = () => {
 
     // Fetch projects for the Computer Science major
     fetch(`https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
-    //fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
+    //  fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -130,7 +130,7 @@ const ComputerScience: React.FC = () => {
                   onClick={handleMoreProjectsClick}
                   aria-label="More Projects Button"
                 >
-                  Like what you see? Click here to see interdisciplinary projects!
+                  Like what you see or don't see your project? Click here to see interdisciplinary projects!
                 </button>
         </section>
       </main>
@@ -152,6 +152,8 @@ const ComputerScience: React.FC = () => {
                     rel="noopener noreferrer"
                     aria-label="Project Video"
                   >
+                    <p style={{ color: "#555" }}>Click Video to View</p>
+
                     <img 
                       src={extractYouTubeThumbnail(selectedProject.youtubeLink) || ""} 
                       alt={`${selectedProject.projectTitle} Thumbnail`}
