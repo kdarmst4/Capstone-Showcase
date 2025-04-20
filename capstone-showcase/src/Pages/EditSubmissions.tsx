@@ -41,8 +41,8 @@ const EditSubmissions: React.FC = () => {
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        //const response = await axios.get('https://asucapstone.com:3000/api/admin/submissions');
-        const response = await axios.get('http://localhost:3000/api/admin/submissions'); // Ensure this matches your server URL
+        const response = await axios.get('https://asucapstone.com:3000/api/admin/submissions');
+        //const response = await axios.get('http://localhost:3000/api/admin/submissions'); // Ensure this matches your server URL
         console.log('Fetched submissions:', response.data); // Debug: Log the fetched data
         setSubmissions(response.data);
       } catch (error) {

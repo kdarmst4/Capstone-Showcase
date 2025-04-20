@@ -20,7 +20,7 @@ const BiomedicalEngineering: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("biomedical-engineering-page-body");
-    fetch(`https://asucapstone.com:3000/api/survey/biomedical-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
+    fetch(`https://asucapstone.com:3000/api/survey/biomedical-engineering/term=${selectedSemester}-${selectedYear}`)
       .then((response) => {
         
         if (!response.ok) {
@@ -205,20 +205,22 @@ const BiomedicalEngineering: React.FC = () => {
 
 {selectedProject.teamPicturePath ? (
 
-<div className="team-container">
-
-  <p><strong>Team Photo</strong></p>
-
-  <img
-
-    src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
-
-    alt="Team Photo"
-
-    style={{ maxWidth: '100%', maxHeight: 400 }}
-
-  />
-
+<div>
+{(selectedProject.teamPicturePath || "")
+  .split(",")
+  .map((path: string, index: number) => {
+    const trimmedPath = path.trim();
+    return (
+      <img
+        key={index}
+        
+        //src={`http://localhost:3000${trimmedPath}`}
+        src={`https://asucapstone.com:3000${trimmedPath}`}
+        alt= {`Team Photo ${index + 1}`}
+        style={{ maxWidth: '100%', maxHeight: 400, marginBottom: '1rem' }}
+      />
+    );
+  })}
 </div>
 
 ) : (

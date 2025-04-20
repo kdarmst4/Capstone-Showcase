@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/PreEventLandingPage.css";
 import asuLogo from "../assets/asuLogo.png";
@@ -13,7 +12,7 @@ import Footer from "./Footer";
 
 const PreEventLandingPage: React.FC = () => {
   const { isSideMenu } = useMenuContext();
-  const navigate = useNavigate();
+  
   const [, setSavedTime] = useState<string | null>(null);
   const [, setSavedDate] = useState<string | null>(null);
   const [, setSavedImage] = useState<string | null>(null);
@@ -30,13 +29,7 @@ const PreEventLandingPage: React.FC = () => {
     };
   }, []);
 
-  const handleAdminLoginClick = () => {
-    navigate("/admin");
-  };
-
-  // const handleSurveyFormClick = () => {
-  //   navigate("/survey");
-  // };
+  
 
   return (
     <>
@@ -51,16 +44,7 @@ const PreEventLandingPage: React.FC = () => {
           <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
         </header>
         <main className="content-area" aria-label="Main Event Content">
-          <div className="button-container">
-            <button
-              className="admin-login-button"
-              onClick={handleAdminLoginClick}
-              aria-label="Admin Login Button"
-            >
-              Admin Login
-            </button>
-            
-          </div>
+          
           <div className="home-page-title-container">
             <img
               src={showcase}
@@ -75,9 +59,9 @@ const PreEventLandingPage: React.FC = () => {
                 <br />
                 <strong>Location:</strong> Memorial Union - Second floor
                 <br />
-                <strong>Check In & Poster Pickup Time:</strong> 10:00am - 10:30am
+                <strong>Check In & Poster Pickup Time:</strong> 10:00am - 10:30am MST
                 <br />
-                <strong>Event Time:</strong> 10:30am - 1:30pm
+                <strong>Event Time:</strong> 10:30am - 1:30pm MST
                 <br />
               </p>
               <p>{landingPageIntro}</p>

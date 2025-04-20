@@ -1,6 +1,9 @@
 import React from "react";
 import asuLogo from "../assets/asuLogo.png";
 import '../CSS/Footer.css'
+import { Link } from "react-router-dom";
+
+
 
 const Footer: React.FC = () => {
     return(
@@ -18,7 +21,7 @@ const Footer: React.FC = () => {
                     <h4>Website</h4>
                     <ul>
                       <li><a href="https://www.asu.edu/">Arizona State University</a></li>
-                      <li><a href="http://localhost:5173/survey">Showcase Proposal</a></li>
+                      <li> <Link to="/admin">Admin Page</Link> </li>
                       <li><a href="https://betasubmission.asucapstone.com/student-proposal-form">Student Project Proposal</a></li>
                       <li><a href="https://betasubmission.asucapstone.com/sponsor-proposal-form">Sponsor Proposal</a></li>
                     </ul>

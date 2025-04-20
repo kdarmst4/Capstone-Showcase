@@ -13,23 +13,22 @@ export const landingPageIntro: string = `For the last 2 semesters, students majo
         issues related to ethics, economics, safety and professional practice 
         in their design solutions.`;
 
-export const capstoneDescription: string = `The capstone projects are designed to go beyond the classroom to bridge
-        the gap between industry and education, and is the final educational
-        element that ties to together all the engineering, science, and
-        humanities learnings as our students transition to the next phase of
-        their lives. This event is an opportunity for our students, faculty,
-        sponsors, alumni, and guests to come together to celebrate the
-        completion of the projects. We invite you to meet our students and talk
-        to them about their projects, their teamwork, and their problem-solving
-        strategies.`;
+export const capstoneDescription: string = `Capstone projects are designed to extend learning beyond the classroom, bridging the gap between education and industry. 
+        As the culminating experience of our students' academic journey, 
+        these projects integrate knowledge from engineering, science, and the humanities. 
+        This event brings together students, faculty, sponsors, alumni, 
+        and guests to celebrate the successful completion of these projects. 
+        We invite you to connect with our students, explore their work, 
+        and learn about their collaboration, creativity, and problem-solving approaches.`;
 
-export const navigationInstructions: string = `The projects are organized by major and you can navigate through the
-        site via the menu on the top or the left side. You can open the sidebar
-        by clicking on the left arrow icon in the upper left corner of this page.
-        You can also see more projects in the expanded menu by clicking on More ->.
+export const navigationInstructions: string = `Projects are organized by major. 
+        Navigate the site using the menu at the top or on the left side. 
+        Open the sidebar by clicking the left arrow icon in the upper-left corner. 
+        To view more projects, click on ‘More’ in the expanded menu →.
+        Projects can be viewed from different semesters as well with the select semester option on each page.
         `;
 
 export const ourTeamDescription: string = `Meet the talented team of developers who brought this web application to 
-        life during the summer and fall semesters of 2024. This application enables semester teams to 
+        life during the school year. This application enables semester teams to 
         upload and showcase their capstone projects. Additionally, it provides essential information about 
         capstone presentations at ASU for each term.`;

@@ -20,6 +20,7 @@ const ComputerSystemsEngineering: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("computer-systems-engineering-page-body");
+    //fetch(`https://localhost:3000/api/survey/computer-systems-engineering/term=${selectedSemester}-${selectedYear}`)
     fetch(`https://asucapstone.com:3000/api/survey/computer-systems-engineering/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the ComputerSystemsEngineering major
       .then((response) => {
         
@@ -187,6 +188,7 @@ const ComputerSystemsEngineering: React.FC = () => {
   <div className="poster-container">
     
     <img
+      //src={`http://localhost:3000${selectedProject.posterPicturePath}`}
       src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
       alt="Project Poster"
       style={{ maxWidth: '100%', maxHeight: 600 }}
@@ -196,16 +198,29 @@ const ComputerSystemsEngineering: React.FC = () => {
   <p>No poster uploaded.</p>
 )}
 {selectedProject.teamPicturePath ? (
-  <div className="team-container">
-    <p><strong>Team Photo</strong></p>
-    <img
-      src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
-      alt="Team Photo"
-      style={{ maxWidth: '100%', maxHeight: 400 }}
-    />
-  </div>
+
+<div>
+{(selectedProject.teamPicturePath || "")
+  .split(",")
+  .map((path: string, index: number) => {
+    const trimmedPath = path.trim();
+    return (
+      <img
+        key={index}
+        
+        //src={`http://localhost:3000${trimmedPath}`}
+        src={`https://asucapstone.com:3000${trimmedPath}`}
+        alt= {`Team Photo ${index + 1}`}
+        style={{ maxWidth: '100%', maxHeight: 400, marginBottom: '1rem' }}
+      />
+    );
+  })}
+</div>
+
 ) : (
-  <p>No team image uploaded.</p>
+
+<p>No team image uploaded.</p>
+
 )}
 
                 </div>

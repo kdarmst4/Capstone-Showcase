@@ -20,6 +20,8 @@ const Informatics: React.FC = () => {
   useEffect(() => {
     console.log("Selected semseter:", selectedSemester, selectedYear)
     document.body.classList.add("informatics-page-body");
+
+    //fetch(`http://localhost:3000/api/survey/informatics/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
     fetch(`https://asucapstone.com:3000/api/survey/informatics/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
       .then((response) => {
         if (!response.ok) {
@@ -203,6 +205,8 @@ const Informatics: React.FC = () => {
 
     <img
 
+      // src={`https://localhost:3000${selectedProject.posterPicturePath}`}
+
       src={`https://asucapstone.com:3000${selectedProject.posterPicturePath}`}
 
       alt="Project Poster"
@@ -220,28 +224,27 @@ const Informatics: React.FC = () => {
 )}
 
 {selectedProject.teamPicturePath ? (
+                    <div>
+                      <h3 style={{ marginBottom: '1rem' }}>Team Photos</h3>
 
-  <div className="team-container">
-
-    <p><strong>Team Photo</strong></p>
-
-    <img
-
-      src={`https://asucapstone.com:3000${selectedProject.teamPicturePath}`}
-
-      alt="Team Photo"
-
-      style={{ maxWidth: '100%', maxHeight: 400 }}
-
-    />
-
-  </div>
-
-) : (
-
-  <p>No team image uploaded.</p>
-
-)}
+                      {(selectedProject.teamPicturePath || "")
+                        .split(",")
+                        .map((path: string, index: number) => {
+                          const trimmedPath = path.trim();
+                          return (
+                            <img
+                              key={index}
+                              //src={`http://localhost:3000${trimmedPath}`}
+                              src={`https://asucapstone.com:3000${trimmedPath}`}
+                              alt={`Team Photo ${index + 1}`}
+                              style={{ maxWidth: '100%', maxHeight: 400, marginBottom: '1rem' }}
+                            />
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <p>No team image uploaded.</p>
+                  )}
                 </div>
               </div>
                 <h3>Abstract</h3>
