@@ -178,7 +178,7 @@ const Interdisciplinary: React.FC = () => {
                 </h2>
                 <p className="project-category">
                 
-                Interdiciplinary</p>
+                Interdisciplinary</p>
 
                 <p className="team-members">
                   

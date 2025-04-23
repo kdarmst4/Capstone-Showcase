@@ -210,22 +210,6 @@ https.createServer(credentials, app).listen(3000, '0.0.0.0', () => {
 
 
 
-// Endpoint to fetch projects by major
-app.get("/api/survey/:major", (req, res) => {
-  const { major } = req.params;
-  console.log("Major requested:", major); // Log the requested major
-
-  const sql = "SELECT * FROM survey_entries WHERE major = ?";
-  db.query(sql, [major], (err, results) => {
-    if (err) {
-      console.error("Error retrieving data:", err);
-      return res.status(500).send("Server error");
-    }
-    console.log("Query results:", results); // Log the query results
-    res.json(results);
-  });
-});
-
 // Endpoint to fetch projects by major and semester
 app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const { major, semester, year } = req.params;
@@ -267,10 +251,10 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
 });
 
 // Endpoint to fetch projects by semester
-app.get("/api/survey/:semester-:year", (req, res) => {
+app.get("/api/survey/term=:semester-:year", (req, res) => {
   const { semester, year } = req.params;
-
-  console.log("Request parameters:", req.params);
+  console.log("Semester requested:", semester);
+  console.log("Year requested:", year);
 
   if (!semester || !year) {
     console.error("Error: Invalid semester or year");
@@ -289,12 +273,10 @@ app.get("/api/survey/:semester-:year", (req, res) => {
     return res.status(400).send("Bad request");
   }
 
-  // Get last day of month function
   const getLastDayOfMonth = (year, month) => {
     return new Date(year, month, 0).getDate();
   };
 
-  // Set start and end dates dynamically
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDay = getLastDayOfMonth(year, parseInt(endMonth));
   const endDate = `${year}-${endMonth}-${endDay} 23:59:59`;
@@ -308,6 +290,22 @@ app.get("/api/survey/:semester-:year", (req, res) => {
       return res.status(500).send("Server error");
     }
     console.log("Query results:", results);
+    res.json(results);
+  });
+});
+
+// Endpoint to fetch projects by major
+app.get("/api/survey/:major", (req, res) => {
+  const { major } = req.params;
+  console.log("Major requested:", major); // Log the requested major
+
+  const sql = "SELECT * FROM survey_entries WHERE major = ?";
+  db.query(sql, [major], (err, results) => {
+    if (err) {
+      console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results); // Log the query results
     res.json(results);
   });
 });
