@@ -41,20 +41,26 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
   };
 
   const csvHeaders = [
-    'id',
-    'email',
-    'name',
-    'projectTitle',
-    'projectDescription',
-    'sponsor',
-    'teamMemberNames',
-    'numberOfTeamMembers',
-    'major',
-    'demo',
-    'power',
-    'nda',
-    'youtubeLink',
-    'submitDate',
+    "id",
+    "projectTitle",
+    "sponsor",
+    "attendance",
+    "email",
+    "name",
+    "projectDescription",
+    "major",
+    "numberOfTeamMembers",
+    "teamMemberNames",
+    "demo",
+    "nda",
+    "posterNDA",
+    "power",
+    "youtubeLink",
+    "zoomLink",
+    "posterPicturePath",
+    "teamPicturePath",
+    "submitDate"
+    
   ];
 
   const downloadCSV = (csvString: any, filename: string) => {
@@ -81,11 +87,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
     return csvRows.join('\n');
   };
 
-  // Update the function to include the new URL structure
-  const getDatabaseSubmissions = async (major: string, semester: string, year: string) => {
+  //to get major/semester/year
+  const getDatabaseSubmissionsMajor = async (major: string, semester: string, year: string) => {
     try {
-       const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
-      //const response = await axios.get(`https://asucapstone.com:3000/api/survey/${major}/term=${semester}-${year}`);
+       //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
+      const response = await axios.get(`https://asucapstone.com:3000/api/survey/${major}/term=${semester}-${year}`);
       console.log('Fetched submissions:', response.data);
       return response.data;
     } catch (error) {
@@ -93,9 +99,22 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
     }
   };
 
-  const handleDownloadClick = async () => {
+
+  //to get semseter year
+  const getDatabaseSubmissionsAll = async ( semester: string, year: string) => {
+    try {
+       //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
+      const response = await axios.get(`https://asucapstone.com:3000/api/survey/${semester}-${year}`);
+      console.log('Fetched submissions:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching submissions:', error);
+    }
+  };
+
+  const handleDownloadClickMajor = async () => {
     if (selectedMajor && selectedSemester && selectedYear) {
-      const data = await getDatabaseSubmissions(selectedMajor, selectedSemester, selectedYear);
+      const data = await getDatabaseSubmissionsMajor(selectedMajor, selectedSemester, selectedYear);
       if (data === '') {
         // Handle empty JSON data
       } else {
@@ -108,6 +127,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
       }
     } else {
       console.log('Please select all filters (major, semester, and year).');
+    }
+  };
+
+  const handleDownloadClickAll = async () => {
+    if ( selectedSemester && selectedYear) {
+      const data = await getDatabaseSubmissionsAll( selectedSemester, selectedYear);
+      if (data === '') {
+        // Handle empty JSON data
+      } else {
+        const csvString = jsonToCSV(data, csvHeaders);
+        if (csvString === '') {
+          // Handle empty CSV data
+        } else {
+          downloadCSV(csvString, 'database.csv');
+        }
+      }
+    } else {
+      console.log('Please select all filters (semester and year).');
     }
   };
 
@@ -165,8 +202,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
               </div>
 
               <div className="button-row">
-                <div className="dashboard-button" onClick={handleDownloadClick}>
-                  Download Database
+                <div className="dashboard-button" onClick={handleDownloadClickMajor}>
+                  Download Database by Major
+                </div>
+                
+                <div className="dashboard-button" onClick={handleDownloadClickAll}>
+                  Download Database by Semester
                 </div>
                 <div className="dashboard-button" onClick={() => window.location.replace('https://betasubmission.asucapstone.com/login')}>
                   Go to Sponsor Page

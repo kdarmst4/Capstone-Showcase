@@ -19,7 +19,7 @@ interface FormData {
   nda: string;
   posterApproved ?: string;
   attendance: string;
-  //zoomLink ?: string;
+  zoomLink ?: string;
   youtubeLink ?: string;
   teamPicturePath ?:string;
   posterPicturePath ?: string;
@@ -39,7 +39,7 @@ interface FormErrors {
   nda: string;
   posterApproved: string;
   attendance: string;
-  //zoomLink ?: string;
+  zoomLink ?: string;
   youtubeLink: string;
   teamPicturePath ?: string;
   posterPicturePath ?: string;
@@ -65,7 +65,7 @@ const Survey: React.FC = () => {
         nda: "",
         posterApproved: "",
         attendance: "",
-        //zoomLink: "",
+        zoomLink: "",
         youtubeLink: "",
         teamPicturePath: "",
         posterPicturePath: "",
@@ -84,7 +84,7 @@ const Survey: React.FC = () => {
         nda: "",
         posterApproved: "",
         attendance: "",
-        //zoomLink: "",
+        zoomLink: "",
         youtubeLink: "",
         teamPicturePath: "",
         posterPicturePath: "",
@@ -272,6 +272,10 @@ const Survey: React.FC = () => {
       if (demo === "yes" && !formData.power) {
         errors.power = "Please specify if your group will need power for your demo.";
       }
+
+      if (attendance === "Online" && !formData.zoomLink) {
+        errors.zoomLink = "Zoom link is required for online attendance.";
+      }
       
     
       const file = selectedFile;
@@ -321,9 +325,9 @@ const Survey: React.FC = () => {
             Read all questions and descriptions carefully. If you encounter
             issues with this form that prohibit you from submitting accurate
             information, email{" "}
-            <a href="mailto:showcasewebsite@asu.edu">
+            <a href="mailto:sdosburn@asu.edu">
               {" "}
-              showcasewebsite@asu.edu{" "}
+              sdosburn@asu.edu{" "}
             </a>
             with a detailed description of the problem.
           </p>
@@ -466,6 +470,24 @@ const Survey: React.FC = () => {
     </select>
     {errors.attendance && (<p className="error-message">{errors.attendance}</p>)}
   </div>
+        <div>
+        {formData.attendance === "online" && (
+        <div className="form-box">
+          <label htmlFor="zoomLink">Zoom link:</label>
+          <input
+            type="url"
+            name="zoomLink"
+            id="zoomLink"
+            value={formData.zoomLink}
+            onChange={handleChange}
+            placeholder="https://zoom.us/..."
+          />
+          {errors.zoomLink && (
+            <p className="error-message">{errors.zoomLink}</p>
+          )}
+        </div>
+        )}
+        </div>
         
         
         <div className="form-box">
