@@ -61,7 +61,6 @@ const storageTeam = multer.diskStorage({
 });
 const uploadTeam = multer({ storage: storageTeam });
 
-//Poster Images Upload Poster And Return Photo Path
 app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
@@ -72,7 +71,6 @@ app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   res.json({ path:filePath });
 });
 
-//Team Images Upload Poster And Return Photo Path
 app.post("/api/survey/uploadsTeam", uploadTeam.array("contentTeamFiles", 10), (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ error: "No team images uploaded" });
@@ -102,14 +100,15 @@ app.post("/api/survey", (req, res) => {
     nda,
     posterApproved,
     attendance,
+    zoomLink,
     youtubeLink,
     posterPicturePath,
-    teamPicturePath
+    teamPicturePath,
   } = req.body;
 
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
-  
+  let zoomLinkValue = zoomLink || null;
   let ndaValue = nda === "yes" ? 1 : 0;
   let demoValue = demo === "yes" ? 1 : 0;
   let powerValue = power === "yes" ? 1 : 0;
@@ -123,9 +122,9 @@ app.post("/api/survey", (req, res) => {
 
   const sql =
     `INSERT INTO survey_entries (
-      email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, youtubeLink,
-      posterPicturePath, teamPicturePath
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
+      posterPicturePath, teamPicturePath,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   db.query(
     sql,
@@ -143,6 +142,7 @@ app.post("/api/survey", (req, res) => {
       ndaValue,
       posterNDA,
       attendanceValue,
+      zoomLinkValue,
       youtubeLinkValue,
       posterPicturePath,
       teamPicturePath,
@@ -167,23 +167,7 @@ app.listen(3000, () => {
   console.log("Server started on port 3000");
 });
 
-// Endpoint to fetch projects by major
-app.get("/api/survey/:major", (req, res) => {
-  const { major } = req.params;
-  console.log("Major requested:", major); // Log the requested major
-
-  const sql = "SELECT * FROM survey_entries WHERE major = ?";
-  db.query(sql, [major], (err, results) => {
-    if (err) {
-      console.error("Error retrieving data:", err);
-      return res.status(500).send("Server error");
-    }
-    console.log("Query results:", results); // Log the query results
-    res.json(results);
-  });
-});
-
-// Endpoint to fetch projects by major and semester
+/// Endpoint to fetch projects by major and semester
 app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const { major, semester, year } = req.params;
   console.log("Request parameters:", req.params); // Log all parameters
@@ -223,6 +207,66 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   });
 });
 
+// Endpoint to fetch projects by semester
+app.get("/api/survey/term=:semester-:year", (req, res) => {
+  const { semester, year } = req.params;
+  console.log("Semester requested:", semester);
+  console.log("Year requested:", year);
+
+  if (!semester || !year) {
+    console.error("Error: Invalid semester or year");
+    return res.status(400).send("Bad request");
+  }
+
+  let startMonth, endMonth;
+  if (semester === "sp") {
+    startMonth = "04";
+    endMonth = "05";
+  } else if (semester === "fa") {
+    startMonth = "11";
+    endMonth = "12";
+  } else {
+    console.error("Error: Invalid semester");
+    return res.status(400).send("Bad request");
+  }
+
+  const getLastDayOfMonth = (year, month) => {
+    return new Date(year, month, 0).getDate();
+  };
+
+  const startDate = `${year}-${startMonth}-01 00:00:00`;
+  const endDay = getLastDayOfMonth(year, parseInt(endMonth));
+  const endDate = `${year}-${endMonth}-${endDay} 23:59:59`;
+
+  console.log(`Querying from ${startDate} to ${endDate}`);
+
+  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
+  db.query(sql, [startDate, endDate], (err, results) => {
+    if (err) {
+      console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
+});
+
+// Endpoint to fetch projects by major
+app.get("/api/survey/:major", (req, res) => {
+  const { major } = req.params;
+  console.log("Major requested:", major); // Log the requested major
+
+  const sql = "SELECT * FROM survey_entries WHERE major = ?";
+  db.query(sql, [major], (err, results) => {
+    if (err) {
+      console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results); // Log the query results
+    res.json(results);
+  });
+});
+
 //Endpoint to fetch submissions for Admin Page
 app.get("/api/admin/submissions", (req, res) => {
   const sql = "SELECT * FROM survey_entries";
@@ -235,35 +279,7 @@ app.get("/api/admin/submissions", (req, res) => {
   });
 });
 
-// Endpoint to fetch submissions by semester
-app.get("/api/admin/submissions/term=:semester-:year", (req, res) => {
-  const { semester, year } = req.params;
-  console.log("Semester requested:", semester, year); // Log the requested semester and year
 
-  if (semester === "sp") {
-    var month = "04"
-  }
-  else if (semester === "fa") {
-    var month = "11"
-  }
-  else {
-    console.error("Error: Invalid semester");
-    return res.status(400).send("Bad request");
-  }
-  
-  const startDate = `${year}-${month}-01 00:00:00`
-  const endDate = `${year}-${month}-30 23:59:59`
-
-  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
-  db.query(sql, [startDate, endDate], (err, results) => {
-    if (err) {
-      console.error("Error retrieving data:", err);
-      return res.status(500).send("Server error");
-    }
-    console.log("Query results:", results); // Log the query results
-    res.json(results);
-  });
-});
 
 //Endpoint to get a list of all the project titles for Survey Page
 app.get('/api/projects', (req, res) => {
@@ -277,7 +293,6 @@ app.get('/api/projects', (req, res) => {
 });
 
 app.put("/api/admin/submissions/:id", (req, res) => {
-  const { id } = req.params;
   const {
     email,
     name,
@@ -290,19 +305,32 @@ app.put("/api/admin/submissions/:id", (req, res) => {
     demo,
     power,
     nda,
+    posterApproved,
+    attendance,
+    zoomLink,
     youtubeLink,
-    posterImage,
+    posterPicturePath,
+    teamPicturePath,
   } = req.body;
 
+  // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
+  let zoomLinkValue = zoomLink || null;
   let ndaValue = nda === "yes" ? 1 : 0;
   let demoValue = demo === "yes" ? 1 : 0;
   let powerValue = power === "yes" ? 1 : 0;
+  let attendanceValue = attendance === "inPerson" ? 1 : 0;
+  let posterNDA = posterApproved === "yes" ? 1 : 0;
 
-  console.log("Updating survey data:", req.body); // Ensure data is logged
+  const id = req.params.id;
 
-  const sql =
-    "UPDATE survey_entries SET email = ?, name = ?, projectTitle = ?, projectDescription = ?, sponsor = ?, numberOfTeamMembers = ?, teamMemberNames = ?, major = ?, demo = ?, power = ?, nda = ?, youtubeLink = ? WHERE id = ?";
+  const sql = `
+    UPDATE survey_entries SET
+      email = ?, name = ?, projectTitle = ?, projectDescription = ?, sponsor = ?,
+      numberOfTeamMembers = ?, teamMemberNames = ?, major = ?, demo = ?, power = ?, nda = ?, posterNDA = ?,
+      attendance = ?, zoomLink = ?, youtubeLink = ?, posterPicturePath = ?, teamPicturePath = ?
+    WHERE id = ?
+  `;
 
   db.query(
     sql,
@@ -312,23 +340,27 @@ app.put("/api/admin/submissions/:id", (req, res) => {
       projectTitle,
       projectDescription,
       sponsor,
-      numberOfTeamMembers,
+      Number(numberOfTeamMembers),
       teamMemberNames,
       major,
       demoValue,
       powerValue,
       ndaValue,
+      posterNDA,
+      attendanceValue,
+      zoomLinkValue,
       youtubeLinkValue,
-      posterImage,
+      posterPicturePath,
+      teamPicturePath,
       id,
     ],
     (err, result) => {
       if (err) {
-        console.error("Error updating survey data:", err);
+        console.error("Error updating submission:", err);
         return res.status(500).send("Server error");
       }
-      console.log("Survey data updated successfully");
-      res.status(200).send("Survey data updated");
+      console.log("Submission updated successfully");
+      res.status(200).send("Submission updated");
     }
   );
 });

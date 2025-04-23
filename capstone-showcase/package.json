@@ -8,7 +8,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "clean": "rimraf ./dist ./build .vite tsconfig.tsbuildinfo node_modules/.vite && del-cli ./dist.zip",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && copy .htaccess dist\\.htaccess",
     "rebuild": "npm run clean && npm install && npm run build",
     "start": "react-scripts start"
   },
