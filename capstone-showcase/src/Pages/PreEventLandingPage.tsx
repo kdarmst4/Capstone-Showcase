@@ -57,7 +57,7 @@ const PreEventLandingPage: React.FC = () => {
               <p>
                 <strong>Showcase Date:</strong> Friday, May 2nd 2025
                 <br />
-                <strong>Location:</strong> Memorial Union - Second floor
+                <strong>Location:</strong> Memorial Union - Second floor<br />301 E Orange St., Tempe, AZ 85281
                 <br />
                 <strong>Check In & Poster Pickup Time:</strong> 10:00am - 10:30am MST
                 <br />
