@@ -196,7 +196,7 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
 
-  const sql = "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY id";
+  const sql = "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY projectTitle";
   db.query(sql, [major, startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -240,7 +240,7 @@ app.get("/api/survey/term=:semester-:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ? ORDER BY id";
+  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -256,7 +256,7 @@ app.get("/api/survey/:major", (req, res) => {
   const { major } = req.params;
   console.log("Major requested:", major); // Log the requested major
 
-  const sql = "SELECT * FROM survey_entries WHERE major = ? ORDER BY id";
+  const sql = "SELECT * FROM survey_entries WHERE major = ? ORDER BY projectTitle";
   db.query(sql, [major], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -269,7 +269,7 @@ app.get("/api/survey/:major", (req, res) => {
 
 //Endpoint to fetch submissions for Admin Page
 app.get("/api/admin/submissions", (req, res) => {
-  const sql = "SELECT * FROM survey_entries ORDER BY id";
+  const sql = "SELECT * FROM survey_entries";
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error fetching submissions:", err);
