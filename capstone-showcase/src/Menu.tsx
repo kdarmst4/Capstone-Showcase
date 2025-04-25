@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { useMenuContext } from "./MenuContext";
-import arrowIcon from "./assets/newArrow.png";
 import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
 
 const Menu: React.FC = () => {
   const { pathname } = useLocation();
   const { isSideMenu, toggleMenu } = useMenuContext();
-  const [isMajorsOpen, setIsMajorsOpen] = useState(false);
   //const submenuRef = useRef<HTMLLIElement>(null);
   const [currentSemester, setCurrentSemester] = useState<"sp" | "fa" | null>(null);
   const [currentYear, setCurrentYear] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const toggleMajors = () => setIsMajorsOpen(prev => !prev);
 
   const getAvailableSemesters = () => {
     const now = new Date();
@@ -98,7 +94,7 @@ const Menu: React.FC = () => {
 
       {currentSemester && currentYear && (
         <div className="selected-semester-label">
-          Selected Semester: <strong>{currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}</strong>
+          Showing projects from: <strong>{currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}</strong>
         </div>
       )}
     </li>
@@ -119,11 +115,6 @@ const Menu: React.FC = () => {
                   <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                 </svg>
               </Link>
-              {currentSemester && currentYear && (
-                <div className="selected-semester-label">
-                  Showing projects from: <strong>{currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}</strong>
-                </div>
-              )}
             </li>
 
              {/* Shared Links */}
@@ -163,37 +154,29 @@ const Menu: React.FC = () => {
                   <Link to="/about">Meet Our<br />Team</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
-                  <Link to="/computer-science">Computer Science</Link>
+                  <Link to="/computer-science">Computer<br />Science</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
                   <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/industrial-engineering" ? "active" : ""}`}>
-                  <Link to="/industrial-engineering">Industrial Engineering</Link>
+                  <Link to="/industrial-engineering">Industrial<br />Engineering</Link>
                 </li>
                 <li className={`menu-item ${pathname === "/interdisciplinary" ? "active" : ""}`}>
                   <Link to="/interdisciplinary">Interdisciplinary</Link>
                 </li>
-                {isMajorsOpen && (
-                  <>
-                    <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
-                      <Link to="/biomedical-engineering">Biomedical Engineering</Link>
-                    </li>
-                    <li className={`menu-item ${pathname === "/mechanical-engineering" ? "active" : ""}`}>
-                      <Link to="/mechanical-engineering">Mechanical Engineering</Link>
-                    </li>
-                    <li className={`menu-item ${pathname === "/electrical-engineering" ? "active" : ""}`}>
-                      <Link to="/electrical-engineering">Electrical Engineering</Link>
-                    </li>
-                    <li className={`menu-item ${pathname === "/informatics" ? "active" : ""}`}>
-                      <Link to="/informatics">Informatics</Link>
-                    </li>
-                  </>
-                )}
-                <div className="majors-title" onClick={toggleMajors}>
-                  {isMajorsOpen ? "Less" : "More"}<br />
-                  <img src={arrowIcon} alt="Arrow Icon" className={`arrow ${isMajorsOpen ? "revArrow" : ""}`} />
-                </div>
+                <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
+                  <Link to="/biomedical-engineering">Biomedical<br />Engineering</Link>
+                </li>
+                <li className={`menu-item ${pathname === "/mechanical-engineering" ? "active" : ""}`}>
+                  <Link to="/mechanical-engineering">Mechanical<br />Engineering</Link>
+                </li>
+                <li className={`menu-item ${pathname === "/electrical-engineering" ? "active" : ""}`}>
+                  <Link to="/electrical-engineering">Electrical<br />Engineering</Link>
+                </li>
+                <li className={`menu-item ${pathname === "/informatics" ? "active" : ""}`}>
+                  <Link to="/informatics">Informatics</Link>
+                </li>
               </>
             ))}
 
