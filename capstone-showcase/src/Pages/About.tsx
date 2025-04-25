@@ -118,7 +118,7 @@ const teamMembers = [
 
 const About = () => {
   const { isSideMenu } = useMenuContext();
-  const membersPerRow = Math.ceil(teamMembers.length / 3);
+  const membersPerRow = Math.ceil(teamMembers.length / 4);
 
   useEffect(() => {
     document.body.classList.add("about-page-body");
@@ -140,7 +140,7 @@ const About = () => {
         </section>
         <div className="underline"></div>
         <section className="team-section">
-          {Array(3)
+          {Array(4)
             .fill(0)
             .map((_, rowIndex) => (
               <div className="team-row" key={rowIndex}>
