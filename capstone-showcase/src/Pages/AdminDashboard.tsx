@@ -104,7 +104,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
   const getDatabaseSubmissionsAll = async ( semester: string, year: string) => {
     try {
        //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
-      const response = await axios.get(`https://asucapstone.com:3000/api/survey/${semester}-${year}`);
+      const response = await axios.get(`https://asucapstone.com:3000/api/survey/term=${semester}-${year}`);
       console.log(response);
       console.log('Fetched submissions:', response.data);
       return response.data;
