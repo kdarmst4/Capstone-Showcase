@@ -69,8 +69,30 @@ const PreEventLandingPage: React.FC = () => {
               <p>{navigationInstructions}</p>
             </article>
           </section>
-        </main>
+          <section className="pdf-section" aria-label="Event Map and Resourses" style={{ marginTop: "40px", textAlign: "center" }}>
+          <h2>Event Map & Resources</h2>
+          <p>Explore the venue maps and download the showcase materials below.</p>
 
+          <div style={{ marginTop: "30px", display: "flex", justifyContent: "center" }}>
+          <embed
+          src="/pdfs/secondFloor_emsFeatures.pdf"
+          type="application/pdf"
+          width="80%"
+          height="600px"
+          />
+          </div>
+
+          <div style={{ marginTop: "20px" }}>
+          <a
+          href="/pdfs/SP25 SCAI Capstone Locations and Diagrams.pdf"
+          download
+          style={{ color: "#8C1D40", fontSize: "18px", fontWeight: "bold", textDecoration: "underline" }}
+          >
+          Download Capstone Locations and Diagrams (PDF)
+          </a>
+          </div>
+          </section>
+        </main>
         <Footer />
       </div>
     </>
