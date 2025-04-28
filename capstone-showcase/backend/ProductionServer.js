@@ -283,13 +283,14 @@ app.get("/api/survey/term=:semester-:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
+  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ? ORDER BY projectTitle";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
       return res.status(500).send("Server error");
     }
     console.log("Query results:", results);
+    results.sort((a, b) => a.projectTitle.localeCompare(b.projectTitle));
     res.json(results);
   });
 });
