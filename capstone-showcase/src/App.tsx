@@ -7,7 +7,7 @@ import PreEventLandingPage from "./Pages/PreEventLandingPage";
 import ComputerScience from "./Pages/ComputerScience";
 import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
-import Survey from "./Pages/Survey";
+//import Survey from "./Pages/Survey";
 import Informatics from "./Pages/Informatics";
 import Interdisciplinary from "./Pages/Interdisciplinary";
 import ElectricalEngineering from "./Pages/ElectricalEngineering";
@@ -52,7 +52,7 @@ const App: React.FC = () => {
             />
             <Route path="/informatics" element={<Informatics />} />
             <Route path="/interdisciplinary" element={<Interdisciplinary />} />
-            <Route path="/survey" element={<Survey />} />
+            {/* <Route path="/survey" element={<Survey />} /> */}
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="admin-dashboard" element={<AdminDashboard pageTitle="Dashboard" />} />
             <Route path="admin-dashboard/edit" element={<AdminDashboard pageTitle="Edit" />} />

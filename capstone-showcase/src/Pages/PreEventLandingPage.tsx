@@ -64,12 +64,7 @@ const PreEventLandingPage: React.FC = () => {
                 <strong>Event Time:</strong> 10:30am - 1:30pm MST
                 <br />
               </p>
-              <p>{landingPageIntro}</p>
-              <p>{capstoneDescription}</p>
-              <p>{navigationInstructions}</p>
-            </article>
-          </section>
-          <section className="pdf-section" aria-label="Event Map and Resourses" style={{ marginTop: "40px", textAlign: "center" }}>
+              <section className="pdf-section" aria-label="Event Map and Resourses" style={{ marginTop: "40px", textAlign: "center" }}>
           <h2>Event Map & Resources</h2>
           <p>Explore the venue maps and download the showcase materials below.</p>
 
@@ -92,6 +87,12 @@ const PreEventLandingPage: React.FC = () => {
           </a>
           </div>
           </section>
+              <p>{landingPageIntro}</p>
+              <p>{capstoneDescription}</p>
+              <p>{navigationInstructions}</p>
+            </article>
+          </section>
+          
         </main>
         <Footer />
       </div>
