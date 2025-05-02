@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { MenuProvider } from "./MenuContext";
 import Menu from "./Menu";
-import PreEventLandingPage from "./Pages/PreEventLandingPage";
+import LandingPage from "./Pages/LandingPage";
 import ComputerScience from "./Pages/ComputerScience";
 import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
@@ -27,7 +27,7 @@ const App: React.FC = () => {
         <Menu />
         <div className="content">
           <Routes>
-            <Route path="/" element={<PreEventLandingPage />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/computer-science" element={<ComputerScience />} />
             <Route

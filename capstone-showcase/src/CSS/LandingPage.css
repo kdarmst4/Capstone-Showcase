@@ -1,0 +1,144 @@
+body.landing-page-body {
+  font-family: "Arial", sans-serif;
+}
+
+.landing-page {
+  margin: 0;
+  padding-top: 20px;
+  text-align: center;
+  transition: margin-left 0.3s ease;
+}
+
+.landing-page.compressed {
+  margin-left: 270px;
+}
+
+.landing-page .asu-logo {
+  margin-top: 0px;
+  width: 400px;
+  transition: transform 0.3s ease;
+}
+
+.asu-logo:hover {
+  transform: scale(1.05);
+}
+
+.header-background {
+  background-image: url("../assets/mainBack.jpeg");
+  background-size: cover;
+  background-position: center 5%;
+  padding: 40px 10px;
+  color: white;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 8px solid black;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.header-background h1,
+.header-background h2,
+.header-background h3 {
+  margin: 10px 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 5px;
+}
+
+.admin-login-button {
+  background-color: #8c1d40;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.admin-login-button:hover,
+.survey-form-button:hover {
+  background-color: #611029;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.admin-login-button:focus,
+.survey-form-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(140, 29, 64, 0.5);
+}
+
+.showcase-image {
+  width: 26.35%;
+  height: auto;
+  margin-top: 27px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.showcase-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  cursor: default;
+}
+
+.content-area {
+  background: white !important;
+  padding-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.event-details {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.event-details article {
+  display: inline-block;
+  text-align: left;
+  width: 80%;
+}
+
+.event-details article p {
+  color: black;
+  font-weight: bold;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.event-details article p:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+}
+
+.team-image {
+  width: 100%;
+  height: auto;
+}
+
+.group-image {
+  width: 64%;
+  height: auto;
+}
+
+.poster-image {
+  width: 36%;
+  height: auto;
+}
