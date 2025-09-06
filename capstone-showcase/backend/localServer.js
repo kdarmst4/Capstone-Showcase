@@ -4,10 +4,11 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const dotenv = require("dotenv");
+dotenv.config();
 const multer = require("multer");
 const fs = require("fs");
-dotenv.config();
-const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE);
+// the || was an addition make sure to recomove it
+const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE || "mysql2");
 
 //Local DB Different
 app.use(bodyParser.json());
@@ -15,8 +16,8 @@ app.use(cors());
 
 const db = mysql.createConnection({
   host: process.env.LOCAL_DB_HOST,
-  user: process.env.LOCAL_DB_USERNAME,
-  password: process.env.LOCAL_DB_PASSWORD,
+  user: process.env.LOCAL_DB_USERNAME || "root",
+  password: process.env.LOCAL_DB_PASSWORD || "password",
   database: process.env.LOCAL_DB_DATABASE,
   
 });
