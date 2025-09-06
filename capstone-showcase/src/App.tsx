@@ -20,6 +20,7 @@ import EditPresentation from "./Pages/EditPresentation";
 import EditSubmissions from "./Pages/EditSubmissions";
 import ContactSupport from "./Pages/ContactSupport";
 import Winners from "./Pages/Winners";
+import ProjectDetails from "./Pages/ProjectDetails";
 
 const App: React.FC = () => {
   return (
@@ -29,7 +30,10 @@ const App: React.FC = () => {
         <div className="content">
           <Routes>
             <Route path="/" element={<PreEventLandingPage />} />
+
             <Route path="/winners" element={<Winners />} />
+            <Route path="/winners/:projectId" element={<ProjectDetails />} />
+
             <Route path="/about" element={<About />} />
             <Route path="/computer-science" element={<ComputerScience />} />
             <Route
