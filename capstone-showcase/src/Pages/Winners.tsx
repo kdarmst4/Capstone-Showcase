@@ -1,7 +1,51 @@
 import "../CSS/WinnersForm.css";
-import { Winners, FeaturedWinners } from "../WinnerComponent";
+import { Winners } from "../WinnerComponent";
 import {useState, useEffect} from "react";
 
+
+interface PastWinnersProps {
+  name: string;
+  project: string;
+  position?: number;
+  department: string;
+  year: number;
+  semester?: string;
+  author?: string;
+  description: string;
+}
+
+export const pastWinners: PastWinnersProps[] = [
+  {
+    name: "Jane Doe",
+    project: "Smart Campus Navigation",
+    department: "Computer Science",
+    semester: "Fall",
+    position: 1,
+    year: 2025,
+    description:
+      "A mobile app that helps students navigate campus buildings using real-time data.",
+  },
+  {
+    name: "John Smith",
+    project: "Eco-Friendly Water Purifier",
+    department: "Mechanical Engineering",
+    semester: "Spring",
+    position: 2,
+    year: 2024,
+    description:
+      "A sustainable water purification system designed for remote communities.",
+  },
+  {
+    name: "Alice Johnson",
+    project: "AI Health Assistant",
+    department: "Biomedical Engineering",
+    semester: "Summer",
+    year: 2025,
+    position: 3,
+    description:
+      "An AI-powered assistant that helps monitor patient health and provide personalized care.",
+  },
+];
 const Winner: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from(
@@ -70,7 +114,7 @@ const Winner: React.FC = () => {
 
       {
         hasFiltered == false ? (
-           <Winners />
+           <Winners winners={pastWinners} />
         ) : (
             <p>Here are the winners:</p>
         )
