@@ -4,16 +4,23 @@ WinnersForm.css
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
+  min-width: 320px;
+  max-width: 100%;
+}
+
+.winners-showcase-title {
+  color:#8C1D40; 
+  font-family: sans-serif; 
+  padding-top: 1rem;
 }
 
 .winners-form {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 24px;
+  gap: 1.5rem;
   background: #f9f9f9;
-  padding: 32px 24px;
+  padding: 2rem 1.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   align-items: flex-end;

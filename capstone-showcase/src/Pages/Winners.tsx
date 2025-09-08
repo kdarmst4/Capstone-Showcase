@@ -1,5 +1,5 @@
 import "../CSS/WinnersForm.css";
-import { Winners } from "../WinnerComponent";
+import { WinnerComponent } from "../WinnerComponent";
 import {useState, useEffect} from "react";
 
 
@@ -63,7 +63,7 @@ const Winner: React.FC = () => {
   
   return (
     <div className="winners-form-container">
-      <h1 style={{color:'#8C1D40', fontFamily:'sans-serif', paddingTop:'1rem'}}>ASU Winners Showcase</h1>
+      <h1 className="winners-showcase-title">ASU Winners Showcase</h1>
       <form className="winners-form" onSubmit={handleSearch}>
         <span>
           <label htmlFor="semester">Semester:</label>
@@ -114,7 +114,7 @@ const Winner: React.FC = () => {
 
       {
         hasFiltered == false ? (
-           <Winners winners={pastWinners} />
+           <WinnerComponent winners={pastWinners} />
         ) : (
             <p>Here are the winners:</p>
         )
