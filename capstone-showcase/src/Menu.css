@@ -21,8 +21,8 @@
 
 .top-menu .asu-logo {
   width: 150px;
-  margin-top: 20px;
-  margin-right: 5px;
+  /* margin-top: 20px; */
+  /* margin-right: 5px; */
 }
 
 .side-menu .asu-logo {
@@ -194,7 +194,7 @@
 }
 
 .top-menu .toggle-button {
-  margin: 25px 10px 0 10px;
+  margin: 0px 10px 0 10px;
 }
 
 .side-menu .toggle-button {
@@ -249,7 +249,6 @@
 .top-menu .menu-container {
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
 }
 
 .top-menu .submenu-container {
@@ -273,4 +272,9 @@
 
 ::-webkit-scrollbar-track {
   background: #d3d3d3;
+}
+
+.semester-selector label {
+  color: black;
+  margin-right: 8px;
 }
