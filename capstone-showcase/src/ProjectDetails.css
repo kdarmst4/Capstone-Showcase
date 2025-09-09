@@ -104,6 +104,10 @@ box-sizing: border-box;
   grid-template-columns: 1fr;
   gap: 2rem;
 }
+.project-gallery
+{
+  position: relative;
+}
 
 @media (min-width: 992px) {
   .project-content {
@@ -326,20 +330,23 @@ box-sizing: border-box;
   margin-top: 1.5rem;
 }
 
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .project-title {
     font-size: 2rem;
   }
-  
   .gallery-image-container {
     min-height: 300px;
   }
-  
   .team-members {
     flex-direction: column;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
+  }
+  .project-gallery {
+    position: static !important;
+    top: auto !important;
   }
 }
