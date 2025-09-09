@@ -17,11 +17,10 @@ const Menu: React.FC = () => {
   const getAvailableSemesters = () => {
     const now = new Date();
     const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
     const semesters: { semester: "sp" | "fa"; year: string }[] = [];
 
-    if (currentMonth < 8) semesters.push({ semester: "sp", year: currentYear.toString() });
-    if (currentMonth >= 7) semesters.push({ semester: "fa", year: currentYear.toString() });
+    semesters.push({ semester: "sp", year: currentYear.toString() });
+    semesters.push({ semester: "fa", year: currentYear.toString() });
 
     semesters.push({ semester: "sp", year: (currentYear - 1).toString() });
     semesters.push({ semester: "fa", year: (currentYear - 1).toString() });

@@ -1,31 +1,14 @@
 import { useParams, useLocation, Link } from "react-router-dom";
 import "../ProjectDetails.css";
-import { pastWinners } from "./Winners";
 import { 
   UsersRound, Facebook, Linkedin, Twitter, 
   Share, Medal, Calendar, GraduationCap, 
-  ChevronLeft, ChevronRight, Download, ExternalLink 
+  ChevronLeft, ChevronRight, ExternalLink 
 } from "lucide-react";
 import { ImageMinus } from "lucide-react";
 import Footer from "./Footer";
 import { useState, useEffect } from "react";
 
-interface PastWinnersProps {
-  name: string;
-  project: string;
-  position?: number;
-  department: string;
-  year: number;
-  semester?: string;
-  author?: string;
-  description: string;
-  teamMembers?: string[];
-  images?: string[];
-  videoLink?: string;
-  projectLink?: string;
-  projectPdf?: string;
-  category?: string;
-}
 
 type ShowcaseEntry = {
   course: string;
@@ -180,10 +163,10 @@ export default function ProjectDetails() {
       alert("No project data to share!");
       return;
     }
-  const url = window.location.href;
+  const url = window.location.origin + window.location.pathname;
     const title = "ASU Capstone Project";
     const projectTitle = winner.ProjectTitle;
-    const description = winner.description;
+    const description = winner.description.substring(0, 125) + '...';
     const shareText = `${title}\n${projectTitle}\n\nProject Description: ${description}\n\n${url}`;
 
     switch (platform) {
