@@ -24,15 +24,15 @@ import ProjectDetails from "./Pages/ProjectDetails";
 
 const App: React.FC = () => {
   return (
-    <MenuProvider>
-      <Router>
+    <Router>
+      <MenuProvider>
         <Menu />
         <div className="content">
           <Routes>
             <Route path="/" element={<PreEventLandingPage />} />
 
             <Route path="/winners" element={<Winners />} />
-            <Route path="/winners/:projectId" element={<ProjectDetails />} />
+            <Route path="/winners/entry/:id" element={<ProjectDetails />} />
 
             <Route path="/about" element={<About />} />
             <Route path="/computer-science" element={<ComputerScience />} />
@@ -60,17 +60,31 @@ const App: React.FC = () => {
             <Route path="/interdisciplinary" element={<Interdisciplinary />} />
             {/* <Route path="/survey" element={<Survey />} /> */}
             <Route path="/admin" element={<AdminLogin />} />
-            <Route path="admin-dashboard" element={<AdminDashboard pageTitle="Dashboard" />} />
-            <Route path="admin-dashboard/edit" element={<AdminDashboard pageTitle="Edit" />} />
-            <Route path="admin-dashboard/edit/presentation" element={<EditPresentation />} />
-            <Route path="admin-dashboard/edit/submissions" element={<EditSubmissions />} />
+            <Route
+              path="admin-dashboard"
+              element={<AdminDashboard pageTitle="Dashboard" />}
+            />
+            <Route
+              path="admin-dashboard/edit"
+              element={<AdminDashboard pageTitle="Edit" />}
+            />
+            <Route
+              path="admin-dashboard/edit/presentation"
+              element={<EditPresentation />}
+            />
+            <Route
+              path="admin-dashboard/edit/submissions"
+              element={<EditSubmissions />}
+            />
 
-
-            <Route path="admin-dashboard/support" element={<ContactSupport />} />
+            <Route
+              path="admin-dashboard/support"
+              element={<ContactSupport />}
+            />
           </Routes>
         </div>
-      </Router>
-    </MenuProvider>
+      </MenuProvider>
+    </Router>
   );
 };
 

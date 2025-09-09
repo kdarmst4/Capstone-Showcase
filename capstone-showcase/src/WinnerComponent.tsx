@@ -1,5 +1,7 @@
 import { ImageMinus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+
 
 interface FeaturedWinner {
   name: string;
@@ -12,10 +14,31 @@ interface FeaturedWinner {
   description: string;
 }
 
+type ShowcaseEntry = {
+  course: string;
+  EntryID: number;
+  video: string;
+  shouldDisplay: "YES" | "NO"; 
+  position: number;
+  members: string;
+  Sponsor: string;
+  description: string;
+  ProjectTitle: string;
+  winning_pic: string | null;
+  department?: string;
+  NDA: "Yes" | "No"; 
+  year: number;
+  semester: "Spring" | "Summer" | "Fall" | "Winter"; 
+};
 
 
 
-export function Winners( { winners }: { winners: FeaturedWinner[] } ) {
+
+export function Winners( { winners }: { winners: ShowcaseEntry[] } ) {
+
+  const queryParams = new URLSearchParams(useLocation().search);
+  const semester = queryParams.get("semester");
+  const year = queryParams.get("year");
 
   const getSource = (position?: number) => {
     switch (position) {
@@ -49,11 +72,14 @@ export function Winners( { winners }: { winners: FeaturedWinner[] } ) {
       style={{
         display: "flex",
         flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        alignItems: "center",
         gap: "1rem",
         paddingTop: "1rem",
       }}
     >
-      {winners.map((winner: FeaturedWinner, index:number) => (
+      {winners.map((winner: ShowcaseEntry, index:number) => (
         <div
           key={index}
           style={{
@@ -84,7 +110,7 @@ export function Winners( { winners }: { winners: FeaturedWinner[] } ) {
             <ImageMinus size={80} />
             <img
               src={getSource(winner.position)}
-              alt={winner.project}
+              alt={winner.winning_pic?.split(',')[0] || "Winner"} //getting the first image of the array
               style={{
                 position: "absolute",
                 top: 0,
@@ -101,9 +127,11 @@ export function Winners( { winners }: { winners: FeaturedWinner[] } ) {
 
           {/* Text section */}
           <div style={{ color: "black", textAlign: "left", margin: 0 }}>
-            <p style={{ margin: 0, fontWeight: "600" }}>{winner.project}</p>
+            <p title={winner.ProjectTitle} style={{ margin: 0, fontWeight: "600",display: "-webkit-box",
+                WebkitLineClamp: 1, WebkitBoxOrient: "vertical", overflow: "hidden",
+                textOverflow: "ellipsis" }}>{winner.ProjectTitle}</p>
             <p style={{ margin: 0, fontSize: "0.90rem" }}>
-              by {winner.author || "John Doe"}
+              by {winner.Sponsor || "John Doe"}
             </p>
             <div
               style={{
@@ -131,7 +159,8 @@ export function Winners( { winners }: { winners: FeaturedWinner[] } ) {
                   fontSize: "0.90rem",
                 }}
               >
-                {winner.department}
+                {/* //default to computer science if no department is provided */}
+                {winner.department || "Computer Science"} 
               </span>
             </div>
             <p
@@ -148,9 +177,12 @@ export function Winners( { winners }: { winners: FeaturedWinner[] } ) {
               {winner.description}
             </p>
             <div style={{marginTop:'1rem'}}>
-              <Link
-                to={`/winners/${winner.project}`}
-                state={{ winner }}
+              <button
+                onClick={() => {
+                 const encodedWinner = encodeURIComponent(JSON.stringify(winner));
+                 console.log('encodedWinner', encodedWinner);
+                 window.location.href = `/winners/entry/${winner.EntryID || 1}?data=${encodedWinner}&semester=${semester || ''}&year=${year || ''}`;
+                }}
                 style={{
                   marginTop: "0.75rem",
                   background: "#8C1D40",
@@ -165,7 +197,7 @@ export function Winners( { winners }: { winners: FeaturedWinner[] } ) {
                 }}
               >
                 More Details
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -27,41 +27,44 @@ interface PastWinnersProps {
   category?: string;
 }
 
+type ShowcaseEntry = {
+  course: string;
+  EntryID: number;
+  video: string;
+  shouldDisplay: "YES" | "NO"; 
+  position: number;
+  members: string;
+  Sponsor: string;
+  description: string;
+  ProjectTitle: string;
+  winning_pic: string | null;
+  department?: string;
+  NDA: "Yes" | "No"; 
+  year: number;
+  semester: "Spring" | "Summer" | "Fall" | "Winter"; 
+};
+
 export default function ProjectDetails() {
-  const location = useLocation();
-  const { projectId } = useParams();
-  let winner = location.state?.winner;
+ const { id:projectId } = useParams(); // gets "123"
+  const location = useLocation(); 
+  const queryParams = new URLSearchParams(location.search);
+  const winnerData = queryParams.get("data");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const winner: ShowcaseEntry | null = winnerData ? JSON.parse(decodeURIComponent(winnerData)) : null;
+  console.log("Project ID from URL:", projectId);
+  console.log("Winner from state:", winner);
+
+
   // Mock images array (replace with actual images from winner object when available)
-  const projectImages = winner?.images || [
+  const projectImages = winner?.winning_pic && winner?.winning_pic.split(",") || [
     "https://img.freepik.com/free-photo/cool-geometric-triangular-figure-neon-laser-light-great-backgrounds-wallpapers_181624-9331.jpg",
     "/src/assets/showcase.jpg",
     "/src/assets/capstone-showcase/src/assets/asuSquareLogo.png"
   ];
 
-  // Fallback: find winner by projectId if not passed in state
-  if (!winner && projectId) {
-    winner = pastWinners.find((w: PastWinnersProps) => w.project === projectId);
-  }
-
-  if (!winner) {
-    return (
-      <div className="project-not-found">
-        <h2>Project not found</h2>
-        <p>The project you're looking for doesn't exist or has been removed.</p>
-        <Link to="/winners" className="back-button">
-          <ChevronLeft size={18} /> Back to Winners
-        </Link>
-      </div>
-    );
-  }
-
-  // Mock team members (replace with actual team members from winner object when available)
-  const teamMembers = winner.teamMembers || [winner.author || "Project Lead"];
-
   // Update Open Graph meta tags for better social sharing
-  const updateOpenGraphTags = (winner: PastWinnersProps, imageUrl?: string) => {
+  const updateOpenGraphTags = (winner: ShowcaseEntry, imageUrl?: string) => {
     const updateMetaTag = (property: string, content: string) => {
       let tag = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
       if (!tag) {
@@ -83,7 +86,7 @@ export default function ProjectDetails() {
     };
 
     // Open Graph tags
-    updateMetaTag('og:title', winner.project);
+    updateMetaTag('og:title', winner.ProjectTitle);
     updateMetaTag('og:description', winner.description?.substring(0, 200) || '');
     updateMetaTag('og:url', window.location.href);
     updateMetaTag('og:type', 'article');
@@ -96,7 +99,7 @@ export default function ProjectDetails() {
     
     // Twitter Card tags
     updateNameTag('twitter:card', imageUrl ? 'summary_large_image' : 'summary');
-    updateNameTag('twitter:title', winner.project);
+    updateNameTag('twitter:title', winner.ProjectTitle);
     updateNameTag('twitter:description', winner.description?.substring(0, 200) || '');
     
     if (imageUrl) {
@@ -110,7 +113,23 @@ export default function ProjectDetails() {
       const imageUrl = projectImages.length > 0 ? projectImages[0] : undefined;
       updateOpenGraphTags(winner, imageUrl);
     }
-  }, [winner, projectImages]);
+  }, [winner, projectImages, projectId]);
+
+  // CONDITIONAL RENDERING COMES AFTER ALL HOOKS
+  if (!winner) {
+    return (
+      <div className="project-not-found" style={{color:"black"}}>
+        <h2>Project not found</h2>
+        <p>The project you're looking for doesn't exist or has been removed.</p>
+        <Link to="/winners" className="back-button">
+          <ChevronLeft size={18} /> Back to Winners
+        </Link>
+      </div>
+    );
+  }
+
+  // Mock team members (replace with actual team members from winner object when available)
+  const teamMembers = winner.members.split(",") || ["Project Lead"];
 
   // Handle image navigation
   const nextImage = () => {
@@ -135,29 +154,18 @@ export default function ProjectDetails() {
     }
   };
 
-  // Generate project emoji based on category or title
-  const getProjectEmoji = (project: string, category?: string) => {
-    const content = (project + ' ' + (category || '')).toLowerCase();
-    if (content.includes('ai') || content.includes('machine learning')) return '🤖';
-    if (content.includes('web') || content.includes('website')) return '🌐';
-    if (content.includes('mobile') || content.includes('app')) return '📱';
-    if (content.includes('game')) return '🎮';
-    if (content.includes('data') || content.includes('analytics')) return '📊';
-    if (content.includes('iot') || content.includes('hardware')) return '⚡';
-    if (content.includes('security') || content.includes('cyber')) return '🔒';
-    return '🚀'; // default
-  };
+
 
   // Generate relevant hashtags
-  const generateHashtags = (winner: PastWinnersProps): string => {
+  const generateHashtags = (winner: ShowcaseEntry): string => {
     const tags = ['#ASUEngineering', '#CapstoneProject', '#Innovation'];
     
-    if (winner.category) {
-      tags.push(`#${winner.category.toLowerCase().replace(/\s+/g, '')}`);
+    if (winner.department || 'Computer Science') {
+      tags.push(`#${winner.department?.toLowerCase().replace(/\s+/g, '')}`);
     }
     
     // Add tech-specific hashtags
-    const content = (winner.project + ' ' + (winner.description || '')).toLowerCase();
+    const content = (winner.ProjectTitle + ' ' + (winner.description || '')).toLowerCase();
     if (content.includes('ai') || content.includes('machine learning')) tags.push('#AI');
     if (content.includes('react') || content.includes('javascript')) tags.push('#WebDev');
     if (content.includes('mobile') || content.includes('android') || content.includes('ios')) tags.push('#MobileApp');
@@ -167,19 +175,18 @@ export default function ProjectDetails() {
   };
 
   // Enhanced social sharing function
-  const shareProject = (platform: string, winner: PastWinnersProps) => {
+  const shareProject = (platform: string, winner: ShowcaseEntry) => {
     const url = window.location.href;
     const summary = winner.description?.substring(0, 100) + '...';
-    const title = winner.project;
-    const imageUrl ="https://img.freepik.com/free-photo/cool-geometric-triangular-figure-neon-laser-light-great-backgrounds-wallpapers_181624-9331.jpg";
-    const emoji = getProjectEmoji(title, winner.category);
+    const title = winner.ProjectTitle;
+    const imageUrl = winner.winning_pic ? winner.winning_pic.split(",")[0] : undefined;
     const hashtags = generateHashtags(winner);
     
     switch (platform) {
       case 'facebook':
         if (imageUrl) {
           window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(`${emoji} Check out this amazing ASU Engineering project: ${title}!`)}`,
+            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(`Check out this amazing ASU Engineering project: ${title}!`)}`,
             '_blank'
           );
         } else {
@@ -191,7 +198,7 @@ export default function ProjectDetails() {
         break;
 
       case 'twitter':
-        const tweetText = `${emoji} ${title}\n\n💡 ${summary}\n\n${hashtags}\n\n👉 ${url}`;
+        const tweetText = `${title}\n\n💡 ${summary}\n\n${hashtags}\n\n👉 ${url}`;
         window.open(
           `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`,
           '_blank'
@@ -199,35 +206,17 @@ export default function ProjectDetails() {
         break;
 
       case 'linkedin':
-        const linkedinText = `${emoji} Excited to share this ASU Engineering project: ${title}\n\n${summary}`;
+        const linkedinText = `Excited to share this ASU Engineering project: ${title}\n\n${summary}`;
         window.open(
           `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(linkedinText)}`,
           '_blank'
         );
         break;
 
-      case 'pinterest':
-        if (imageUrl) {
-          const pinterestUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(imageUrl)}&description=${encodeURIComponent(`${title} - ${summary} #ASUEngineering #Innovation`)}`;
-          window.open(pinterestUrl, '_blank');
-        }
-        break;
-
-      case 'whatsapp':
-        const whatsappText = imageUrl 
-          ? `${emoji} ${title}\n\n${summary}\n\n📸 ${imageUrl}\n\n🔗 ${url}`
-          : `${emoji} ${title}\n\n${summary}\n\n🔗 ${url}`;
-        
-        window.open(
-          `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappText)}`,
-          '_blank'
-        );
-        break;
-
       case 'copy':
         const copyText = imageUrl 
-          ? `${emoji} ${title}\n\n${summary}\n\n📸 Image: ${imageUrl}\n\n🔗 ${url}\n\n${hashtags}`
-          : `${emoji} ${title}\n\n${summary}\n\n🔗 ${url}\n\n${hashtags}`;
+          ? `${title}\n\n${summary}\n\nImage: ${imageUrl}\n\n🔗 ${url}\n\n${hashtags}`
+          : `${title}\n\n${summary}\n\n🔗 ${url}\n\n${hashtags}`;
         
         navigator.clipboard.writeText(copyText).then(() => {
           alert('Project details copied to clipboard!');
@@ -270,14 +259,14 @@ export default function ProjectDetails() {
               <Calendar size={18} /> {winner.semester} {winner.year}
             </div>
             <div className="department-badge">
-              <GraduationCap size={18} /> {winner.department}
+              <GraduationCap size={18} /> {winner.department || "Computer Science"}
             </div>
           </div>
-          
-          <h1 className="project-title">{winner.project}</h1>
-          
+
+          <h1 className="project-title">{winner.ProjectTitle}</h1>
+
           <div className="project-author">
-            <UsersRound size={24} /> sponsored by {winner.author || "John Doe"}
+            <UsersRound size={24} /> sponsored by {winner.Sponsor || "John Doe"}
           </div>
         </div>
       </div>
@@ -290,7 +279,7 @@ export default function ProjectDetails() {
               <>
                 <img 
                   src={projectImages[currentImageIndex]} 
-                  alt={`${winner.project} - Image ${currentImageIndex + 1}`} 
+                  alt={`${winner.ProjectTitle} - Image ${currentImageIndex + 1}`} 
                   className="gallery-image"
                 />
                 
@@ -343,22 +332,13 @@ export default function ProjectDetails() {
           <div className="info-section">
             <h2 className="section-title">Project Resources</h2>
             <div className="project-resources">
-              {winner.projectLink && (
-                <a href={winner.projectLink} target="_blank" rel="noopener noreferrer" className="resource-link">
-                  <ExternalLink size={18} /> Visit Project Website
-                </a>
-              )}
-              {winner.videoLink && (
-                <a href={winner.videoLink} target="_blank" rel="noopener noreferrer" className="resource-link">
+              {winner.video && (
+                <a href={winner.video} target="_blank" rel="noopener noreferrer" className="resource-link">
                   <ExternalLink size={18} /> Watch Demo Video
                 </a>
               )}
-              {winner.projectPdf && (
-                <a href={winner.projectPdf} target="_blank" rel="noopener noreferrer" className="resource-link">
-                  <Download size={18} /> Download Project PDF
-                </a>
-              )}
-              {!winner.projectLink && !winner.videoLink && !winner.projectPdf && (
+             
+              {!winner.video && (
                 <p className="no-resources">No additional resources available</p>
               )}
             </div>

@@ -46,6 +46,10 @@ const Menu: React.FC = () => {
   };
 
   useEffect(() => {
+    // Only run semester/year redirect logic on top-level routes
+    const topLevelRoutes = ["/", "/winners", "/about", "/computer-science", "/computer-systems-engineering", "/interdisciplinary", "/biomedical-engineering", "/mechanical-engineering", "/electrical-engineering", "/industrial-engineering", "/informatics"];
+    if (!topLevelRoutes.includes(pathname)) return;
+
     const semesterFromUrl = searchParams.get("semester") as "sp" | "fa" | null;
     const yearFromUrl = searchParams.get("year");
 
@@ -68,7 +72,7 @@ const Menu: React.FC = () => {
         navigate(`${pathname}?semester=${semester}&year=${year}`, { replace: true });
       }
     }
-  }, [location.search]);
+  }, [location.search, pathname]);
 
   const renderSemesterDropdown = () => (
     <li className="semester-selector">

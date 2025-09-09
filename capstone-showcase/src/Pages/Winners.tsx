@@ -1,6 +1,7 @@
 import "../CSS/WinnersForm.css";
 import { Winners } from "../WinnerComponent";
 import {useState, useEffect} from "react";
+import Footer from "./Footer";
 
 
 interface PastWinnersProps {
@@ -13,6 +14,23 @@ interface PastWinnersProps {
   author?: string;
   description: string;
 }
+
+type ShowcaseEntry = {
+  course: string;
+  video: string;
+  EntryID: number;
+  shouldDisplay: "YES" | "NO"; // restrict to YES/NO
+  position: number;
+  members: string;
+  Sponsor: string;
+  description: string;
+  ProjectTitle: string;
+  winning_pic: string | null;
+  NDA: "Yes" | "No"; // restrict to Yes/No
+  year: number;
+  semester: "Spring" | "Summer" | "Fall" | "Winter"; // valid seasons only
+};
+
 
 export const pastWinners: PastWinnersProps[] = [
   {
@@ -47,6 +65,8 @@ export const pastWinners: PastWinnersProps[] = [
   },
 ];
 const Winner: React.FC = () => {
+
+  const [pastWinnersData, setPastWinnersData] = useState<ShowcaseEntry[]>([]);
   const currentYear = new Date().getFullYear();
   const years = Array.from(
     { length: currentYear - 2000 + 1 },
@@ -60,6 +80,14 @@ const Winner: React.FC = () => {
     setHasFiltered(true);
   };
 
+ //getting the data for testing
+  useEffect(() =>
+  {
+    fetch('http://localhost:3000/api/winners').then(res => res.json())
+    .then(data => setPastWinnersData(data));
+
+    console.log('the use effect ran')
+  }, []);
   
   return (
     <div className="winners-form-container">
@@ -115,11 +143,12 @@ const Winner: React.FC = () => {
 
       {
         hasFiltered == false ? (
-           <Winners winners={pastWinners} />
+           <Winners winners={pastWinnersData} />
         ) : (
             <p>Here are the winners:</p>
         )
       }
+    <Footer />
     </div>
   );
 };
