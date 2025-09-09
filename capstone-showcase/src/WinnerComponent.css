@@ -62,6 +62,11 @@
 .winner-author {
   margin: 0;
   font-size: 0.90rem;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .winner-info-row {

@@ -67,7 +67,7 @@ export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
           {/* Text section */}
           <div className="winner-text-section">
             <p className="winner-project" title={winner.ProjectTitle}>{winner.ProjectTitle}</p>
-            <p className="winner-author">by {winner.Sponsor || "John Doe"}</p>
+            <p className="winner-author" title={winner.Sponsor || "John Doe"}>by {winner.Sponsor || "John Doe"}</p>
             <div className="winner-info-row">
               <span className="winner-semester">
                 {winner.semester} {winner.year}
