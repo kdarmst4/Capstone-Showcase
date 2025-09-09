@@ -286,6 +286,41 @@ WHERE position IS NOT NULL;`;
   });
 });
 
+//getting a specific winner by id
+app.get("/api/winner/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = `SELECT 
+  CourseNumber AS course,
+  VideoLinkRaw AS video,
+  shouldDisplay,
+  position AS position,
+  MemberNames AS members,
+  Sponsor,
+  ProjectDescription AS description,
+  ProjectTitle,
+  winning_pic,
+  shouldDisplay,
+  NDA,
+  EntryID,
+  YEAR(DateStamp) AS year,
+  CASE 
+    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
+  END AS semester
+FROM showcaseentries
+WHERE position IS NOT NULL AND EntryID = ?;`;
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error retrieving winners data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
+});
+
 // Endpoint to fetch projects by major
 app.get("/api/survey/:major", (req, res) => {
   const { major } = req.params;

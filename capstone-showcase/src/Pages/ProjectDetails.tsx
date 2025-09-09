@@ -45,13 +45,14 @@ type ShowcaseEntry = {
 };
 
 export default function ProjectDetails() {
- const { id:projectId } = useParams(); // gets "123"
+  const { id: projectId } = useParams(); // gets "123"
   const location = useLocation(); 
   const queryParams = new URLSearchParams(location.search);
   const winnerData = queryParams.get("data");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const winner: ShowcaseEntry | null = winnerData ? JSON.parse(decodeURIComponent(winnerData)) : null;
+  const [winner, setWinner] = useState<ShowcaseEntry | null>(
+    winnerData ? JSON.parse(decodeURIComponent(winnerData)) : null
+  );
   console.log("Project ID from URL:", projectId);
   console.log("Winner from state:", winner);
 
@@ -63,6 +64,21 @@ export default function ProjectDetails() {
     "/src/assets/capstone-showcase/src/assets/asuSquareLogo.png"
   ];
 
+  useEffect(() => {
+    if (!winnerData && projectId) {
+      console.log("Fetching winner data for project ID:", projectId);
+      fetch(`http://localhost:3000/api/winner/${projectId}`)
+        .then(res => res.json())
+        .then(data => {
+          setWinner(data[0] as ShowcaseEntry);
+          console.log("Winner data after fetch (if applicable):", data[0]);
+        })
+        .catch(err => {
+          console.error("Error fetching winner data:", err);
+          setWinner(null);
+        });
+    }
+  }, [winnerData, projectId]);
   // Update Open Graph meta tags for better social sharing
   const updateOpenGraphTags = (winner: ShowcaseEntry, imageUrl?: string) => {
     const updateMetaTag = (property: string, content: string) => {
@@ -156,74 +172,46 @@ export default function ProjectDetails() {
 
 
 
-  // Generate relevant hashtags
-  const generateHashtags = (winner: ShowcaseEntry): string => {
-    const tags = ['#ASUEngineering', '#CapstoneProject', '#Innovation'];
-    
-    if (winner.department || 'Computer Science') {
-      tags.push(`#${winner.department?.toLowerCase().replace(/\s+/g, '')}`);
-    }
-    
-    // Add tech-specific hashtags
-    const content = (winner.ProjectTitle + ' ' + (winner.description || '')).toLowerCase();
-    if (content.includes('ai') || content.includes('machine learning')) tags.push('#AI');
-    if (content.includes('react') || content.includes('javascript')) tags.push('#WebDev');
-    if (content.includes('mobile') || content.includes('android') || content.includes('ios')) tags.push('#MobileApp');
-    if (content.includes('data')) tags.push('#DataScience');
-    
-    return tags.slice(0, 5).join(' '); // Limit to 5 hashtags
-  };
+
 
   // Enhanced social sharing function
-  const shareProject = (platform: string, winner: ShowcaseEntry) => {
-    const url = window.location.href;
-    const summary = winner.description?.substring(0, 100) + '...';
-    const title = winner.ProjectTitle;
-    const imageUrl = winner.winning_pic ? winner.winning_pic.split(",")[0] : undefined;
-    const hashtags = generateHashtags(winner);
-    
+  const shareProject = async (platform: string, winner: ShowcaseEntry | null) => {
+    if (!winner) {
+      alert("No project data to share!");
+      return;
+    }
+  const url = window.location.href;
+    const title = "ASU Capstone Project";
+    const projectTitle = winner.ProjectTitle;
+    const description = winner.description;
+    const shareText = `${title}\n${projectTitle}\n\nProject Description: ${description}\n\n${url}`;
+
     switch (platform) {
       case 'facebook':
-        if (imageUrl) {
-          window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(`Check out this amazing ASU Engineering project: ${title}!`)}`,
-            '_blank'
-          );
-        } else {
-          window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-            '_blank'
-          );
-        }
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`,
+          '_blank'
+        );
         break;
-
       case 'twitter':
-        const tweetText = `${title}\n\n💡 ${summary}\n\n${hashtags}\n\n👉 ${url}`;
         window.open(
-          `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`,
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
           '_blank'
         );
         break;
-
       case 'linkedin':
-        const linkedinText = `Excited to share this ASU Engineering project: ${title}\n\n${summary}`;
         window.open(
-          `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(linkedinText)}`,
+          `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(shareText)}`,
           '_blank'
         );
         break;
-
       case 'copy':
-        const copyText = imageUrl 
-          ? `${title}\n\n${summary}\n\nImage: ${imageUrl}\n\n🔗 ${url}\n\n${hashtags}`
-          : `${title}\n\n${summary}\n\n🔗 ${url}\n\n${hashtags}`;
-        
-        navigator.clipboard.writeText(copyText).then(() => {
+        navigator.clipboard.writeText(shareText).then(() => {
           alert('Project details copied to clipboard!');
         }).catch(() => {
           // Fallback for older browsers
           const textArea = document.createElement('textarea');
-          textArea.value = copyText;
+          textArea.value = shareText;
           document.body.appendChild(textArea);
           textArea.select();
           document.execCommand('copy');
@@ -231,7 +219,6 @@ export default function ProjectDetails() {
           alert('Project details copied to clipboard!');
         });
         break;
-
       default:
         console.warn(`Unsupported share platform: ${platform}`);
     }
