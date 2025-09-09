@@ -21,10 +21,11 @@ WinnersForm.css
   gap: 1.5rem;
   background: #f9f9f9;
   padding: 2rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   align-items: flex-end;
   text-align: left;
+  margin-bottom: 25px;
 }
 
 .winners-form span {

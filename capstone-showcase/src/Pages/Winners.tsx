@@ -1,7 +1,7 @@
 import "../CSS/WinnersForm.css";
 import { WinnerComponent } from "../WinnerComponent";
 import {useState, useEffect} from "react";
-
+import Footer from "./Footer";
 
 interface PastWinnersProps {
   name: string;
@@ -119,6 +119,7 @@ const Winner: React.FC = () => {
             <p>Here are the winners:</p>
         )
       }
+    <Footer />
     </div>
   );
 };
