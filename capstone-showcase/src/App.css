@@ -1,12 +1,12 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem 2rem 2rem;
   text-align: center;
 }
 
 .content {
-  margin-top: 60px;
+  /* margin-top: 60px; */
   transition: margin-left 0.3s ease;
 }
 
