@@ -5,7 +5,6 @@ import {
   useSearchParams,
   useNavigate,
 } from "react-router-dom";
-import { Menu as MenuIcon } from "lucide-react";
 import { useMenuContext } from "./MenuContext";
 import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
@@ -131,9 +130,10 @@ const Menu: React.FC = () => {
 
   const renderSemesterDropdown = () => (
     <li className="semester-selector">
-      <label htmlFor="semesterDropdown">Select Semester:</label>
+      <label htmlFor="semesterDropdown" style={{marginRight: 8}}>Select Semester:</label>
       <select
         id="semesterDropdown"
+        className="semesterDropdown"
         value={
           currentSemester && currentYear
             ? `${currentSemester}-${currentYear}`
@@ -154,13 +154,9 @@ const Menu: React.FC = () => {
           );
         })}
       </select>
-
       {currentSemester && currentYear && (
-        <div className="selected-semester-label">
-          Showing projects from:{" "}
-          <strong>
-            {currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}
-          </strong>
+        <div className="selected-semester-label" style={{marginTop: 6}}>
+          Showing projects from: <strong>{currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}</strong>
         </div>
       )}
     </li>
@@ -169,121 +165,6 @@ const Menu: React.FC = () => {
   return (
     <div>
       {isSideMenu ? (
-        <div
-          className={`menu-wrapper ${isSideMenu ? "side-menu" : "top-menu"}`}
-        >
-          <div
-            className={`page-container ${
-              isSideMenu ? "side-menu" : "top-menu"
-            }`}
-          >
-            <div className="menu-container">
-              <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-              <button className="toggle-button" onClick={toggleMenu}>
-                <i
-                  className={`fas ${isSideMenu ? "fa-arrow-left" : "fa-bars"}`}
-                ></i>
-              </button>
-              <div className="menu">
-                <ul className="menu-list">
-                  <li
-                    className={`menu-item ${pathname === "/" ? "active" : ""}`}
-                  >
-                    <Link to="/" className="home-link">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="black"
-                        width="22px"
-                        height="27px"
-                        className="home-icon"
-                      >
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                      </svg>
-                    </Link>
-                  </li>
-
-                  {/* this is for the side menu */}
-                  <li
-                    className={`menu-item ${
-                      pathname === "/about" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/about">Meet Our Team </Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/computer-science" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/computer-science">Computer Science</Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/computer-systems-engineering"
-                        ? "active"
-                        : ""
-                    }`}
-                  >
-                    <Link to="/computer-systems-engineering">
-                      Computer Systems Engineering
-                    </Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/interdisciplinary" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/interdisciplinary">Interdisciplinary</Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/biomedical-engineering" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/biomedical-engineering">
-                      Biomedical Engineering
-                    </Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/mechanical-engineering" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/mechanical-engineering">
-                      Mechanical Engineering
-                    </Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/electrical-engineering" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/electrical-engineering">
-                      Electrical Engineering
-                    </Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/industrial-engineering" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/industrial-engineering">
-                      Industrial Engineering
-                    </Link>
-                  </li>
-                  <li
-                    className={`menu-item ${
-                      pathname === "/informatics" ? "active" : ""
-                    }`}
-                  >
-                    <Link to="/informatics">Informatics</Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
         <div
           className=""
           style={{
@@ -294,6 +175,7 @@ const Menu: React.FC = () => {
             alignItems: "center",
             padding: "0 10px",
             position: "relative",
+            
           }}
         >
           <div
@@ -324,8 +206,140 @@ const Menu: React.FC = () => {
               {menuOptions.map((option) => (
                 <li
                   key={option.path}
+                  className="menu-item"
                   style={{
                     margin: "10px",
+                    color: "black",
+                    // borderTop: "1px solid black",
+                  }}
+                >
+                  <Link
+                    to={option.path}
+                    className={`menu-item ${
+                      pathname === option.path ? "active" : ""
+                    }`}
+                  >
+                    {option.name}
+                  </Link>
+                </li>
+              ))}
+              {renderSemesterDropdown()}
+            </ul>
+          </div>
+          <Link to="/" className="">
+            <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+          </Link>
+          <div>
+            <div
+              onClick={() => setToggleDropdown(!toggleDropdown)}
+              style={{
+                background: "none",
+                width: "40px",
+                height: "40px",
+                border: "none",
+                outline: "none",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "relative",
+                cursor: "pointer",
+                zIndex: 101,
+              }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  top: toggleDropdown ? "50%" : "30%",
+                  left: "50%",
+                  transform: toggleDropdown
+                    ? "translate(-50%, -50%) rotate(45deg)"
+                    : "translate(-50%, -50%)",
+                  background: "black",
+                  width: "20px",
+                  height: "2px",
+                  borderRadius: "2px",
+                  transition: "all 0.3s ease",
+                }}
+              />
+              <span
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  background: "black",
+                  width: "20px",
+                  height: "2px",
+                  borderRadius: "2px",
+                  transition: "all 0.3s ease",
+                  opacity: toggleDropdown ? 0 : 1,
+                }}
+              />
+              <span
+                style={{
+                  position: "absolute",
+                  top: toggleDropdown ? "50%" : "70%",
+                  left: "50%",
+                  transform: toggleDropdown
+                    ? "translate(-50%, -50%) rotate(-45deg)"
+                    : "translate(-50%, -50%)",
+                  background: "black",
+                  width: "20px",
+                  height: "2px",
+                  borderRadius: "2px",
+                  transition: "all 0.3s ease",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        // this is the desktop view
+        <div
+          className=""
+          style={{
+            display: "flex",
+            backgroundColor: "white",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0 10px",
+            position: "relative",
+            
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "40px",
+              left: "0",
+              backgroundColor: "white",
+              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+              borderRadius: "4px",
+
+              zIndex: 100,
+              width: "100%",
+              height: toggleDropdown ? "425px" : "0",
+              overflow: "hidden",
+              transition: "height 0.3s ease",
+              //   display: toggleDropdown ? 'block' : 'none',
+            }}
+          >
+            <ul
+              style={{
+                listStyle: "none",
+                padding: "0",
+                margin: "0",
+                width: "100%",
+              }}
+            >
+              {menuOptions.map((option) => (
+                <li
+                  key={option.path}
+                  className="menu-item"
+                  style={{
+                    margin: "10px",
+                    color: "black",
                     // borderTop: "1px solid black",
                   }}
                 >

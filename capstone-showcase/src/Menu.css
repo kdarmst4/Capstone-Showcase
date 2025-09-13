@@ -91,11 +91,8 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-.menu-item.active a {
-  background-color: #8C1D40;
-  color: white;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.menu-item {
+  color: black;
 }
 
 .menu-item.active a:hover {
@@ -277,4 +274,12 @@
 .semester-selector label {
   color: black;
   margin-right: 8px;
+}
+
+.semesterDropdown {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
 }
