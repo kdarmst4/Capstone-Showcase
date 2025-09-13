@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
+import {  Award, UsersRound, ChevronDown  } from "lucide-react";
 
 const Menu: React.FC = () => {
   const { pathname } = useLocation();
@@ -159,8 +160,7 @@ const Menu: React.FC = () => {
           className="nav-mobile-dropdown"
           style={{ height: toggleDropdown ? 425 : 0 }}
         >
-          <ul
->
+          <ul>
             {menuOptions.map((option) => (
               <li key={option.path} className="menu-item">
                 <Link
@@ -191,7 +191,6 @@ const Menu: React.FC = () => {
               transform: toggleDropdown
                 ? "translate(-50%, -50%) rotate(45deg)"
                 : "translate(-50%, -50%)",
-
             }}
           />
           <span
@@ -208,9 +207,37 @@ const Menu: React.FC = () => {
               transform: toggleDropdown
                 ? "translate(-50%, -50%) rotate(-45deg)"
                 : "translate(-50%, -50%)",
-
             }}
           />
+        </div>
+        {/* desktop view menu  */}
+        <div className="desktop-menu">
+          <Link to="/winners" className="special-link">
+            <Award size={24} />
+            Winners
+          </Link>
+          <Link to="/about" className="special-link">
+            <UsersRound size={24} />
+            About Us
+          </Link>
+          <button className="department-button">
+            Department
+            <ChevronDown size={16} style={{ marginLeft: 4 }} className="arrow" />
+            <div className="department-dropdown">
+              {menuOptions.map((option) => (
+                <Link
+                  key={option.path}
+                  to={option.path}
+                  className={`menu-item ${
+                    pathname === option.path ? "active" : ""
+                  }`}
+                >
+                  {option.name}
+                </Link>
+              ))}
+            </div>
+          </button>
+          {renderSemesterDropdown()}
         </div>
       </div>
     </div>
