@@ -16,6 +16,8 @@ import teamMember10 from "../assets/austinProfile.jpg";
 import teamMember11 from "../assets/cameronProfile.jpg";
 import teamMember12 from "../assets/kaliProfile.jpg"; 
 import Footer from './Footer';
+import { Github } from 'lucide-react';
+
 
 const teamMembers = [
   {
@@ -118,7 +120,6 @@ const teamMembers = [
 
 const About = () => {
   const { isSideMenu } = useMenuContext();
-  const membersPerRow = Math.ceil(teamMembers.length / 4);
 
   useEffect(() => {
     document.body.classList.add("about-page-body");
@@ -140,26 +141,16 @@ const About = () => {
         </section>
         <div className="underline"></div>
         <section className="team-section">
-          {Array(4)
-            .fill(0)
-            .map((_, rowIndex) => (
-              <div className="team-row" key={rowIndex}>
-                {teamMembers
-                  .slice(
-                    rowIndex * membersPerRow,
-                    (rowIndex + 1) * membersPerRow
-                  )
-                  .map((member, index) => (
-                    <div key={index} className="team-member">
-                      <img
-                        src={member.image}
-                        alt={`Team Member ${index + 1}`}
-                      />
-                      <p>
-                        <b>{member.name}</b>
-                      </p>
-                      <p>{member.major}</p>
-                      <div className="team-icons">
+          {
+            
+            teamMembers.map((member, index) => (
+              <div className="team-member" key={index}>
+                <img src={member.image} alt={`${member.name} Profile`} className="team-member-image" />
+                <div className="team-member-info">
+                  <h3>{member.name}</h3>
+                  <p>{member.major}</p>
+                  <p>{member.email}</p>
+                   <div className="team-icons">
                         <a
                           href={`mailto:${member.email}`}
                           target="_blank"
@@ -182,8 +173,8 @@ const About = () => {
                           <i className="fab fa-github"></i>
                         </a>
                       </div>
-                    </div>
-                  ))}
+
+                </div>
               </div>
             ))}
         </section>

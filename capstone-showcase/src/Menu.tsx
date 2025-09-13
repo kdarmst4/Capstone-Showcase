@@ -8,7 +8,6 @@ import {
 import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
 import {  Award, UsersRound, ChevronDown  } from "lucide-react";
-
 const Menu: React.FC = () => {
   const { pathname } = useLocation();
   const [toggleDropdown, setToggleDropdown] = useState(false);
@@ -37,6 +36,11 @@ const Menu: React.FC = () => {
     { name: "Industrial Engineering", path: "/industrial-engineering" },
     { name: "Informatics", path: "/informatics" },
   ];
+
+  useEffect(() =>
+  {
+    setToggleDropdown(false);
+  },[location.pathname]);
 
   const getAvailableSemesters = () => {
     const now = new Date();
@@ -224,17 +228,19 @@ const Menu: React.FC = () => {
             Department
             <ChevronDown size={16} style={{ marginLeft: 4 }} className="arrow" />
             <div className="department-dropdown">
-              {menuOptions.map((option) => (
-                <Link
-                  key={option.path}
-                  to={option.path}
-                  className={`menu-item ${
-                    pathname === option.path ? "active" : ""
-                  }`}
-                >
-                  {option.name}
-                </Link>
-              ))}
+              {menuOptions
+                .filter(option => !['About', 'Winners', 'Home'].includes(option.name))
+                .map(option => (
+                  <Link
+                    key={option.path}
+                    to={option.path}
+                    className={`menu-item ${
+                      pathname === option.path ? "active" : ""
+                    }`}
+                  >
+                    {option.name}
+                  </Link>
+                ))}
             </div>
           </button>
           {renderSemesterDropdown()}

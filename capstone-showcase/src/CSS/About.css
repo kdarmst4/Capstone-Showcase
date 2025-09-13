@@ -13,6 +13,15 @@
   margin-left: 270px;
 }
 
+.team-member-image 
+{
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 .about .header-background {
   background-image: url("../assets/teamBanner.png");
   background-size: cover;
@@ -49,6 +58,10 @@
   padding-left: 20px;
   padding-right: 20px;
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 .team-row {
@@ -60,8 +73,9 @@
 }
 
 .team-member {
-  width: 280px;
-  height: 270px;
+  width: 14em;
+  min-height: 379px !important;
+  color: black;
   text-align: center;
   background-color: #f9f9f9;
   padding: 20px;
@@ -69,6 +83,8 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .team-member:hover {
