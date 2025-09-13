@@ -5,13 +5,11 @@ import {
   useSearchParams,
   useNavigate,
 } from "react-router-dom";
-import { useMenuContext } from "./MenuContext";
 import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
 
 const Menu: React.FC = () => {
   const { pathname } = useLocation();
-  const { isSideMenu, toggleMenu } = useMenuContext();
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   //const submenuRef = useRef<HTMLLIElement>(null);
@@ -38,20 +36,7 @@ const Menu: React.FC = () => {
     { name: "Industrial Engineering", path: "/industrial-engineering" },
     { name: "Informatics", path: "/informatics" },
   ];
-  // reactive to size change
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        if (!isSideMenu) toggleMenu();
-      } else {
-        if (isSideMenu) toggleMenu();
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [isSideMenu, toggleMenu]);
+
   const getAvailableSemesters = () => {
     const now = new Date();
     const currentYear = now.getFullYear();
@@ -130,7 +115,9 @@ const Menu: React.FC = () => {
 
   const renderSemesterDropdown = () => (
     <li className="semester-selector">
-      <label htmlFor="semesterDropdown" style={{marginRight: 8}}>Select Semester:</label>
+      <label htmlFor="semesterDropdown" style={{ marginRight: 8 }}>
+        Select Semester:
+      </label>
       <select
         id="semesterDropdown"
         className="semesterDropdown"
@@ -155,8 +142,11 @@ const Menu: React.FC = () => {
         })}
       </select>
       {currentSemester && currentYear && (
-        <div className="selected-semester-label" style={{marginTop: 6}}>
-          Showing projects from: <strong>{currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}</strong>
+        <div className="selected-semester-label">
+          Showing projects from:{" "}
+          <strong>
+            {currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}
+          </strong>
         </div>
       )}
     </li>
@@ -164,266 +154,65 @@ const Menu: React.FC = () => {
 
   return (
     <div>
-      {isSideMenu ? (
+      <div className="nav-container">
         <div
-          className=""
-          style={{
-            display: "flex",
-            backgroundColor: "white",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "0 10px",
-            position: "relative",
-            
-          }}
+          className="nav-mobile-dropdown"
+          style={{ height: toggleDropdown ? 425 : 0 }}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: "40px",
-              left: "0",
-              backgroundColor: "white",
-              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-              borderRadius: "4px",
-
-              zIndex: 100,
-              width: "100%",
-              height: toggleDropdown ? "425px" : "0",
-              overflow: "hidden",
-              transition: "height 0.3s ease",
-              //   display: toggleDropdown ? 'block' : 'none',
-            }}
-          >
-            <ul
-              style={{
-                listStyle: "none",
-                padding: "0",
-                margin: "0",
-                width: "100%",
-              }}
-            >
-              {menuOptions.map((option) => (
-                <li
-                  key={option.path}
-                  className="menu-item"
-                  style={{
-                    margin: "10px",
-                    color: "black",
-                    // borderTop: "1px solid black",
-                  }}
+          <ul
+>
+            {menuOptions.map((option) => (
+              <li key={option.path} className="menu-item">
+                <Link
+                  to={option.path}
+                  className={`menu-item ${
+                    pathname === option.path ? "active" : ""
+                  }`}
                 >
-                  <Link
-                    to={option.path}
-                    className={`menu-item ${
-                      pathname === option.path ? "active" : ""
-                    }`}
-                  >
-                    {option.name}
-                  </Link>
-                </li>
-              ))}
-              {renderSemesterDropdown()}
-            </ul>
-          </div>
-          <Link to="/" className="">
-            <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-          </Link>
-          <div>
-            <div
-              onClick={() => setToggleDropdown(!toggleDropdown)}
-              style={{
-                background: "none",
-                width: "40px",
-                height: "40px",
-                border: "none",
-                outline: "none",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                position: "relative",
-                cursor: "pointer",
-                zIndex: 101,
-              }}
-            >
-              <span
-                style={{
-                  position: "absolute",
-                  top: toggleDropdown ? "50%" : "30%",
-                  left: "50%",
-                  transform: toggleDropdown
-                    ? "translate(-50%, -50%) rotate(45deg)"
-                    : "translate(-50%, -50%)",
-                  background: "black",
-                  width: "20px",
-                  height: "2px",
-                  borderRadius: "2px",
-                  transition: "all 0.3s ease",
-                }}
-              />
-              <span
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  background: "black",
-                  width: "20px",
-                  height: "2px",
-                  borderRadius: "2px",
-                  transition: "all 0.3s ease",
-                  opacity: toggleDropdown ? 0 : 1,
-                }}
-              />
-              <span
-                style={{
-                  position: "absolute",
-                  top: toggleDropdown ? "50%" : "70%",
-                  left: "50%",
-                  transform: toggleDropdown
-                    ? "translate(-50%, -50%) rotate(-45deg)"
-                    : "translate(-50%, -50%)",
-                  background: "black",
-                  width: "20px",
-                  height: "2px",
-                  borderRadius: "2px",
-                  transition: "all 0.3s ease",
-                }}
-              />
-            </div>
-          </div>
+                  {option.name}
+                </Link>
+              </li>
+            ))}
+            {renderSemesterDropdown()}
+          </ul>
         </div>
-      ) : (
-        // this is the desktop view
+        <Link to="/" className="">
+          <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+        </Link>
         <div
-          className=""
-          style={{
-            display: "flex",
-            backgroundColor: "white",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "0 10px",
-            position: "relative",
-            
-          }}
+          className="burger-menu"
+          onClick={() => setToggleDropdown(!toggleDropdown)}
         >
-          <div
+          <span
+            className="bun"
             style={{
-              position: "absolute",
-              top: "40px",
-              left: "0",
-              backgroundColor: "white",
-              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-              borderRadius: "4px",
+              top: toggleDropdown ? "50%" : "30%",
+              left: "50%",
+              transform: toggleDropdown
+                ? "translate(-50%, -50%) rotate(45deg)"
+                : "translate(-50%, -50%)",
 
-              zIndex: 100,
-              width: "100%",
-              height: toggleDropdown ? "425px" : "0",
-              overflow: "hidden",
-              transition: "height 0.3s ease",
-              //   display: toggleDropdown ? 'block' : 'none',
             }}
-          >
-            <ul
-              style={{
-                listStyle: "none",
-                padding: "0",
-                margin: "0",
-                width: "100%",
-              }}
-            >
-              {menuOptions.map((option) => (
-                <li
-                  key={option.path}
-                  className="menu-item"
-                  style={{
-                    margin: "10px",
-                    color: "black",
-                    // borderTop: "1px solid black",
-                  }}
-                >
-                  <Link
-                    to={option.path}
-                    className={`menu-item ${
-                      pathname === option.path ? "active" : ""
-                    }`}
-                  >
-                    {option.name}
-                  </Link>
-                </li>
-              ))}
-              {renderSemesterDropdown()}
-            </ul>
-          </div>
-          <Link to="/" className="">
-            <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-          </Link>
-          <div>
-            <div
-              onClick={() => setToggleDropdown(!toggleDropdown)}
-              style={{
-                background: "none",
-                width: "40px",
-                height: "40px",
-                border: "none",
-                outline: "none",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                position: "relative",
-                cursor: "pointer",
-                zIndex: 101,
-              }}
-            >
-              <span
-                style={{
-                  position: "absolute",
-                  top: toggleDropdown ? "50%" : "30%",
-                  left: "50%",
-                  transform: toggleDropdown
-                    ? "translate(-50%, -50%) rotate(45deg)"
-                    : "translate(-50%, -50%)",
-                  background: "black",
-                  width: "20px",
-                  height: "2px",
-                  borderRadius: "2px",
-                  transition: "all 0.3s ease",
-                }}
-              />
-              <span
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  background: "black",
-                  width: "20px",
-                  height: "2px",
-                  borderRadius: "2px",
-                  transition: "all 0.3s ease",
-                  opacity: toggleDropdown ? 0 : 1,
-                }}
-              />
-              <span
-                style={{
-                  position: "absolute",
-                  top: toggleDropdown ? "50%" : "70%",
-                  left: "50%",
-                  transform: toggleDropdown
-                    ? "translate(-50%, -50%) rotate(-45deg)"
-                    : "translate(-50%, -50%)",
-                  background: "black",
-                  width: "20px",
-                  height: "2px",
-                  borderRadius: "2px",
-                  transition: "all 0.3s ease",
-                }}
-              />
-            </div>
-          </div>
+          />
+          <span
+            className="patty"
+            style={{
+              opacity: toggleDropdown ? 0 : 1,
+            }}
+          />
+          <span
+            className="bun"
+            style={{
+              top: toggleDropdown ? "50%" : "70%",
+              left: "50%",
+              transform: toggleDropdown
+                ? "translate(-50%, -50%) rotate(-45deg)"
+                : "translate(-50%, -50%)",
+
+            }}
+          />
         </div>
-      )}
+      </div>
     </div>
   );
 };

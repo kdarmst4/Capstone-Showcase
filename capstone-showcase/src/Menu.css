@@ -1,274 +1,19 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
-.page-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.menu-container {
-  width: 100%;
-  height: auto;
-  background: #f1f1f1;
-  padding: 10px 5px;
-  display: flex;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  overflow-x: auto;
-}
-
-.top-menu .asu-logo {
+.asu-logo {
   width: 150px;
-  /* margin-top: 20px; */
-  /* margin-right: 5px; */
-}
-
-.side-menu .asu-logo {
-  width: 200px;
-  margin-right: 10px;
-}
-
-.arrow {
-  margin-left: 5px;
-  width: 24px;
-  height: 24px;
-  transition: transform 0.3s ease;
-}
-
-.arrow.revArrow {
-  transform: rotate(180deg);
 }
 
 .selected-semester-label {
   color: black;
-}
-.top-menu .home-link {
-  margin: 10px;
-  margin-left: 8px;
+  margin-top: 6px;
 }
 
-.top-menu .menu-list {
-  list-style-type: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-.top-menu .menu-list li {
-  margin: 0 6px;
-  position: relative;
-  white-space: nowrap;
-}
-
-.top-menu .menu-list li:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: -6px;
-  height: 80%;
-  width: 2px;
-  background: #ccc;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.side-menu .menu-list {
-  align-items: flex-start;
-}
-
-.menu-list a {
-  color: black;
-  font-size: 15px;
-  font-family: Trebuchet MS;
-  font-weight: bold;
-  padding: 10px 15px;
-  background: none;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  transition: background 0.3s ease, color 0.3s ease;
-}
 
 .menu-item {
   color: black;
-}
-
-.menu-item.active a:hover {
-  background-color: #FFC627;
-}
-
-.menu-list a:hover {
-  background: #e0e0e0;
-}
-
-.majors-container {
-  display: flex;
-  align-items: center;
-}
-
-.majors-title {
-  font-family: Trebuchet MS;
-  font-weight: bold;
-  cursor: pointer;
+  margin: 10px;
   color: black;
-  padding: 5px 10px;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  margin-left: 30px;
-  margin-right: 15px;
-  flex-shrink: 0;
-}
-
-.majors-title:hover {
-  background: #e0e0e0;
-}
-
-.majors-list {
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
-}
-
-.submenu-title {
-  font-family: Trebuchet MS;
-  font-weight: bold;
-  cursor: pointer;
-  color: black;
-  padding: 10px 15px;
-  background: #fafafa;
-  border-radius: 15px;
-  display: flex;
-  align-items: left;
-  transition: background 0.3s ease;
-}
-
-.submenu-title:hover {
-  background: #e0e0e0;
-}
-
-.submenu-list {
-  list-style-type: none;
-  width: 150px;
-  position: absolute;
-  background: #fafafa;
-  border-radius: 15px;
-  margin: 5px 0;
-  padding: 10px 0;
-  z-index: 1001;
-}
-
-.submenu-list a {
-  color: black;
-  padding: 10px 15px;
-  background: #f0f0f0;
-  border-radius: 15px;
-  align-items: center;
-  display: flex;
-  text-decoration: none;
-  margin: 5px 0;
-}
-
-.toggle-button {
-  width: 40px;
-  height: 40px;
-  border: none;
-  background-color: Black;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.toggle-button:hover {
-  background-color: #7a1636;
-  transform: scale(1.05);
-}
-
-.top-menu .toggle-button {
-  margin: 0px 10px 0 10px;
-}
-
-.side-menu .toggle-button {
-  margin: 20px 0 0 30px;
-  width: 20px;
-}
-
-.side-menu .menu-container {
-  width: 250px;
-  height: 100%;
-  position: fixed;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding-top: 20px;
-  overflow-y: auto;
-  padding-right: 15px;
-}
-
-.side-menu .menu {
-  margin: 0;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.side-menu .menu-list {
-  list-style-type: none;
-  flex-direction: column;
-  width: calc(100% - 15px);
-  padding: 0;
-}
-
-.side-menu .menu-list li {
-  margin: 10px 0;
-  text-align: left;
-  position: relative;
-}
-
-.side-menu .menu-list a {
-  width: 100%;
-  text-align: left;
-  padding: 10px 10px;
-  justify-content: left;
-}
-
-.side-menu .menu-list a:hover {
-  color: black;
-  background: #e0e0e0;
-}
-
-.top-menu .menu-container {
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
-.top-menu .submenu-container {
-  margin-top: 13px;
-}
-
-.side-menu .content {
-  margin-left: 250px;
-  transition: margin-left 0.3s ease;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #d3d3d3;
 }
 
 .semester-selector label {
@@ -282,4 +27,85 @@
   border: 1px solid #ccc;
   background-color: white;
   color: black;
+}
+
+.nav-container
+{
+  display: flex;
+  background-color: white;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  position: relative;
+}
+
+.nav-mobile-dropdown
+{
+   position: absolute;
+   top: 40px;
+   left: 0;
+   background-color: white;
+   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+   border-radius: 4px;
+   z-index: 100;
+   width: 100%;
+   overflow: hidden;
+   transition: height 0.3s ease;
+}
+
+ul 
+{
+   list-style: none;
+   padding: 0;
+   margin: 0;
+   width: 100%;
+}
+
+.burger-menu 
+{
+  background: none;
+  width: 40px;
+  height: 40px;
+  border: none;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  z-index: 101;
+}
+
+.bun 
+{
+   position: absolute;
+   left: 50%;
+   background: black;
+   width: 20px;
+   height: 2px;
+   border-radius: 2px;
+   transition: all 0.3s ease;
+}
+
+.patty 
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: black;
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .burger-menu {
+    display: none;
+  }
+  .nav-mobile-dropdown {
+    display: none;
+  }
 }
