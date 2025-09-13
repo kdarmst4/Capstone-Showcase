@@ -4,7 +4,7 @@ body.pre-event-landing-page-body {
 
 .pre-event-landing-page {
   margin: 0;
-  padding-top: 20px;
+  /* padding-top: 20px; */
   text-align: center;
   transition: margin-left 0.3s ease;
 }
@@ -35,8 +35,8 @@ body.pre-event-landing-page-body {
   justify-content: center;
   align-items: center;
   border-bottom: 8px solid black;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  /* border-top-right-radius: 10px;
+  border-top-left-radius: 10px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 

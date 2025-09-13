@@ -1,18 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useSearchParams, useNavigate } from "react-router-dom";
-import { useMenuContext } from "./MenuContext";
+import {
+  Link,
+  useLocation,
+  useSearchParams,
+  useNavigate,
+} from "react-router-dom";
 import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
-
+import {  Award, UsersRound, ChevronDown  } from "lucide-react";
 const Menu: React.FC = () => {
   const { pathname } = useLocation();
-  const { isSideMenu, toggleMenu } = useMenuContext();
+  const [toggleDropdown, setToggleDropdown] = useState(false);
+
   //const submenuRef = useRef<HTMLLIElement>(null);
-  const [currentSemester, setCurrentSemester] = useState<"sp" | "fa" | null>(null);
+  const [currentSemester, setCurrentSemester] = useState<"sp" | "fa" | null>(
+    null
+  );
   const [currentYear, setCurrentYear] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const menuOptions = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Winners", path: "/winners" },
+    { name: "Computer Science", path: "/computer-science" },
+    {
+      name: "Computer Systems Engineering",
+      path: "/computer-systems-engineering",
+    },
+    { name: "Interdisciplinary", path: "/interdisciplinary" },
+    { name: "Biomedical Engineering", path: "/biomedical-engineering" },
+    { name: "Mechanical Engineering", path: "/mechanical-engineering" },
+    { name: "Electrical Engineering", path: "/electrical-engineering" },
+    { name: "Industrial Engineering", path: "/industrial-engineering" },
+    { name: "Informatics", path: "/informatics" },
+  ];
+
+  useEffect(() =>
+  {
+    setToggleDropdown(false);
+  },[location.pathname]);
 
   const getAvailableSemesters = () => {
     const now = new Date();
@@ -46,7 +74,19 @@ const Menu: React.FC = () => {
 
   useEffect(() => {
     // Only run semester/year redirect logic on top-level routes
-    const topLevelRoutes = ["/", "/winners", "/about", "/computer-science", "/computer-systems-engineering", "/interdisciplinary", "/biomedical-engineering", "/mechanical-engineering", "/electrical-engineering", "/industrial-engineering", "/informatics"];
+    const topLevelRoutes = [
+      "/",
+      "/winners",
+      "/about",
+      "/computer-science",
+      "/computer-systems-engineering",
+      "/interdisciplinary",
+      "/biomedical-engineering",
+      "/mechanical-engineering",
+      "/electrical-engineering",
+      "/industrial-engineering",
+      "/informatics",
+    ];
     if (!topLevelRoutes.includes(pathname)) return;
 
     const semesterFromUrl = searchParams.get("semester") as "sp" | "fa" | null;
@@ -55,7 +95,10 @@ const Menu: React.FC = () => {
     if (semesterFromUrl && yearFromUrl) {
       setCurrentSemester(semesterFromUrl);
       setCurrentYear(yearFromUrl);
-      localStorage.setItem("selectedSemesterYear", `${semesterFromUrl}-${yearFromUrl}`);
+      localStorage.setItem(
+        "selectedSemesterYear",
+        `${semesterFromUrl}-${yearFromUrl}`
+      );
     } else {
       const stored = localStorage.getItem("selectedSemesterYear");
       if (stored) {
@@ -68,17 +111,26 @@ const Menu: React.FC = () => {
         setCurrentSemester(semester);
         setCurrentYear(year);
         localStorage.setItem("selectedSemesterYear", `${semester}-${year}`);
-        navigate(`${pathname}?semester=${semester}&year=${year}`, { replace: true });
+        navigate(`${pathname}?semester=${semester}&year=${year}`, {
+          replace: true,
+        });
       }
     }
   }, [location.search, pathname]);
 
   const renderSemesterDropdown = () => (
     <li className="semester-selector">
-      <label htmlFor="semesterDropdown">Select Semester:</label>
+      <label htmlFor="semesterDropdown" style={{ marginRight: 8 }}>
+        Select Semester:
+      </label>
       <select
         id="semesterDropdown"
-        value={currentSemester && currentYear ? `${currentSemester}-${currentYear}` : ""}
+        className="semesterDropdown"
+        value={
+          currentSemester && currentYear
+            ? `${currentSemester}-${currentYear}`
+            : ""
+        }
         onChange={(e) => {
           const [sem, yr] = e.target.value.split("-");
           handleSemesterSelection(sem as "sp" | "fa", yr);
@@ -94,98 +146,104 @@ const Menu: React.FC = () => {
           );
         })}
       </select>
-
       {currentSemester && currentYear && (
         <div className="selected-semester-label">
-          Showing projects from: <strong>{currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}</strong>
+          Showing projects from:{" "}
+          <strong>
+            {currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}
+          </strong>
         </div>
       )}
     </li>
   );
 
   return (
-    <div className={`page-container ${isSideMenu ? "side-menu" : "top-menu"}`}>
-      <div className="menu-container">
-        <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
-        <button className="toggle-button" onClick={toggleMenu}>
-          <i className={`fas ${isSideMenu ? "fa-arrow-left" : "fa-bars"}`}></i>
-        </button>
-        <div className="menu">
-          <ul className="menu-list">
-            <li className={`menu-item ${pathname === "/" ? "active" : ""}`}>
-              <Link to="/" className="home-link">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="black" width="22px" height="27px" className="home-icon">
-                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                </svg>
-              </Link>
-            </li>
-
-             {/* Shared Links */}
-             {(isSideMenu ? (
-              <>
-                <li className={`menu-item ${pathname === "/about" ? "active" : ""}`}>
-                  <Link to="/about">Meet Our Team</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
-                  <Link to="/computer-science">Computer Science</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/interdisciplinary" ? "active" : ""}`}>
-                  <Link to="/interdisciplinary">Interdisciplinary</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
-                  <Link to="/biomedical-engineering">Biomedical Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/mechanical-engineering" ? "active" : ""}`}>
-                  <Link to="/mechanical-engineering">Mechanical Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/electrical-engineering" ? "active" : ""}`}>
-                  <Link to="/electrical-engineering">Electrical Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/industrial-engineering" ? "active" : ""}`}>
-                  <Link to="/industrial-engineering">Industrial Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/informatics" ? "active" : ""}`}>
-                  <Link to="/informatics">Informatics</Link>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className={`menu-item ${pathname === "/about" ? "active" : ""}`}>
-                  <Link to="/about">Meet Our<br />Team</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/computer-science" ? "active" : ""}`}>
-                  <Link to="/computer-science">Computer<br />Science</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/computer-systems-engineering" ? "active" : ""}`}>
-                  <Link to="/computer-systems-engineering">Computer Systems<br />Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/industrial-engineering" ? "active" : ""}`}>
-                  <Link to="/industrial-engineering">Industrial<br />Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/interdisciplinary" ? "active" : ""}`}>
-                  <Link to="/interdisciplinary">Interdisciplinary</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/biomedical-engineering" ? "active" : ""}`}>
-                  <Link to="/biomedical-engineering">Biomedical<br />Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/mechanical-engineering" ? "active" : ""}`}>
-                  <Link to="/mechanical-engineering">Mechanical<br />Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/electrical-engineering" ? "active" : ""}`}>
-                  <Link to="/electrical-engineering">Electrical<br />Engineering</Link>
-                </li>
-                <li className={`menu-item ${pathname === "/informatics" ? "active" : ""}`}>
-                  <Link to="/informatics">Informatics</Link>
-                </li>
-              </>
+    <div>
+      <div className="nav-container">
+        <div
+          className="nav-mobile-dropdown"
+          style={{ height: toggleDropdown ? 425 : 0 }}
+        >
+          <ul>
+            {menuOptions.map((option) => (
+              <li key={option.path} className="menu-item">
+                <Link
+                  to={option.path}
+                  className={`menu-item ${
+                    pathname === option.path ? "active" : ""
+                  }`}
+                >
+                  {option.name}
+                </Link>
+              </li>
             ))}
-
-            {/* Semester Selector */}
             {renderSemesterDropdown()}
           </ul>
+        </div>
+        <Link to="/" className="">
+          <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+        </Link>
+        <div
+          className="burger-menu"
+          onClick={() => setToggleDropdown(!toggleDropdown)}
+        >
+          <span
+            className="bun"
+            style={{
+              top: toggleDropdown ? "50%" : "30%",
+              left: "50%",
+              transform: toggleDropdown
+                ? "translate(-50%, -50%) rotate(45deg)"
+                : "translate(-50%, -50%)",
+            }}
+          />
+          <span
+            className="patty"
+            style={{
+              opacity: toggleDropdown ? 0 : 1,
+            }}
+          />
+          <span
+            className="bun"
+            style={{
+              top: toggleDropdown ? "50%" : "70%",
+              left: "50%",
+              transform: toggleDropdown
+                ? "translate(-50%, -50%) rotate(-45deg)"
+                : "translate(-50%, -50%)",
+            }}
+          />
+        </div>
+        {/* desktop view menu  */}
+        <div className="desktop-menu">
+          <Link to="/winners" className="special-link">
+            <Award size={24} />
+            Winners
+          </Link>
+          <Link to="/about" className="special-link">
+            <UsersRound size={24} />
+            About Us
+          </Link>
+          <button className="department-button">
+            Department
+            <ChevronDown size={16} style={{ marginLeft: 4 }} className="arrow" />
+            <div className="department-dropdown">
+              {menuOptions
+                .filter(option => !['About', 'Winners', 'Home'].includes(option.name))
+                .map(option => (
+                  <Link
+                    key={option.path}
+                    to={option.path}
+                    className={`menu-item ${
+                      pathname === option.path ? "active" : ""
+                    }`}
+                  >
+                    {option.name}
+                  </Link>
+                ))}
+            </div>
+          </button>
+          {renderSemesterDropdown()}
         </div>
       </div>
     </div>
