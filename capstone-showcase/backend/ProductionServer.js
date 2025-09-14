@@ -17,7 +17,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (
       !origin || // allow non-browser tools like curl/postman
-      origin === "https://showcase.asucapstone.com:3000" ||
+      origin === "https://showcase.asucapstone.com" ||
       origin.endsWith(".asucapstone.com")
     ) {
       callback(null, true);
@@ -196,7 +196,7 @@ app.post("/api/survey", (req, res) => {
 
 //Server Start
 http.createServer(app).listen(3000, "127.0.0.1", () => {
-  console.log("HTTPS Server started on port 3000");
+  console.log("HTTP Server started on port 3000");
 });
 
 // Endpoint to fetch projects by major and semester
