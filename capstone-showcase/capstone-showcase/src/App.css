@@ -1,9 +1,10 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  min-height: 100vh !important;
   text-align: center;
+  background-color: red;
 }
+
 
 .logo {
   height: 6em;

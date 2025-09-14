@@ -10,12 +10,12 @@ const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
 
-  useEffect(() => {
-    document.body.classList.add("admin-login-page-body");
-    return () => {
-      document.body.classList.remove("admin-login-page-body");
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.body.classList.add("admin-login-page-body");
+  //   return () => {
+  //     document.body.classList.remove("admin-login-page-body");
+  //   };
+  // }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

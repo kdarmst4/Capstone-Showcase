@@ -129,7 +129,7 @@ const Winner: React.FC = () => {
         </div>
       </form>
       <WinnerComponent winners={hasFiltered ? filteredWinnersData : pastWinnersData} />
-    <Footer />
+    {/* <Footer /> */}
     </div>
   );
 };
