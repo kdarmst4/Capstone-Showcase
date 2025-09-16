@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
-
+import { Edit } from "../Edit";
 import { DownloadProjects } from "../DownloadProjects";
 
 interface AdminDashboardProps {
@@ -265,7 +265,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
         </span>
       </span>
       <main className="admin-dashboard-main">
-        {pageTitle === 'Dashboard' && ( <DownloadProjects /> )}
+        {/* {pageTitle === 'Dashboard' && ( <DownloadProjects /> )} */}
+        {pageTitle === 'Dashboard' && ( <Edit /> )}  
       </main>
     </div>
   );

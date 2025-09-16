@@ -27,7 +27,7 @@ const AdminLogin: React.FC = () => {
     <div className="container">
       <div className="box">
         <img src={asuLogoPlain} alt="ASU Logo" className="logo" />
-        <h1>ASU Capstone Showcase</h1>
+        <h1 style={{ color: "black" }}>ASU Capstone Showcase</h1>
         <h2 className="admin-login-title">Admin Login</h2>
         <form onSubmit={handleSubmit} className="admin-form">
           <span className="input">

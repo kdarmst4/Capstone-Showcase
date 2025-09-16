@@ -362,6 +362,30 @@ app.get('/api/projects', (req, res) => {
   });
 });
 
+app.get('/api/projects/:semester/:year/:department', (req, res) => {
+  const { semester, year, department } = req.params;
+  let startMonth, endMonth;
+  if (semester === 'sp') {
+    startMonth = '04';
+    endMonth = '05';
+  } else if (semester === 'fa') {
+    startMonth = '11';
+    endMonth = '12';
+  } else {
+    res.status(400).json({ error: 'Invalid semester' });
+    return;
+  }
+  const startDate = `${year}-${startMonth}-01 00:00:00`;
+  const endDate = `${year}-${endMonth}-01 00:00:00`;
+  db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: 'Database query failed' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 app.put("/api/admin/submissions/:id", (req, res) => {
   const {
     email,

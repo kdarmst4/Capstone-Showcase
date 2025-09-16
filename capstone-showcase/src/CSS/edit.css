@@ -1,0 +1,189 @@
+.edit-page, .edit-instructions {
+  font-family: Arial, sans-serif;
+  /* background-color: #f4f4f4; */
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+}
+.edit-title {
+  text-align: center;
+  color: #8c1d40;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.edit-choice {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 20px;
+  background-color: grey;
+  width: fit-content;
+  height: fit-content;
+  align-self: center;
+  border-radius: 10px;
+  outline: none;
+}
+.edit-choice-button {
+  background-color: #8c1d40;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  /* margin: 10px; */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  background-color: transparent;
+  font-size: large;
+  transition: all 0.5s ease;
+  color: black;
+}
+
+.edit-choice-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+.active-edit {
+  background-color: #611029;
+  color: white;
+}
+
+.edit-form {
+  color: black;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  /* background: #f9f9f9; */
+  padding: 1rem .5rem;
+  
+  /* box-shadow: 0 2px 12px rgba(0,0,0,0.08); */
+  align-items: flex-end;
+  text-align: left;
+  margin-bottom: 25px;
+}
+.edit-form span {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.edit-form label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #8C1D40;
+}
+.edit-form select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background: #fff;
+  color: black;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+tr:hover{
+  background-color: #8c1d40 !important;
+  color: white;
+    cursor: pointer;
+}
+tr:nth-child(1) {
+  background-color: #8c1d40;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+.edit-submission-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+    color: black;
+    
+}
+
+
+.edit-project-submission {
+  
+  color: red;
+  /* position: relative; */
+}
+
+.edit-project-submission .edit-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #8c1d40;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.edit-project-submission .edit-close-btn:hover {
+  background-color: #FFC627;
+  color: #8c1d40;
+}
+
+.update_presentation-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+.update_presentation-details span {
+  display: flex;
+  flex-direction: column;
+}
+.update_presentation-details label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #8C1D40;
+}
+.update_presentation-details input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background: #fff;
+  color: black;
+}
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+    cursor: pointer;
+    width: 100%;
+    
+}
+.update_presentation-details select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background: #fff;
+  color: black;
+}
