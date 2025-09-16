@@ -13,10 +13,13 @@ import {
   CloudDownload,
   PackageMinus,
   Info,
-  LogOut 
+  LogOut,
+  Crown 
 } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+
+import { DownloadProjects } from "../DownloadProjects";
 
 interface AdminDashboardProps {
   pageTitle: string;
@@ -71,6 +74,7 @@ const sidebarOptions = [
     path: "/admin-dashboard/download-database",
     icon: <CloudDownload />,
   },
+  {label:'Update Winners', path:'/admin-dashboard/update-winners', icon:<Crown />},
   { label: "Go to Sponsore Page", path: "/sponsor", icon: <PackageMinus /> },
   { label: "Support", path: "/admin-dashboard/support", icon: <Info /> },
   // {label: "Edit", path: "/admin-dashboard/edit-admins", icon: <UserCog />},
@@ -260,7 +264,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
           </button>
         </span>
       </span>
-      <main className="admin-dashboard-main"></main>
+      <main className="admin-dashboard-main">
+        {pageTitle === 'Dashboard' && ( <DownloadProjects /> )}
+      </main>
     </div>
   );
 };

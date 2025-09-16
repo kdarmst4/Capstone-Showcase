@@ -1,6 +1,6 @@
 .admin-dashboard-container {
   display: flex;
-  height: 100vh;
+  /* height: 100vh; */
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -25,6 +25,7 @@
   flex: 1;
   padding: 20px;
   background-color: #ecf0f1;
+  overflow-y: auto;
 }
 .admin-dashboard-navbar-items {
   
