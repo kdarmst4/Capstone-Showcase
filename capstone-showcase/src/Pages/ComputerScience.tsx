@@ -26,14 +26,18 @@ const ComputerScience: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const DEFAULT_SEMESTER = "fa";
+  const DEFAULT_YEAR = "2025";
+
+  const semester = selectedSemester || DEFAULT_SEMESTER;
+  const year = selectedYear || DEFAULT_YEAR;
+
   useEffect(() => {
-    console.log("Selected semseter:", selectedSemester, selectedYear);
+    console.log("Selected semseter:", semester, year);
     document.body.classList.add("computer-science-page-body");
 
     // Fetch projects for the Computer Science major
-    fetch(
-      `${API_BASE_URL}/survey/computer-science/term=${selectedSemester}-${selectedYear}`
-    )
+    fetch(`${API_BASE_URL}/survey/computer-science/term=${semester}-${year}`)
       //  fetch(`https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
       //  fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
       .then((response) => {
@@ -48,7 +52,7 @@ const ComputerScience: React.FC = () => {
     return () => {
       document.body.classList.remove("computer-science-page-body");
     };
-  }, [selectedSemester, selectedYear]);
+  }, [semester, year]);
 
   const extractYouTubeThumbnail = (url: string): string | null => {
     const regex =
