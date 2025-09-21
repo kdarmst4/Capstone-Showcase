@@ -15,6 +15,10 @@ import teamMember9 from "../assets/brianProfile.jpg";
 import teamMember10 from "../assets/austinProfile.jpg";
 import teamMember11 from "../assets/cameronProfile.jpg";
 import teamMember12 from "../assets/kaliProfile.jpg"; 
+
+//import teamMember14 from "../assets/leroyProfile.jpg"
+import teamMember15 from "../assets/joshProfile.jpg"
+import teamMember16 from "../assets/marioProfile.jpg"
 import Footer from './Footer';
 import { Github } from 'lucide-react';
 
@@ -115,6 +119,31 @@ const teamMembers = [
     email: "kdarms5@gmail.com",
     linkedin: "https://www.linkedin.com/in/kali-armstrong/",
     github: "https://github.com/kdarmst4",
+  },
+
+  // {
+  //   image: teamMember14,
+  //   name: "Leroy Freelon III",
+  //   major: "Computer Science",
+  //   email: "lfreelon@asu.edu",
+  //   linkedin: "https://github.com/lfreelon21",
+  //   github: "https://www.linkedin.com/in/leroy-freelon-iii-0aa67b255/",
+  // },
+  {
+    image: teamMember15,
+    name: "Josh Decker",
+    major: "Computer Science",
+    email: "jdeckerbfm@gmail.com",
+    linkedin: "https://www.linkedin.com/in/joshua-decker-605821157/",
+    github: "https://github.com/Code-Level-Beard",
+  },
+  {
+    image: teamMember16,
+    name: "Mario Zuniga",
+    major: "Computer Science",
+    email: "mozuniga@asu.edu",
+    linkedin: "https://www.linkedin.com/in/mario-zuniga-0a402625a/",
+    github: "https://github.com/Osvaldo1799",
   },
 ];
 
