@@ -31,21 +31,6 @@ const semesters = [
 ];
 
 const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
-
-const majors = [
-  { label: "Biomedical Engineering", value: "biomedical-engineering" },
-  { label: "Computer Science", value: "computer-science" },
-  {
-    label: "Computer Systems Engineering",
-    value: "computer-systems-engineering",
-  },
-  { label: "Electrical Engineering", value: "electrical-engineering" },
-  { label: "Industrial Engineering", value: "industrial-engineering" },
-  { label: "Informatics", value: "informatics" },
-  { label: "Interdisciplinary", value: "interdisciplinary" },
-  { label: "Mechanical Engineering", value: "mechanical-engineering" },
-];
 
 const sidebarOptions = [
   { label: "Dashboard", path: "/admin-dashboard", icon: <LayoutDashboard /> },
@@ -80,7 +65,7 @@ const sidebarOptions = [
   // {label: "Edit", path: "/admin-dashboard/edit-admins", icon: <UserCog />},
 ];
 
-const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
+const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedSemester, setSelectedSemester] = useState<string | undefined>(
@@ -89,7 +74,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
   const [selectedYear, setSelectedYear] = useState<string | undefined>("");
   const [selectedMajor, setSelectedMajor] = useState<string | undefined>("");
   const [loggingOut, setLoggingOut] = useState(false);
-
+  const [pageTitle, setPageTitle] = useState("Dashboard");
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     sessionStorage.removeItem("authToken");
@@ -244,12 +229,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
           {sidebarOptions.map((option) => (
             <li key={option.label} className="admin-dashboard-navbar-items">
               {option.icon}
-              <Link
-                to={option.path}
-                
+              <span style={{fontSize: '13px', cursor: 'pointer'}}
+                onClick={() => {
+                  setPageTitle(option.label);
+                }}
               >
                 {option.label}
-              </Link>
+              </span>
             </li>
           ))}
         </ul>
@@ -265,8 +251,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
         </span>
       </span>
       <main className="admin-dashboard-main">
-        {/* {pageTitle === 'Dashboard' && ( <DownloadProjects /> )} */}
-        {pageTitle === 'Dashboard' && ( <Edit /> )}  
+        {pageTitle === 'Download Database' && ( <DownloadProjects /> )}
+        {pageTitle === 'Edit Students Submissions' && ( <Edit /> )}  
       </main>
     </div>
   );

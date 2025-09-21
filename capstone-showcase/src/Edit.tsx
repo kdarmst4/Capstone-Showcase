@@ -1,6 +1,6 @@
-import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./CSS/edit.css";
+import EditProject from "./EditProject";
 export function Edit() {
   const [presentationEdit, setPresentationEdit] = useState<boolean>(false);
   const years = Array.from(
@@ -11,13 +11,24 @@ export function Edit() {
   const [submissionSelected, setSubmissionSelected] = useState(null);
   const fetchProjects = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/projects"); // Replace with your API endpoint
+      const response = await fetch('http://localhost:3000/api/projects/fa/2024') // Replace with your API endpoint
       const data = await response.json();
       setProjects(data);
+      console.log(data);
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
   };
+
+  const handleSelectionClose = () =>
+  {
+    setSubmissionSelected(null);
+  }
+
+  useEffect(() =>
+  {
+    fetchProjects();
+  }, [])
   return (
     <div className="edit-page">
       <p className="edit-title">Choose what you want to edit</p>
@@ -78,16 +89,16 @@ export function Edit() {
           </div>
         </div>
       ) : (
-        <div className="edit-instructions">
+        <div className={`edit-instructions ${submissionSelected ? "no-scroll" : ""}`}>
           {submissionSelected && (
-            <div className="admin-logout-shade edit-project-submission">
-              <p>{submissionSelected.projectTitle}</p>
+            <div className="edit-project-submission">
               <p
                 className="edit-close-btn"
                 onClick={() => setSubmissionSelected(null)}
               >
                 X
               </p>
+              <EditProject project={submissionSelected} closeFunc={handleSelectionClose} />
             </div>
           )}
           <form className="edit-form">
@@ -150,25 +161,23 @@ export function Edit() {
                 <th>EntryId</th>
                 <th>Project Title</th>
                 <th>Project Desc</th>
-                <th>Project Desc</th>
+                <th>Member Count</th>
                 <th>Project Sponsor</th>
               </tr>
-              <tr
-                onClick={() => setSubmissionSelected({ projectTitle: "Linus" })}
-              >
-                <td>Emil</td>
-                <td>Tobias</td>
-                <td>Linus</td>
-                <td>Linus</td>
-                <td>Linus</td>
-              </tr>
-              <tr>
-                <td>16</td>
-                <td>14</td>
-                <td>10</td>
-                <td>10</td>
-                <td>10</td>
-              </tr>
+              {
+                projects.map((project: any) => (
+                  <tr
+                    key={project.EntryID}
+                    onClick={() => setSubmissionSelected(project)}
+                  >
+                    <td><div>{project.EntryID}</div></td>
+                    <td><div>{project.ProjectTitle}</div></td>
+                    <td><div>{project.ProjectDescription}</div></td>
+                    <td><div>{project.NumberOfMembers}</div></td>
+                    <td><div>{project.Sponsor}</div></td>
+                  </tr>
+                ))
+              }
             </table>
           </div>
         </div>

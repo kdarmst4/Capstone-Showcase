@@ -1,4 +1,5 @@
-.edit-page, .edit-instructions {
+.edit-page,
+.edit-instructions {
   font-family: Arial, sans-serif;
   /* background-color: #f4f4f4; */
   padding: 20px;
@@ -60,8 +61,8 @@
   justify-content: center;
   gap: 1rem;
   /* background: #f9f9f9; */
-  padding: 1rem .5rem;
-  
+  padding: 1rem 0.5rem;
+
   /* box-shadow: 0 2px 12px rgba(0,0,0,0.08); */
   align-items: flex-end;
   text-align: left;
@@ -76,7 +77,7 @@
 .edit-form label {
   font-weight: 600;
   margin-bottom: 8px;
-  color: #8C1D40;
+  color: #8c1d40;
 }
 .edit-form select {
   padding: 8px 10px;
@@ -93,15 +94,33 @@ table {
   width: 100%;
 }
 
-td, th {
+td,
+th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-tr:hover{
+
+th {
+  background-color: #8c1d40;
+  color: white;
+}
+
+td div 
+{
+  overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            line-height: 1.5em;
+            max-height: 4.5em; /* 3 lines * line-height */
+}
+
+tr:hover {
   background-color: #8c1d40 !important;
   color: white;
-    cursor: pointer;
+  cursor: pointer;
 }
 tr:nth-child(1) {
   background-color: #8c1d40;
@@ -116,37 +135,30 @@ tr:nth-child(even) {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-    color: black;
-    
+  color: black;
 }
-
-
+.no-scroll {
+  /* overflow: hidden !important;
+  height: 98vh !important; */
+}
 .edit-project-submission {
-  
-  color: red;
-  /* position: relative; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow: auto;
 }
 
-.edit-project-submission .edit-close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #8c1d40;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 2rem;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-}
+
 
 .edit-project-submission .edit-close-btn:hover {
-  background-color: #FFC627;
+  background-color: #ffc627;
   color: #8c1d40;
 }
 
@@ -163,7 +175,7 @@ tr:nth-child(even) {
 .update_presentation-details label {
   font-weight: 600;
   margin-bottom: 8px;
-  color: #8C1D40;
+  color: #8c1d40;
 }
 .update_presentation-details input {
   padding: 8px 10px;
@@ -175,9 +187,8 @@ tr:nth-child(even) {
 }
 ::-webkit-calendar-picker-indicator {
   filter: invert(1);
-    cursor: pointer;
-    width: 100%;
-    
+  cursor: pointer;
+  width: 100%;
 }
 .update_presentation-details select {
   padding: 8px 10px;
