@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../CSS/AdminDashboard.css";
+import { Winners } from "../AdminWinners";
 import {Support} from "../Support";
 import asuLogoPlain from "../assets/asuSquareLogo.png";
 import {
@@ -60,7 +61,7 @@ const sidebarOptions = [
     path: "/admin-dashboard/download-database",
     icon: <CloudDownload />,
   },
-  {label:'Update Winners', path:'/admin-dashboard/update-winners', icon:<Crown />},
+  {label:'Winners', path:'/admin-dashboard/update-winners', icon:<Crown />},
   { label: "Go to Sponsore Page", path: "/sponsor", icon: <PackageMinus /> },
   { label: "Support", path: "/admin-dashboard/support", icon: <Info /> },
   // {label: "Edit", path: "/admin-dashboard/edit-admins", icon: <UserCog />},
@@ -255,6 +256,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
         {pageTitle === 'Download Database' && ( <DownloadProjects /> )}
         {pageTitle === 'Edit Students Submissions' && ( <Edit /> )}  
         {pageTitle === 'Support' && ( <Support /> )}  
+        {pageTitle === 'Winners' && ( <Winners /> )}  
       </main>
     </div>
   );
