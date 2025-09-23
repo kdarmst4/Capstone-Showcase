@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../CSS/AdminDashboard.css";
+import {Support} from "../Support";
 import asuLogoPlain from "../assets/asuSquareLogo.png";
 import {
   ArrowBigDownDash,
@@ -253,6 +254,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
       <main className="admin-dashboard-main">
         {pageTitle === 'Download Database' && ( <DownloadProjects /> )}
         {pageTitle === 'Edit Students Submissions' && ( <Edit /> )}  
+        {pageTitle === 'Support' && ( <Support /> )}  
       </main>
     </div>
   );
