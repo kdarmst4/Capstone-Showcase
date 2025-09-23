@@ -15,7 +15,7 @@ import teamMember9 from "../assets/brianProfile.jpg";
 import teamMember10 from "../assets/austinProfile.jpg";
 import teamMember11 from "../assets/cameronProfile.jpg";
 import teamMember12 from "../assets/kaliProfile.jpg"; 
-
+import teamMember13 from "../assets/isabelleProfile.jpg";
 //import teamMember14 from "../assets/leroyProfile.jpg"
 import teamMember15 from "../assets/joshProfile.jpg"
 import teamMember16 from "../assets/marioProfile.jpg"
@@ -119,6 +119,14 @@ const teamMembers = [
     email: "kdarms5@gmail.com",
     linkedin: "https://www.linkedin.com/in/kali-armstrong/",
     github: "https://github.com/kdarmst4",
+  },
+  {
+    image: teamMember13,
+    name: "Isabelle Perkins",
+    major: "Computer Science",
+    email: "isabellemperkins@gmail.com",
+    linkedin: "https://www.linkedin.com/in/isabelle-perkins-35122a260/",
+    github: "https://github.com/RainbowPecan"
   },
 
   // {
