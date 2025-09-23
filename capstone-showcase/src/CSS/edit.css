@@ -17,6 +17,22 @@
   font-weight: bold;
   text-transform: uppercase;
 }
+.form-button {
+  background-color: #8c1d40;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+.form-button:hover {
+  background-color: #ffc627;
+  color: #8c1d40;
+}
 .edit-choice {
   display: flex;
   justify-content: center;
@@ -108,13 +124,12 @@ th {
   color: white;
 }
 
-td div 
-{
+td div {
   overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-            line-height: 1.5em;
-            max-height: 4.5em; /* 3 lines * line-height */
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 1.5em;
+  max-height: 4.5em; /* 3 lines * line-height */
 }
 
 tr:hover {
@@ -142,20 +157,18 @@ tr:nth-child(even) {
   height: 98vh !important; */
 }
 .edit-project-submission {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    overflow: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: auto;
 }
-
-
 
 .edit-project-submission .edit-close-btn:hover {
   background-color: #ffc627;
@@ -184,12 +197,48 @@ tr:nth-child(even) {
   font-size: 16px;
   background: #fff;
   color: black;
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  line-height: 30px;
+  display: block;
+  padding: 0.5rem 1rem;
 }
 ::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  /* filter: invert(1); */
   cursor: pointer;
-  width: 100%;
+  /* width: 100%; */
 }
+.update_presentation-details input[type="date"] {
+  flex: 1;
+
+  background-color: white;
+  color: black;
+
+  &::-webkit-calendar-picker-indicator {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' %3E%3Cg%3E%3Cpath d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-image: none;
+    background-color: currentColor;
+    mask-type: match-source;
+  }
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator{
+   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' %3E%3Cg%3E%3Cpath d='M12 4c-4.41 0-8 3.59-8 8s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm.5-10H11v5.25l4.75 2.85.75-1.23-4.5-2.67V8z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-image: none;
+    background-color: currentColor;
+    mask-type: match-source;
+}
+
+
+.update_presentation-details input[type="file"] {
+  flex: 1;
+  background-color: white;
+  color: black;
+}
+
+
 .update_presentation-details select {
   padding: 8px 10px;
   border-radius: 6px;

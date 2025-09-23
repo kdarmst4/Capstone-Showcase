@@ -66,6 +66,22 @@ export function Edit() {
                 />
               </span>
               <span>
+                <label htmlFor="presentation-location">Presentation Location:</label>
+                <input
+                  type="text"
+                  id="presentation-location"
+                  name="presentation-location"
+                />
+              </span>
+              <span>
+                <label htmlFor="checking-time">Checking Time:</label>
+                <input
+                  type="time"
+                  id="checking-time"
+                  name="checking-time"
+                />
+              </span>
+              <span>
                 <label htmlFor="presentation-time">Presentation Time:</label>
                 <input
                   type="time"
