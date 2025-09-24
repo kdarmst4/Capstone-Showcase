@@ -16,9 +16,11 @@ import teamMember10 from "../assets/austinProfile.jpg";
 import teamMember11 from "../assets/cameronProfile.jpg";
 import teamMember12 from "../assets/kaliProfile.jpg"; 
 import teamMember13 from "../assets/isabelleProfile.jpg";
-//import teamMember14 from "../assets/leroyProfile.jpg"
+import teamMember14 from "../assets/leroyProfile.jpg"
 import teamMember15 from "../assets/joshProfile.jpg"
 import teamMember16 from "../assets/marioProfile.jpg"
+import teamMember17 from "../assets/hanselProfile.jpg"
+import teamMember18 from "../assets/achuProfile.jpg"
 import Footer from './Footer';
 import { Github } from 'lucide-react';
 
@@ -128,15 +130,14 @@ const teamMembers = [
     linkedin: "https://www.linkedin.com/in/isabelle-perkins-35122a260/",
     github: "https://github.com/RainbowPecan"
   },
-
-  // {
-  //   image: teamMember14,
-  //   name: "Leroy Freelon III",
-  //   major: "Computer Science",
-  //   email: "lfreelon@asu.edu",
-  //   linkedin: "https://github.com/lfreelon21",
-  //   github: "https://www.linkedin.com/in/leroy-freelon-iii-0aa67b255/",
-  // },
+  {
+    image: teamMember14,
+    name: "Leroy Freelon III",
+    major: "Computer Science",
+    email: "lfreelon@asu.edu",
+    linkedin: "https://github.com/lfreelon21",
+    github: "https://www.linkedin.com/in/leroy-freelon-iii-0aa67b255/",
+  },
   {
     image: teamMember15,
     name: "Josh Decker",
@@ -152,6 +153,22 @@ const teamMembers = [
     email: "mozuniga@asu.edu",
     linkedin: "https://www.linkedin.com/in/mario-zuniga-0a402625a/",
     github: "https://github.com/Osvaldo1799",
+  },
+  {
+    image: teamMember17,
+    name: "Hansel Lopez",
+    major: "Computer Science",
+    email: "mozuniga@asu.edu",
+    linkedin: "https://www.linkedin.com/in/hansel-lopez-9a4118386?trk=contact-info",
+    github: "https://github.com/Hansel-1",
+  },
+  {
+    image: teamMember18,
+    name: "Worifung Achu",
+    major: "Computer Science",
+    email: "wachu1@asu.edu",
+    linkedin: "https://www.linkedin.com/in/worifung-achu-bab3b423a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+    github: "https://github.com/Achu-Worifung",
   },
 ];
 
