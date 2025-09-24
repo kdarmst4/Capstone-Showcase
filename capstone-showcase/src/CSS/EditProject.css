@@ -5,30 +5,34 @@
 
 .edit-project-container {
   background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 40px 25px 50px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
   position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; 
 }
 .edit-close-btn {
- position: absolute;
+  position: absolute;
   top: 10px;
   right: 10px;
   background-color: #8c1d40;
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 2rem;
+  font-size: 1.5rem;
   border-radius: 20px;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease;
+  z-index: 1010; 
 }
 .edit-project-container h2 {
   text-align: center;

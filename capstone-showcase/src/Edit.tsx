@@ -25,10 +25,25 @@ export function Edit() {
     setSubmissionSelected(null);
   }
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     fetchProjects();
-  }, [])
+  }, []);
+  
+  // Control body scroll when modal is open
+  useEffect(() => {
+    if (submissionSelected) {
+      // Prevent scrolling on the body when modal is open
+      document.body.classList.add('modal-open');
+    } else {
+      // Re-enable scrolling when modal is closed
+      document.body.classList.remove('modal-open');
+    }
+    
+    // Cleanup function to ensure we remove the class when component unmounts
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [submissionSelected]);
   return (
     <div className="edit-page">
       <p className="edit-title">Choose what you want to edit</p>
@@ -108,12 +123,7 @@ export function Edit() {
         <div className={`edit-instructions ${submissionSelected ? "no-scroll" : ""}`}>
           {submissionSelected && (
             <div className="edit-project-submission">
-              <p
-                className="edit-close-btn"
-                onClick={() => setSubmissionSelected(null)}
-              >
-                X
-              </p>
+
               <EditProject project={submissionSelected} closeFunc={handleSelectionClose} />
             </div>
           )}

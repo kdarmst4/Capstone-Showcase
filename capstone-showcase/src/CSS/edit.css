@@ -153,21 +153,32 @@ tr:nth-child(even) {
   color: black;
 }
 .no-scroll {
-  /* overflow: hidden !important;
-  height: 98vh !important; */
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 .edit-project-submission {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  overflow: auto;
+  overflow: hidden; 
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .edit-project-submission .edit-close-btn:hover {
