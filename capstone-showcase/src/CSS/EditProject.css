@@ -210,13 +210,16 @@
   padding: 8px 24px;
   border-radius: 4px;
   font-weight: bold;
+  max-width: 210px;
+  width: 100%;
   cursor: pointer;
+  background-color: var(--asu-maroon);
+  color: white;
 }
 
-.save-btn {
-  background-color: #8c1d40;
-  color: white;
-  border: none;
+.save-btn:hover {
+  background-color: var(--asu-gold);
+  color: var(--asu-maroon);
 }
 
 .cancel-btn {
@@ -225,9 +228,7 @@
   border: 1px solid #ddd;
 }
 
-.save-btn:hover {
-  background-color: #611029;
-}
+
 
 .cancel-btn:hover {
   background-color: #e5e5e5;

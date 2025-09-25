@@ -36,26 +36,26 @@ const currentYear = new Date().getFullYear();
 
 const sidebarOptions = [
   { label: "Dashboard", path: "/admin-dashboard", icon: <LayoutDashboard /> },
+  // {
+  //   label: "Support Requests",
+  //   path: "/admin-dashboard/support",
+  //   icon: <FontAwesomeIcon icon={faCircleInfo} />,
+  // },
   {
-    label: "Support Requests",
-    path: "/admin-dashboard/support",
-    icon: <FontAwesomeIcon icon={faCircleInfo} />,
-  },
-  {
-    label: "Edit Students Submissions",
+    label: "Make Edits",
     path: "/admin-dashboard/edit-students",
     icon: <PencilOff />,
   },
-  {
-    label: "Edit Sponsors",
-    path: "/admin-dashboard/edit-sponsors",
-    icon: <UserRoundPen />,
-  },
-  {
-    label: "Edit Presentation Info",
-    path: "/admin-dashboard/edit-presentation-info",
-    icon: <FilePenLine />,
-  },
+  // {
+  //   label: "Edit Sponsors",
+  //   path: "/admin-dashboard/edit-sponsors",
+  //   icon: <UserRoundPen />,
+  // },
+  // {
+  //   label: "Edit Presentation Info",
+  //   path: "/admin-dashboard/edit-presentation-info",
+  //   icon: <FilePenLine />,
+  // },
   {
     label: "Download Database",
     path: "/admin-dashboard/download-database",
@@ -63,7 +63,7 @@ const sidebarOptions = [
   },
   {label:'Winners', path:'/admin-dashboard/update-winners', icon:<Crown />},
   { label: "Go to Sponsore Page", path: "/sponsor", icon: <PackageMinus /> },
-  { label: "Support", path: "/admin-dashboard/support", icon: <Info /> },
+  // { label: "Support", path: "/admin-dashboard/support", icon: <Info /> },
   // {label: "Edit", path: "/admin-dashboard/edit-admins", icon: <UserCog />},
 ];
 
@@ -254,8 +254,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
       </span>
       <main className="admin-dashboard-main">
         {pageTitle === 'Download Database' && ( <DownloadProjects /> )}
-        {pageTitle === 'Edit Students Submissions' && ( <Edit /> )}  
-        {pageTitle === 'Support' && ( <Support /> )}  
+        {pageTitle === 'Make Edits' && ( <Edit /> )}  
+        {/* {pageTitle === 'Support' && ( <Support /> )}   */}
         {pageTitle === 'Winners' && ( <Winners /> )}  
       </main>
     </div>

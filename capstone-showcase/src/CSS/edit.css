@@ -46,7 +46,7 @@
   outline: none;
 }
 .edit-choice-button {
-  background-color: #8c1d40;
+  background-color: var(--asu-maroon);
   color: white;
   border: none;
   padding: 10px 20px;
