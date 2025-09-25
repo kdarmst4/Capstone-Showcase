@@ -215,7 +215,7 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
 });
 
 // Endpoint to fetch projects by semester
-app.get("/api/survey/term=:semester-:year", (req, res) => {
+app.get("/api/survey/:semester/:year", (req, res) => {
   const { semester, year } = req.params;
   console.log("Semester requested:", semester);
   console.log("Year requested:", year);
@@ -247,7 +247,7 @@ app.get("/api/survey/term=:semester-:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
+  const sql = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
