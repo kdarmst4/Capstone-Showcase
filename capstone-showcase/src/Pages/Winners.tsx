@@ -18,19 +18,19 @@ const Winner: React.FC = () => {
   } = useWinners();
 
   return (
-    <div className="winners-form-container">
+    <div className="winners__form-container">
       <h1 style={{ color: "#8C1D40", fontFamily: "sans-serif", paddingTop: "1rem" }}>
         ASU Winners Showcase
       </h1>
       <p>Celebrating academic excellence and innovation through outstanding student achievements at Arizona State University.</p>
 
-      <form className="winners-form" onSubmit={handleFilterSubmit}>
+      <form className="winners__form" onSubmit={handleFilterSubmit}>
         <input
           type="text"
           placeholder="Search"
           value={searchValue}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="filter-param"
+          className="winners__filter-param"
         />
 
         <span>
@@ -38,7 +38,7 @@ const Winner: React.FC = () => {
           <select
             name="semester"
             id="semester"
-            className="filter-param"
+            className="winners__filter-param"
             value={filters.semester}
             onChange={(e) => setFilters({ ...filters, semester: e.target.value })}
           >
@@ -54,7 +54,7 @@ const Winner: React.FC = () => {
           <select
             name="year"
             id="year"
-            className="filter-param"
+            className="winners__filter-param"
             value={filters.year}
             onChange={(e) => setFilters({ ...filters, year: e.target.value })}
           >
@@ -72,7 +72,7 @@ const Winner: React.FC = () => {
           <select
             name="department"
             id="department"
-            className="filter-param"
+            className="winners__filter-param"
             value={filters.department}
             onChange={(e) => setFilters({ ...filters, department: e.target.value })}
           >
@@ -88,11 +88,11 @@ const Winner: React.FC = () => {
           </select>
         </span>
 
-        <div className="button-container">
-          <button type="submit" className="form-button">
+        <div className="winners__button-container">
+          <button type="submit" className="winners__form-button">
             Filter
           </button>
-          <button className="form-button" onClick={clearFilters}>
+          <button className="winners__form-button" onClick={clearFilters}>
             Clear Filters
           </button>
         </div>

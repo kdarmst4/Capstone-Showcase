@@ -1,4 +1,4 @@
-.winners-form-container {
+.winners__form-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,13 +7,13 @@
   flex-grow: 1;
 }
 
-.winners-showcase-title {
+.winners__showcase-title {
   color:#8C1D40; 
   font-family: sans-serif; 
   padding-top: 1rem;
 }
 
-.winners-form {
+.winners__form {
   display: flex;
   width: 100%;
   box-sizing: border-box;
@@ -29,19 +29,19 @@
   margin-bottom: 25px;
 }
 
-.winners-form span {
+.winners__form span {
   display: flex;
   flex-direction: column;
   min-width: 180px;
 }
 
-.winners-form label {
+.winners__form label {
   font-weight: 600;
   margin-bottom: 8px;
   color: #8C1D40;
 }
 
-.winners-form .filter-param {
+.winners__form .winners__filter-param {
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -50,14 +50,15 @@
   color: black;
 }
 
-.button-container {
+.winners__button-container {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   margin-left: 12px;
+  gap: 12px;
 }
 
-.button-container > .form-button{
+.winners__button-container > .winners__form-button{
   padding: 10px 28px;
   background: #8C1D40;
   border: none;
@@ -68,6 +69,6 @@
   transition: background 0.2s;
 }
 
-.button-container > .form-button:hover {
+.winners__button-container > .winners__form-button:hover {
   background: #A23B72;
 }

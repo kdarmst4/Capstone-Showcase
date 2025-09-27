@@ -208,67 +208,67 @@ export default function ProjectDetails() {
   };
 
   return (
-    <div className="project-details-container">
+    <div className="project-details__container">
       {/* Back to Winners Button */}
-      <div className="back-button-container">
-        <Link to="/winners" className="back-button">
+      <div className="project-details__back-button-container">
+        <Link to="/winners" className="project-details__back-button">
           <ChevronLeft size={18} /> Back to Winners
         </Link>
       </div>
 
       {/* Project Header */}
-      <div className="project-header">
-        <div className="project-header-content">
-          <div className="project-badge">
+      <div className="project-details__project-header">
+        <div className="pproject-details__roject-header-content">
+          <div className="project-details__project-badge">
             {winner.position && (
-              <div className="position-badge">
+              <div className="project-details__position-badge">
                 <Medal size={18} /> {getPositionText(winner.position)}
               </div>
             )}
-            <div className="semester-badge">
+            <div className="project-details__semester-badge">
               <Calendar size={18} /> {winner.semester} {winner.year}
             </div>
-            <div className="department-badge">
+            <div className="project-details__department-badge">
               <GraduationCap size={18} /> {winner.department || "Computer Science"}
             </div>
           </div>
 
-          <h1 className="project-title">{winner.ProjectTitle}</h1>
+          <h1 className="project-details__project-title">{winner.ProjectTitle}</h1>
 
-          <div className="project-author">
+          <div className="project-details__project-author">
             <UsersRound size={24} /> sponsored by {winner.Sponsor || "John Doe"}
           </div>
         </div>
       </div>
 
-      <div className="project-content">
+      <div className="project-details__project-content">
         {/* Image Gallery */}
-        <div className="project-gallery">
-          <div className="gallery-image-container">
+        <div className="project-details__project-gallery">
+          <div className="project-details__gallery-image-container">
             {projectImages.length > 0 ? (
               <>
                 <img 
                   src={projectImages[currentImageIndex]} 
                   alt={`${winner.ProjectTitle} - Image ${currentImageIndex + 1}`} 
-                  className="gallery-image"
+                  className="project-details__gallery-image"
                 />
                 
                 {projectImages.length > 1 && (
-                  <div className="gallery-controls">
-                    <button onClick={prevImage} className="gallery-control-btn">
+                  <div className="project-details__gallery-controls">
+                    <button onClick={prevImage} className="project-details__gallery-control-btn">
                       <ChevronLeft size={24} />
                     </button>
-                    <span className="gallery-pagination">
+                    <span className="project-details__gallery-pagination">
                       {currentImageIndex + 1} / {projectImages.length}
                     </span>
-                    <button onClick={nextImage} className="gallery-control-btn">
+                    <button onClick={nextImage} className="project-details__gallery-control-btn">
                       <ChevronRight size={24} />
                     </button>
                   </div>
                 )}
               </>
             ) : (
-              <div className="placeholder-image">
+              <div className="project-details__placeholder-image">
                 <ImageMinus size={120} />
                 <p>No project images available</p>
               </div>
@@ -277,19 +277,19 @@ export default function ProjectDetails() {
         </div>
 
         {/* Project Details */}
-        <div className="project-info">
-          <div className="info-section">
-            <h2 className="section-title">Project Overview</h2>
-            <p className="project-description">{winner.description}</p>
+        <div className="project-details__project-info">
+          <div className="project-details__info-section">
+            <h2 className="project-details__section-title">Project Overview</h2>
+            <p className="project-details__project-description">{winner.description}</p>
           </div>
 
           {/* Team Members Section */}
-          <div className="info-section">
-            <h2 className="section-title">Team Members</h2>
-            <div className="team-members">
+          <div className="project-details__info-section">
+            <h2 className="project-details__section-title">Team Members</h2>
+            <div className="project-details__team-members">
               {teamMembers.map((member: string, index: number) => (
-                <div key={index} className="team-member">
-                  <div className="member-avatar">
+                <div key={index} className="project-details__team-member">
+                  <div className="project-details__member-avatar">
                     <UsersRound size={24} />
                   </div>
                   <span>{member}</span>
@@ -299,9 +299,9 @@ export default function ProjectDetails() {
           </div>
 
           {/* Project Resources */}
-          <div className="info-section">
-            <h2 className="section-title">Project Resources</h2>
-            <div className="project-resources">
+          <div className="project-details__info-section">
+            <h2 className="project-details__section-title">Project Resources</h2>
+            <div className="project-details__project-resources">
               {winner.video && (
                 <a href={winner.video} target="_blank" rel="noopener noreferrer" className="resource-link">
                   <ExternalLink size={18} /> Watch Demo Video
@@ -309,18 +309,18 @@ export default function ProjectDetails() {
               )}
              
               {!winner.video && (
-                <p className="no-resources">No additional resources available</p>
+                <p className="project-details__no-resources">No additional resources available</p>
               )}
             </div>
           </div>
 
           {/* Social Sharing */}
-          <div className="info-section">
-            <h2 className="section-title">Share This Project</h2>
-            <div className="social-icons">
+          <div className="project-details__info-section">
+            <h2 className="project-details__section-title">Share This Project</h2>
+            <div className="project-details__social-icons">
               <button 
                 onClick={() => shareProject('facebook', winner)} 
-                className="share-icon" 
+                className="project-details__share-icon" 
                 aria-label="Share on Facebook"
                 title="Share on Facebook"
               >
@@ -328,7 +328,7 @@ export default function ProjectDetails() {
               </button>
               <button 
                 onClick={() => shareProject('linkedin', winner)} 
-                className="share-icon" 
+                className="project-details__share-icon" 
                 aria-label="Share on LinkedIn"
                 title="Share on LinkedIn"
               >
@@ -336,7 +336,7 @@ export default function ProjectDetails() {
               </button>
               <button 
                 onClick={() => shareProject('twitter', winner)} 
-                className="share-icon" 
+                className="project-details__share-icon" 
                 aria-label="Share on Twitter"
                 title="Share on Twitter"
               >
@@ -344,7 +344,7 @@ export default function ProjectDetails() {
               </button>
               <button 
                 onClick={() => shareProject('copy', winner)} 
-                className="share-icon" 
+                className="project-details__share-icon" 
                 aria-label="Copy link"
                 title="Copy link to clipboard"
               >
@@ -355,11 +355,11 @@ export default function ProjectDetails() {
         </div>
       </div>
 
-      <div className="asu-branding">
+      <div className="project-details__asu-branding">
         <img 
           src="https://innovationshowcase.engineering.asu.edu/wp-content/themes/pitchfork/src/endorsed-logos/asu_fultonengineering_white.png" 
           alt="ASU Fulton Engineering" 
-          className="asu-logo"
+          className="project-details__asu-logo"
         />
       </div>
       

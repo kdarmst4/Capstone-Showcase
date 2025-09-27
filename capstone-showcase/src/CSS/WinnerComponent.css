@@ -1,4 +1,4 @@
-.parent-container {
+.winner-component__parent-container {
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -6,11 +6,11 @@
   align-items: center;
   flex-grow: 1;
 }
-.no-results {
+.winner-component__no-results {
   flex-grow: 1;
 }
 
-.winner-container {
+.winner-component__winner-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -21,7 +21,7 @@
   background-color: white;
 }
 
-.winner-card {
+.winner-component__winner-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,7 +33,7 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.winner-image {
+.winner-component__winner-image {
   width: 100%;
   height: 200px;
   background: #eaeaea;
@@ -45,7 +45,7 @@
   position: relative;
 }
 
-.winner-medal {
+.winner-component__winner-medal {
   position: absolute;
   top: 0;
   left: 0;
@@ -56,13 +56,13 @@
   stroke-width: 12;
 }
 
-.winner-text-section {
+.winner-component__winner-text-section {
   color: black;
   text-align: left;
   margin: 0;
 }
 
-.winner-project {
+.winner-component__winner-project {
   margin: 0;
   font-weight: 600;
   display: -webkit-box;
@@ -72,7 +72,7 @@
   overflow: hidden;
 }
 
-.winner-author {
+.winner-component__winner-author {
   margin: 0;
   font-size: 0.90rem;
   color: #555;
@@ -83,20 +83,20 @@
   overflow: hidden;
 }
 
-.winner-info-row {
+.winner-component__winner-info-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
 }
 
-.winner-semester {
+.winner-component__winner-semester {
   font-size: 0.90rem;
   background: #D1E7FF;
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
 }
 
-.winner-department {
+.winner-component__winner-department {
   background: #FFC627;
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
@@ -104,7 +104,7 @@
   font-size: 0.90rem;
 }
 
-.winner-description {
+.winner-component__winner-description {
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -115,11 +115,11 @@
   font-size: 0.90rem;
 }
 
-.winner-details-link-container {
+.winner-component__winner-details-link-container {
   margin-top: 1rem;
 }
 
-.winner-details-link {
+.winner-component__winner-details-link {
   margin-top: 0.75rem;
   background: #8C1D40;
   color: #fff;
@@ -135,7 +135,7 @@
 }
 
 @media (max-width: 1024px) {
-  .winner-container {
+  .winner-component__winner-container {
     flex-direction: column;
     align-items: center;
   }

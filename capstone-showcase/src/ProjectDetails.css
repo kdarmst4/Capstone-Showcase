@@ -1,6 +1,6 @@
 
 /* Project Details Container */
-.project-details-container {
+.project-details__container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
@@ -9,13 +9,13 @@
 }
 
 /* Back Button */
-.back-button-container {
+.project-details__back-button-container {
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: flex-start;
 }
 
-.back-button {
+.project-details__back-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -28,13 +28,13 @@
   background-color: #f5f5f5;
 }
 
-.back-button:hover {
+.project-details__back-button:hover {
   color: #5c0f28;
   background-color: #ebebeb;
 }
 
 /* Project Header */
-.project-header {
+.project-details__project-header {
 box-sizing: border-box;
 
   background: linear-gradient(to right, #8C1D40, #5c0f28);
@@ -45,20 +45,20 @@ box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.project-header-content {
+.project-details__project-header-content {
   max-width: 800px;
 }
 
-.project-badge {
+.project-details__project-badge {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
 
-.position-badge,
-.semester-badge,
-.department-badge {
+.project-details__position-badge,
+.project-details__semester-badge,
+.project-details__department-badge {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -68,20 +68,20 @@ box-sizing: border-box;
   font-size: 0.9rem;
 }
 
-.position-badge {
+.project-details__position-badge {
   background-color: #FFC627;
   color: #333;
 }
 
-.semester-badge {
+.project-details__semester-badge {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.department-badge {
+.project-details__department-badge {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.project-title {
+.project-details__project-title {
   font-size: 2.5rem;
   margin: 1rem 0;
   line-height: 1.2;
@@ -89,7 +89,7 @@ box-sizing: border-box;
   color:white;
 }
 
-.project-author {
+.project-details__project-author {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -99,24 +99,24 @@ box-sizing: border-box;
 }
 
 /* Project Content */
-.project-content {
+.project-details__project-content {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
 }
-.project-gallery
+.project-details__project-gallery
 {
   position: relative;
 }
 
 @media (min-width: 992px) {
-  .project-content {
+  .project-details__project-content {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 /* Image Gallery */
-.project-gallery {
+.project-details__project-gallery {
   height: fit-content;
   position: sticky;
   border-radius: 8px;
@@ -126,7 +126,7 @@ box-sizing: border-box;
   top: 120px;
 }
 
-.gallery-image-container {
+.project-details__gallery-image-container {
   position: relative;
   min-height: 400px;
   display: flex;
@@ -134,7 +134,7 @@ box-sizing: border-box;
   align-items: center;
 }
 
-.gallery-image {
+.project-details__gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -142,7 +142,7 @@ box-sizing: border-box;
   max-height: 500px;
 }
 
-.gallery-controls {
+.project-details__gallery-controls {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -154,7 +154,7 @@ box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.gallery-control-btn {
+.project-details__gallery-control-btn {
   background: transparent;
   border: none;
   color: white;
@@ -164,16 +164,16 @@ box-sizing: border-box;
   align-items: center;
 }
 
-.gallery-control-btn:hover {
+.project-details__gallery-control-btn:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.gallery-pagination {
+.project-details__gallery-pagination {
   color: white;
   font-size: 0.9rem;
 }
 
-.placeholder-image {
+.project-details__placeholder-image {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -184,18 +184,18 @@ box-sizing: border-box;
 }
 
 /* Project Info */
-.project-info {
+.project-details__project-info {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.info-section {
+.project-details__info-section {
   margin-bottom: 1.5rem;
   color: white;
 }
 
-.section-title {
+.project-details__section-title {
   color: #8C1D40;
   font-size: 1.5rem;
   margin-bottom: 1rem;
@@ -203,20 +203,20 @@ box-sizing: border-box;
   border-bottom: 2px solid #FFC627;
 }
 
-.project-description {
+.project-details__project-description {
   font-size: 1.1rem;
   line-height: 1.6;
   color: white;
 }
 
 /* Team Members */
-.team-members {
+.project-details__team-members {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-.team-member {
+.project-details__team-member {
   display: flex;
   align-items: center;
   justify-content: baseline;
@@ -227,7 +227,7 @@ box-sizing: border-box;
   height: fit-content;
 }
 
-.member-avatar {
+.project-details__member-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -238,14 +238,14 @@ box-sizing: border-box;
 }
 
 /* Project Resources */
-.project-resources {
+.project-details__project-resources {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   color: white;
 }
 
-.resource-link {
+.project-details__resource-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -258,22 +258,22 @@ box-sizing: border-box;
   transition: background-color 0.2s;
 }
 
-.resource-link:hover {
+.project-details__resource-link:hover {
   background-color: #e0e0e0;
 }
 
-.no-resources {
+.project-details__no-resources {
   color: white;
   font-style: italic;
 }
 
 /* Social Icons */
-.social-icons {
+.project-details__social-icons {
   display: flex;
   gap: 1rem;
 }
 
-.share-icon {
+.project-details__share-icon {
   cursor: pointer;
   padding:0;
   transition: all 0.2s;
@@ -288,17 +288,17 @@ box-sizing: border-box;
   align-items: center;
 }
 
-.share-icon:hover {
+.project-details__share-icon:hover {
   transform: scale(1.1);
   background-color: #e0e0e0;
 }
 
-.share-icon:hover svg {
+.project-details__share-icon:hover svg {
   stroke: #8C1D40;
 }
 
 /* ASU Branding */
-.asu-branding {
+.project-details__asu-branding {
   margin-top: 3rem;
   padding: 1.5rem;
   background-color: #2d2e30;
@@ -307,12 +307,12 @@ box-sizing: border-box;
   justify-content: flex-start;
 }
 
-.asu-logo {
+.project-details__asu-logo {
   height: 60px;
 }
 
 /* Project Not Found */
-.project-not-found {
+.project-details__project-not-found {
   text-align: center;
   padding: 3rem;
   background-color: #f5f5f5;
@@ -321,31 +321,31 @@ box-sizing: border-box;
   max-width: 600px;
 }
 
-.project-not-found h2 {
+.project-details__project-not-found h2 {
   color: #8C1D40;
   margin-bottom: 1rem;
 }
 
-.project-not-found .back-button {
+.project-details__project-not-found .project-details__back-button {
   margin-top: 1.5rem;
 }
 
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .project-title {
+  .project-details__project-title {
     font-size: 2rem;
   }
-  .gallery-image-container {
+  .project-details__gallery-image-container {
     min-height: 300px;
   }
-  .team-members {
+  .project-details__team-members {
     flex-direction: column;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
   }
-  .project-gallery {
+  .project-details__project-gallery {
     position: static !important;
     top: auto !important;
   }
