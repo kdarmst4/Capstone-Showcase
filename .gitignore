@@ -29,3 +29,4 @@ backend/teamUploads/
 *.sw?
 *.env
 *.pem
+*.json
