@@ -4,10 +4,11 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const dotenv = require("dotenv");
+dotenv.config();
 const multer = require("multer");
 const fs = require("fs");
-dotenv.config();
-const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE);
+// the || was an addition make sure to recomove it
+const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE || "mysql2");
 
 //Local DB Different
 app.use(bodyParser.json());
@@ -15,9 +16,9 @@ app.use(cors());
 
 const db = mysql.createConnection({
   host: process.env.LOCAL_DB_HOST,
-  user: process.env.LOCAL_DB_USERNAME,
-  password: process.env.LOCAL_DB_PASSWORD,
-  database: process.env.LOCAL_DB_DATABASE,
+  user: process.env.LOCAL_DB_USERNAME || "root",
+  password: process.env.LOCAL_DB_PASSWORD || "password",
+  database: process.env.LOCAL_DB_DATABASE ||'asucapstone_jmtlqnmy_capstone_project_submission',
   
 });
 
@@ -244,6 +245,75 @@ app.get("/api/survey/term=:semester-:year", (req, res) => {
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
+});
+
+//get endpoint to fetch all the winners of prev projects
+app.get("/api/winners", (req, res) => {
+  const sql = `SELECT 
+  CourseNumber AS course,
+  VideoLinkRaw AS video,
+  shouldDisplay,
+  position AS position,
+  MemberNames AS members,
+  Sponsor,
+  ProjectDescription AS description,
+  ProjectTitle,
+  winning_pic,
+  shouldDisplay,
+  NDA,
+  EntryID,
+  YEAR(DateStamp) AS year,
+  CASE 
+    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
+  END AS semester
+FROM showcaseentries
+WHERE position IS NOT NULL;`;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error retrieving winners data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
+});
+
+//getting a specific winner by id
+app.get("/api/winner/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = `SELECT 
+  CourseNumber AS course,
+  VideoLinkRaw AS video,
+  shouldDisplay,
+  position AS position,
+  MemberNames AS members,
+  Sponsor,
+  ProjectDescription AS description,
+  ProjectTitle,
+  winning_pic,
+  shouldDisplay,
+  NDA,
+  EntryID,
+  YEAR(DateStamp) AS year,
+  CASE 
+    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
+  END AS semester
+FROM showcaseentries
+WHERE position IS NOT NULL AND EntryID = ?;`;
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error retrieving winners data:", err);
       return res.status(500).send("Server error");
     }
     console.log("Query results:", results);

@@ -1,28 +1,8 @@
 #root {
-  /* margin: 0 auto; */
-  /* padding: 0 2rem 2rem 2rem; */
-  text-align: center;
-  width: 100vw;
   max-width: 1280px;
-  height: 100vh;
-}
-
-.app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.content {
-  /* margin-top: 60px; */
-  transition: margin-left 0.3s ease;
-  height: 100%;
-  display: flex;
-}
-
-.side-menu .content {
-  margin-left: 250px;
-  transition: margin-left 0.3s ease;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 .logo {

@@ -6,18 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-.env.local
-.env
-capstone-showcase/backend/env
 
 node_modules
 dist
 dist-ssr
-dist.zip
 *.local
-dist.zip
-backend/posterUploads/
-backend/teamUploads/
 
 # Editor directories and files
 .vscode/*
@@ -29,5 +22,3 @@ backend/teamUploads/
 *.njsproj
 *.sln
 *.sw?
-*.env
-*.pem

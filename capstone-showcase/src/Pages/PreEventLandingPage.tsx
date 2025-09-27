@@ -69,12 +69,13 @@ const PreEventLandingPage: React.FC = () => {
           <p>Explore the venue maps and download the showcase materials below.</p>
 
           <div style={{ marginTop: "30px", display: "flex", justifyContent: "center" }}>
-          <embed
-          src="/pdfs/secondFloor_emsFeatures.pdf"
+          <iframe src="/pdfs/secondFloor_emsFeatures.pdf" width="100%" height="600px"></iframe>
+          {/* <embed
+          // src="/pdfs/secondFloor_emsFeatures.pdf" loading the page caused pdf to download 
           type="application/pdf"
           width="80%"
           height="600px"
-          />
+          /> */}
           </div>
 
           <div style={{ marginTop: "20px" }}>

@@ -1,0 +1,73 @@
+.winners-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+  max-width: 100%;
+  flex-grow: 1;
+}
+
+.winners-showcase-title {
+  color:#8C1D40; 
+  font-family: sans-serif; 
+  padding-top: 1rem;
+}
+
+.winners-form {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  background: #f9f9f9;
+  padding: 2rem 1.5rem;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  align-items: flex-end;
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.winners-form span {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.winners-form label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #8C1D40;
+}
+
+.winners-form .filter-param {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background: #fff;
+  color: black;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: 12px;
+}
+
+.button-container > .form-button{
+  padding: 10px 28px;
+  background: #8C1D40;
+  border: none;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.button-container > .form-button:hover {
+  background: #A23B72;
+}
