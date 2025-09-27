@@ -1,11 +1,12 @@
 import './CSS/SelectModalWinner.css'
+import { ProjectObj } from './SiteInterface';
 export function SelectWinnerModal({
   project,
   setSelectionMade,
   handleSelectionClose,
 }: {
-  project: any;
-  setSelectionMade: (position: number) => void;
+  project: ProjectObj;
+  setSelectionMade: (project: ProjectObj, position: number) => void;
   handleSelectionClose: () => void;
 }) {
   console.log("Project in Modal:", project);
@@ -30,7 +31,7 @@ export function SelectWinnerModal({
             <select
               name="position"
               id="position"
-              onChange={(e) => setSelectionMade(parseInt(e.target.value))}
+              onChange={(e) => setSelectionMade(project, Number(e.target.value))}
             >
               <option value="1">1st Place</option>
               <option value="2">2nd Place</option>

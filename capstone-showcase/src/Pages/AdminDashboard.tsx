@@ -1,25 +1,25 @@
 import React, { useState } from "react";
-import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
+import {  useNavigate,useLocation } from "react-router-dom";
 import axios from "axios";
 import "../CSS/AdminDashboard.css";
 import { Winners } from "../AdminWinners";
-import {Support} from "../Support";
-import asuLogoPlain from "../assets/asuSquareLogo.png";
+// import {Support} from "../Support";
+// import asuLogoPlain from "../assets/asuSquareLogo.png";
 import {
-  ArrowBigDownDash,
-  PencilRuler,
+  // ArrowBigDownDash,
+  // PencilRuler,
   LayoutDashboard,
   PencilOff,
-  UserRoundPen,
-  FilePenLine,
+  // UserRoundPen,
+  // FilePenLine,
   CloudDownload,
   PackageMinus,
-  Info,
+  // Info,
   LogOut,
   Crown 
 } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { Edit } from "../Edit";
 import { DownloadProjects } from "../DownloadProjects";
 
@@ -27,12 +27,6 @@ interface AdminDashboardProps {
   pageTitle: string;
 }
 
-const semesters = [
-  { label: "Spring", value: "sp" },
-  { label: "Fall", value: "fa" },
-];
-
-const currentYear = new Date().getFullYear();
 
 const sidebarOptions = [
   { label: "Dashboard", path: "/admin-dashboard", icon: <LayoutDashboard /> },

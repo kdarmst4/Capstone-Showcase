@@ -24,7 +24,7 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container-login-admin">
       <div className="box">
         <img src={asuLogoPlain} alt="ASU Logo" className="logo" />
         <h1 style={{ color: "black" }}>ASU Capstone Showcase</h1>

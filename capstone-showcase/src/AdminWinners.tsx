@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import "./CSS/AdminWinners.css";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SelectWinnerModal } from "./SelectWinnerModal";
-export interface WinnerSelection {
-  position: string;
-  projectId: number;
-  projectName: string;
-  pictures: string[];
-}
+import { ProjectObj, WinnerSelection } from "./SiteInterface";
+
 export function Winners() {
-  const [projects, setProjects] = useState([]);
-  const [selectionMade, setSelectionMade] = useState(false);
+  const [projects, setProjects] = useState<ProjectObj[] | null>(null);
+  const [selectionMade, setSelectionMade] = useState<boolean>(false);
+  const [currSelection, setCurrSelection] = useState<ProjectObj | null>(null);
   const [selectedWinners, setSelectedWinners] = useState<
     WinnerSelection[] | null
   >(null);
@@ -21,7 +17,7 @@ export function Winners() {
   useEffect(() => {
     fetchProjects();
   }, []);
-  const setSelection = (project: any, position: number) => {
+  const setSelection = (project: ProjectObj, position: number) => {
     switch (position) {
       case 1:
         project.position = "1";
@@ -43,10 +39,22 @@ export function Winners() {
           (winner) => winner.position !== project.position
         );
         // Add the new winner
-        updatedWinners.push(project);
+        updatedWinners.push({
+          projectId: project.EntryID,
+          projectName: project.ProjectTitle,
+          position: project.position,
+          pictures: [],
+        });
         return updatedWinners;
       } else {
-        return [project];
+        return [
+          {
+            projectId: project.EntryID,
+            projectName: project.ProjectTitle,
+            position: project.position,
+            pictures: [],
+          },
+        ];
       }
     });
   };
@@ -66,17 +74,17 @@ export function Winners() {
       console.error("Error fetching projects:", error);
     }
   };
-  const currMonth = new Date().getMonth();
+  // const currMonth = new Date().getMonth();
   const currYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currYear - i);
   const semesters = ["fa", "sp"];
   return (
     <div className="admin-set-winners-page">
-      {selectionMade && (
+      {selectionMade && currSelection && (
         <div className="edit-project-submission">
           <SelectWinnerModal
-            project={selectedWinners}
-            setSelectionMade={setSelectionMade}
+            project={currSelection}
+            setSelectionMade={setSelection}
             handleSelectionClose={handleSelectionClose}
           />
         </div>
@@ -102,7 +110,7 @@ export function Winners() {
           <select
             id="year"
             value={year}
-            onChange={(e) => setYear(e.target.value)}
+            onChange={(e) => setYear(Number(e.target.value))}
           >
             {years.map((yr) => (
               <option key={yr} value={yr}>
@@ -122,7 +130,7 @@ export function Winners() {
         </section>
       </form>
       <div className="projects-list">
-        {projects.length === 0 ? (
+        {projects && projects.length === 0 ? (
           <p className="winner-small-title" style={{ fontSize: "" }}>
             No projects available for the selected semester and year.
           </p>
@@ -168,31 +176,32 @@ export function Winners() {
                   <th>Member Count</th>
                   <th>Project Sponsor</th>
                 </tr>
-                {projects.map((project: any) => (
-                  <tr
-                    key={project.EntryID}
-                    onClick={() => {
-                      setSelectionMade(true);
-                      setSelectedWinners(project);
-                    }}
-                  >
-                    <td>
-                      <div>{project.EntryID}</div>
-                    </td>
-                    <td>
-                      <div>{project.ProjectTitle}</div>
-                    </td>
-                    <td>
-                      <div>{project.ProjectDescription}</div>
-                    </td>
-                    <td>
-                      <div>{project.NumberOfMembers}</div>
-                    </td>
-                    <td>
-                      <div>{project.Sponsor}</div>
-                    </td>
-                  </tr>
-                ))}
+                {projects &&
+                  projects.map((project: any) => (
+                    <tr
+                      key={project.EntryID}
+                      onClick={() => {
+                        setSelectionMade(true);
+                        setCurrSelection(project);
+                      }}
+                    >
+                      <td>
+                        <div>{project.EntryID}</div>
+                      </td>
+                      <td>
+                        <div>{project.ProjectTitle}</div>
+                      </td>
+                      <td>
+                        <div>{project.ProjectDescription}</div>
+                      </td>
+                      <td>
+                        <div>{project.NumberOfMembers}</div>
+                      </td>
+                      <td>
+                        <div>{project.Sponsor}</div>
+                      </td>
+                    </tr>
+                  ))}
               </table>
             </div>
           </>

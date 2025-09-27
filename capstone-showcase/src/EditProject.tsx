@@ -1,7 +1,8 @@
 import "./CSS/EditProject.css";
 import { useState } from "react";
+import { ProjectObj } from "./SiteInterface";
 
-export default function EditProject({ project, closeFunc }: { project: any; closeFunc: () => void }) {
+export default function EditProject({ project, closeFunc }: { project: ProjectObj; closeFunc: () => void }) {
   const initialMembers = project.MemberNames ? project.MemberNames.split(", ") : [];
   const [members, setMembers] = useState(initialMembers);
 
