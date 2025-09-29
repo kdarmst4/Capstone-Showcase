@@ -412,11 +412,11 @@ app.put("/api/admin/submissions/:id", (req, res) => {
 // Endpoint to fetch projects by semester
 app.get("/api/survey/:semester/:year", (req, res) => {
   const { semester, year } = req.params;
-  console.log("Semester requested:", semester);
-  console.log("Year requested:", year);
+  // console.log("Semester requested:", semester);
+  // console.log("Year requested:", year);
 
   if (!semester || !year) {
-    console.error("Error: Invalid semester or year");
+    // console.error("Error: Invalid semester or year");
     return res.status(400).send("Bad request");
   }
 
@@ -446,7 +446,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
   const endDay = getLastDayOfMonth(year, parseInt(endMonth));
   const endDate = `${year}-${endMonth}-${endDay} 23:59:59`;
 
-  console.log(`Querying from ${startDate} to ${endDate}`);
+  // console.log(`Querying from ${startDate} to ${endDate}`);
 
   const sql = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
@@ -454,7 +454,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
       console.error("Error retrieving data:", err);
       return res.status(500).send("Server error");
     }
-    console.log("Query results:", results);
+    // console.log("Query results:", results);
     res.json(results);
   });
 });
