@@ -46,7 +46,7 @@ const AppContent: React.FC = () => {
           <Route path="/interdisciplinary" element={<Interdisciplinary />} />
           {/* <Route path="/survey" element={<Survey />} /> */}
           <Route path="/admin" element={<AdminLogin />} />
-          <Route path="admin-dashboard" element={<AdminDashboard />} />
+          <Route path="admin-dashboard" element={<AdminDashboard pageTitle="Admin Dashboard" />} />
           <Route path="admin-dashboard/edit/presentation" element={<EditPresentation />} />
           <Route path="admin-dashboard/edit/submissions" element={<EditSubmissions />} />
           <Route path="admin-dashboard/support" element={<ContactSupport />} />

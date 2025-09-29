@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../CSS/AdminDashboard.css";
 import { Winners } from "../AdminWinners";
@@ -16,7 +16,7 @@ import {
   PackageMinus,
   // Info,
   LogOut,
-  Crown 
+  Crown,
 } from "lucide-react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
@@ -26,7 +26,6 @@ import { DownloadProjects } from "../DownloadProjects";
 interface AdminDashboardProps {
   pageTitle: string;
 }
-
 
 const sidebarOptions = [
   { label: "Dashboard", path: "/admin-dashboard", icon: <LayoutDashboard /> },
@@ -55,8 +54,11 @@ const sidebarOptions = [
     path: "/admin-dashboard/download-database",
     icon: <CloudDownload />,
   },
-  {label:'Winners', path:'/admin-dashboard/update-winners', icon:<Crown />},
-  { label: "Go to Sponsore Page", path: "/sponsor", icon: <PackageMinus /> },
+  {
+    label: "Winners",
+    path: "/admin-dashboard/update-winners",
+    icon: <Crown />,
+  },
   // { label: "Support", path: "/admin-dashboard/support", icon: <Info /> },
   // {label: "Edit", path: "/admin-dashboard/edit-admins", icon: <UserCog />},
 ];
@@ -141,12 +143,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     }
   };
 
-  const API_BASE_URL = 
-    process.env.NODE_ENV === 'production'?
-     "":
-     'http://localhost:3000/api';
-  const STATIC_BASE_URL = 
-   process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
+  const API_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
+  const STATIC_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
 
   //to get semseter year
   const getDatabaseSubmissionsAll = async (semester: string, year: string) => {
@@ -211,37 +211,56 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const isSupportPage = location.pathname === "/admin-dashboard/support";
 
   return (
-    
     <div className="admin-dashboard-container">
-      {loggingOut && 
-      <div className="admin-logout-shade" onClick={ () => setLoggingOut(false)}>
-        <div className="admin-logout-msg">
-           <LogOut size={50} className="admin-logout-icon" />
-           <p>Ohh no! Are you sure you want to log out?</p>
-           <p>Are you sure you want to log out?</p>
-          <button className="admin-logout-yes" onClick={handleLogout}>Yes</button>
-          <button className="admin-logout-no" onClick={() => setLoggingOut(false)}>No</button>
+      {loggingOut && (
+        <div
+          className="admin-logout-shade"
+          onClick={() => setLoggingOut(false)}
+        >
+          <div className="admin-logout-msg">
+            <LogOut size={50} className="admin-logout-icon" />
+            <h2>Log Out</h2>
+            <p>
+              Are you sure you want to log out? You’ll need to sign in again to
+              access your dashboard.
+            </p>
+            <button className="admin-logout-yes" onClick={handleLogout}>
+              Yes, Log Me Out
+            </button>
+            <button
+              className="admin-logout-no"
+              onClick={() => setLoggingOut(false)}
+            >
+              Cancel
+            </button>
           </div>
-      </div>
-    }
+        </div>
+      )}
       <span className="admin-dashboard-navbar">
-        <span>
-          <h1 className="admin-dashboard-navbar-title">{pageTitle}</h1>
-        </span>
-        <ul>
-          {sidebarOptions.map((option) => (
-            <li key={option.label} className="admin-dashboard-navbar-items">
-              {option.icon}
-              <span style={{fontSize: '13px', cursor: 'pointer'}}
+        <span className="admin-dashboard-navbar-options">
+          <span>
+            <h1 className="admin-dashboard-navbar-title">{pageTitle}</h1>
+          </span>
+          <ul className="admin-dashboard-navbar-list">
+            {sidebarOptions.map((option) => (
+              <li
+                key={option.label}
+                className="admin-dashboard-navbar-items"
                 onClick={() => {
                   setPageTitle(option.label);
                 }}
               >
+                {option.icon}
+
                 {option.label}
-              </span>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+            <a href="https://betasubmission.asucapstone.com/login" className="admin-dashboard-navbar-items"><PackageMinus />Go to Sponsore Page</a>
+              
+
+          </ul>
+        </span>
+
         <span>
           <button
             className="admin-dashboard-logout-button"
@@ -254,10 +273,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
         </span>
       </span>
       <main className="admin-dashboard-main">
-        {pageTitle === 'Download Database' && ( <DownloadProjects /> )}
-        {pageTitle === 'Make Edits' && ( <Edit /> )}  
+        {pageTitle === "Download Database" && <DownloadProjects />}
+        {pageTitle === "Make Edits" && <Edit />}
         {/* {pageTitle === 'Support' && ( <Support /> )}   */}
-        {pageTitle === 'Winners' && ( <Winners /> )}  
+        {pageTitle === "Winners" && <Winners />}
       </main>
     </div>
   );

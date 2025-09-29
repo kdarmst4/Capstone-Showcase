@@ -8,6 +8,8 @@
   flex-direction: column;
   align-items: center;
   color: black;
+  box-sizing: border-box;
+  width: 100%;
 }
 .edit-title {
   text-align: center;
