@@ -1,17 +1,40 @@
 import { useState, useEffect } from "react";
 import "./CSS/edit.css";
 import EditProject from "./EditProject";
+import { TodaysDate } from "./AdminDate";
 export function Edit() {
   const [presentationEdit, setPresentationEdit] = useState<boolean>(false);
+  const[formData, setFormData] = useState(
+    {
+      semester:"All",
+      year:"All",
+      department:"All"
+    }
+  )
+  const[editpresentationData, setEditPresentationData] = useState(
+    {
+      presentationDate:new Date().toISOString().split('T')[0],
+      presentationLocation:"Memorial Union - Second floor",
+      checkingTime:"",
+      presentationTime:""
+    }
+  )
   const years = Array.from(
     { length: 10 },
     (_, i) => new Date().getFullYear() - i
   );
   const [projects, setProjects] = useState([]);
   const [submissionSelected, setSubmissionSelected] = useState(null);
-  const fetchProjects = async () => {
+    const API_BASE_URL = 
+    process.env.NODE_ENV === 'production'?
+     "":
+     'http://localhost:3000/api';
+  const STATIC_BASE_URL = 
+   process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
+   
+  const fetchProjects = async (semester: string, year: number) => {
     try {
-      const response = await fetch('http://localhost:3000/api/projects/fa/2024') // Replace with your API endpoint
+      const response = await fetch(`${API_BASE_URL}/projects/${semester}/${year}`) 
       const data = await response.json();
       setProjects(data);
       console.log(data);
@@ -25,25 +48,59 @@ export function Edit() {
     setSubmissionSelected(null);
   }
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-  
-  // Control body scroll when modal is open
-  useEffect(() => {
-    if (submissionSelected) {
-      // Prevent scrolling on the body when modal is open
-      document.body.classList.add('modal-open');
-    } else {
-      // Re-enable scrolling when modal is closed
-      document.body.classList.remove('modal-open');
-    }
+  useEffect(() =>
+  {const {year: curr_year, semester} = TodaysDate(); 
+
+    fetchProjects(semester, curr_year);
+  }, [])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+  {
+    const {name, value} = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+    console.log(formData);
+  }
+  const handlePresentationInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+  {
+    const {name, value} = e.target;
+    setEditPresentationData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+    console.log(editpresentationData);
+  }
+  const handlePresentationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // IMPLEMENT LATER
+    console.log('Form submitted with data:', editpresentationData);
+  }
+  const fetchSubmission = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Form submitted with data:', formData);
     
-    // Cleanup function to ensure we remove the class when component unmounts
-    return () => {
-      document.body.classList.remove('modal-open');
-    };
-  }, [submissionSelected]);
+    const { semester, year } = formData;
+    
+    let semesterCode = semester;
+    if (semester === 'spring') semesterCode = 'sp';
+    else if (semester === 'summer') semesterCode = 'su';
+    else if (semester === 'fall') semesterCode = 'fa';
+    
+    // Use current values or defaults
+    const finalSemester = semester === 'all' || !semester ? 'fa' : semesterCode;
+    const finalYear = year === 'all' || !year ? new Date().getFullYear() : parseInt(year);
+    
+    console.log('Fetching projects for:', finalSemester, finalYear);
+    
+    try {
+      await fetchProjects(finalSemester, finalYear);
+      console.log('Projects fetched successfully');
+    } catch (error) {
+      console.error('Error in form submission:', error);
+    }
+  }
   return (
     <div className="edit-page">
       <p className="edit-title">Choose what you want to edit</p>
@@ -71,13 +128,15 @@ export function Edit() {
           <p className="edit-instructions-text">Capstone Presentation</p>
           <div>
             <p>Update Presentation Details</p>
-            <form className="update_presentation-details">
+            <form className="update_presentation-details" onSubmit={handlePresentationSubmit}>
               <span>
                 <label htmlFor="presentation-date">Presentation Date:</label>
                 <input
                   type="date"
                   id="presentation-date"
-                  name="presentation-date"
+                  name="presentationDate"
+                  value={editpresentationData.presentationDate}
+                  onChange={handlePresentationInputChange}
                 />
               </span>
               <span>
@@ -85,7 +144,9 @@ export function Edit() {
                 <input
                   type="text"
                   id="presentation-location"
-                  name="presentation-location"
+                  name="presentationLocation"
+                  value={editpresentationData.presentationLocation}
+                  onChange={handlePresentationInputChange}
                 />
               </span>
               <span>
@@ -93,7 +154,9 @@ export function Edit() {
                 <input
                   type="time"
                   id="checking-time"
-                  name="checking-time"
+                  name="checkingTime"
+                  value={editpresentationData.checkingTime}
+                  onChange={handlePresentationInputChange}
                 />
               </span>
               <span>
@@ -101,7 +164,9 @@ export function Edit() {
                 <input
                   type="time"
                   id="presentation-time"
-                  name="presentation-time"
+                  name="presentationTime"
+                  value={editpresentationData.presentationTime}
+                  onChange={handlePresentationInputChange}
                 />
               </span>
               <span>
@@ -123,14 +188,19 @@ export function Edit() {
         <div className={`edit-instructions ${submissionSelected ? "no-scroll" : ""}`}>
           {submissionSelected && (
             <div className="edit-project-submission">
-
+              <p
+                className="edit-close-btn"
+                onClick={() => setSubmissionSelected(null)}
+              >
+                X
+              </p>
               <EditProject project={submissionSelected} closeFunc={handleSelectionClose} />
             </div>
           )}
-          <form className="edit-form">
+          <form className="edit-form" onSubmit={fetchSubmission}>
             <span>
               <label htmlFor="semester">Semester:</label>
-              <select name="semester" id="semester">
+              <select name="semester" id="semester" value={formData.semester} onChange={handleInputChange}>
                 <option value="all">All</option>
                 <option value="spring">Spring</option>
                 <option value="summer">Summer</option>
@@ -139,7 +209,7 @@ export function Edit() {
             </span>
             <span>
               <label htmlFor="year">Year:</label>
-              <select name="year" id="year">
+              <select name="year" id="year" value={formData.year} onChange={handleInputChange}>
                 <option value="all">All</option>
                 {years.map((year) => (
                   <option key={year} value={year}>
@@ -150,7 +220,7 @@ export function Edit() {
             </span>
             <span>
               <label htmlFor="department">Department:</label>
-              <select name="department" id="department">
+              <select name="department" id="department" onChange={handleInputChange} value={formData.department}>
                 <option value="all">All</option>
                 <option value="computer-science">Computer Science</option>
                 <option value="computer-systems-engineering">
@@ -176,7 +246,11 @@ export function Edit() {
               <button type="submit" className="form-button">
                 Get submissions
               </button>
-              <button className="form-button">Clear Filters</button>
+              <button type="button" className="form-button" onClick={() => {
+                setFormData({ semester: '', year: '', department: '' });
+                const { year, semester } = TodaysDate();
+                fetchProjects(semester, year);
+              }}>Clear Filters</button>
             </div>
           </form>
 

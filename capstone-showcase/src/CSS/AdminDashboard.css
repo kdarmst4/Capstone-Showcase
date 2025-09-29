@@ -5,6 +5,7 @@
   margin: 0;
   padding: 0;
   position: relative;
+  width: 100vw;
 }
 .admin-dashboard-navbar {
   display: flex;

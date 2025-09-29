@@ -29,6 +29,13 @@ export function DownloadProjects() {
     document.body.removeChild(link);
   };
 
+    const API_BASE_URL = 
+    process.env.NODE_ENV === 'production'?
+     "":
+     'http://localhost:3000/api';
+  const STATIC_BASE_URL = 
+   process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
+
   const jsonToCSV = (data: any, headers: string[]) => {
     const csvRows = [];
     const headerRow = headers.join(",");

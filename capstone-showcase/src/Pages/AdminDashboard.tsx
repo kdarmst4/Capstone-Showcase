@@ -141,6 +141,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     }
   };
 
+  const API_BASE_URL = 
+    process.env.NODE_ENV === 'production'?
+     "":
+     'http://localhost:3000/api';
+  const STATIC_BASE_URL = 
+   process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
+
   //to get semseter year
   const getDatabaseSubmissionsAll = async (semester: string, year: string) => {
     try {

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./CSS/AdminWinners.css";
 import { SelectWinnerModal } from "./SelectWinnerModal";
 import { ProjectObj, WinnerSelection } from "./SiteInterface";
+import { TodaysDate } from "./AdminDate";
 
 export function Winners() {
   const [projects, setProjects] = useState<ProjectObj[] | null>(null);
@@ -10,12 +11,12 @@ export function Winners() {
   const [selectedWinners, setSelectedWinners] = useState<
     WinnerSelection[] | null
   >(null);
-  const [semester, setSemester] = useState(
-    new Date().getMonth() >= 0 && new Date().getMonth() <= 5 ? "sp" : "fa"
-  );
-  const [year, setYear] = useState(new Date().getFullYear());
+   const [semester, setSemester] = useState(
+    TodaysDate().semester
+   );
+   const [year, setYear] = useState(TodaysDate().year);
   useEffect(() => {
-    fetchProjects();
+    fetchProjects(semester, year);
   }, []);
   const setSelection = (project: ProjectObj, position: number) => {
     switch (position) {
@@ -62,10 +63,18 @@ export function Winners() {
     setSelectionMade(false);
     setSelectedWinners(null);
   };
-  const fetchProjects = async () => {
+   const API_BASE_URL = 
+    process.env.NODE_ENV === 'production'?
+     "":
+     'http://localhost:3000/api';
+  const STATIC_BASE_URL = 
+   process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
+  
+  const fetchProjects = async (semester: string, year: number) => {
+    console.log(semester, year);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/survey/${semester}/${year}`
+        `${API_BASE_URL}/survey/${semester}/${year}`
       );
       const data = await response.json();
       setProjects(data);
@@ -77,7 +86,7 @@ export function Winners() {
   // const currMonth = new Date().getMonth();
   const currYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currYear - i);
-  const semesters = ["fa", "sp"];
+  const semesters = ["fa", "sp", 'su'];
   return (
     <div className="admin-set-winners-page">
       {selectionMade && currSelection && (
@@ -122,7 +131,7 @@ export function Winners() {
         <section>
           <button
             type="button"
-            onClick={fetchProjects}
+            onClick={() => fetchProjects(semester, year)}
             className="fetch-projects-btn"
           >
             Fetch Projects

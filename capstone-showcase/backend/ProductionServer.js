@@ -408,3 +408,88 @@ app.put("/api/admin/submissions/:id", (req, res) => {
     }
   );
 });
+
+// Endpoint to fetch projects by semester
+app.get("/api/survey/:semester/:year", (req, res) => {
+  const { semester, year } = req.params;
+  console.log("Semester requested:", semester);
+  console.log("Year requested:", year);
+
+  if (!semester || !year) {
+    console.error("Error: Invalid semester or year");
+    return res.status(400).send("Bad request");
+  }
+
+  let startMonth, endMonth;
+   if (semester === "sp") {
+    startMonth = "00";
+    endMonth = "04";
+  } else if (semester === "su") {
+    startMonth = "05";
+    endMonth = "08";
+  } else if (semester === "fa") {
+    startMonth = "09";
+    endMonth = "12";
+  } else if (semester === 'all') {
+    startMonth = "00";
+    endMonth = "12";
+  } else {
+    res.status(400).json({ error: "Invalid semester" });
+    return;
+  }
+
+  const getLastDayOfMonth = (year, month) => {
+    return new Date(year, month, 0).getDate();
+  };
+
+  const startDate = `${year}-${startMonth}-01 00:00:00`;
+  const endDay = getLastDayOfMonth(year, parseInt(endMonth));
+  const endDate = `${year}-${endMonth}-${endDay} 23:59:59`;
+
+  console.log(`Querying from ${startDate} to ${endDate}`);
+
+  const sql = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  db.query(sql, [startDate, endDate], (err, results) => {
+    if (err) {
+      console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
+});
+
+// fetch all projects submission by given data (achu)
+// app.get('/api/projects/:semester/:year/:department', (req, res) => {
+app.get("/api/projects/:semester/:year", (req, res) => {
+  const { semester, year } = req.params;
+  let startMonth, endMonth;
+  if (semester === "sp") {
+    startMonth = "00";
+    endMonth = "04";
+  } else if (semester === "su") {
+    startMonth = "05";
+    endMonth = "08";
+  } else if (semester === "fa") {
+    startMonth = "09";
+    endMonth = "12";
+  } else if (semester === 'all') {
+    startMonth = "00";
+    endMonth = "12";
+  } else {
+    res.status(400).json({ error: "Invalid semester" });
+    return;
+  }
+  const startDate = `${year}-${startMonth}-01 00:00:00`;
+  const endDate = `${year}-${endMonth}-01 00:00:00`;
+  // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
+  db.query('SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
+  // db.query("SELECT * FROM survey_entries;", (err, results) => {
+    if (err) {
+      console.error("here is the error", err);
+      res.status(500).json({ error: "Database query failed" });
+      return;
+    }
+    res.json(results);
+  });
+});
