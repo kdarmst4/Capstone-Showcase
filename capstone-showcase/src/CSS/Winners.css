@@ -16,6 +16,8 @@
 
 .winners-form {
   display: flex;
+  width: 100%;
+  box-sizing: border-box;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.5rem;
@@ -41,7 +43,7 @@
   color: #8C1D40;
 }
 
-.winners-form select {
+.winners-form .filter-param {
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #ccc;

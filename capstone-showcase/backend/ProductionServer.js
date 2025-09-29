@@ -1,14 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const https = require("https");
+const http = require("http");
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const app = express();
 
 const dotenv = require("dotenv");
-
 
 dotenv.config();
 const mysql = require(process.env.PRODUCTION_DB_MYSQL_PACKAGE);
@@ -18,30 +17,27 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (
       !origin || // allow non-browser tools like curl/postman
-      origin === 'https://asucapstone.com:3000' ||
-      origin.endsWith('.asucapstone.com')
+      origin === "https://showcase.asucapstone.com" ||
+      origin.endsWith(".asucapstone.com")
     ) {
       callback(null, true);
     } else {
       console.log("CORS blocked origin:", origin);
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 const db = mysql.createConnection({
   host: process.env.PRODUCTION_DB_HOST,
   user: process.env.PRODUCTION_DB_USERNAME,
   password: process.env.PRODUCTION_DB_PASSWORD,
   database: process.env.PRODUCTION_DB_DATABASE,
-  
 });
-
-
 
 db.connect((err) => {
   if (err) {
@@ -51,26 +47,16 @@ db.connect((err) => {
   console.log("MySQL Connected...");
 });
 
-
-
-
-//PERMS to Connect/Create Server
+/*
+//PERMS to Connect/Create Server Note ***Removed to test new proxy method***
 const privateKey = fs.readFileSync("./keySSL.pem", "utf8")
 const certificate = fs.readFileSync("./certSSL.pem", "utf8")
 
 const credentials = {key: privateKey, cert: certificate};
-
+*/
 
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
-
-
-
-
-
-
-
-
 
 //Image Upload And Storgae API
 
@@ -90,7 +76,10 @@ if (!fs.existsSync(uploadTeamDir)) {
 const storagePoster = multer.diskStorage({
   destination: "./posterUploads/",
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
   },
 });
 const upload = multer({ storage: storagePoster });
@@ -99,7 +88,10 @@ const upload = multer({ storage: storagePoster });
 const storageTeam = multer.diskStorage({
   destination: "./teamUploads/",
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
   },
 });
 const uploadTeam = multer({ storage: storageTeam });
@@ -111,21 +103,22 @@ app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   const filePath = `/posterUploads/${req.file.filename}`;
   console.log("Uploaded file:", req.file.filename);
   console.log("Picture Path:", filePath);
-  res.json({ path:filePath });
+  res.json({ path: filePath });
 });
 
-app.post("/api/survey/uploadsTeam", uploadTeam.array("contentTeamFiles", 10), (req, res) => {
-  if (!req.files || req.files.length === 0) {
-    return res.status(400).json({ error: "No team images uploaded" });
+app.post(
+  "/api/survey/uploadsTeam",
+  uploadTeam.array("contentTeamFiles", 10),
+  (req, res) => {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "No team images uploaded" });
+    }
+
+    const paths = req.files.map((file) => `/teamUploads/${file.filename}`);
+    console.log("Uploaded team files:", paths);
+    res.json({ paths });
   }
-
-  const paths = req.files.map(file => `/teamUploads/${file.filename}`);
-  console.log("Uploaded team files:", paths);
-  res.json({ paths });
-});
-
-
-
+);
 
 //Survey Upload API
 app.post("/api/survey", (req, res) => {
@@ -163,52 +156,48 @@ app.post("/api/survey", (req, res) => {
 
   console.log("Received survey data:", req.body);
 
-  const sql =
-  `INSERT INTO survey_entries (
+  const sql = `INSERT INTO survey_entries (
     email, name, projectTitle, projectDescription, sponsor, teamMemberNames, numberOfTeamMembers, major, demo, power, nda,
     youtubeLink, posterPicturePath, submitDate, attendance, posterNDA, teamPicturePath, zoomLink
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-db.query(
-  sql,
-  [
-    email,
-    name,
-    projectTitle,
-    projectDescription,
-    sponsor,
-    teamMemberNames,
-    Number(numberOfTeamMembers),
-    major,
-    demoValue,
-    powerValue,
-    ndaValue,
-    youtubeLinkValue,
-    posterPicturePath,
-    submitDate,
-    attendanceValue,
-    posterNDA,
-    teamPicturePath,
-    zoomLinkValue
-  ],
-  (err, result) => {
-    if (err) {
-      console.error("Error inserting survey data:", err);
-      return res.status(500).send("Server error");
+  db.query(
+    sql,
+    [
+      email,
+      name,
+      projectTitle,
+      projectDescription,
+      sponsor,
+      teamMemberNames,
+      Number(numberOfTeamMembers),
+      major,
+      demoValue,
+      powerValue,
+      ndaValue,
+      youtubeLinkValue,
+      posterPicturePath,
+      submitDate,
+      attendanceValue,
+      posterNDA,
+      teamPicturePath,
+      zoomLinkValue,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error("Error inserting survey data:", err);
+        return res.status(500).send("Server error");
+      }
+      console.log("Survey data inserted successfully");
+      res.status(200).send("Survey data inserted");
     }
-    console.log("Survey data inserted successfully");
-    res.status(200).send("Survey data inserted");
-  }
-);
+  );
 });
-
 
 //Server Start
-https.createServer(credentials, app).listen(3000, '0.0.0.0', () => {
-  console.log("HTTPS Server started on port 3000");
+http.createServer(app).listen(3000, "127.0.0.1", () => {
+  console.log("HTTP Server started on port 3000");
 });
-
-
 
 // Endpoint to fetch projects by major and semester
 app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
@@ -239,7 +228,8 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
 
-  const sql = "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY projectTitle";
+  const sql =
+    "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY projectTitle";
   db.query(sql, [major, startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -283,7 +273,8 @@ app.get("/api/survey/term=:semester-:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ? ORDER BY projectTitle";
+  const sql =
+    "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ? ORDER BY projectTitle";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -300,7 +291,8 @@ app.get("/api/survey/:major", (req, res) => {
   const { major } = req.params;
   console.log("Major requested:", major); // Log the requested major
 
-  const sql = "SELECT * FROM survey_entries WHERE major = ? ORDER BY projectTitle";
+  const sql =
+    "SELECT * FROM survey_entries WHERE major = ? ORDER BY projectTitle";
   db.query(sql, [major], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -323,17 +315,18 @@ app.get("/api/admin/submissions", (req, res) => {
   });
 });
 
-
-
 //Endpoint to get a list of all the project titles for Survey Page
-app.get('/api/projects', (req, res) => {
-  db.query('SELECT project_id, project_title FROM project_entries', (err, results) => {
-    if (err) {
-      res.status(500).json({ error: 'Database query failed' });
-      return;
+app.get("/api/projects", (req, res) => {
+  db.query(
+    "SELECT project_id, project_title FROM project_entries",
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Database query failed" });
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
 app.put("/api/admin/submissions/:id", (req, res) => {
