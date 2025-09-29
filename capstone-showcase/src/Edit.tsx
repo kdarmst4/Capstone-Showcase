@@ -188,12 +188,6 @@ export function Edit() {
         <div className={`edit-instructions ${submissionSelected ? "no-scroll" : ""}`}>
           {submissionSelected && (
             <div className="edit-project-submission">
-              <p
-                className="edit-close-btn"
-                onClick={() => setSubmissionSelected(null)}
-              >
-                X
-              </p>
               <EditProject project={submissionSelected} closeFunc={handleSelectionClose} />
             </div>
           )}
