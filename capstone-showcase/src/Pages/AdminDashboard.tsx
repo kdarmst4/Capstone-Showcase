@@ -1,43 +1,82 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import "../CSS/AdminDashboard.css";
-import asuLogoPlain from "../assets/asuSquareLogo.png";
+import { Winners } from "../AdminWinners";
+// import {Support} from "../Support";
+// import asuLogoPlain from "../assets/asuSquareLogo.png";
+import {
+  // ArrowBigDownDash,
+  // PencilRuler,
+  LayoutDashboard,
+  PencilOff,
+  // UserRoundPen,
+  // FilePenLine,
+  CloudDownload,
+  PackageMinus,
+  // Info,
+  LogOut,
+  Crown,
+} from "lucide-react";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { Edit } from "../Edit";
+import { DownloadProjects } from "../DownloadProjects";
 
 interface AdminDashboardProps {
   pageTitle: string;
 }
 
-const semesters = [
-  { label: "Spring", value: "sp" },
-  { label: "Fall", value: "fa" },
+const sidebarOptions = [
+  { label: "Dashboard", path: "/admin-dashboard", icon: <LayoutDashboard /> },
+  // {
+  //   label: "Support Requests",
+  //   path: "/admin-dashboard/support",
+  //   icon: <FontAwesomeIcon icon={faCircleInfo} />,
+  // },
+  {
+    label: "Make Edits",
+    path: "/admin-dashboard/edit-students",
+    icon: <PencilOff />,
+  },
+  // {
+  //   label: "Edit Sponsors",
+  //   path: "/admin-dashboard/edit-sponsors",
+  //   icon: <UserRoundPen />,
+  // },
+  // {
+  //   label: "Edit Presentation Info",
+  //   path: "/admin-dashboard/edit-presentation-info",
+  //   icon: <FilePenLine />,
+  // },
+  {
+    label: "Download Database",
+    path: "/admin-dashboard/download-database",
+    icon: <CloudDownload />,
+  },
+  {
+    label: "Winners",
+    path: "/admin-dashboard/update-winners",
+    icon: <Crown />,
+  },
+  // { label: "Support", path: "/admin-dashboard/support", icon: <Info /> },
+  // {label: "Edit", path: "/admin-dashboard/edit-admins", icon: <UserCog />},
 ];
 
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
-
-const majors = [
-  { label: "Biomedical Engineering", value: "biomedical-engineering" },
-  { label: "Computer Science", value: "computer-science" },
-  { label: "Computer Systems Engineering", value: "computer-systems-engineering" },
-  { label: "Electrical Engineering", value: "electrical-engineering" },
-  { label: "Industrial Engineering", value: "industrial-engineering" },
-  { label: "Informatics", value: "informatics" },
-  { label: "Interdisciplinary", value: "interdisciplinary" },
-  { label: "Mechanical Engineering", value: "mechanical-engineering" },
-];
-
-const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
+const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedSemester, setSelectedSemester] = useState<string | undefined>('');
-  const [selectedYear, setSelectedYear] = useState<string | undefined>('');
-  const [selectedMajor, setSelectedMajor] = useState<string | undefined>('');
-
+  const [selectedSemester, setSelectedSemester] = useState<string | undefined>(
+    ""
+  );
+  const [selectedYear, setSelectedYear] = useState<string | undefined>("");
+  const [selectedMajor, setSelectedMajor] = useState<string | undefined>("");
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [pageTitle, setPageTitle] = useState("Dashboard");
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    sessionStorage.removeItem('authToken');
-    navigate('/admin');
+    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
+    navigate("/admin");
   };
 
   const csvHeaders = [
@@ -59,15 +98,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
     "zoomLink",
     "posterPicturePath",
     "teamPicturePath",
-    "submitDate"
-    
+    "submitDate",
   ];
 
   const downloadCSV = (csvString: any, filename: string) => {
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', filename);
+    link.setAttribute("download", filename);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -75,217 +113,171 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pageTitle }) => {
 
   const jsonToCSV = (data: any, headers: string[]) => {
     const csvRows = [];
-    const headerRow = headers.join(',');
+    const headerRow = headers.join(",");
     csvRows.push(headerRow);
     for (const row of data) {
-      const rowValues = headers.map(header => {
-        const escaped = ('' + row[header]).replace(/"/g, '\\"');
+      const rowValues = headers.map((header) => {
+        const escaped = ("" + row[header]).replace(/"/g, '\\"');
         return `"${escaped}"`;
       });
-      csvRows.push(rowValues.join(','));
+      csvRows.push(rowValues.join(","));
     }
-    return csvRows.join('\n');
+    return csvRows.join("\n");
   };
 
   //to get major/semester/year
-  const getDatabaseSubmissionsMajor = async (major: string, semester: string, year: string) => {
+  const getDatabaseSubmissionsMajor = async (
+    major: string,
+    semester: string,
+    year: string
+  ) => {
     try {
-       //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
-      const response = await axios.get(`https://asucapstone.com:3000/api/survey/${major}/term=${semester}-${year}`);
-      console.log('Fetched submissions:', response.data);
+      //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
+      const response = await axios.get(
+        `https://asucapstone.com:3000/api/survey/${major}/term=${semester}-${year}`
+      );
+      console.log("Fetched submissions:", response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching submissions:', error);
+      console.error("Error fetching submissions:", error);
     }
   };
 
+  const API_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
+  const STATIC_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
 
   //to get semseter year
-  const getDatabaseSubmissionsAll = async ( semester: string, year: string) => {
+  const getDatabaseSubmissionsAll = async (semester: string, year: string) => {
     try {
-       //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
-      const response = await axios.get(`https://asucapstone.com:3000/api/survey/term=${semester}-${year}`);
+      //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
+      const response = await axios.get(
+        `https://asucapstone.com:3000/api/survey/term=${semester}-${year}`
+      );
       console.log(response);
-      console.log('Fetched submissions:', response.data);
+      console.log("Fetched submissions:", response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching submissions:', error);
+      console.error("Error fetching submissions:", error);
     }
   };
 
   const handleDownloadClickMajor = async () => {
     if (selectedMajor && selectedSemester && selectedYear) {
-      const data = await getDatabaseSubmissionsMajor(selectedMajor, selectedSemester, selectedYear);
-      if (data === '') {
+      const data = await getDatabaseSubmissionsMajor(
+        selectedMajor,
+        selectedSemester,
+        selectedYear
+      );
+      if (data === "") {
         // Handle empty JSON data
       } else {
         const csvString = jsonToCSV(data, csvHeaders);
-        if (csvString === '') {
+        if (csvString === "") {
           // Handle empty CSV data
         } else {
-          downloadCSV(csvString, 'database.csv');
+          downloadCSV(csvString, "database.csv");
         }
       }
     } else {
-      console.log('Please select all filters (major, semester, and year).');
+      console.log("Please select all filters (major, semester, and year).");
     }
   };
 
   const handleDownloadClickAll = async () => {
-    if ( selectedSemester && selectedYear) {
-      const data = await getDatabaseSubmissionsAll( selectedSemester, selectedYear);
-      if (data === '') {
+    if (selectedSemester && selectedYear) {
+      const data = await getDatabaseSubmissionsAll(
+        selectedSemester,
+        selectedYear
+      );
+      if (data === "") {
         // Handle empty JSON data
       } else {
         const csvString = jsonToCSV(data, csvHeaders);
-        if (csvString === '') {
+        if (csvString === "") {
           // Handle empty CSV data
         } else {
-          downloadCSV(csvString, 'database.csv');
+          downloadCSV(csvString, "database.csv");
         }
       }
     } else {
-      console.log('Please select all filters (semester and year).');
+      console.log("Please select all filters (semester and year).");
     }
   };
 
-  const isDashboardPage = location.pathname === '/admin-dashboard';
-  const isEditPage = location.pathname === '/admin-dashboard/edit';
-  const isSupportPage = location.pathname === '/admin-dashboard/support';
+  const isDashboardPage = location.pathname === "/admin-dashboard";
+  const isEditPage = location.pathname === "/admin-dashboard/edit";
+  const isSupportPage = location.pathname === "/admin-dashboard/support";
 
   return (
     <div className="admin-dashboard-container">
-      <div className="admin-dashboard">
-        <nav className="sidebar">
-          <div className="admin-info">
-            <img src={asuLogoPlain} alt="Admin" />
-            <p>Admin</p>
+      {loggingOut && (
+        <div
+          className="admin-logout-shade"
+          onClick={() => setLoggingOut(false)}
+        >
+          <div className="admin-logout-msg">
+            <LogOut size={50} className="admin-logout-icon" />
+            <h2>Log Out</h2>
+            <p>
+              Are you sure you want to log out? You’ll need to sign in again to
+              access your dashboard.
+            </p>
+            <button className="admin-logout-yes" onClick={handleLogout}>
+              Yes, Log Me Out
+            </button>
+            <button
+              className="admin-logout-no"
+              onClick={() => setLoggingOut(false)}
+            >
+              Cancel
+            </button>
           </div>
-          <ul>
-            <li>
-              <Link to="/admin-dashboard" className="dashboard-header">
-                <i className="fa-solid fa-house"></i> Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link to="/admin-dashboard/edit">
-                <i className="fa-solid fa-pen-to-square"></i> Edit
-              </Link>
-            </li>
-            <li>
-              <Link to="/admin-dashboard/support">
-                <i className="fa-solid fa-envelope-open"></i> Support
-              </Link>
-            </li>
-            <li>
-              <button onClick={handleLogout} className="logout-button">
-                <i className="fa-solid fa-right-from-bracket"></i> Logout
-              </button>
-            </li>
-          </ul>
-        </nav>
-
-        <div className="admin-dashboard-content">
-          <h1>{pageTitle}</h1>
-
-          {isDashboardPage && (
-            <div>
-              <div className="button-row">
-                <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/presentation')}>
-                  Edit Capstone Presentation Information
-                </div>
-                <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/submissions')}>
-                  Edit Student Capstone Submissions
-                </div>
-                <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/support')}>
-                  Contact Support
-                </div>
-              </div>
-
-              <div className="button-row">
-                <div className="dashboard-button" onClick={handleDownloadClickMajor}>
-                  Download Database by Major
-                </div>
-                
-                <div className="dashboard-button" onClick={handleDownloadClickAll}>
-                  Download Database by Semester
-                </div>
-                <div className="dashboard-button" onClick={() => window.location.replace('https://betasubmission.asucapstone.com/login')}>
-                  Go to Sponsor Page
-                </div>
-              </div>
-              <div>
-                <label>Pick Semester, Major, and Year to Download Database</label>
-              </div>
-              <div className="filters">
-                <label>
-                  Semester:
-                  <select
-                    value={selectedSemester}
-                    onChange={(e) => setSelectedSemester(e.target.value)}
-                  >
-                    <option value="">Select Semester</option>
-                    {semesters.map((semester) => (
-                      <option key={semester.value} value={semester.value}>
-                        {semester.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label>
-                  Year:
-                  <select
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                  >
-                    <option value="">Select Year</option>
-                    {years.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label>
-                  Major:
-                  <select
-                    value={selectedMajor}
-                    onChange={(e) => setSelectedMajor(e.target.value)}
-                  >
-                    <option value="">Select Major</option>
-                    {majors.map((major) => (
-                      <option key={major.value} value={major.value}>
-                        {major.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            </div>
-          )}
-
-          {isEditPage && (
-            <div className="edit-button-row">
-              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/presentation')}>
-                Edit Capstone Presentation Information
-              </div>
-              <div className="dashboard-button" onClick={() => navigate('/admin-dashboard/edit/submissions')}>
-                Edit Student Capstone Submissions
-              </div>
-            </div>
-          )}
-
-          {isSupportPage && (
-            <div className="support-content">
-              <p>Need help? Fill out the form below or contact us directly!</p>
-            </div>
-          )}
-
-          <Outlet />
         </div>
-      </div>
+      )}
+      <span className="admin-dashboard-navbar">
+        <span className="admin-dashboard-navbar-options">
+          <span>
+            <h1 className="admin-dashboard-navbar-title">{pageTitle}</h1>
+          </span>
+          <ul className="admin-dashboard-navbar-list">
+            {sidebarOptions.map((option) => (
+              <li
+                key={option.label}
+                className="admin-dashboard-navbar-items"
+                onClick={() => {
+                  setPageTitle(option.label);
+                }}
+              >
+                {option.icon}
+
+                {option.label}
+              </li>
+            ))}
+            <a href="https://betasubmission.asucapstone.com/login" className="admin-dashboard-navbar-items"><PackageMinus />Go to Sponsore Page</a>
+              
+
+          </ul>
+        </span>
+
+        <span>
+          <button
+            className="admin-dashboard-logout-button"
+            onClick={() => {
+              setLoggingOut(true);
+            }}
+          >
+            Logout
+          </button>
+        </span>
+      </span>
+      <main className="admin-dashboard-main">
+        {pageTitle === "Download Database" && <DownloadProjects />}
+        {pageTitle === "Make Edits" && <Edit />}
+        {/* {pageTitle === 'Support' && ( <Support /> )}   */}
+        {pageTitle === "Winners" && <Winners />}
+      </main>
     </div>
   );
 };

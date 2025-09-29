@@ -18,8 +18,9 @@ const db = mysql.createConnection({
   host: process.env.LOCAL_DB_HOST,
   user: process.env.LOCAL_DB_USERNAME || "root",
   password: process.env.LOCAL_DB_PASSWORD || "password",
-  database: process.env.LOCAL_DB_DATABASE ||'asucapstone_jmtlqnmy_capstone_project_submission',
-  
+  database:
+    process.env.LOCAL_DB_DATABASE ||
+    "asucapstone_jmtlqnmy_capstone_project_submission",
 });
 
 db.connect((err) => {
@@ -48,7 +49,10 @@ if (!fs.existsSync(uploadTeamDir)) {
 const storagePoster = multer.diskStorage({
   destination: "./posterUploads/",
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
   },
 });
 const upload = multer({ storage: storagePoster });
@@ -57,7 +61,10 @@ const upload = multer({ storage: storagePoster });
 const storageTeam = multer.diskStorage({
   destination: "./teamUploads/",
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
   },
 });
 const uploadTeam = multer({ storage: storageTeam });
@@ -69,22 +76,27 @@ app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   const filePath = `/posterUploads/${req.file.filename}`;
   console.log("Uploaded file:", req.file.filename);
   console.log("Picture Path:", filePath);
-  res.json({ path:filePath });
+  res.json({ path: filePath });
 });
 
-app.post("/api/survey/uploadsTeam", uploadTeam.array("contentTeamFiles", 10), (req, res) => {
-  if (!req.files || req.files.length === 0) {
-    return res.status(400).json({ error: "No team images uploaded" });
+app.post(
+  "/api/survey/uploadsTeam",
+  uploadTeam.array("contentTeamFiles", 10),
+  (req, res) => {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "No team images uploaded" });
+    }
+
+    const paths = req.files.map((file) => `/teamUploads/${file.filename}`);
+    console.log("Uploaded team files:", paths);
+    res.json({ paths });
   }
+);
 
-  const paths = req.files.map(file => `/teamUploads/${file.filename}`);
-  console.log("Uploaded team files:", paths);
-  res.json({ paths });
+// this is the api route in the localserver.js file 
+app.post('/api/signin', (req, res) => {
+
 });
-
-
-
-
 
 app.post("/api/survey", (req, res) => {
   const {
@@ -121,8 +133,7 @@ app.post("/api/survey", (req, res) => {
 
   console.log("Received survey data:", req.body);
 
-  const sql =
-    `INSERT INTO survey_entries (
+  const sql = `INSERT INTO survey_entries (
       email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
       posterPicturePath, teamPicturePath,
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -147,7 +158,7 @@ app.post("/api/survey", (req, res) => {
       youtubeLinkValue,
       posterPicturePath,
       teamPicturePath,
-      submitDate,  // Include the current date and time for submitDate
+      submitDate, // Include the current date and time for submitDate
     ],
     (err, result) => {
       if (err) {
@@ -162,7 +173,6 @@ app.post("/api/survey", (req, res) => {
 
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
-
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
@@ -197,7 +207,8 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
 
-  const sql = "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY projectTitle";
+  const sql =
+    "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY projectTitle";
   db.query(sql, [major, startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -209,7 +220,7 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
 });
 
 // Endpoint to fetch projects by semester
-app.get("/api/survey/term=:semester-:year", (req, res) => {
+app.get("/api/survey/:semester/:year", (req, res) => {
   const { semester, year } = req.params;
   console.log("Semester requested:", semester);
   console.log("Year requested:", year);
@@ -241,7 +252,7 @@ app.get("/api/survey/term=:semester-:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
+  const sql = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -326,7 +337,8 @@ app.get("/api/survey/:major", (req, res) => {
   const { major } = req.params;
   console.log("Major requested:", major); // Log the requested major
 
-  const sql = "SELECT * FROM survey_entries WHERE major = ? ORDER BY projectTitle";
+  const sql =
+    "SELECT * FROM survey_entries WHERE major = ? ORDER BY projectTitle";
   db.query(sql, [major], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -349,13 +361,42 @@ app.get("/api/admin/submissions", (req, res) => {
   });
 });
 
-
-
 //Endpoint to get a list of all the project titles for Survey Page
-app.get('/api/projects', (req, res) => {
-  db.query('SELECT project_id, project_title FROM project_entries', (err, results) => {
+app.get("/api/projects", (req, res) => {
+  db.query(
+    "SELECT project_id, project_title FROM project_entries",
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Database query failed" });
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
+
+// app.get('/api/projects/:semester/:year/:department', (req, res) => {
+app.get("/api/projects/:semester/:year", (req, res) => {
+  const { semester, year } = req.params;
+  let startMonth, endMonth;
+  if (semester === "sp") {
+    startMonth = "04";
+    endMonth = "05";
+  } else if (semester === "fa") {
+    startMonth = "11";
+    endMonth = "12";
+  } else {
+    res.status(400).json({ error: "Invalid semester" });
+    return;
+  }
+  const startDate = `${year}-${startMonth}-01 00:00:00`;
+  const endDate = `${year}-${endMonth}-01 00:00:00`;
+  // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
+  db.query('SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
+  // db.query("SELECT * FROM survey_entries;", (err, results) => {
     if (err) {
-      res.status(500).json({ error: 'Database query failed' });
+      console.error("here is the error", err);
+      res.status(500).json({ error: "Database query failed" });
       return;
     }
     res.json(results);
