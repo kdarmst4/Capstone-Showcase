@@ -35,7 +35,7 @@ const PreEventLandingPage: React.FC = () => {
     <>
       <title>ASU Capstone Showcase</title>
       <div
-        className={`pre-event-landing-page ${isSideMenu ? "compressed" : ""}`}
+        className={`pre-event-landing-page `}
       >
         <header
           className="header-background"

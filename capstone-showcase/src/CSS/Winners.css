@@ -1,10 +1,11 @@
 .winners__form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 320px;
-  max-width: 100%;
-  flex-grow: 1;
+  /* display: flex;
+  flex-direction: column; */
+  /* align-items: center;
+  margin-top: 40px;
+  min-width: 320px; */
+  
+  /* max-width: 100%; */
 }
 
 .winners__showcase-title {
@@ -27,6 +28,7 @@
   align-items: flex-end;
   text-align: left;
   margin-bottom: 25px;
+  
 }
 
 .winners__form span {
@@ -60,7 +62,8 @@
 
 .winners__button-container > .winners__form-button{
   padding: 10px 28px;
-  background: #8C1D40;
+  background: var(--asu-maroon);
+  color: white;
   border: none;
   border-radius: 6px;
   font-size: 17px;
@@ -70,5 +73,6 @@
 }
 
 .winners__button-container > .winners__form-button:hover {
-  background: #A23B72;
+  background: var(--asu-gold);
+  color: var(--asu-maroon);
 }

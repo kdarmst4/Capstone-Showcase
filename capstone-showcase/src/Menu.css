@@ -41,6 +41,14 @@
   padding: 0 10px;
   position: relative;
 }
+.parent 
+{
+  position:sticky;
+  top:0;
+  background-color: white;
+  z-index: 102;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
 .nav-mobile-dropdown
 {

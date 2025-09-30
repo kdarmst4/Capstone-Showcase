@@ -1,126 +1,137 @@
 .admin-dashboard-container {
   display: flex;
-  justify-content: center;
-  width: 100%;
-  background-color: #d3d3d3;
-  margin-top: 70px;
+  /* height: 100vh; */
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100vw;
 }
-
-.admin-dashboard {
+.admin-dashboard-navbar {
   display: flex;
-  width: 1200px;
-  height: 100vh;
-}
-
-.sidebar {
-  background-color: rgb(72, 69, 70);
+  flex-direction: column;
+  /* justify-content: flex-end; */
+  align-items: flex-end;
+  flex: 0 0 250px;
+  width: 250px;
+  background-color: #2c3e50;
   color: white;
-  width: 200px;
-  height: 100%;
   padding: 20px;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: 99vh;
+  flex: 20%;
+  justify-content: space-between;
   box-sizing: border-box;
 }
 
-.admin-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.admin-info img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
-  border: 3px solid white;
-}
-
-.admin-info p {
-  margin: 0;
-  font-size: 18px;
-  color: white;
-}
-
-.dashboard-header {
-  font-weight: bold;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar ul li {
-  margin-bottom: 20px;
-  font-size: 18px;
-}
-
-.sidebar ul li i {
-  margin-right: 10px;
-  font-size: 16px;
-}
-
-.sidebar ul li a {
-  color: white;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.sidebar ul li a:hover {
-  color: #d0d0d0;
-}
-
-.admin-dashboard-content {
+.admin-dashboard-main {
   flex: 1;
   padding: 20px;
-  background-color: white;
-  border-radius: 15px;
-  margin: 25px;
-  box-sizing: border-box;
+  background-color: #ecf0f1;
+  overflow-y: auto;
+  flex: 80%;
 }
-
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: black;
-}
-
-.button-row {
+.admin-dashboard-navbar-options {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 40px;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.dashboard-button {
-  width: 200px;
-  height: 200px;
-  background-color: #8c1d40;
-  color: white;
-  font-size: 24px;
+.admin-dashboard-container ul 
+{
+  cursor: pointer;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: right;
+  font-size: large;
+}
+.admin-dashboard-navbar-items {
+  
+  display: flex;
+  align-items: center;
+  color: white !important;
+  text-decoration: none;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+    transition: background-color 0.3s;
+   font-weight: bold;
+  gap: 2px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+  
+  
+}
+.admin-dashboard-navbar-items:hover {
+  background-color: #34495e;
+}
+.admin-dashboard-navbar-title {
+  font-size: 2.5rem;
+
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+
+.admin-logout-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
+  z-index: 1000;
+}
+
+.admin-logout-msg 
+{
+  color: black;
+  font-size: 24px;
+  background-color: white;
+  padding: 20px;
   border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  padding-right: 10px;
-  padding-left: 10px;
-}
-
-.dashboard-button:hover {
-  background-color: #541227;
-}
-
-.edit-button-row {
   display: flex;
-  justify-content: center; 
-  gap: 100px; 
-  margin-top: 60px; 
+  flex-direction: column;
+  align-items: center;
+  max-width: 80%;
+}
+.admin-logout-icon {
+  margin-right: 10px;
+  color: #f39c12;
+  font-size: 75px;
+  vertical-align: middle;
+
+}
+
+.admin-logout-msg p {
+  margin: 10px 0;
+  font-size: large;
+}
+
+.admin-logout-yes, .admin-logout-no {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  background-color: #3498db;
+  color: white;
+  width: 80%;
+
+}
+.admin-logout-yes:hover, .admin-logout-no:hover {
+  background-color: #2980b9;
+  
 }
