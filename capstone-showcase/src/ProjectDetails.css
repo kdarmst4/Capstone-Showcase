@@ -86,9 +86,11 @@ box-sizing: border-box;
   margin: 1rem 0;
   line-height: 1.2;
   letter-spacing: -0.05rem;
-  color:white;
 }
-
+.title-in-project-details 
+{
+  color: white;
+}
 .project-author {
   display: flex;
   align-items: center;
@@ -210,21 +212,29 @@ box-sizing: border-box;
 }
 
 /* Team Members */
-.team-members {
-  display: flex;
-  flex-wrap: wrap;
+.team-members-project-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
+  
 }
 
-.team-member {
-  display: flex;
-  align-items: center;
-  justify-content: baseline;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: #f5f5f5;
+.team-member-project-details{
+    border-radius: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+    background-color: #f5f5f5;
+color: black;
   border-radius: 8px;
-  height: fit-content;
+display: flex;
+align-items: center;
+
+}
+.team-member-project-details:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 .member-avatar {
@@ -333,7 +343,7 @@ box-sizing: border-box;
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .project-title {
+  .project-title-detail {
     font-size: 2rem;
   }
   .gallery-image-container {

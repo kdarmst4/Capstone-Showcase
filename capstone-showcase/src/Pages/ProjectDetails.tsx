@@ -217,7 +217,7 @@ export default function ProjectDetails() {
             </div>
           </div>
 
-          <h1 className="project-title">{winner.ProjectTitle}</h1>
+          <h1 className="project-title title-in-project-details">{winner.ProjectTitle}</h1>
 
           <div className="project-author">
             <UsersRound size={24} /> sponsored by {winner.Sponsor || "John Doe"}
@@ -270,9 +270,9 @@ export default function ProjectDetails() {
           {/* Team Members Section */}
           <div className="info-section">
             <h2 className="section-title">Team Members</h2>
-            <div className="team-members">
+            <div className="team-members-project-details">
               {teamMembers.map((member: string, index: number) => (
-                <div key={index} className="team-member">
+                <div key={index} className="team-member-project-details">
                   <div className="member-avatar">
                     <UsersRound size={24} />
                   </div>
