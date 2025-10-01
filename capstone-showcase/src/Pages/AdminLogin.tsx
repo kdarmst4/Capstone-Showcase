@@ -1,16 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
 import "../CSS/AdminLogin.css";
 import asuLogoPlain from "../assets/asuLogoPlain.png";
 import { EyeOff, Eye } from "lucide-react";
+import { useAuth } from "../AuthContext";
 
 const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
+  const { setIsSignedIn, isSignedIn } = useAuth();
+
+  if (!isSignedIn) { //awesom auth context is live
+    console.log("setIsSignedIn is undefined");
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
