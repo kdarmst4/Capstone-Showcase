@@ -10,7 +10,7 @@ const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { setIsSignedIn, isSignedIn } = useAuth();
+  const { setIsSignedIn, isSignedIn , setToken} = useAuth();
 
   if (!isSignedIn) { //awesom auth context is live
     console.log("setIsSignedIn is undefined");
@@ -20,7 +20,11 @@ const AdminLogin: React.FC = () => {
     event.preventDefault();
     // Placeholder login validation. Replace with actual authentication logic.
     if (username === "admin" && password === "Oh1o4o58vUjp") {
-      setAuth(true);
+      setToken("dummy-token");
+      setIsSignedIn(true);
+      // localStorage.setItem("isAdmin", "true");
+      // localStorage
+      // setAuth(true);
       navigate("/admin-dashboard");
     } else {
       alert("Invalid credentials");
