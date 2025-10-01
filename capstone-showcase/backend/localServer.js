@@ -94,8 +94,64 @@ app.post(
 );
 
 // this is the api route in the localserver.js file 
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const saltRounds = 10;  // Number of hashing rounds 
+const secretJWTKey = process.env.SECRET_KEY || 'test-key'; // Using a test key for now
 app.post('/api/signin', (req, res) => {
+  // defining variables from request body
+  const {username, email, password} = req.body;
 
+   // Hashing the email
+  bcrypt.hash(email, saltRounds, (err, emailHash) => {
+    if (err) throw err;
+    console.log('Hashed Email:', emailHash);
+
+    // Hashing the password
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      if (err) throw err;
+      console.log('Hashed Password:', hash);
+
+      // Querying the SQL server for the given username 
+      const sql = "SELECT * FROM admin_pass_hash WHERE username = ?";
+      db.query(sql, [username], (err, results) => {
+        if (err) {
+          console.error("Error retrieving data:", err);
+          return res.status(500).send("Server error");
+        }
+        console.log("Query results:", results); // Loging query results
+        // Checking the fetched user data
+        try{
+          const fetchedUser = results[0];
+          const usernameMatch = username === fetchedUser.username;
+          const emailMatch = email === fetchedUser.email;
+          if (!usernameMatch || !emailMatch) {
+            console.log("usernameMatch||emailMatch error");
+            return res.status(401).json({ error: "Invalid credentials" });
+          }
+          // Comparing the password hashes
+          bcrypt.compare(password, fetchedUser.pass_hash, (err, pwmatches) => {
+            if (err) throw err;
+            if (pwmatches){
+              const jwtToken = jwt.sign({ 
+                username: fetchedUser.username, 
+                email: fetchedUser.email 
+                },secretJWTKey,
+                { expiresIn: '30d' } // Token expiring in 1 month  
+                );
+              console.log("Allowing sign in! JWT Token generated.", pwmatches);
+              return res.json({ jwtToken });
+          }else{
+            return res.status(401).json({ error: "Invalid credentials" });
+          }
+        });  
+        }catch{
+          console.log("Credential Error Caught");
+          return res.status(401).json({ error: "Invalid credentials" });
+        }
+      });
+    });
+  });
 });
 
 app.post("/api/survey", (req, res) => {
