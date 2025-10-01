@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../CSS/AdminDashboard.css";
 import { Winners } from "../AdminWinners";
+import { AdminDashboardShortcut } from "./AdminDashboardShortcut";
+import { useAuth } from "../AuthContext";
 // import {Support} from "../Support";
 // import asuLogoPlain from "../assets/asuSquareLogo.png";
 import {
@@ -73,6 +75,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const [selectedMajor, setSelectedMajor] = useState<string | undefined>("");
   const [loggingOut, setLoggingOut] = useState(false);
   const [pageTitle, setPageTitle] = useState("Dashboard");
+  // const { token, setToken, isSignedIn } = useAuth(); // Use the useAuth hook
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     sessionStorage.removeItem("authToken");
@@ -205,6 +208,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
       console.log("Please select all filters (semester and year).");
     }
   };
+  const changeTitle = (title: string) => {
+    setPageTitle(title);
+  }
 
   const isDashboardPage = location.pathname === "/admin-dashboard";
   const isEditPage = location.pathname === "/admin-dashboard/edit";
@@ -273,6 +279,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
         </span>
       </span>
       <main className="admin-dashboard-main">
+        {pageTitle === "Dashboard" && (
+          <AdminDashboardShortcut changeTitle={changeTitle} />
+        )}
         {pageTitle === "Download Database" && <DownloadProjects />}
         {pageTitle === "Make Edits" && <Edit />}
         {/* {pageTitle === 'Support' && ( <Support /> )}   */}
