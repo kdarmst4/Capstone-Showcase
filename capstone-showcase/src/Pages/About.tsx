@@ -22,7 +22,6 @@ import teamMember16 from "../assets/marioProfile.jpg"
 import teamMember17 from "../assets/hanselProfile.jpg"
 import teamMember18 from "../assets/achuProfile.jpg"
 import Footer from './Footer';
-import { Github } from 'lucide-react';
 
 
 const teamMembers = [

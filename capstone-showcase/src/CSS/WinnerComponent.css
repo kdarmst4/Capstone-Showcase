@@ -1,3 +1,15 @@
+.parent-container {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+.no-results {
+  flex-grow: 1;
+}
+
 .winner-container {
   display: flex;
   flex-wrap: wrap;
@@ -15,10 +27,15 @@
   align-items: center;
   width: 300px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   padding: 1rem;
   background: #fff;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.winner-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
 }
 
 .winner-image {
@@ -35,13 +52,14 @@
 
 .winner-medal {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0.2em;
+  left: 0.2em;
   width: 40px;
   height: 40px;
   object-fit: cover;
   border-radius: 50%;
   stroke-width: 12;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .winner-text-section {
@@ -52,19 +70,23 @@
 
 .winner-project {
   margin: 0;
-  font-weight: 600;
+  font-weight: 650;
+  font-size: 1.1rem;
+  color: #8C1D40;
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .winner-author {
   margin: 0;
-  font-size: 0.90rem;
+  font-size: 0.85rem;
   color: #555;
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -73,11 +95,14 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 
 .winner-semester {
-  font-size: 0.90rem;
-  background: #D1E7FF;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #E0E0E0;
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
 }
@@ -87,17 +112,19 @@
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
   margin-left: 0.25rem;
-  font-size: 0.90rem;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .winner-description {
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.90rem;
+  font-size: 0.875rem;
 }
 
 .winner-details-link-container {
@@ -117,6 +144,10 @@
   transition: background 0.2s;
   text-decoration: none;
   display: inline-block;
+}
+
+.winner-details-link:hover {
+  background: #D23153;
 }
 
 @media (max-width: 1024px) {

@@ -1,11 +1,11 @@
-Winners.css
 .winners-form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* display: flex;
+  flex-direction: column; */
+  /* align-items: center;
   margin-top: 40px;
-  min-width: 320px;
-  max-width: 100%;
+  min-width: 320px; */
+  
+  /* max-width: 100%; */
 }
 
 .winners-showcase-title {
@@ -16,6 +16,8 @@ Winners.css
 
 .winners-form {
   display: flex;
+  width: 100%;
+  box-sizing: border-box;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.5rem;
@@ -26,6 +28,7 @@ Winners.css
   align-items: flex-end;
   text-align: left;
   margin-bottom: 25px;
+  
 }
 
 .winners-form span {
@@ -40,7 +43,7 @@ Winners.css
   color: #8C1D40;
 }
 
-.winners-form select {
+.winners-form .filter-param {
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -58,7 +61,8 @@ Winners.css
 
 .button-container > .form-button{
   padding: 10px 28px;
-  background: #8C1D40;
+  background: var(--asu-maroon);
+  color: white;
   border: none;
   border-radius: 6px;
   font-size: 17px;
@@ -68,5 +72,6 @@ Winners.css
 }
 
 .button-container > .form-button:hover {
-  background: #A23B72;
+  background: var(--asu-gold);
+  color: var(--asu-maroon);
 }

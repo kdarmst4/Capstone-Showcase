@@ -5,6 +5,7 @@ footer {
   background: linear-gradient(90deg, rgba(255,198,39,1) 0%, rgba(255,198,39,1) 13%, rgba(140,29,64,1) 55%);
   margin-top:100px;
   height: auto;
+  width: 100%;
 }
 
 footer a {
@@ -46,9 +47,6 @@ footer li a{
 
 h4 {
   margin-bottom: 5px; 
-}
-
-.container {
 }
 
 .row1 {

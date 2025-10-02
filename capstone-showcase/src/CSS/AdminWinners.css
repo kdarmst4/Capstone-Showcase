@@ -1,0 +1,100 @@
+
+
+.admin-set-winners-page form 
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    width: 100%;
+    gap: 2.5rem
+}
+
+.admin-set-winners-page form section
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    width: fit-content;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: larger;
+    color: #8c1d40;
+    text-align: left;
+}
+.admin-set-winners-page form section label
+{
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: medium;
+    font-weight: bold;
+    color: #8c1d40;
+}
+
+.admin-set-winners-page form section select 
+{
+    /* margin-left: 10px;
+    margin-right: 10px; */
+    width: 150px;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px solid #8c1d40;
+    font-size: medium;
+    font-weight: normal;
+    padding: 2px;
+    min-height: 35px;
+    text-align: left;
+    background-color: white;
+    color: black;
+    ;
+}
+.fetch-projects-btn
+{
+    background-color: #8c1d40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: medium;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 21px;
+}
+.fetch-projects-btn:hover
+{
+    background-color: #ffc627;
+    color: #8c1d40;
+}
+.winner-small-title 
+{
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #8c1d40;
+}
+
+.winner-selected-project-backdrop
+{
+    z-index: -1;
+    display: grid;
+    grid-column-start: 1;
+    grid-row-start: 1;
+    align-self: stretch;
+    justify-self: stretch;
+    background-color: rgba(0,0,0,0.4);
+}
+.winner-selected-project-modal 
+{
+    z-index: 50;
+    max-height: calc(100vh - 100px);
+    display: grid;
+    grid-column-start: 1;
+    grid-row-start: 1;
+    padding: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .25);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}

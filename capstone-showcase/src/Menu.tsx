@@ -158,7 +158,7 @@ const Menu: React.FC = () => {
   );
 
   return (
-    <div>
+    <div className="parent">
       <div className="nav-container">
         <div
           className="nav-mobile-dropdown"

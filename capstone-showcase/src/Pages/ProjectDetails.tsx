@@ -8,24 +8,8 @@ import {
 import { ImageMinus } from "lucide-react";
 import Footer from "./Footer";
 import { useState, useEffect } from "react";
+import { ShowcaseEntry } from "../SiteInterface";
 
-
-type ShowcaseEntry = {
-  course: string;
-  EntryID: number;
-  video: string;
-  shouldDisplay: "YES" | "NO"; 
-  position: number;
-  members: string;
-  Sponsor: string;
-  description: string;
-  ProjectTitle: string;
-  winning_pic: string | null;
-  department?: string;
-  NDA: "Yes" | "No"; 
-  year: number;
-  semester: "Spring" | "Summer" | "Fall" | "Winter"; 
-};
 
 export default function ProjectDetails() {
   const { id: projectId } = useParams(); // gets "123"
