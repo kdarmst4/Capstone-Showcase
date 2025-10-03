@@ -1,4 +1,3 @@
-/* --- General Container and Layout --- */
 .admin-dashboard-container {
   display: flex;
   flex-direction: column;
@@ -7,35 +6,35 @@
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent body scroll */
+  overflow: hidden; 
 }
 
 .admin-dashboard-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Better alignment */
+  justify-content: space-between; 
   height: 4rem;
   padding: 0 20px;
   background-color: #2c3e50;
   color: white;
-  flex-shrink: 0; /* Prevent header from shrinking */
+  flex-shrink: 0; 
   box-sizing: border-box;
 }
 
 .admin-dashboard-header .title {
-  font-size: 1.8rem; /* Adjusted for better fit */
+  font-size: 1.8rem; 
   font-weight: bold;
 }
 
 .admin-dashboard-header .menu {
-  display: none; /* Hidden by default, shown in media query */
+  display: none; 
   cursor: pointer;
 }
 
 .admin-dashboard-body {
   display: flex;
-  flex: 1; /* This makes it fill the remaining height */
-  overflow: hidden; /* Important for child scrolling */
+  flex: 1; 
+  overflow: hidden; 
 }
 
 /* --- Sidebar / Navbar --- */
@@ -43,12 +42,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 0 0 250px; /* DON'T grow, DON'T shrink, stay 250px */
+  flex: 0 0 250px; 
   background-color: #2c3e50;
   color: white;
   padding: 20px;
   overflow-y: auto;
-  transition: transform 0.3s ease-in-out; /* Smooth transition for mobile */
+  transition: transform 0.3s ease-in-out; 
 }
 
 .admin-dashboard-navbar-options {
@@ -65,7 +64,7 @@
 .admin-dashboard-navbar-items {
   display: flex;
   align-items: center;
-  gap: 12px; /* Better spacing */
+  gap: 12px; 
   color: white !important;
   text-decoration: none;
   margin: 10px 0;
@@ -81,15 +80,13 @@
   background-color: #34495e;
 }
 
-/* --- Main Content Area --- */
 .admin-dashboard-main {
-  flex: 1; /* Takes up all remaining space */
+  flex: 1; 
   padding: 20px;
   background-color: #ecf0f1;
-  overflow-y: auto; /* Only this area should scroll */
+  overflow-y: auto; 
 }
 
-/* --- Logout Button & Modal --- */
 .admin-dashboard-logout-container {
   width: 100%;
 }
@@ -115,7 +112,7 @@
 }
 
 .admin-logout-shade {
-  position: fixed; /* Use fixed to cover the whole screen */
+  position: fixed; 
   top: 0;
   left: 0;
   width: 100%;
@@ -127,7 +124,6 @@
   z-index: 1000;
 }
 
-/* ... your other logout modal styles are fine ... */
 .admin-logout-msg {
  color: black;
  font-size: 24px;
@@ -167,7 +163,6 @@
  background-color: #2980b9;
 }
 
-/* --- Mobile Overlay for closing menu --- */
 .mobile-overlay {
   display: none; 
 }
@@ -175,21 +170,27 @@
 /* --- Responsive Design for Mobile --- */
 @media screen and (max-width: 768px) {
   .admin-dashboard-header .menu {
-    display: block; /* Show hamburger menu */
+    display: block; 
+  }
+  .admin-dashboard-main 
+  {
+    min-height: min-content;
   }
 
   .admin-dashboard-navbar {
-    position: absolute; /* Take it out of the document flow */
-    top: 4rem; /* Position it below the header */
-    left: -250px; /* Start off-screen */
-    height: calc(100vh - 4rem); /* Fill remaining height */
+    position: absolute;
+    top: 4rem; 
+    left: -250px; 
+    height: calc(100vh - 4rem) !important;
     z-index: 100;
-    transition: left 0.3s ease-in-out; /* Animate the slide */
+    transition: left 0.3s ease-in-out;
     box-shadow: 2px 0px 10px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+   
   }
 
   .admin-nav-show {
-    left: 0; /* Slide into view */
+    left: 0; 
   }
   
   .mobile-overlay {
@@ -200,6 +201,6 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0,0,0,0.4);
-    z-index: 99; /* Below the navbar but above content */
+    z-index: 99; 
   }
 }

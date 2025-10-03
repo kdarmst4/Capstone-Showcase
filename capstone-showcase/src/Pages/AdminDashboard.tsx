@@ -42,10 +42,7 @@ const sidebarOptions = [
 
 const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [selectedSemester, setSelectedSemester] = useState<string | undefined>("");
-  const [selectedYear, setSelectedYear] = useState<string | undefined>("");
-  const [selectedMajor, setSelectedMajor] = useState<string | undefined>("");
+
   const [loggingOut, setLoggingOut] = useState(false);
   const [pageTitle, setPageTitle] = useState("Dashboard");
   const [showMenu, setShowMenu] = useState(false);
@@ -56,7 +53,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     navigate("/admin");
   };
 
-  // ... (rest of your functions like downloadCSV, jsonToCSV, API calls remain the same)
 
   return (
     <div className="admin-dashboard-container">
@@ -95,7 +91,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
         </span>
       </div>
       <div className="admin-dashboard-body">
-        {/* --- CORRECTED CLASSNAME LOGIC --- */}
         <nav className={`admin-dashboard-navbar ${showMenu ? 'admin-nav-show' : ''}`}>
           <div className="admin-dashboard-navbar-options">
             <ul className="admin-dashboard-navbar-list">
@@ -105,7 +100,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
                   className="admin-dashboard-navbar-items"
                   onClick={() => {
                     setPageTitle(option.label);
-                    setShowMenu(false); // Close menu on selection
+                    setShowMenu(false); 
                   }}
                 >
                   {option.icon}
