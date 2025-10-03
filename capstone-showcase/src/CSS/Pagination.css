@@ -6,7 +6,6 @@
   max-width: 1400px;
   padding: 0 20px;
   width: calc(100% - 40px);
-  background-color: lightblue;
 }
 
 @media (min-width: 1400px) {
@@ -60,7 +59,6 @@
   overflow: hidden;
   margin: 0 auto;
   justify-content: space-between;
-  background-color: lightgreen;
 }
 
 .projects-grid .project-card:hover {
