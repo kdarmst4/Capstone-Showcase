@@ -6,6 +6,8 @@ const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const app = express();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const dotenv = require("dotenv");
 
@@ -414,7 +416,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
   }
 
   let startMonth, endMonth;
-   if (semester === "sp") {
+  if (semester === "sp") {
     startMonth = "00";
     endMonth = "04";
   } else if (semester === "su") {
@@ -423,7 +425,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
   } else if (semester === "fa") {
     startMonth = "09";
     endMonth = "12";
-  } else if (semester === 'all') {
+  } else if (semester === "all") {
     startMonth = "00";
     endMonth = "12";
   } else {
@@ -466,7 +468,7 @@ app.get("/api/projects/:semester/:year", (req, res) => {
   } else if (semester === "fa") {
     startMonth = "09";
     endMonth = "12";
-  } else if (semester === 'all') {
+  } else if (semester === "all") {
     startMonth = "00";
     endMonth = "12";
   } else {
@@ -476,13 +478,68 @@ app.get("/api/projects/:semester/:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
   // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
-  db.query('SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
-  // db.query("SELECT * FROM survey_entries;", (err, results) => {
-    if (err) {
-      console.error("here is the error", err);
-      res.status(500).json({ error: "Database query failed" });
-      return;
+  db.query(
+    "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?",
+    [startDate, endDate],
+    (err, results) => {
+      // db.query("SELECT * FROM survey_entries;", (err, results) => {
+      if (err) {
+        console.error("here is the error", err);
+        res.status(500).json({ error: "Database query failed" });
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
+  );
+});
+
+app.post("/api/signin", (req, res) => {
+  // defining variables from request body
+  const { username, password } = req.body;
+  const saltRounds = 10; // Number of hashing rounds
+  const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
+
+  if (!username || !password) {
+    return res
+      .status(400)
+      .json({ error: "Username and password are required" });
+  }
+  // Hashing the password
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) throw err;
+
+    // Querying the SQL server for the given username
+    const sql =
+      "SELECT * FROM admin_pass_hash WHERE username = ? OR email = ? AND PASS_HASH = ? LIMIT 1";
+    db.query(sql, [username, username, hash], (err, results) => {
+      if (err) {
+        return res.status(500).send("Server error");
+      }
+      // Checking the fetched user data
+      try {
+        if (results.length === 0) {
+          return res.status(401).json({ error: "Invalid credentials" });
+        }
+        // Comparing the password hashes
+        bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
+          if (err) throw err;
+          if (pwmatches) {
+            const jwtToken = jwt.sign(
+              {
+                username: results[0].username,
+                email: results[0].email,
+              },
+              secretJWTKey,
+              { expiresIn: "30d" } // Token expiring in 1 month
+            );
+            return res.status(200).json({ jwtToken });
+          } else {
+            return res.status(401).json({ error: "Invalid credentials" });
+          }
+        });
+      } catch {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+    });
   });
 });

@@ -29,8 +29,8 @@ export function Edit() {
     process.env.NODE_ENV === 'production'?
      "":
      'http://localhost:3000/api';
-  const STATIC_BASE_URL = 
-   process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
+  // const STATIC_BASE_URL = 
+  //  process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
    
   const fetchProjects = async (semester: string, year: number) => {
     try {

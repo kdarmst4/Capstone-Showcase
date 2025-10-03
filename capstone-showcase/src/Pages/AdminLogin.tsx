@@ -10,25 +10,49 @@ const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { setIsSignedIn, isSignedIn , setToken} = useAuth();
+  const { setIsSignedIn, isSignedIn , setToken, isTokenValid} = useAuth();
+  const[error, setError] = useState<string | null>(null);
 
-  if (!isSignedIn) { //awesom auth context is live
-    console.log("setIsSignedIn is undefined");
+  useEffect(() => {
+    if (isSignedIn && isTokenValid())
+  {
+    navigate("/admin-dashboard");
   }
+  }, [isSignedIn, isTokenValid, navigate]);
+  
+  const API_BASE_URL = process.env.NODE_ENV === 'production' ? 
+  'api' : 'http://localhost:3000/api';
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Placeholder login validation. Replace with actual authentication logic.
-    if (username === "admin" && password === "Oh1o4o58vUjp") {
-      setToken("dummy-token");
-      setIsSignedIn(true);
-      // localStorage.setItem("isAdmin", "true");
-      // localStorage
-      // setAuth(true);
-      navigate("/admin-dashboard");
-    } else {
-      alert("Invalid credentials");
-    }
+    fetch(
+      `${API_BASE_URL}/signin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      }
+    ).then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      if (data && data.jwtToken) {
+        setToken(data.jwtToken);
+        setIsSignedIn(true);
+        navigate("/admin-dashboard");
+      } else {
+        setError("Invalid username or password.");
+        setIsSignedIn(false);
+        setToken(null);
+        console.error("Invalid response data:", data);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      setError("Invalid username or password.");
+      console.error("Error fetching data:", error);
+    });
   };
 
   return (
@@ -65,6 +89,7 @@ const AdminLogin: React.FC = () => {
               <EyeOff onClick={() => setShowPassword(true)} className="eye-icon" />
             )}
           </span>
+          {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="button">
             Login

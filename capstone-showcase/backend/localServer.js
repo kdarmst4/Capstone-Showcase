@@ -97,24 +97,21 @@ app.post(
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;  // Number of hashing rounds 
-const secretJWTKey = process.env.SECRET_KEY || 'test-key'; // Using a test key for now
+const secretJWTKey = process.env.JWT_SECRET_KEY || 'test-key'; // Using a test key for now
 app.post('/api/signin', (req, res) => {
   // defining variables from request body
-  const {username, email, password} = req.body;
-
-   // Hashing the email
-  bcrypt.hash(email, saltRounds, (err, emailHash) => {
-    if (err) throw err;
-    console.log('Hashed Email:', emailHash);
-
+  const {username,  password} = req.body;
+  console.log("Signin attempt for user:", username, password);
+  console.log("Using JWT Secret Key:", secretJWTKey);
     // Hashing the password
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) throw err;
       console.log('Hashed Password:', hash);
+      
 
       // Querying the SQL server for the given username 
-      const sql = "SELECT * FROM admin_pass_hash WHERE username = ?";
-      db.query(sql, [username], (err, results) => {
+      const sql = "SELECT * FROM admin_pass_hash WHERE username = ? OR email = ? AND PASS_HASH = ? LIMIT 1";
+      db.query(sql, [username, username, hash], (err, results) => {
         if (err) {
           console.error("Error retrieving data:", err);
           return res.status(500).send("Server error");
@@ -122,25 +119,21 @@ app.post('/api/signin', (req, res) => {
         console.log("Query results:", results); // Loging query results
         // Checking the fetched user data
         try{
-          const fetchedUser = results[0];
-          const usernameMatch = username === fetchedUser.username;
-          const emailMatch = email === fetchedUser.email;
-          if (!usernameMatch || !emailMatch) {
-            console.log("usernameMatch||emailMatch error");
+          if (results.length === 0) {
             return res.status(401).json({ error: "Invalid credentials" });
           }
           // Comparing the password hashes
-          bcrypt.compare(password, fetchedUser.pass_hash, (err, pwmatches) => {
+          bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
             if (err) throw err;
             if (pwmatches){
               const jwtToken = jwt.sign({ 
-                username: fetchedUser.username, 
-                email: fetchedUser.email 
+                username: results[0].username, 
+                email: results[0].email 
                 },secretJWTKey,
                 { expiresIn: '30d' } // Token expiring in 1 month  
                 );
               console.log("Allowing sign in! JWT Token generated.", pwmatches);
-              return res.json({ jwtToken });
+              return res.status(200).json({ jwtToken });
           }else{
             return res.status(401).json({ error: "Invalid credentials" });
           }
@@ -151,7 +144,6 @@ app.post('/api/signin', (req, res) => {
         }
       });
     });
-  });
 });
 
 app.post("/api/survey", (req, res) => {

@@ -1,14 +1,13 @@
-import React, { createContext, useState, ReactNode, useEffect, useContext } from 'react';
+import  { createContext, useState, ReactNode, useEffect, useContext } from 'react';
 import { tokenManager } from "../src/lib/token-manager";
-// interface AuthContextType {
-//   auth: boolean;
-//   setAuth: (auth: boolean) => void;
-// }
+import { jwtDecode } from 'jwt-decode';
+
 type AuthContextType = {
   token: string | null;
   setToken: (token: string | null) => void;
   isSignedIn: boolean;
   setIsSignedIn: (val: boolean) => void;
+  isTokenValid: () => boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,9 +37,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setTokenState(token);
   }
+  const isTokenValid = () => {
+    const t = tokenManager.get();
+    if (!t) return false;
+    try 
+    {
+      const decoded = jwtDecode(t);
+      const currentTime = Date.now() / 1000;
+      if (typeof decoded !== 'object' || !decoded.exp) return false;
+      return decoded.exp > currentTime;
+    }
+    catch (e)
+    {
+      return false;
+    }
+  } 
 
   return (
-    <AuthContext.Provider value={{  setIsSignedIn, token, setToken, isSignedIn:!!token }}>
+    <AuthContext.Provider value={{  setIsSignedIn, token, setToken, isSignedIn:!!token, isTokenValid }}>
       {children}
     </AuthContext.Provider>
   );

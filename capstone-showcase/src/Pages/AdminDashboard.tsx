@@ -1,27 +1,18 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../CSS/AdminDashboard.css";
 import { Winners } from "../AdminWinners";
 import { AdminDashboardShortcut } from "./AdminDashboardShortcut";
 import { useAuth } from "../AuthContext";
-// import {Support} from "../Support";
-// import asuLogoPlain from "../assets/asuSquareLogo.png";
 import {
-  // ArrowBigDownDash,
-  // PencilRuler,
   LayoutDashboard,
   PencilOff,
-  // UserRoundPen,
-  // FilePenLine,
   CloudDownload,
   PackageMinus,
-  // Info,
   LogOut,
   Crown,
 } from "lucide-react";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { Edit } from "../Edit";
 import { DownloadProjects } from "../DownloadProjects";
 
@@ -31,26 +22,12 @@ interface AdminDashboardProps {
 
 const sidebarOptions = [
   { label: "Dashboard", path: "/admin-dashboard", icon: <LayoutDashboard /> },
-  // {
-  //   label: "Support Requests",
-  //   path: "/admin-dashboard/support",
-  //   icon: <FontAwesomeIcon icon={faCircleInfo} />,
-  // },
   {
     label: "Make Edits",
     path: "/admin-dashboard/edit-students",
     icon: <PencilOff />,
   },
-  // {
-  //   label: "Edit Sponsors",
-  //   path: "/admin-dashboard/edit-sponsors",
-  //   icon: <UserRoundPen />,
-  // },
-  // {
-  //   label: "Edit Presentation Info",
-  //   path: "/admin-dashboard/edit-presentation-info",
-  //   icon: <FilePenLine />,
-  // },
+
   {
     label: "Download Database",
     path: "/admin-dashboard/download-database",
@@ -61,8 +38,7 @@ const sidebarOptions = [
     path: "/admin-dashboard/update-winners",
     icon: <Crown />,
   },
-  // { label: "Support", path: "/admin-dashboard/support", icon: <Info /> },
-  // {label: "Edit", path: "/admin-dashboard/edit-admins", icon: <UserCog />},
+ 
 ];
 
 const AdminDashboard: React.FC<AdminDashboardProps> = () => {
@@ -75,12 +51,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const [selectedMajor, setSelectedMajor] = useState<string | undefined>("");
   const [loggingOut, setLoggingOut] = useState(false);
   const [pageTitle, setPageTitle] = useState("Dashboard");
-  // const { token, setToken, isSignedIn } = useAuth(); // Use the useAuth hook
+  const {  isSignedIn, isTokenValid, setIsSignedIn, setToken } = useAuth();
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    sessionStorage.removeItem("authToken");
+    setIsSignedIn(false);
+    setToken(null);
     navigate("/admin");
   };
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      navigate("/admin");
+    }
+    else if (!isTokenValid())
+    {
+      setIsSignedIn(false);
+      setToken(null);
+      navigate("/admin");
+    }
+  }, [isSignedIn, navigate]);
 
   const csvHeaders = [
     "id",
@@ -135,7 +123,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     year: string
   ) => {
     try {
-      //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
       const response = await axios.get(
         `https://asucapstone.com:3000/api/survey/${major}/term=${semester}-${year}`
       );
@@ -154,7 +141,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   //to get semseter year
   const getDatabaseSubmissionsAll = async (semester: string, year: string) => {
     try {
-      //const response = await axios.get(`http://localhost:3000/api/survey/${major}/term=${semester}-${year}`);
       const response = await axios.get(
         `https://asucapstone.com:3000/api/survey/term=${semester}-${year}`
       );
@@ -211,10 +197,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const changeTitle = (title: string) => {
     setPageTitle(title);
   }
-
-  const isDashboardPage = location.pathname === "/admin-dashboard";
-  const isEditPage = location.pathname === "/admin-dashboard/edit";
-  const isSupportPage = location.pathname === "/admin-dashboard/support";
 
   return (
     <div className="admin-dashboard-container">
@@ -284,7 +266,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
         )}
         {pageTitle === "Download Database" && <DownloadProjects />}
         {pageTitle === "Make Edits" && <Edit />}
-        {/* {pageTitle === 'Support' && ( <Support /> )}   */}
         {pageTitle === "Winners" && <Winners />}
       </main>
     </div>
