@@ -93,63 +93,57 @@ app.post(
   }
 );
 
-// this is the api route in the localserver.js file 
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const saltRounds = 10;  // Number of hashing rounds 
-const secretJWTKey = process.env.SECRET_KEY || 'test-key'; // Using a test key for now
-app.post('/api/signin', (req, res) => {
+// this is the api route in the localserver.js file
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const saltRounds = 10; // Number of hashing rounds
+const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
+app.post("/api/signin", (req, res) => {
   // defining variables from request body
-  const {username, email, password} = req.body;
-
-   // Hashing the email
-  bcrypt.hash(email, saltRounds, (err, emailHash) => {
+  const { username, password } = req.body;
+  console.log("Signin attempt for user:", username, password);
+  console.log("Using JWT Secret Key:", secretJWTKey);
+  // Hashing the password
+  bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) throw err;
-    console.log('Hashed Email:', emailHash);
+    console.log("Hashed Password:", hash);
 
-    // Hashing the password
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) throw err;
-      console.log('Hashed Password:', hash);
-
-      // Querying the SQL server for the given username 
-      const sql = "SELECT * FROM admin_pass_hash WHERE username = ?";
-      db.query(sql, [username], (err, results) => {
-        if (err) {
-          console.error("Error retrieving data:", err);
-          return res.status(500).send("Server error");
-        }
-        console.log("Query results:", results); // Loging query results
-        // Checking the fetched user data
-        try{
-          const fetchedUser = results[0];
-          const usernameMatch = username === fetchedUser.username;
-          const emailMatch = email === fetchedUser.email;
-          if (!usernameMatch || !emailMatch) {
-            console.log("usernameMatch||emailMatch error");
-            return res.status(401).json({ error: "Invalid credentials" });
-          }
-          // Comparing the password hashes
-          bcrypt.compare(password, fetchedUser.pass_hash, (err, pwmatches) => {
-            if (err) throw err;
-            if (pwmatches){
-              const jwtToken = jwt.sign({ 
-                username: fetchedUser.username, 
-                email: fetchedUser.email 
-                },secretJWTKey,
-                { expiresIn: '30d' } // Token expiring in 1 month  
-                );
-              console.log("Allowing sign in! JWT Token generated.", pwmatches);
-              return res.json({ jwtToken });
-          }else{
-            return res.status(401).json({ error: "Invalid credentials" });
-          }
-        });  
-        }catch{
-          console.log("Credential Error Caught");
+    // Querying the SQL server for the given username
+    const sql =
+      "SELECT * FROM admin_pass_hash WHERE username = ? OR email = ? AND PASS_HASH = ? LIMIT 1";
+    db.query(sql, [username, username, hash], (err, results) => {
+      if (err) {
+        console.error("Error retrieving data:", err);
+        return res.status(500).send("Server error");
+      }
+      console.log("Query results:", results); // Loging query results
+      // Checking the fetched user data
+      try {
+        if (results.length === 0) {
           return res.status(401).json({ error: "Invalid credentials" });
         }
-      });
+        // Comparing the password hashes
+        bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
+          if (err) throw err;
+          if (pwmatches) {
+            const jwtToken = jwt.sign(
+              {
+                username: results[0].username,
+                email: results[0].email,
+              },
+              secretJWTKey,
+              { expiresIn: "30d" } // Token expiring in 1 month
+            );
+            console.log("Allowing sign in! JWT Token generated.", pwmatches);
+            return res.status(200).json({ jwtToken });
+          } else {
+            return res.status(401).json({ error: "Invalid credentials" });
+          }
+        });
+      } catch {
+        console.log("Credential Error Caught");
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
     });
   });
 });
@@ -448,15 +442,19 @@ app.get("/api/projects/:semester/:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
   // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
-  db.query('SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
-  // db.query("SELECT * FROM survey_entries;", (err, results) => {
-    if (err) {
-      console.error("here is the error", err);
-      res.status(500).json({ error: "Database query failed" });
-      return;
+  db.query(
+    "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?",
+    [startDate, endDate],
+    (err, results) => {
+      // db.query("SELECT * FROM survey_entries;", (err, results) => {
+      if (err) {
+        console.error("here is the error", err);
+        res.status(500).json({ error: "Database query failed" });
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
 app.put("/api/admin/submissions/:id", (req, res) => {
@@ -530,4 +528,29 @@ app.put("/api/admin/submissions/:id", (req, res) => {
       res.status(200).send("Submission updated");
     }
   );
+});
+
+app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
+  const { startDate, endDate, discipline } = req.params;
+  let query = "";
+  let queryParams = [];
+  // query = 'select * from survey_entries where submitDate BETWEEN ? AND ? AND major = ?';
+  query = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  queryParams = [startDate, endDate];
+  if (discipline && discipline !== "all") {
+    query += " AND major = ?";
+    queryParams.push(discipline);
+  }
+  try {
+    db.query(query, queryParams, (err, results) => {
+      if (err) {
+        console.error("Error fetching projects:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+      console.log("Fetched projects:", results);
+      res.status(200).json({ results });
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Database query failed" });
+  }
 });

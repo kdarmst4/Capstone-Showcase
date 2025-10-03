@@ -136,3 +136,15 @@ footer {
 .nowrap {
   white-space: nowrap;
 }
+
+.team-member-info h3 {
+  margin-bottom: 4px;  
+}
+
+.terms-active {
+  font-size: 13px;           
+  font-weight: 500;         
+  color: #555;               
+  margin-top: 0;          
+  margin-bottom: 6px;       
+}

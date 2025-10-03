@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import React, { useState , useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import "../CSS/AdminDashboard.css";
 import { Winners } from "../AdminWinners";
 import { AdminDashboardShortcut } from "./AdminDashboardShortcut";
@@ -46,12 +45,26 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const [loggingOut, setLoggingOut] = useState(false);
   const [pageTitle, setPageTitle] = useState("Dashboard");
   const [showMenu, setShowMenu] = useState(false);
+  const {  isSignedIn, isTokenValid, setIsSignedIn, setToken } = useAuth();
+
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    sessionStorage.removeItem("authToken");
+    setIsSignedIn(false);
+    setToken(null);
     navigate("/admin");
   };
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      navigate("/admin");
+    }
+    else if (!isTokenValid())
+    {
+      setIsSignedIn(false);
+      setToken(null);
+      navigate("/admin");
+    }
+  }, [isSignedIn, navigate]);
 
 
   return (
