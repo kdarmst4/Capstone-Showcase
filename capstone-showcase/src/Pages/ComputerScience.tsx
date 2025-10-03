@@ -27,6 +27,7 @@ const ComputerScience: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Pagination Variables
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 8;
   const totalPages = Math.ceil(projects.length / projectsPerPage);
@@ -62,6 +63,7 @@ const ComputerScience: React.FC = () => {
     };
   }, [semester, year]);
 
+  // Set starting page to the first page
   useEffect(() => {
     setCurrentPage(1);
   }, [projects]);
@@ -96,6 +98,7 @@ const ComputerScience: React.FC = () => {
     setSelectedProject(null);
   };
 
+  // Pagination function calls
   const goToPage = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
