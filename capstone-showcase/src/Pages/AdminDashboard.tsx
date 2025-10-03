@@ -92,29 +92,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     "submitDate",
   ];
 
-  const downloadCSV = (csvString: any, filename: string) => {
-    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
-  const jsonToCSV = (data: any, headers: string[]) => {
-    const csvRows = [];
-    const headerRow = headers.join(",");
-    csvRows.push(headerRow);
-    for (const row of data) {
-      const rowValues = headers.map((header) => {
-        const escaped = ("" + row[header]).replace(/"/g, '\\"');
-        return `"${escaped}"`;
-      });
-      csvRows.push(rowValues.join(","));
-    }
-    return csvRows.join("\n");
-  };
 
   //to get major/semester/year
   const getDatabaseSubmissionsMajor = async (
@@ -152,48 +130,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     }
   };
 
-  const handleDownloadClickMajor = async () => {
-    if (selectedMajor && selectedSemester && selectedYear) {
-      const data = await getDatabaseSubmissionsMajor(
-        selectedMajor,
-        selectedSemester,
-        selectedYear
-      );
-      if (data === "") {
-        // Handle empty JSON data
-      } else {
-        const csvString = jsonToCSV(data, csvHeaders);
-        if (csvString === "") {
-          // Handle empty CSV data
-        } else {
-          downloadCSV(csvString, "database.csv");
-        }
-      }
-    } else {
-      console.log("Please select all filters (major, semester, and year).");
-    }
-  };
 
-  const handleDownloadClickAll = async () => {
-    if (selectedSemester && selectedYear) {
-      const data = await getDatabaseSubmissionsAll(
-        selectedSemester,
-        selectedYear
-      );
-      if (data === "") {
-        // Handle empty JSON data
-      } else {
-        const csvString = jsonToCSV(data, csvHeaders);
-        if (csvString === "") {
-          // Handle empty CSV data
-        } else {
-          downloadCSV(csvString, "database.csv");
-        }
-      }
-    } else {
-      console.log("Please select all filters (semester and year).");
-    }
-  };
   const changeTitle = (title: string) => {
     setPageTitle(title);
   }

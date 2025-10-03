@@ -543,3 +543,27 @@ app.post("/api/signin", (req, res) => {
     });
   });
 });
+
+
+app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
+  const { startDate, endDate, discipline } = req.params;
+  let query = "";
+  let queryParams = [];
+  // query = 'select * from survey_entries where submitDate BETWEEN ? AND ? AND major = ?';
+  query = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  queryParams = [startDate, endDate];
+  if (discipline && discipline !== "all") {
+    query += " AND major = ?";
+    queryParams.push(discipline);
+  }
+  try {
+    db.query(query, queryParams, (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: "Database query failed" });
+      }
+      res.status(200).json({ results });
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Database query failed" });
+  }
+});

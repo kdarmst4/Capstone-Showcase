@@ -58,6 +58,24 @@
   align-items: flex-start;
   width: 100%;
 }
+.download-projects-field input[type='date'] {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--asu-maroon);
+  border-radius: 6px;
+  box-sizing: border-box;
+  background-color: white;
+  color: black;
+}
+.download-projects-error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0);
+  size: 3px;
+}
 
 .download-projects-field label {
   font-weight: 600;
