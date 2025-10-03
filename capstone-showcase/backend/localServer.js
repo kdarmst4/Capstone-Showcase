@@ -135,8 +135,8 @@ app.post("/api/survey", (req, res) => {
 
   const sql = `INSERT INTO survey_entries (
       email, name, projectTitle, projectDescription, sponsor, numberOfTeamMembers, teamMemberNames, major, demo, power, nda, posterNDA, attendance, zoomLink, youtubeLink,
-      posterPicturePath, teamPicturePath,
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      posterPicturePath, teamPicturePath, submitDate,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   db.query(
     sql,
@@ -208,7 +208,7 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const endDate = `${year}-${endMonth}-01 00:00:00`;
 
   const sql =
-    "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY projectTitle";
+    "SELECT * FROM survey_entries ORDER BY projectTitle";
   db.query(sql, [major, startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
