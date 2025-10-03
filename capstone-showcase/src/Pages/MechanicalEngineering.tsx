@@ -172,7 +172,7 @@ const MechanicalEngineering: React.FC = () => {
         {/* Render the list of projects */}
         <section className="projects-list">
           {projects.length === 0 ? (
-            <p>No projects available for Computer Science.</p>
+            <p>No projects available for Mechanical Engineering.</p>
           ) : (
             <>
               {/* Projects Grid */}
