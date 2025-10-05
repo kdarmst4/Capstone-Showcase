@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/ComputerScience.css";
+import "../CSS/ProjectCards.css";
 import "../CSS/Pagination.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
@@ -173,37 +174,39 @@ const ComputerScience: React.FC = () => {
           ) : (
             <>
               {/* Projects Grid */}
-              <div className="projects-grid">
-                {currentProjects.map((project, index) => (
-                  <div
-                    key={project.id || index}
-                    className="project-card"
-                    onClick={() => handleProjectClick(project)}
-                  >
-                    {project.youtubeLink && (
-                      <img
-                        src={extractYouTubeThumbnail(project.youtubeLink) || ""}
-                        alt={`${project.projectTitle} Thumbnail`}
-                        className="youtube-thumbnail"
-                      />
-                    )}
-                    <div className="project-details">
-                      <h4 className="project-title">{project.projectTitle}</h4>
-                      <p className="project-description">
-                        {project.projectDescription}
-                      </p>
-                      <div className="project-meta">
-                        <p>
-                          <strong>Team:</strong> {project.teamMemberNames}
+              <section className="project-catalog">
+                <div className="projects-grid">
+                  {currentProjects.map((project, index) => (
+                    <div
+                      key={project.id || index}
+                      className="project-card"
+                      onClick={() => handleProjectClick(project)}
+                    >
+                      {project.youtubeLink && (
+                        <img
+                          src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                          alt={`${project.projectTitle} Thumbnail`}
+                          className="youtube-thumbnail"
+                        />
+                      )}
+                      <div className="project-details">
+                        <h4 className="project-title">{project.projectTitle}</h4>
+                        <p className="project-description">
+                          {project.projectDescription}
                         </p>
-                        <p>
-                          <strong>Sponsor:</strong> {project.sponsor}
-                        </p>
+                        <div className="project-meta">
+                          <p>
+                            <strong>Team:</strong> {project.teamMemberNames}
+                          </p>
+                          <p>
+                            <strong>Sponsor:</strong> {project.sponsor}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </section>
 
               {/*Pagination*/}
               {totalPages > 1 && (
