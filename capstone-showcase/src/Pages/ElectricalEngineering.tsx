@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/ElectricalEngineering.css";
 import "../CSS/Pagination.css";
+import "../CSS/ProjectCards.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
@@ -174,6 +175,7 @@ const ElectricalEngineering: React.FC = () => {
           ) : (
             <>
               {/* Projects Grid */}
+              <section className="project-catalog">
               <div className="projects-grid">
                 {currentProjects.map((project, index) => (
                   <div
@@ -205,6 +207,7 @@ const ElectricalEngineering: React.FC = () => {
                   </div>
                 ))}
               </div>
+              </section>
 
               {/*Pagination*/}
               {totalPages > 1 && (
