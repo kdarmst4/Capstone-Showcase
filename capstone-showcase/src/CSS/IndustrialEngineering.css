@@ -64,6 +64,13 @@
   color: black;
 }
 
+.industrial-engineering .main-page-title {
+  font-size: clamp(2vw, 5vw, 20vw);
+  font-weight: 700;
+  color: #222222;
+  line-height: 1;
+}
+
 .content-area {
   background: #d3d3d3;
   width: 100%;

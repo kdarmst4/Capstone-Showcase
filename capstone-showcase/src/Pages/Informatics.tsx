@@ -156,7 +156,7 @@ const Informatics: React.FC = () => {
           <article>
             <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
             <div className="title-container">
-              <h3>Informatics</h3>
+              <h3 className="main-page-title">Informatics</h3>
               <button
                 className="survey-form-button"
                 onClick={handleSurveyFormClick}
