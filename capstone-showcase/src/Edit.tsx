@@ -21,6 +21,7 @@ export function Edit() {
     presentationLocation: "Memorial Union - Second floor",
     checkingTime: "",
     presentationTime: "",
+    presentationFile: null as File | null,
   });
   const years = Array.from(
     { length: 10 },
@@ -81,19 +82,58 @@ export function Edit() {
   const handlePresentationInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setEditPresentationData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const target = e.target as HTMLInputElement;
+    const { name, value, files } = target;
+    
+    if (name === 'location-file' && files && files[0]) {
+      setEditPresentationData((prevData) => ({
+        ...prevData,
+        presentationFile: files[0]
+      }));
+    } else {
+      setEditPresentationData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+    
     console.log(editpresentationData);
   };
   const handlePresentationSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    // IMPLEMENT LATER
     console.log("Form submitted with data:", editpresentationData);
+    
+    try {
+      // Create FormData to handle file upload
+      const formData = new FormData();
+      formData.append('presentationDate', editpresentationData.presentationDate);
+      formData.append('presentationLocation', editpresentationData.presentationLocation);
+      formData.append('checkingTime', editpresentationData.checkingTime);
+      formData.append('presentationTime', editpresentationData.presentationTime);
+      
+      // Only append file if one was selected
+      if (editpresentationData.presentationFile) {
+        formData.append('presentationFile', editpresentationData.presentationFile);
+      }
+      
+      const res = await fetch(`${API_BASE_URL}/presentation/update`, {
+        method: "POST",
+        body: formData, // Send FormData instead of JSON
+        // Don't set Content-Type header - let browser set it with boundary
+      });
+      
+      const data = await res.json();
+      console.log(data);
+      
+      if (res.ok) {
+        alert('Presentation updated successfully!');
+      }
+    } catch (error) {
+      console.error("Error in form submission:", error);
+      alert('Error updating presentation');
+    }
   };
   const fetchSubmission = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -194,12 +234,13 @@ export function Edit() {
                 />
               </span>
               <span>
-                <label htmlFor="location">Location:</label>
+                <label htmlFor="location-file">Location:</label>
                 <input
                   type="file"
-                  id="presentation-location"
-                  name="presentation-location"
+                  id="location-file"
+                  name="location-file"
                   placeholder="Enter location"
+                  onChange={handlePresentationInputChange}
                 />
               </span>
               <button type="submit" className="form-button">
