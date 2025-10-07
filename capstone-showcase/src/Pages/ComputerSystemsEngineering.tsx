@@ -3,6 +3,7 @@ import { useMenuContext } from "../MenuContext";
 import "../CSS/ComputerSystemsEngineering.css";
 import "../CSS/Pagination.css";
 import "../CSS/ProjectCards.css";
+import "../CSS/ProjectModal.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
@@ -264,16 +265,13 @@ const ComputerSystemsEngineering: React.FC = () => {
       </main>
 
       {isModalOpen && selectedProject && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal" onClick={closeModal}>
+        <div className="project-modal-overlay" onClick={closeModal}>
+          <div className="project-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="project-close-modal" onClick={closeModal}>
               X
             </button>
-            <div className="project-menu">
-              <header className="modal-header-background"></header>
-            </div>
             <div className="project-header">
-              <div className="project-image">
+              <div className="project-video">
                 {selectedProject.youtubeLink && (
                   <a
                     href={selectedProject.youtubeLink}
@@ -281,7 +279,7 @@ const ComputerSystemsEngineering: React.FC = () => {
                     rel="noopener noreferrer"
                     aria-label="Project Video"
                   >
-                    <p style={{ color: "#555" }}>Click Video to View</p>
+                    <p className="project-video-label">Click Video to View</p>
                     <img
                       src={
                         extractYouTubeThumbnail(selectedProject.youtubeLink) ||
@@ -294,13 +292,14 @@ const ComputerSystemsEngineering: React.FC = () => {
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}
                 </h2>
-                <p className="project-category">Computer Systems Engineering</p>
-
+                <div className="project-category-tagline">
+                  <span className="project-category">Computer Systems Engineering</span>
+                  <span className="semester-tag">{getSemesterLabel()}</span>
+                </div>
                 <p className="team-members">
                   {selectedProject.teamMemberNames}
                 </p>
@@ -311,7 +310,7 @@ const ComputerSystemsEngineering: React.FC = () => {
                 <h3>Poster</h3>
 
                 <div className="right-section">
-                  <div className="poster-container">
+                  <div>
                     <p></p>
                     {selectedProject.posterPicturePath ? (
                       <div className="poster-container">
@@ -326,7 +325,7 @@ const ComputerSystemsEngineering: React.FC = () => {
                       <p>No poster uploaded.</p>
                     )}
                     {selectedProject.teamPicturePath ? (
-                      <div>
+                      <div className="team-container">
                         {(selectedProject.teamPicturePath || "")
                           .split(",")
                           .map((path: string, index: number) => {
