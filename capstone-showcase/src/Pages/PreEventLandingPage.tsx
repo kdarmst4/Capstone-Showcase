@@ -54,6 +54,7 @@ const PreEventLandingPage: React.FC = () => {
           </div>
           <section className="event-details" aria-label="Event Details Section">
             <article>
+              {/*
               <p>
                 <strong>Showcase Date:</strong> Friday, May 2nd 2025
                 <br />
@@ -64,6 +65,7 @@ const PreEventLandingPage: React.FC = () => {
                 <strong>Event Time:</strong> 10:30am - 1:30pm MST
                 <br />
               </p>
+              */}
               <section className="pdf-section" aria-label="Event Map and Resourses" style={{ marginTop: "40px", textAlign: "center" }}>
           <h2>Event Map & Resources</h2>
           <p>Explore the venue maps and download the showcase materials below.</p>

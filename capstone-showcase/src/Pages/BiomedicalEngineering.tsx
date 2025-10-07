@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/BiomedicalEngineering.css";
+import "../CSS/Pagination.css";
+import "../CSS/ProjectCards.css";
+import "../CSS/ProjectModal.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
@@ -26,6 +29,14 @@ const BiomedicalEngineering: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Pagination variables
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 8;
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
+  const startIndex = (currentPage - 1) * projectsPerPage;
+  const endIndex = startIndex + projectsPerPage;
+  const currentProjects = projects.slice(startIndex, endIndex);
+
   const DEFAULT_SEMESTER = "fa";
   const DEFAULT_YEAR = "2025";
 
@@ -33,10 +44,12 @@ const BiomedicalEngineering: React.FC = () => {
   const year = selectedYear || DEFAULT_YEAR;
 
   useEffect(() => {
+    let ignore = false;
+
     console.log("Selected semseter:", semester, year);
     document.body.classList.add("biomedical-engineering-page-body");
     fetch(
-      `${API_BASE_URL}survey/biomedical-engineering/term=${semester}-${year}`
+      `${API_BASE_URL}/survey/biomedical-engineering/term=${semester}-${year}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -44,13 +57,67 @@ const BiomedicalEngineering: React.FC = () => {
         }
         return response.json();
       })
-      .then((data) => setProjects(data)) // Populate the state with fetched projects
+      .then((data) => {if(!ignore) setProjects(data)}) // Populate the state with fetched projects
       .catch((error) => console.error("Error fetching projects:", error));
 
     return () => {
       document.body.classList.remove("biomedical-engineering-page-body");
+      ignore = true;
     };
   }, [semester, year]);
+
+  // Set Starting Page to the first page
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [projects]);
+
+  // Pagination function calls
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+
+      if (startPage > 1) {
+        pages.unshift("...");
+        pages.unshift(1);
+      }
+
+      if (endPage < totalPages) {
+        pages.push("...");
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
 
   const extractYouTubeThumbnail = (url: string): string | null => {
     const regex =
@@ -93,7 +160,7 @@ const BiomedicalEngineering: React.FC = () => {
           <article>
             <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
             <div className="title-container">
-              <h3>Biomedical Engineering</h3>
+              <h3 className="main-page-title">Biomedical Engineering</h3>
               <button
                 className="survey-form-button"
                 onClick={handleSurveyFormClick}
@@ -105,73 +172,107 @@ const BiomedicalEngineering: React.FC = () => {
           </article>
         </section>
 
+        {/* Render the list of projects */}
         <section className="projects-list">
           {projects.length === 0 ? (
             <p>No projects available for Biomedical Engineering.</p>
           ) : (
-            projects.map((project, index) => (
-              <div
-                key={project.id}
-                className={`project-card ${
-                  index % 2 === 0 ? "zigzag-left" : "zigzag-right"
-                }`}
-                onClick={() => handleProjectClick(project)}
-              >
-                {index % 2 === 0 && project.youtubeLink && (
-                  <a
-                    href={project.youtubeLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+            <>
+              {/* Projects Grid */}
+              <section className="project-catalog">
+              <div className="projects-grid">
+                {currentProjects.map((project, index) => (
+                  <div
+                    key={project.id || index}
+                    className="project-card"
+                    onClick={() => handleProjectClick(project)}
                   >
-                    <img
-                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
-                      alt={`${project.projectTitle} Thumbnail`}
-                      className="youtube-thumbnail"
-                    />
-                  </a>
-                )}
-                <div className="project-details">
-                  <h4 className="project-title">{project.projectTitle}</h4>
-                  <p></p>
-                </div>
-                {index % 2 !== 0 && project.youtubeLink && (
-                  <a
-                    href={project.youtubeLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={extractYouTubeThumbnail(project.youtubeLink) || ""}
-                      alt={`${project.projectTitle} Thumbnail`}
-                      className="youtube-thumbnail"
-                    />
-                  </a>
-                )}
+                    {project.youtubeLink && (
+                      <img
+                        src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                        alt={`${project.projectTitle} Thumbnail`}
+                        className="youtube-thumbnail"
+                      />
+                    )}
+                    <div className="project-details">
+                      <h4 className="project-title">{project.projectTitle}</h4>
+                      <p className="project-description">
+                        {project.projectDescription}
+                      </p>
+                      <div className="project-meta">
+                        <p>
+                          <strong>Team:</strong> {project.teamMemberNames}
+                        </p>
+                        <p>
+                          <strong>Sponsor:</strong> {project.sponsor}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))
+              </section>
+
+              {/*Pagination*/}
+              {totalPages > 1 && (
+                <div className="pagination-container">
+                  <button
+                    className="pagination-button"
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+
+                  {getPageNumbers().map((page, index) => (
+                    <button
+                      key={index}
+                      className={`page-number ${
+                        page === currentPage ? "active" : ""
+                      }`}
+                      onClick={() => typeof page === "number" && goToPage(page)}
+                      disabled={page === "..."}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    className="pagination-button"
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+
+                  <div className="page-info">
+                    Page {currentPage} of {totalPages} ({projects.length} total
+                    projects)
+                  </div>
+                </div>
+              )}
+
+              <button
+                className="more-projects-button"
+                onClick={handleMoreProjectsClick}
+                aria-label="More Projects Button"
+              >
+                Like what you see or don't see your project? Click here to see
+                interdisciplinary projects!
+              </button>
+            </>
           )}
-          <button
-            className="more-projects-button"
-            onClick={handleMoreProjectsClick}
-            aria-label="More Projects Button"
-          >
-            Like what you see or don't see your project? Click here to see
-            interdisciplinary projects!
-          </button>
         </section>
       </main>
 
       {isModalOpen && selectedProject && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal" onClick={closeModal}>
+        <div className="project-modal-overlay" onClick={closeModal}>
+          <div className="project-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="project-close-modal" onClick={closeModal}>
               X
             </button>
-            <div className="project-menu">
-              <header className="modal-header-background"></header>
-            </div>
             <div className="project-header">
-              <div className="project-image">
+              <div className="project-video">
                 {selectedProject.youtubeLink && (
                   <a
                     href={selectedProject.youtubeLink}
@@ -179,7 +280,7 @@ const BiomedicalEngineering: React.FC = () => {
                     rel="noopener noreferrer"
                     aria-label="Project Video"
                   >
-                    <p style={{ color: "#555" }}>Click Video to View</p>
+                    <p className="project-video-label">Click Video to View</p>
                     <img
                       src={
                         extractYouTubeThumbnail(selectedProject.youtubeLink) ||
@@ -192,13 +293,14 @@ const BiomedicalEngineering: React.FC = () => {
               </div>
 
               <div className="project-info">
-                <span className="semester-tag">{getSemesterLabel()}</span>
                 <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
                 <h2 className="project-title">
                   {selectedProject.projectTitle}
                 </h2>
-                <p className="project-category">Biomedical Engineering</p>
-
+                <div className="project-category-tagline">
+                  <span className="project-category">Biomedical Engineering</span>
+                  <span className="semester-tag">{getSemesterLabel()}</span>
+                </div>
                 <p className="team-members">
                   {selectedProject.teamMemberNames}
                 </p>
@@ -209,7 +311,7 @@ const BiomedicalEngineering: React.FC = () => {
                 <h3>Poster</h3>
 
                 <div className="right-section">
-                  <div className="poster-container">
+                  <div>
                     <p></p>
                     {selectedProject.posterPicturePath ? (
                       <div className="poster-container">
@@ -224,7 +326,7 @@ const BiomedicalEngineering: React.FC = () => {
                     )}
 
                     {selectedProject.teamPicturePath ? (
-                      <div>
+                      <div className="team-container">
                         {(selectedProject.teamPicturePath || "")
                           .split(",")
                           .map((path: string, index: number) => {
