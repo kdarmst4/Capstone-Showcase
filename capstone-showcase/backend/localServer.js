@@ -554,3 +554,28 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
     return res.status(500).json({ error: "Database query failed" });
   }
 });
+
+app.put("/api/:id/update", (req, res) => {
+  const { id } = req.params;
+  console.log("ID to update:", id);
+  // console.log("Request body:", req.body);
+  const keys = Object.keys(req.body);
+  const values = Object.values(req.body);
+
+  let query = "UPDATE showcaseentries SET ";
+  for (const key of keys) {
+    query += `${key} = ?, `;
+  }
+  query = query.slice(0, -2); // Remove trailing comma and space
+  query += ` WHERE EntryID = ${id}`;
+  console.log("Constructed query:", query);
+
+  db.query(query, values, (err) => {
+    if (err) {
+      console.error("Error updating entry:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Entry updated successfully");
+    res.status(200).json({ message: "Entry updated successfully" });
+  });
+});

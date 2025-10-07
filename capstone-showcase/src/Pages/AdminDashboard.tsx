@@ -1,6 +1,5 @@
 import React, { useState , useEffect} from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../CSS/AdminDashboard.css";
 import { Winners } from "../AdminWinners";
 import { AdminDashboardShortcut } from "./AdminDashboardShortcut";
@@ -43,12 +42,6 @@ const sidebarOptions = [
 
 const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [selectedSemester, setSelectedSemester] = useState<string | undefined>(
-    ""
-  );
-  const [selectedYear, setSelectedYear] = useState<string | undefined>("");
-  const [selectedMajor, setSelectedMajor] = useState<string | undefined>("");
   const [loggingOut, setLoggingOut] = useState(false);
   const [pageTitle, setPageTitle] = useState("Dashboard");
   const {  isSignedIn, isTokenValid, setIsSignedIn, setToken } = useAuth();
@@ -70,65 +63,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     }
   }, [isSignedIn, navigate]);
 
-  const csvHeaders = [
-    "id",
-    "projectTitle",
-    "sponsor",
-    "attendance",
-    "email",
-    "name",
-    "projectDescription",
-    "major",
-    "numberOfTeamMembers",
-    "teamMemberNames",
-    "demo",
-    "nda",
-    "posterNDA",
-    "power",
-    "youtubeLink",
-    "zoomLink",
-    "posterPicturePath",
-    "teamPicturePath",
-    "submitDate",
-  ];
 
 
 
-  //to get major/semester/year
-  const getDatabaseSubmissionsMajor = async (
-    major: string,
-    semester: string,
-    year: string
-  ) => {
-    try {
-      const response = await axios.get(
-        `https://asucapstone.com:3000/api/survey/${major}/term=${semester}-${year}`
-      );
-      console.log("Fetched submissions:", response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching submissions:", error);
-    }
-  };
 
-  const API_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
-  const STATIC_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
-
-  //to get semseter year
-  const getDatabaseSubmissionsAll = async (semester: string, year: string) => {
-    try {
-      const response = await axios.get(
-        `https://asucapstone.com:3000/api/survey/term=${semester}-${year}`
-      );
-      console.log(response);
-      console.log("Fetched submissions:", response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching submissions:", error);
-    }
-  };
 
 
   const changeTitle = (title: string) => {
