@@ -44,6 +44,8 @@ const MechanicalEngineering: React.FC = () => {
   const year = selectedYear || DEFAULT_YEAR;
 
   useEffect(() => {
+    let ignore = false;
+
     console.log("Selected semseter:", semester, year);
     document.body.classList.add("mechanical-engineering-page-body");
 
@@ -57,11 +59,12 @@ const MechanicalEngineering: React.FC = () => {
         }
         return response.json();
       })
-      .then((data) => setProjects(data))
+      .then((data) => {if(!ignore) setProjects(data)})
       .catch((error) => console.error("Error fetching projects:", error));
 
     return () => {
       document.body.classList.remove("mechanical-engineering-page-body");
+      ignore = true;
     };
   }, [semester, year]);
 
