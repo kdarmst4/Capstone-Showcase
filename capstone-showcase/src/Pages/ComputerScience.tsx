@@ -44,6 +44,8 @@ const ComputerScience: React.FC = () => {
   const year = selectedYear || DEFAULT_YEAR;
 
   useEffect(() => {
+    let ignore = false;
+
     console.log("Selected semseter:", semester, year);
     document.body.classList.add("computer-science-page-body");
 
@@ -57,11 +59,12 @@ const ComputerScience: React.FC = () => {
         }
         return response.json();
       })
-      .then((data) => setProjects(data)) // Populate the state with fetched projects
+      .then((data) => {if(!ignore) setProjects(data)}) // Populate the state with fetched projects
       .catch((error) => console.error("Error fetching projects:", error));
 
     return () => {
       document.body.classList.remove("computer-science-page-body");
+      ignore = true;
     };
   }, [semester, year]);
 
