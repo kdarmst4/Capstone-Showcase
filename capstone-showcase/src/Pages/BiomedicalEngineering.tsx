@@ -157,7 +157,7 @@ const BiomedicalEngineering: React.FC = () => {
           <article>
             <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
             <div className="title-container">
-              <h3>Biomedical Engineering</h3>
+              <h3 className="main-page-title">Biomedical Engineering</h3>
               <button
                 className="survey-form-button"
                 onClick={handleSurveyFormClick}
