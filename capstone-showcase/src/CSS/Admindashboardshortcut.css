@@ -18,13 +18,13 @@
     top: 50%;
     left: 50%;
     transform: rotate(-90deg) translate(100%, 0%);
-}
+  }
 
 
 .glass-card {
   width: 240px;
   height: 360px;
-  background: rgba(63, 61, 61, 0.308);
+  background: rgba(94, 82, 82, 0.308);
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
   border-radius: 20px;
@@ -84,7 +84,7 @@
     justify-content: center;
   gap: 1rem;
   /* padding: 20px; */
-  background-color: #f0f0f0;
+  background-color: 	#BEBEBE;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
