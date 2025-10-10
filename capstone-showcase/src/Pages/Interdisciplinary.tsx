@@ -3,7 +3,7 @@ import { useMenuContext } from "../MenuContext";
 import "../CSS/Interdisciplinary.css";
 import "../CSS/Pagination.css";
 import "../CSS/ProjectCards.css";
-import "../CSS/ProjectModal.css";
+import "../CSS/ProjectShowcase.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
@@ -266,13 +266,13 @@ const Interdisciplinary: React.FC = () => {
       </main>
 
       {isModalOpen && selectedProject && (
-        <div className="project-modal-overlay" onClick={closeModal}>
-          <div className="project-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="project-close-modal" onClick={closeModal}>
+        <div className="project-showcase-overlay" onClick={closeModal}>
+          <div className="project-showcase-content" onClick={(e) => e.stopPropagation()}>
+            <button className="project-showcase-close" onClick={closeModal}>
               X
             </button>
-            <div className="project-header">
-              <div className="project-video">
+            <div className="project-showcase-header">
+              <div className="project-showcase-video">
                 {selectedProject.youtubeLink && (
                   <a
                     href={selectedProject.youtubeLink}
@@ -280,7 +280,6 @@ const Interdisciplinary: React.FC = () => {
                     rel="noopener noreferrer"
                     aria-label="Project Video"
                   >
-                    <p className="project-video-label">Click Video to View</p>
                     <img
                       src={
                         extractYouTubeThumbnail(selectedProject.youtubeLink) ||
@@ -288,25 +287,24 @@ const Interdisciplinary: React.FC = () => {
                       }
                       alt={`${selectedProject.projectTitle} Thumbnail`}
                     />
+                    <figcaption className="project-showcase-video-label">Click Video to View</figcaption>
                   </a>
                 )}
               </div>
 
-              <div className="project-info">
-                <img src={asuLogo} alt="ASU Logo" className="modal-asu-logo" />
-                <h2 className="project-title">
-                  {selectedProject.projectTitle}
-                </h2>
-                <div className="project-category-tagline">
-                  <span className="project-category">Interdisciplinary</span>
-                  <span className="semester-tag">{getSemesterLabel()}</span>
+              <div className="project-showcase-info">
+                <img src={asuLogo} alt="ASU Logo" className="project-showcase-logo" />
+                <h2 className="project-showcase-title">{selectedProject.projectTitle}</h2>
+
+                <div className="project-showcase-meta">
+                  <span className="project-showcase-category">Interdisciplinary</span>
+                  <span className="project-showcase-semester">{getSemesterLabel()}</span>
                 </div>
-                <p className="team-members">
-                  {selectedProject.teamMemberNames}
-                </p>
+
+                <p className="project-showcase-team">{selectedProject.teamMemberNames}</p>
               </div>
             </div>
-            <div className="project-details">
+            <div className="project-showcase-details">
               <div className="left-section">
                 <h3>Poster</h3>
 
