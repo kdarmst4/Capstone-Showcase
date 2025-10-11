@@ -197,8 +197,8 @@ const MechanicalEngineering: React.FC = () => {
                       />
                     )}
                     <div className="project-details">
-                      <h4 className="project-title">{project.projectTitle}</h4>
-                      <p className="project-description">
+                        <h4 className="project-title left-aligned">{project.projectTitle}</h4>
+                        <p className="project-description left-aligned">
                         {project.projectDescription}
                       </p>
                       <div className="project-meta">
