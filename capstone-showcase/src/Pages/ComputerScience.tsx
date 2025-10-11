@@ -7,7 +7,7 @@ import "../CSS/ProjectModal.css";
 // import { capstoneDescription } from "../TextContent";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
@@ -181,10 +181,11 @@ const ComputerScience: React.FC = () => {
               <section className="project-catalog">
                 <div className="projects-grid">
                   {currentProjects.map((project, index) => (
+                    <Link to ={`/survey/${project.id}`} state={{ project }} key={project.id}>
                     <div
                       key={project.id || index}
                       className="project-card"
-                      onClick={() => handleProjectClick(project)}
+                      // onClick={() => handleProjectClick(project)}
                     >
                       {project.youtubeLink && (
                         <img
@@ -208,6 +209,8 @@ const ComputerScience: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                    </Link> 
+
                   ))}
                 </div>
               </section>

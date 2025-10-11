@@ -21,6 +21,7 @@ import EditSubmissions from "./Pages/EditSubmissions";
 import ContactSupport from "./Pages/ContactSupport";
 import Winners from "./Pages/Winners";
 import ProjectDetails from "./Pages/ProjectDetails";
+import { SurveyDetails } from "./Pages/SurveyDetails";
 
 
 const AppContent: React.FC = () => {
@@ -35,6 +36,7 @@ const AppContent: React.FC = () => {
           <Route path="/" element={<PreEventLandingPage />} />
           <Route path="/winners" element={<Winners />} />
           <Route path="/winners/entry/:id" element={<ProjectDetails />} />
+          <Route path="/survey/:id" element={<SurveyDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/computer-science" element={<ComputerScience />} />
           <Route path="/computer-systems-engineering" element={<ComputerSystemsEngineering />} />
