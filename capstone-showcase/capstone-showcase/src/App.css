@@ -2,6 +2,7 @@
   margin: 0 auto;
   min-height: 100vh !important;
   text-align: center;
+  box-sizing: border-box;
 }
 
 

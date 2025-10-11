@@ -156,7 +156,8 @@
 
 .modal-content {
   background: white;
-  width: 100vw;
+    max-width: calc(100vw - 17px);
+;
   height: 100vh;
   position: relative;
   display: flex;

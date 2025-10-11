@@ -2,7 +2,8 @@
   /* margin: 0 auto; */
   /* padding: 0 2rem 2rem 2rem; */
   text-align: center;
-  width: 100vw;
+    max-width: calc(100vw - 17px);
+;
   /* max-width: 1280px; */
   height: 100vh;
 }
@@ -10,7 +11,8 @@
 .content {
   /* margin-top: 60px; */
   transition: margin-left 0.3s ease;
-  width: 100vw;
+    max-width: calc(100vw - 17px);
+;
   overflow-x: hidden;
   /* display: flex; */
   justify-content: center;
