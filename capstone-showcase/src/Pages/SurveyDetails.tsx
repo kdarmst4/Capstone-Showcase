@@ -48,7 +48,7 @@ export  function SurveyDetails() {
     : "http://localhost:3000/api";
 
   if (!project) {
-    fetch(`${API_BASE_URL}/survey/${id}`)
+    fetch(`${API_BASE_URL}/single_survey/${id}`)
         .then((response) => {
           if (response.status === 200) {
             return response.json();

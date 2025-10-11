@@ -133,7 +133,6 @@
     cursor: pointer;
 }
 
-/* Video and Team Members Section */
 .video-and-members {
   display: flex;
   gap: 2rem;
@@ -146,7 +145,7 @@
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%; 
   overflow: hidden;
   border-radius: 12px;
   background: #000;
@@ -211,10 +210,10 @@
   color: var(--asu-maroon);
 }
 
-/* Main Content */
 .survey-details-content {
   max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .project-title-section {
@@ -236,67 +235,6 @@
 
 
 
-/* Grid Layout */
-.project-details-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-}
-
-.details-card {
-  background: var(--asu-white);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.details-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-}
-
-.card-title {
-  color: var(--asu-maroon);
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--asu-light-gray);
-}
-
-.info-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.info-icon {
-  color: var(--asu-maroon);
-  margin-top: 0.25rem;
-  flex-shrink: 0;
-}
-
-.info-label {
-  display: block;
-  color: var(--asu-dark-gray);
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-}
-
-.info-value {
-  display: block;
-  color: #333;
-  font-size: 1rem;
-  line-height: 1.4;
-}
-
-/* Team Members */
 .team-members {
   margin-top: 1rem;
 }
@@ -318,7 +256,6 @@
   border: 1px solid #ddd;
 }
 
-/* Description Card */
 .description-card {
   grid-column: 1 / -1;
 }
@@ -330,7 +267,6 @@
   margin: 0;
 }
 
-/* Video Card */
 .video-card {
   grid-column: 1 / -1;
 }
@@ -339,7 +275,7 @@
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%; 
   overflow: hidden;
   border-radius: 8px;
   background: #000;
@@ -354,20 +290,34 @@
   border-radius: 8px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .survey-details-container {
     padding: 1rem;
+  }
+  .back-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .project-badges span {
+    font-size: 0.85rem !important;
+    gap: 0;
+    padding: .20rem .25rem !important;
+  }
+  .requirement-badge span {
+    font-size: 0.75rem !important;
+    gap: .25rem !important;
   }
 
   .survey-details-header {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  .project-title {
-    font-size: 1.5rem;
+  .survey-project-title {
+    font-size: 1.2rem;
   }
 
   .project-details-grid {
@@ -383,24 +333,7 @@
   }
 }
 
-@media (max-width: 480px) {
-  .project-title-section {
-    padding: 1.5rem;
-  }
 
-  .project-title {
-    font-size: 1.3rem;
-  }
-
-  .details-card {
-    padding: 1rem;
-  }
-
-  .info-item {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-}
 
 /* Responsive Design for Video and Members */
 @media (max-width: 992px) {
