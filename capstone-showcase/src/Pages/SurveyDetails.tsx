@@ -11,6 +11,10 @@ import {
   Building,
 } from "lucide-react";
 import "../CSS/SurveryDetails.css";
+import { useParams } from 'react-router-dom';
+import React from "react";
+import { useState } from "react";
+
 import Footer from "./Footer";
 interface ProjectData {
   id: number;
@@ -28,23 +32,50 @@ interface ProjectData {
   youtubeLink: string;
 }
 
-export function SurveyDetails() {
+export  function SurveyDetails() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { project }: { project: ProjectData } = state || {};
+  const { id } = useParams<{ id: string }>();
+  const [project, setProject] = useState<ProjectData | null>(
+    (state && (state as { project?: ProjectData }).project) || null
+  );
 
-  console.log("Project Data:", project);
-  console.log("Project Data:", project.teamMemberNames);
+  console.log("Project Data:", id);
+  console.log("Project Data:", project?.teamMemberNames);
+  const API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
+    : "http://localhost:3000/api";
 
   if (!project) {
-    return (
-      <div className="survey-details-error">
-        <h2>No project data found</h2>
-        <button onClick={() => navigate(-1)} className="back-button">
-          Go Back
-        </button>
-      </div>
-    );
+    fetch(`${API_BASE_URL}/survey/${id}`)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error("Failed to fetch project data");
+          }
+        })
+        .then((data) => {
+          console.log("Fetched project data:", data);
+            setProject(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching project data:", error);
+        });
+
+        if (!project) {
+          return (
+            <div className="survey-details-error">
+              <p>Error: Project data not available.</p>
+              <button onClick={() => navigate(-1)} className="back-button">
+                <ArrowLeft size={20} />
+                Back to Projects
+              </button>
+            </div>
+          );
+        }
+    
   }
 
   const getBadgeText = (value: number, type: "demo" | "power" | "nda") => {
@@ -68,6 +99,7 @@ export function SurveyDetails() {
   };
 
   return (
+
     <div className="survey-details-container">
       <div className="survey-details-header">
         <button onClick={() => navigate(-1)} className="back-button">
