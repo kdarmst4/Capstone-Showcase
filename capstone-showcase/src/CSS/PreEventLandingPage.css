@@ -15,7 +15,7 @@ body.pre-event-landing-page-body {
 
 .pre-event-landing-page .asu-logo {
   margin-top: 0px;
-  width: 400px;
+  width: 450px;
   transition: transform 0.3s ease;
 }
 
@@ -131,4 +131,11 @@ body.pre-event-landing-page-body {
 .uploaded-image {
   width: 100%;
   height: auto;
+}
+
+@media (max-width: 500px)
+{
+  .pre-event-landing-page .asu-logo {
+    width: 360px;
+  }
 }
