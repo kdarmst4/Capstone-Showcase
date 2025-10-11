@@ -10,7 +10,8 @@
 .content {
   /* margin-top: 60px; */
   transition: margin-left 0.3s ease;
-  width: 99vw;
+  width: 100vw;
+  overflow-x: hidden;
   /* display: flex; */
   justify-content: center;
 
