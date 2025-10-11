@@ -162,7 +162,7 @@ const Menu: React.FC = () => {
       <div className="nav-container">
         <div
           className="nav-mobile-dropdown"
-          style={{ height: toggleDropdown ? 425 : 0 }}
+          style={{ height: toggleDropdown ? 525 : 0 }}
         >
           <ul>
             {menuOptions.map((option) => (
@@ -181,7 +181,7 @@ const Menu: React.FC = () => {
           </ul>
         </div>
         <Link to="/" className="">
-          <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
+          <img src={asuLogo} alt="ASU Logo" className="asu-logo" width={450}/>
         </Link>
         <div
           className="burger-menu"
