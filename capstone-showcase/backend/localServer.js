@@ -93,9 +93,59 @@ app.post(
   }
 );
 
-// this is the api route in the localserver.js file 
-app.post('/api/signin', (req, res) => {
+// this is the api route in the localserver.js file
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const saltRounds = 10; // Number of hashing rounds
+const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
+app.post("/api/signin", (req, res) => {
+  // defining variables from request body
+  const { username, password } = req.body;
+  console.log("Signin attempt for user:", username, password);
+  console.log("Using JWT Secret Key:", secretJWTKey);
+  // Hashing the password
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) throw err;
+    console.log("Hashed Password:", hash);
 
+    // Querying the SQL server for the given username
+    const sql =
+      "SELECT * FROM admin_pass_hash WHERE username = ? OR email = ? AND PASS_HASH = ? LIMIT 1";
+    db.query(sql, [username, username, hash], (err, results) => {
+      if (err) {
+        console.error("Error retrieving data:", err);
+        return res.status(500).send("Server error");
+      }
+      console.log("Query results:", results); // Loging query results
+      // Checking the fetched user data
+      try {
+        if (results.length === 0) {
+          return res.status(401).json({ error: "Invalid credentials" });
+        }
+        // Comparing the password hashes
+        bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
+          if (err) throw err;
+          if (pwmatches) {
+            const jwtToken = jwt.sign(
+              {
+                username: results[0].username,
+                email: results[0].email,
+              },
+              secretJWTKey,
+              { expiresIn: "30d" } // Token expiring in 1 month
+            );
+            console.log("Allowing sign in! JWT Token generated.", pwmatches);
+            return res.status(200).json({ jwtToken });
+          } else {
+            return res.status(401).json({ error: "Invalid credentials" });
+          }
+        });
+      } catch {
+        console.log("Credential Error Caught");
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+    });
+  });
 });
 
 app.post("/api/survey", (req, res) => {
@@ -392,15 +442,19 @@ app.get("/api/projects/:semester/:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
   // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
-  db.query('SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?', [startDate, endDate], (err, results) => {
-  // db.query("SELECT * FROM survey_entries;", (err, results) => {
-    if (err) {
-      console.error("here is the error", err);
-      res.status(500).json({ error: "Database query failed" });
-      return;
+  db.query(
+    "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?",
+    [startDate, endDate],
+    (err, results) => {
+      // db.query("SELECT * FROM survey_entries;", (err, results) => {
+      if (err) {
+        console.error("here is the error", err);
+        res.status(500).json({ error: "Database query failed" });
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
 app.put("/api/admin/submissions/:id", (req, res) => {
@@ -474,4 +528,144 @@ app.put("/api/admin/submissions/:id", (req, res) => {
       res.status(200).send("Submission updated");
     }
   );
+});
+
+app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
+  const { startDate, endDate, discipline } = req.params;
+  let query = "";
+  let queryParams = [];
+  // query = 'select * from survey_entries where submitDate BETWEEN ? AND ? AND major = ?';
+  query = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  queryParams = [startDate, endDate];
+  if (discipline && discipline !== "all") {
+    query += " AND major = ?";
+    queryParams.push(discipline);
+  }
+  try {
+    db.query(query, queryParams, (err, results) => {
+      if (err) {
+        console.error("Error fetching projects:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+      console.log("Fetched projects:", results);
+      res.status(200).json({ results });
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Database query failed" });
+  }
+});
+
+app.put("/api/:id/update", (req, res) => {
+  const { id } = req.params;
+  console.log("ID to update:", id);
+  // console.log("Request body:", req.body);
+  const keys = Object.keys(req.body);
+  const values = Object.values(req.body);
+
+  let query = "UPDATE showcaseentries SET ";
+  for (const key of keys) {
+    query += `${key} = ?, `;
+  }
+  query = query.slice(0, -2); // Remove trailing comma and space
+  query += ` WHERE EntryID = ${id}`;
+  console.log("Constructed query:", query);
+
+  db.query(query, values, (err) => {
+    if (err) {
+      console.error("Error updating entry:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Entry updated successfully");
+    res.status(200).json({ message: "Entry updated successfully" });
+  });
+});
+
+// Configure Multer for presentation file storage (uncomment and fix this section)
+const presentationStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = './public/uploads/';
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Create unique filename with timestamp
+    const uniqueName = 'presentation-' + Date.now() + path.extname(file.originalname);
+    cb(null, uniqueName);
+  }
+});
+
+const uploadPresentation = multer({ 
+    storage: presentationStorage,
+    limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        // Accept common presentation file types
+        const allowedTypes = /pdf|ppt|pptx|doc|docx/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)'));
+        }
+    }
+});
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static('public/uploads'));
+
+// Update your presentation endpoint to use the middleware
+app.post('/api/presentation/update', uploadPresentation.single('presentationFile'), (req, res) => {
+    console.log('Request body:', req.body);
+    console.log('Request file:', req.file);
+    
+    const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
+    
+    if (req.file) {
+        console.log('File received:', req.file);
+        
+        // Here you can save the presentation details to your database
+        const presentationData = {
+            presentationDate,
+            presentationLocation, 
+            checkingTime,
+            presentationTime,
+            filePath: `/uploads/${req.file.filename}`
+        };
+        
+        // Add database insert/update logic here if needed
+        // const sql = 'INSERT INTO presentations (date, location, checking_time, presentation_time, file_path) VALUES (?, ?, ?, ?, ?)';
+        // db.query(sql, [presentationDate, presentationLocation, checkingTime, presentationTime, presentationData.filePath], (err, result) => {
+        //     if (err) {
+        //         console.error('Error saving presentation:', err);
+        //         return res.status(500).json({ error: 'Failed to save presentation' });
+        //     }
+        //     res.status(200).json({ message: 'Presentation updated successfully', data: presentationData });
+        // });
+        
+        res.status(200).json({ 
+            message: 'Presentation updated successfully', 
+            data: presentationData 
+        });
+    } else {
+        console.log('No file received, updating other fields only');
+        
+        // Handle case where only text fields are updated (no file)
+        const presentationData = {
+            presentationDate,
+            presentationLocation,
+            checkingTime, 
+            presentationTime
+        };
+        
+        res.status(200).json({ 
+            message: 'Presentation details updated successfully', 
+            data: presentationData 
+        });
+    }
 });

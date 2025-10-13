@@ -1,6 +1,6 @@
 
 /* Project Details Container */
-.project-details__container {
+.project-details-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
@@ -9,13 +9,13 @@
 }
 
 /* Back Button */
-.project-details__back-button-container {
+.back-button-container {
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: flex-start;
 }
 
-.project-details__back-button {
+.back-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -28,13 +28,13 @@
   background-color: #f5f5f5;
 }
 
-.project-details__back-button:hover {
+.back-button:hover {
   color: #5c0f28;
   background-color: #ebebeb;
 }
 
 /* Project Header */
-.project-details__project-header {
+.project-header {
 box-sizing: border-box;
 
   background: linear-gradient(to right, #8C1D40, #5c0f28);
@@ -45,20 +45,20 @@ box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.project-details__project-header-content {
+.project-header-content {
   max-width: 800px;
 }
 
-.project-details__project-badge {
+.project-badge {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
 
-.project-details__position-badge,
-.project-details__semester-badge,
-.project-details__department-badge {
+.position-badge,
+.semester-badge,
+.department-badge {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -68,28 +68,30 @@ box-sizing: border-box;
   font-size: 0.9rem;
 }
 
-.project-details__position-badge {
+.position-badge {
   background-color: #FFC627;
   color: #333;
 }
 
-.project-details__semester-badge {
+.semester-badge {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.project-details__department-badge {
+.department-badge {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.project-details__project-title {
+.project-title {
   font-size: 2.5rem;
   margin: 1rem 0;
   line-height: 1.2;
   letter-spacing: -0.05rem;
-  color:white;
 }
-
-.project-details__project-author {
+.title-in-project-details 
+{
+  color: white;
+}
+.project-author {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -99,24 +101,25 @@ box-sizing: border-box;
 }
 
 /* Project Content */
-.project-details__project-content {
+.project-content {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
 }
-.project-details__project-gallery
+.project-gallery
 {
   position: relative;
 }
 
 @media (min-width: 992px) {
-  .project-details__project-content {
+  .project-content {
     grid-template-columns: 1fr 1fr;
   }
+
 }
 
 /* Image Gallery */
-.project-details__project-gallery {
+.project-gallery {
   height: fit-content;
   position: sticky;
   border-radius: 8px;
@@ -126,7 +129,7 @@ box-sizing: border-box;
   top: 120px;
 }
 
-.project-details__gallery-image-container {
+.gallery-image-container {
   position: relative;
   min-height: 400px;
   display: flex;
@@ -134,7 +137,7 @@ box-sizing: border-box;
   align-items: center;
 }
 
-.project-details__gallery-image {
+.gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -142,7 +145,7 @@ box-sizing: border-box;
   max-height: 500px;
 }
 
-.project-details__gallery-controls {
+.gallery-controls {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -154,7 +157,7 @@ box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.project-details__gallery-control-btn {
+.gallery-control-btn {
   background: transparent;
   border: none;
   color: white;
@@ -164,16 +167,16 @@ box-sizing: border-box;
   align-items: center;
 }
 
-.project-details__gallery-control-btn:hover {
+.gallery-control-btn:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.project-details__gallery-pagination {
+.gallery-pagination {
   color: white;
   font-size: 0.9rem;
 }
 
-.project-details__placeholder-image {
+.placeholder-image {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -184,18 +187,18 @@ box-sizing: border-box;
 }
 
 /* Project Info */
-.project-details__project-info {
+.project-info {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.project-details__info-section {
+.info-section {
   margin-bottom: 1.5rem;
   color: white;
 }
 
-.project-details__section-title {
+.section-title {
   color: #8C1D40;
   font-size: 1.5rem;
   margin-bottom: 1rem;
@@ -203,31 +206,39 @@ box-sizing: border-box;
   border-bottom: 2px solid #FFC627;
 }
 
-.project-details__project-description {
+.project-description {
   font-size: 1.1rem;
   line-height: 1.6;
   color: white;
 }
 
 /* Team Members */
-.project-details__team-members {
-  display: flex;
-  flex-wrap: wrap;
+.team-members-project-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
+  
 }
 
-.project-details__team-member {
-  display: flex;
-  align-items: center;
-  justify-content: baseline;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: #f5f5f5;
+.team-member-project-details{
+    border-radius: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+    background-color: #f5f5f5;
+color: black;
   border-radius: 8px;
-  height: fit-content;
+display: flex;
+align-items: center;
+
+}
+.team-member-project-details:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
-.project-details__member-avatar {
+.member-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -238,14 +249,14 @@ box-sizing: border-box;
 }
 
 /* Project Resources */
-.project-details__project-resources {
+.project-resources {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   color: white;
 }
 
-.project-details__resource-link {
+.resource-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -258,22 +269,22 @@ box-sizing: border-box;
   transition: background-color 0.2s;
 }
 
-.project-details__resource-link:hover {
+.resource-link:hover {
   background-color: #e0e0e0;
 }
 
-.project-details__no-resources {
+.no-resources {
   color: white;
   font-style: italic;
 }
 
 /* Social Icons */
-.project-details__social-icons {
+.social-icons {
   display: flex;
   gap: 1rem;
 }
 
-.project-details__share-icon {
+.share-icon {
   cursor: pointer;
   padding:0;
   transition: all 0.2s;
@@ -288,17 +299,17 @@ box-sizing: border-box;
   align-items: center;
 }
 
-.project-details__share-icon:hover {
+.share-icon:hover {
   transform: scale(1.1);
   background-color: #e0e0e0;
 }
 
-.project-details__share-icon:hover svg {
+.share-icon:hover svg {
   stroke: #8C1D40;
 }
 
 /* ASU Branding */
-.project-details__asu-branding {
+.asu-branding {
   margin-top: 3rem;
   padding: 1.5rem;
   background-color: #2d2e30;
@@ -307,12 +318,12 @@ box-sizing: border-box;
   justify-content: flex-start;
 }
 
-.project-details__asu-logo {
+.asu-logo {
   height: 60px;
 }
 
 /* Project Not Found */
-.project-details__project-not-found {
+.project-not-found {
   text-align: center;
   padding: 3rem;
   background-color: #f5f5f5;
@@ -321,32 +332,41 @@ box-sizing: border-box;
   max-width: 600px;
 }
 
-.project-details__project-not-found h2 {
+.project-not-found h2 {
   color: #8C1D40;
   margin-bottom: 1rem;
 }
 
-.project-details__project-not-found .project-details__back-button {
+.project-not-found .back-button {
   margin-top: 1.5rem;
 }
 
+@media (max-width: 991px) {
+  .project-gallery {
+    position: static !important;
+  }
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .project-details__project-title {
+  .project-title-detail {
     font-size: 2rem;
   }
-  .project-details__gallery-image-container {
+  .gallery-image-container {
     min-height: 300px;
   }
-  .project-details__team-members {
+  .team-members {
     flex-direction: column;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
   }
-  .project-details__project-gallery {
+  .project-gallery {
     position: static !important;
     top: auto !important;
+  }
+  .project-gallery 
+  {
+    position: static !important;
   }
 }

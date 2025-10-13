@@ -112,8 +112,8 @@ table {
   width: 100%;
 }
 
-td,
-th {
+.edit-submission-table td,
+.edit-submission-table th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
@@ -121,7 +121,7 @@ th {
   text-overflow: ellipsis;
 }
 
-th {
+.edit-submission-table th {
   background-color: #8c1d40;
   color: white;
 }
@@ -139,11 +139,7 @@ tr:hover {
   color: white;
   cursor: pointer;
 }
-tr:nth-child(1) {
-  background-color: #8c1d40;
-  color: white;
-  border-radius: 10px 10px 0 0;
-}
+
 
 tr:nth-child(even) {
   background-color: #dddddd;
