@@ -36,9 +36,12 @@ export default function useWinners() {
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 2000 + 1 }, (_, i) => 2000 + i);
-
+  const API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
+    : "http://localhost:3000/api";
   useEffect(() => {
-    fetch("http://localhost:3000/api/winners")
+    fetch(`${API_BASE_URL}/winners`)
       .then((res) => res.json())
       .then((data) => setPastWinnersData(data))
       .catch(() => setPastWinnersData([]));

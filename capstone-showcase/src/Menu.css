@@ -1,15 +1,13 @@
-
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
 .asu-logo {
-  width: 150px;
+  width: 200px;
 }
 
 .selected-semester-label {
   color: black;
   margin-top: 6px;
 }
-
 
 .menu-item {
   color: black;
@@ -20,7 +18,6 @@
 .semester-selector label {
   color: black;
   margin-right: 8px;
-
 }
 
 .semesterDropdown {
@@ -29,55 +26,54 @@
   border: 1px solid #ccc;
   background-color: white;
   color: black;
+  font-size: 1.20rem;
 }
 
-.nav-container
-{
+.nav-container {
   display: flex;
   background-color: white;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
+  /* padding: 0 10px; */
   position: relative;
+  font-size: 1.20rem;
+  width: 100%;
 }
-.parent 
-{
-  position:sticky;
-  top:0;
+
+.parent {
+  position: sticky;
+  top: 0;
   background-color: white;
   z-index: 102;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-mobile-dropdown
-{
-   position: absolute;
-   top: 40px;
-   left: 0;
-   background-color: white;
-   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-   border-radius: 4px;
-   z-index: 100;
-   width: 100%;
-   overflow: hidden;
-   transition: height 0.3s ease;
+.nav-mobile-dropdown {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 100;
+  width: 100%;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  /* font-size: 1.05rem; */
 }
 
-ul 
-{
-   list-style: none;
-   padding: 0;
-   margin: 0;
-   width: 100%;
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
-li 
-{
+li {
   list-style: none;
 }
 
-.burger-menu 
-{
+.burger-menu {
   background: none;
   width: 40px;
   height: 40px;
@@ -91,19 +87,17 @@ li
   z-index: 101;
 }
 
-.bun 
-{
-   position: absolute;
-   left: 50%;
-   background: black;
-   width: 20px;
-   height: 2px;
-   border-radius: 2px;
-   transition: all 0.3s ease;
+.bun {
+  position: absolute;
+  left: 50%;
+  background: black;
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
-.patty 
-{
+.patty {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -115,14 +109,14 @@ li
   transition: all 0.3s ease;
 }
 
-.desktop-menu 
-{
-  display:none;
+.desktop-menu {
+  display: none;
   flex-direction: row;
   color: black;
   gap: 10px;
   justify-content: baseline;
   align-items: center;
+  /* font-size: 1.15rem; */
 }
 /* Department dropdown hidden by default, shown on hover */
 .department-button {
@@ -130,7 +124,6 @@ li
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
   padding: 8px;
   color: black;
   display: flex;
@@ -143,8 +136,7 @@ li
   border-radius: 4px;
 }
 
-.department-button:hover .arrow
-{
+.department-button:hover .arrow {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
 }
@@ -155,15 +147,14 @@ li
   top: 100%;
   left: 0;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 100;
-  min-width: 200px;
+  min-width: 240px;
   border-radius: 4px;
   padding: 8px 0;
 }
 
-.special-link
-{
+.special-link {
   color: black;
   text-decoration: none;
   padding: 8px;
@@ -172,8 +163,7 @@ li
   gap: 4px;
   transition: background-color 0.3s, color 0.3s;
 }
-.special-link:hover
-{
+.special-link:hover {
   border-radius: 4px;
   background-color: #f0f0f0;
 }
@@ -188,17 +178,19 @@ li
   padding: 8px 16px;
   color: #333;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  /* font-size: 1.25rem; */
 }
-
+/* .menu-item a {
+  font-size: 1.25rem;
+} */
 .department-dropdown .menu-item:hover,
 .department-dropdown .menu-item.active {
   background: #f0f0f0;
   color: #000;
 }
 
-
-@media (min-width: 800px) {
+@media (min-width: 913px) {
   .burger-menu {
     display: none;
   }
@@ -208,5 +200,8 @@ li
 
   .desktop-menu {
     display: flex;
+  }
+  .semesterDropdown {
+    font-size: 1.05rem;
   }
 }

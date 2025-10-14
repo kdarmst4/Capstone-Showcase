@@ -1,11 +1,12 @@
 
 /* Project Details Container */
 .project-details-container {
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
   padding: 2rem 1rem;
   color: #333;
   font-family: 'Arial', sans-serif;
+  background-color: white;
 }
 
 /* Back Button */
@@ -29,8 +30,7 @@
 }
 
 .back-button:hover {
-  color: #5c0f28;
-  background-color: #ebebeb;
+  color: var(--asu-gold);
 }
 
 /* Project Header */
@@ -89,7 +89,7 @@ box-sizing: border-box;
 }
 .title-in-project-details 
 {
-  color: white;
+  color: white !important;
 }
 .project-author {
   display: flex;
@@ -318,9 +318,7 @@ align-items: center;
   justify-content: flex-start;
 }
 
-.asu-logo {
-  height: 60px;
-}
+
 
 /* Project Not Found */
 .project-not-found {

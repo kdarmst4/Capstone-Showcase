@@ -4,10 +4,9 @@ import "../CSS/ComputerScience.css";
 import "../CSS/ProjectCards.css";
 import "../CSS/Pagination.css";
 import "../CSS/ProjectShowcase.css";
-// import { capstoneDescription } from "../TextContent";
-import asuLogo from "../assets/asuLogo.png";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
-import { useNavigate, useSearchParams } from "react-router-dom";
+
 
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
@@ -181,10 +180,11 @@ const ComputerScience: React.FC = () => {
               <section className="project-catalog">
                 <div className="projects-grid">
                   {currentProjects.map((project, index) => (
+                    <Link to ={`/survey/${project.id}`} state={{ project }} key={project.id}>
                     <div
                       key={project.id || index}
                       className="project-card"
-                      onClick={() => handleProjectClick(project)}
+                      // onClick={() => handleProjectClick(project)}
                     >
                       {project.youtubeLink && (
                         <img
@@ -194,8 +194,8 @@ const ComputerScience: React.FC = () => {
                         />
                       )}
                       <div className="project-details">
-                        <h4 className="project-title">{project.projectTitle}</h4>
-                        <p className="project-description">
+                        <h4 className="project-title left-aligned">{project.projectTitle}</h4>
+                        <p className="project-description left-aligned">
                           {project.projectDescription}
                         </p>
                         <div className="project-meta">
@@ -208,6 +208,8 @@ const ComputerScience: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                    </Link> 
+
                   ))}
                 </div>
               </section>

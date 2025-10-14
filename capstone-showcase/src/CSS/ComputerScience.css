@@ -87,6 +87,12 @@
   cursor: not-allowed;
   box-shadow: none;
 } 
+.left-aligned 
+{
+  text-align: left !important;
+  margin: 4px 0 0 0 !important;
+}
+
 
 .more-projects-button{
     background-color: #8c1d40;

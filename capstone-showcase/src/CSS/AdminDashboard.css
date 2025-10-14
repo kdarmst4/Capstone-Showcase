@@ -42,7 +42,7 @@
   overflow: hidden; 
 }
 
-/* --- Sidebar / Navbar --- */
+
 .admin-dashboard-navbar {
   display: flex;
   flex-direction: column;
