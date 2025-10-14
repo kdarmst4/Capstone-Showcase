@@ -190,6 +190,10 @@ li {
   color: #000;
 }
 
+.far-right-container {
+  padding: 0 16px;
+}
+
 @media (min-width: 913px) {
   .burger-menu {
     display: none;
