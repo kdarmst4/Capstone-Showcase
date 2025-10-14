@@ -22,7 +22,7 @@ import ContactSupport from "./Pages/ContactSupport";
 import Winners from "./Pages/Winners";
 import ProjectDetails from "./Pages/ProjectDetails";
 import { SurveyDetails } from "./Pages/SurveyDetails";
-
+import { AuthProvider } from "./AuthContext";
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -30,6 +30,7 @@ const AppContent: React.FC = () => {
   const hideMenu = location.pathname.startsWith('/admin') || location.pathname.startsWith('/admin-dashboard');
   return (
     <MenuProvider>
+      <AuthProvider>
       {!hideMenu && <Menu />}
       <div className="content">
         <Routes>
@@ -54,6 +55,7 @@ const AppContent: React.FC = () => {
           <Route path="admin-dashboard/support" element={<ContactSupport />} />
         </Routes>
       </div>
+      </AuthProvider>
     </MenuProvider>
   );
 };
