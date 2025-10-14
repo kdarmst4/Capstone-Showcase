@@ -203,13 +203,13 @@ export  function SurveyDetails() {
           </div>
         </div>
         {/* black asu logo  */}
-        <div className="asu-branding">
+        {/* <div className="asu-branding">
         <img 
           src="https://innovationshowcase.engineering.asu.edu/wp-content/themes/pitchfork/src/endorsed-logos/asu_fultonengineering_white.png" 
           alt="ASU Fulton Engineering" 
-          className="asu-logo"
+          className="survey-details__asu-logo"
         />
-      </div>
+      </div> */}
       <Footer />
       </div>
     </div>

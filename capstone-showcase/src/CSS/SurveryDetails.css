@@ -375,3 +375,9 @@
     font-size: 1.1rem;
   }
 }
+
+.survey-details__asu-logo {
+  width: 180px;
+  height: auto;
+  margin-top: 20px;
+}
