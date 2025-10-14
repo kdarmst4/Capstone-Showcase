@@ -120,8 +120,7 @@ const Menu: React.FC = () => {
 
   const renderSemesterDropdown = () => (
     <li className="semester-selector">
-      <label htmlFor="semesterDropdown" style={{ marginRight: 8 }}>
-        Select Semester:
+      <label htmlFor="semesterDropdown">
       </label>
       <select
         id="semesterDropdown"
@@ -222,7 +221,7 @@ const Menu: React.FC = () => {
           </Link>
           <button className="department-button">
             Department
-            <ChevronDown size={16} style={{ marginLeft: 4 }} className="arrow" />
+            <ChevronDown size={14} style={{ marginLeft: 0 }} strokeWidth={3.5} className="arrow" />
             <div className="department-dropdown">
               {menuOptions
                 .filter(option => !['About', 'Winners', 'Home'].includes(option.name))
