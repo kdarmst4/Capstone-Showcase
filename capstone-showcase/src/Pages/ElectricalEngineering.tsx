@@ -4,10 +4,8 @@ import "../CSS/ElectricalEngineering.css";
 import "../CSS/Pagination.css";
 import "../CSS/ProjectCards.css";
 import "../CSS/ProjectShowcase.css";
-// import { capstoneDescription } from "../TextContent";
-import asuLogo from "../assets/asuLogo.png";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
-import { useNavigate, useSearchParams } from "react-router-dom";
 
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
@@ -179,38 +177,41 @@ const ElectricalEngineering: React.FC = () => {
           ) : (
             <>
               {/* Projects Grid */}
-              <section className="project-catalog">
-              <div className="projects-grid">
-                {currentProjects.map((project, index) => (
-                  <div
-                    key={project.id || index}
-                    className="project-card"
-                    onClick={() => handleProjectClick(project)}
-                  >
-                    {project.youtubeLink && (
-                      <img
-                        src={extractYouTubeThumbnail(project.youtubeLink) || ""}
-                        alt={`${project.projectTitle} Thumbnail`}
-                        className="youtube-thumbnail"
-                      />
-                    )}
-                    <div className="project-details">
+               <section className="project-catalog">
+                <div className="projects-grid">
+                  {currentProjects.map((project, index) => (
+                    <Link to ={`/survey/${project.id}`} state={{ project }} key={project.id}>
+                    <div
+                      key={project.id || index}
+                      className="project-card"
+                      // onClick={() => handleProjectClick(project)}
+                    >
+                      {project.youtubeLink && (
+                        <img
+                          src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                          alt={`${project.projectTitle} Thumbnail`}
+                          className="youtube-thumbnail"
+                        />
+                      )}
+                      <div className="project-details">
                         <h4 className="project-title left-aligned">{project.projectTitle}</h4>
                         <p className="project-description left-aligned">
-                        {project.projectDescription}
-                      </p>
-                      <div className="project-meta">
-                        <p>
-                          <strong>Team:</strong> {project.teamMemberNames}
+                          {project.projectDescription}
                         </p>
-                        <p>
-                          <strong>Sponsor:</strong> {project.sponsor}
-                        </p>
+                        <div className="project-meta">
+                          <p>
+                            <strong>Team:</strong> {project.teamMemberNames}
+                          </p>
+                          <p>
+                            <strong>Sponsor:</strong> {project.sponsor}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                    </Link> 
+
+                  ))}
+                </div>
               </section>
 
               {/*Pagination*/}

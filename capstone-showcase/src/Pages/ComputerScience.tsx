@@ -4,10 +4,9 @@ import "../CSS/ComputerScience.css";
 import "../CSS/ProjectCards.css";
 import "../CSS/Pagination.css";
 import "../CSS/ProjectShowcase.css";
-// import { capstoneDescription } from "../TextContent";
-import asuLogo from "../assets/asuLogo.png";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+
 
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
