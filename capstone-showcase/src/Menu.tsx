@@ -146,14 +146,14 @@ const Menu: React.FC = () => {
           );
         })}
       </select>
-      {/* {currentSemester && currentYear && (
+      {currentSemester && currentYear && (
         <div className="selected-semester-label">
           Showing projects from:{" "}
           <strong>
             {currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}
           </strong>
         </div>
-      )} */}
+      )}
     </li>
   );
 
@@ -217,8 +217,12 @@ const Menu: React.FC = () => {
         {/* desktop view menu  */}
         <div className="desktop-menu">
           <Link to="/winners" className="special-link">
-            {/* <Award size={24} /> */}
+            <Award size={24} />
             Winners
+          </Link>
+          <Link to="/about" className="special-link">
+            <UsersRound size={24} />
+            About Us
           </Link>
           <button className="department-button">
             Department
@@ -239,15 +243,7 @@ const Menu: React.FC = () => {
                 ))}
             </div>
           </button>
-          <div className="semester-dropdown">
-            {renderSemesterDropdown()}
-          </div>
-        </div>
-        <div className="far-right-container">
-          <Link to="/about" className="special-link">
-            {/* <UsersRound size={24} /> */}
-            About Us
-          </Link>
+          {renderSemesterDropdown()}
         </div>
       </div>
     </div>
