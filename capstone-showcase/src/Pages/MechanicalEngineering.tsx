@@ -308,7 +308,12 @@ const MechanicalEngineering: React.FC = () => {
             </div>
             <div className="project-showcase-details">
               <div className="left-section">
-                <h3>Poster</h3>
+                <section className="abstract-section">
+                  <h3 className="abstract-title">Abstract</h3>
+                  <p className="abstract-text">{selectedProject.projectDescription}</p>
+                </section>
+                
+                {/* <h3>Poster</h3>
 
                 <div className="right-section">
                   <div>
@@ -353,9 +358,7 @@ const MechanicalEngineering: React.FC = () => {
                       <p>No team image uploaded.</p>
                     )}
                   </div>
-                </div>
-                <h3>Abstract</h3>
-                <p>{selectedProject.projectDescription}</p>
+                </div> */}
               </div>
             </div>
           </div>

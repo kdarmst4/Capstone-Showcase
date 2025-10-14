@@ -100,3 +100,30 @@
 .more-projects-button:hover {
   background-color: #611029;
 }
+
+.abstract-section {
+  margin: 2rem auto;
+  padding: 1.25rem 1.5rem;
+  max-width: 900px;              
+  border: 2px solid #8c1d40;
+  border-radius: 12px;
+  background: #fffdfc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.abstract-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #8c1d40;
+  margin-bottom: 0.75rem;
+}
+
+.abstract-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  white-space: normal !important;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  color: #222;
+}
