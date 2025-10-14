@@ -124,6 +124,7 @@ li {
   color: black;
   justify-content: baseline;
   align-items: center;
+  gap: 25px;
   /* font-size: 1.15rem; */
 }
 /* Department dropdown hidden by default, shown on hover */
