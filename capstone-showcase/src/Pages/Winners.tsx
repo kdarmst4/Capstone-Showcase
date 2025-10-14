@@ -22,7 +22,7 @@ const Winner: React.FC = () => {
       <h1 style={{ color: "#8C1D40", fontFamily: "sans-serif", paddingTop: "1rem" }}>
         ASU Winners Showcase
       </h1>
-      <p>Celebrating academic excellence and innovation through outstanding student achievements at Arizona State University.</p>
+      <p style={{color:'black'}}>Celebrating academic excellence and innovation through outstanding student achievements at Arizona State University.</p>
 
       <form className="winners__form" onSubmit={handleFilterSubmit}>
         <input

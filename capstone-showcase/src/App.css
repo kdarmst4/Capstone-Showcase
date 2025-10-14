@@ -2,22 +2,38 @@
   /* margin: 0 auto; */
   /* padding: 0 2rem 2rem 2rem; */
   text-align: center;
-    max-width: calc(100vw - 17px);
+max-width: 100vw;
 ;
   /* max-width: 1280px; */
   height: 100vh;
+    width: 100vw;
+
 }
 /* Firefox */
-* { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.3) transparent; }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) white; /* thumb color | track color */
+}
 
-/* WebKit (Chrome, Safari) */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.35); border-radius: 8px; }
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: white; /* sets the track to white */
+}
 
 .content {
   /* margin-top: 60px; */
   transition: margin-left 0.3s ease;
-    max-width: calc(100vw - 17px);
+max-width: 100vw;
 ;
   overflow-x: hidden;
   /* display: flex; */

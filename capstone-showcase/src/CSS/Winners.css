@@ -1,11 +1,5 @@
 .winners__form-container {
-  /* display: flex;
-  flex-direction: column; */
-  /* align-items: center;
-  margin-top: 40px;
-  min-width: 320px; */
-  
-  /* max-width: 100%; */
+  background-color: white;
 }
 
 .winners__showcase-title {
