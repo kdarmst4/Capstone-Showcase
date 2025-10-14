@@ -11,8 +11,12 @@
 
 .menu-item {
   color: black;
-  margin: 10px;
+  /* margin: 10px; */
   color: black;
+  text-decoration-line: none;
+  /* padding: 4px; */
+  /* display: inline-block; */
+  /* width: fit-content; */
 }
 
 .semester-selector label {
@@ -41,6 +45,7 @@
   /* padding: 0 10px; */
   position: relative;
   width: 100%;
+  height: 65px;
 }
 
 .parent {
@@ -117,7 +122,6 @@ li {
   display: none;
   flex-direction: row;
   color: black;
-  gap: 18px;
   justify-content: baseline;
   align-items: center;
   /* font-size: 1.15rem; */
