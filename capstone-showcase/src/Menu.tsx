@@ -120,8 +120,7 @@ const Menu: React.FC = () => {
 
   const renderSemesterDropdown = () => (
     <li className="semester-selector">
-      <label htmlFor="semesterDropdown" style={{ marginRight: 8 }}>
-        Select Semester:
+      <label htmlFor="semesterDropdown">
       </label>
       <select
         id="semesterDropdown"
@@ -146,14 +145,14 @@ const Menu: React.FC = () => {
           );
         })}
       </select>
-      {currentSemester && currentYear && (
+      {/* {currentSemester && currentYear && (
         <div className="selected-semester-label">
           Showing projects from:{" "}
           <strong>
             {currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}
           </strong>
         </div>
-      )}
+      )} */}
     </li>
   );
 
@@ -181,7 +180,7 @@ const Menu: React.FC = () => {
           </ul>
         </div>
         <Link to="/" className="">
-          <img src={asuLogo} alt="ASU Logo" className="asu-logo" width={450}/>
+          <img src={asuLogo} alt="ASU Logo" className="asu-logo-nav" width={450}/>
         </Link>
         <div
           className="burger-menu"
@@ -217,16 +216,12 @@ const Menu: React.FC = () => {
         {/* desktop view menu  */}
         <div className="desktop-menu">
           <Link to="/winners" className="special-link">
-            <Award size={24} />
+            {/* <Award size={24} /> */}
             Winners
-          </Link>
-          <Link to="/about" className="special-link">
-            <UsersRound size={24} />
-            About Us
           </Link>
           <button className="department-button">
             Department
-            <ChevronDown size={16} style={{ marginLeft: 4 }} className="arrow" />
+            <ChevronDown size={14} style={{ marginLeft: 0 }} strokeWidth={3.5} className="arrow" />
             <div className="department-dropdown">
               {menuOptions
                 .filter(option => !['About', 'Winners', 'Home'].includes(option.name))
@@ -243,7 +238,15 @@ const Menu: React.FC = () => {
                 ))}
             </div>
           </button>
-          {renderSemesterDropdown()}
+          <div className="semester-dropdown">
+            {renderSemesterDropdown()}
+          </div>
+        </div>
+        <div className="far-right-container">
+          <Link to="/about" className="special-link">
+            {/* <UsersRound size={24} /> */}
+            About Us
+          </Link>
         </div>
       </div>
     </div>

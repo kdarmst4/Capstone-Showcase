@@ -1,7 +1,20 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
-.asu-logo {
+.asu-logo-nav {
   width: 200px;
+}
+
+.asu-branding .asu-logo
+{
+  height: 60px;
+}
+.asu-branding {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #2d2e30;
+  border-radius: 8px;
+  display: flex;
+  justify-content: flex-start;
 }
 .asu-branding .asu-logo {
   height: 60px;
@@ -13,19 +26,26 @@
 
 .menu-item {
   color: black;
-  margin: 10px;
+  /* margin: 10px; */
   color: black;
+  text-decoration-line: none;
+  /* padding: 4px; */
+  /* display: inline-block; */
+  /* width: fit-content; */
 }
 
 .semester-selector label {
   color: black;
-  margin-right: 8px;
+}
+
+.semester-dropdown {
+  cursor: pointer;
 }
 
 .semesterDropdown {
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: none;
   background-color: white;
   color: black;
   font-size: 1.20rem;
@@ -39,8 +59,8 @@
   align-items: center;
   /* padding: 0 10px; */
   position: relative;
-  font-size: 1.20rem;
   width: 100%;
+  height: 65px;
 }
 
 .parent {
@@ -49,6 +69,8 @@
   background-color: white;
   z-index: 102;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 18px;
 }
 
 .nav-mobile-dropdown {
@@ -115,9 +137,9 @@ li {
   display: none;
   flex-direction: row;
   color: black;
-  gap: 10px;
   justify-content: baseline;
   align-items: center;
+  gap: 25px;
   /* font-size: 1.15rem; */
 }
 /* Department dropdown hidden by default, shown on hover */
@@ -131,6 +153,9 @@ li {
   display: flex;
   align-items: center;
   gap: 4px;
+  font-size: 18px;
+  line-height: 1.5;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 .department-button:hover,
 .department-button:focus {
@@ -190,6 +215,10 @@ li {
 .department-dropdown .menu-item.active {
   background: #f0f0f0;
   color: #000;
+}
+
+.far-right-container {
+  padding: 0 16px;
 }
 
 @media (min-width: 913px) {
