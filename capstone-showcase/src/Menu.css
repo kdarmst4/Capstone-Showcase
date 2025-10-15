@@ -3,7 +3,9 @@
 .asu-logo {
   width: 200px;
 }
-
+.asu-branding .asu-logo {
+  height: 60px;
+}
 .selected-semester-label {
   color: black;
   margin-top: 6px;
