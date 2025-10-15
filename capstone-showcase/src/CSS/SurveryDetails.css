@@ -91,6 +91,8 @@
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.85rem;
+  color: black;
+  background-color: var(--asu-gold);
 }
 
 .badge-required {
@@ -135,21 +137,19 @@
 
 .video-and-members {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   margin-top: 2rem;
   align-items: flex-start;
 }
 
 .video-container {
-  flex: 2;
+  flex: 1;
   position: relative;
   width: 100%;
-  height: 0;
-  padding-bottom: 56.25%; 
+  height: auto;
+  padding-bottom: 50%; 
   overflow: hidden;
   border-radius: 12px;
-  background: #000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .video-iframe {
@@ -157,13 +157,14 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 65%;
   border-radius: 12px;
+  padding: 24px 0;
 }
 
 .team-members-section {
   flex: 1;
-  padding: 1.5rem;
+  padding: 1.5rem 0 0 0;
   min-height: fit-content;
 }
 
@@ -191,12 +192,17 @@
   gap: 0.5rem;
   background: var(--asu-light-gray);
   color: var(--asu-dark-gray);
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
   border: 1px solid #ddd;
   transition: all 0.3s ease;
+  margin: 0 0 .5rem 0;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid #ddd;
 }
 
 .member-tag:hover {
@@ -246,15 +252,7 @@
   margin-top: 0.75rem;
 }
 
-.member-tag {
-  background: var(--asu-light-gray);
-  color: var(--asu-dark-gray);
-  padding: 0.4rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid #ddd;
-}
+
 
 .description-card {
   grid-column: 1 / -1;
@@ -270,25 +268,11 @@
 .video-card {
   grid-column: 1 / -1;
 }
-
-.video-container {
-  position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 56.25%; 
-  overflow: hidden;
-  border-radius: 8px;
-  background: #000;
+.team-members-section h3 
+{
+  margin: 0 0 .5rem 0;
 }
 
-.video-iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-}
 
 @media (max-width: 768px) {
   .survey-details-container {
@@ -297,15 +281,6 @@
   .back-button {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
-  }
-  .project-badges span {
-    font-size: 0.85rem !important;
-    gap: 0;
-    padding: .20rem .25rem !important;
-  }
-  .requirement-badge span {
-    font-size: 0.75rem !important;
-    gap: .25rem !important;
   }
 
   .survey-details-header {
@@ -319,36 +294,29 @@
   .survey-project-title {
     font-size: 1.2rem;
   }
-
-  .project-details-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .details-card {
-    padding: 1.5rem;
-  }
-
-  .project-badges {
-    justify-content: flex-start;
-  }
+.video-and-members {
+  flex-direction: column;
+  gap: 1rem;
 }
 
+.video-container {
+  position: relative; 
+  width: 100%;
+  padding-bottom: 56.25%; 
+}
 
+.video-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90%; 
+}
 
-/* Responsive Design for Video and Members */
-@media (max-width: 992px) {
-  .video-and-members {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .video-container {
-    flex: none;
-  }
-  
-  .team-members-section {
-    flex: none;
-  }
+.team-members-section {
+  flex: none;
+  padding-top: 0;
+}
   
   .team-members-list {
     flex-direction: row;
@@ -359,19 +327,8 @@
   .member-tag {
     flex: none;
     padding: 0.5rem 0.75rem;
+    margin: 0 0 .5rem 0;
   }
-}
 
-@media (max-width: 768px) {
-  .video-and-members {
-    gap: 1rem;
-  }
-  
-  .team-members-section {
-    padding: 1rem;
-  }
-  
-  .team-members-section h3 {
-    font-size: 1.1rem;
-  }
+
 }
