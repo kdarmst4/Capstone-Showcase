@@ -2,6 +2,7 @@
 import { ImageMinus } from "lucide-react";
 
 import "../CSS/WinnerComponent.css";
+import { Link } from "react-router-dom";
 
 
 type ShowcaseEntry = {
@@ -79,16 +80,13 @@ export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
                       </div>
                       <p className="winner-component__winner-description">{winner.description}</p>
                       <div className="winner-component__winner-details-link-container">
-                        <button
-                          onClick={() => {
-                          const encodedWinner = encodeURIComponent(JSON.stringify(winner));
-                          console.log('encodedWinner', encodedWinner);
-                          window.location.href = `/winners/entry/${winner.EntryID || 1}?data=${encodedWinner}`;
-                          }}
+                        <Link
+                          to={`/winners/entry/${winner.EntryID}`}
+                          state={winner}
                           className="winner-component__winner-details-link"
                         >
                           More Details
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
