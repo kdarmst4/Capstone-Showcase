@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface MenuContextProps {
   isSideMenu: boolean;
@@ -6,6 +6,7 @@ interface MenuContextProps {
   selectedSemester: string | null;
   selectedYear: string | null;
   setSelectedSemester: (semester: string, year: string) => void;
+  getSelectedSemester: () => string | undefined;
 }
 
 const MenuContext = createContext<MenuContextProps | undefined>(undefined);
@@ -26,7 +27,21 @@ export const MenuProvider: React.FC<MenuProviderProps> = ({ children }) => {
   const [isSideMenu, setIsSideMenu] = useState(false);
   const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [selectedSemesterYear, setSelectedSemesterYear] = useState<string | null>(null);
 
+  useEffect(() =>
+  {
+    const selectedSemesterYear = localStorage.getItem('selectedSemesterYear');
+
+    if (selectedSemesterYear) {
+      const [semester, year] = selectedSemesterYear.split('-');
+      setSelectedSemesterYear(selectedSemesterYear);
+      setSelectedSemester(semester);
+      setSelectedYear(year);
+    }
+
+
+  }, [])
   const toggleMenu = () => {
     setIsSideMenu(!isSideMenu);
   };
@@ -36,8 +51,19 @@ export const MenuProvider: React.FC<MenuProviderProps> = ({ children }) => {
     setSelectedYear(year);
   };
 
+  const getSelectedSemester = () => {
+    if (selectedSemesterYear) {
+      console.log(selectedSemesterYear);
+      return selectedSemesterYear;
+    } else 
+    {
+      console.log("No semester selected");
+      return undefined;
+    }
+  };
+
   return (
-    <MenuContext.Provider value={{ isSideMenu, toggleMenu, selectedSemester, selectedYear, setSelectedSemester: setSelectedSemesterHandler }}>
+    <MenuContext.Provider value={{ isSideMenu, toggleMenu, selectedSemester, selectedYear, setSelectedSemester: setSelectedSemesterHandler,  getSelectedSemester }}>
       {children}
     </MenuContext.Provider>
   );

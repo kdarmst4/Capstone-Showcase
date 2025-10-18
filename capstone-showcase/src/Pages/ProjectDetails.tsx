@@ -14,11 +14,11 @@ import { ShowcaseEntry } from "../SiteInterface";
 export default function ProjectDetails() {
   const { id: projectId } = useParams(); // gets "123"
   const location = useLocation(); 
-  const queryParams = new URLSearchParams(location.search);
-  const winnerData = queryParams.get("data");
+  const {state} = useLocation();
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [winner, setWinner] = useState<ShowcaseEntry | null>(
-    winnerData ? JSON.parse(decodeURIComponent(winnerData)) : null
+    (state && (state as { winner?: ShowcaseEntry }).winner) || null
   );
   console.log("Project ID from URL:", projectId);
   console.log("Winner from state:", winner);
@@ -32,7 +32,7 @@ export default function ProjectDetails() {
   ];
 
   useEffect(() => {
-    if (!winnerData && projectId) {
+    if (!winner && projectId) {
       console.log("Fetching winner data for project ID:", projectId);
       fetch(`http://localhost:3000/api/winner/${projectId}`)
         .then(res => res.json())
@@ -45,7 +45,7 @@ export default function ProjectDetails() {
           setWinner(null);
         });
     }
-  }, [winnerData, projectId]);
+  }, [winner, projectId]);
   // Update Open Graph meta tags for better social sharing
   const updateOpenGraphTags = (winner: ShowcaseEntry, imageUrl?: string) => {
     const updateMetaTag = (property: string, content: string) => {

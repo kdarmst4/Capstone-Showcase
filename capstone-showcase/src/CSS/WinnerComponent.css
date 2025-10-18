@@ -155,6 +155,11 @@
   display: inline-block;
 }
 
+.winner-component__winner-details-link:hover 
+{
+  color: #ffc627;
+}
+
 .winner-details-link:hover {
   background: #D23153;
 }
