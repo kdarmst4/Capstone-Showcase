@@ -17,6 +17,7 @@ import { useParams } from 'react-router-dom';
 import React from "react";
 import { useState } from "react";
 import { useMenuContext } from "../MenuContext";
+import Missing_photo from "../assets/Missing_photo.svg";
 
 import Footer from "./Footer";
 interface ProjectData {
@@ -33,6 +34,7 @@ interface ProjectData {
   power: number;
   nda: number;
   youtubeLink: string;
+  teamPicturePath: string;
 }
 
 export  function SurveyDetails() {
@@ -42,8 +44,15 @@ export  function SurveyDetails() {
   const [project, setProject] = useState<ProjectData | null>(
     (state && (state as { project?: ProjectData }).project) || null
   );
+  const[teamMembers, setTeamMembers] = useState<string[]>(state && (state as { project?: ProjectData }).project ? ((state as { project?: ProjectData }).project!.teamMemberNames.split(", ")) : []);
+  const[teamMemberPhotos, setTeamMemberPhotos] = useState<string[]>(state && (state as { project?: ProjectData }).project ? Array(((state as { project?: ProjectData }).project!.teamPicturePath.split(", ")).length).fill("") : []);
 
   const { getSelectedSemester } = useMenuContext();
+
+  const STATIC_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "" // Relative URL - will use https://showcase.asucapstone.com/api
+    : "http://localhost:3000";
 
 
   //  const getCurrentSemester = () => {
@@ -170,8 +179,11 @@ export  function SurveyDetails() {
                   .split(", ")
                   .map((name: string, index: number) => (
                     <span key={index} className="member-tag">
-                      <User size={14} />
-                      {name.trim()}
+                      <span className="survey-detail-img-container">
+                      <img src={`${STATIC_BASE_URL}${teamMemberPhotos[index]}`} alt={Missing_photo} />
+                      </span>
+                      
+                      <p>{name.trim()}</p>
                     </span>
                   ))}
             </div>

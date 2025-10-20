@@ -166,6 +166,9 @@
   flex: 1;
   padding: 1.5rem 0 0 0;
   min-height: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .team-members-section h3 {
@@ -189,23 +192,39 @@
 .member-tag {
   display: flex;
   align-items: center;
+  max-width: 200px ;
   gap: 0.5rem;
-  background: var(--asu-light-gray);
-  color: var(--asu-dark-gray);
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--asu-white);
+  color: var(--asu-maroon);
+  border: 2px solid var(--asu-maroon);
   border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: 1px solid #ddd;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.3s ease;
-  margin: 0 0 .5rem 0;
-  border-radius: 15px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid #ddd;
+}
+.survey-detail-img-container 
+{
+  width: 100%;
+  height: 80%;
+
+}
+.survey-detail-img-container img 
+{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.member-tag p 
+{
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-.member-tag:hover {
+/* .member-tag:hover {
   background: var(--asu-gold);
   color: var(--asu-dark-gray);
   transform: translateX(4px);
@@ -214,7 +233,7 @@
 
 .member-tag svg {
   color: var(--asu-maroon);
-}
+} */
 
 .survey-details-content {
   max-width: 1200px;
