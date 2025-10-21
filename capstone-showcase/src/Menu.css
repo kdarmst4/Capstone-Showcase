@@ -10,6 +10,21 @@
   padding: 0 10px;
 }
 
+.asu-branding .asu-logo
+{
+  height: 60px;
+}
+.asu-branding {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #2d2e30;
+  border-radius: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+.asu-branding .asu-logo {
+  height: 60px;
+}
 .selected-semester-label {
   color: black;
   margin-top: 6px;

@@ -9,11 +9,14 @@ import {
   Mail,
   User,
   Building,
+  Menu,
+  Calendar,
 } from "lucide-react";
 import "../CSS/SurveryDetails.css";
 import { useParams } from 'react-router-dom';
 import React from "react";
 import { useState } from "react";
+import { useMenuContext } from "../MenuContext";
 
 import Footer from "./Footer";
 interface ProjectData {
@@ -39,6 +42,16 @@ export  function SurveyDetails() {
   const [project, setProject] = useState<ProjectData | null>(
     (state && (state as { project?: ProjectData }).project) || null
   );
+
+  const { getSelectedSemester } = useMenuContext();
+
+
+  //  const getCurrentSemester = () => {
+  //   const selectedSemester = getSelectedSemester();
+  //   if (selectedSemester) {
+  //     return selectedSemester;
+  //   }
+  // }
 
   console.log("Project Data:", id);
   console.log("Project Data:", project?.teamMemberNames);
@@ -78,12 +91,17 @@ export  function SurveyDetails() {
     
   }
 
-  const getBadgeText = (value: number, type: "demo" | "power" | "nda") => {
-    if (type === "demo") return value === 1 ? "Demo Required" : "No Demo";
-    if (type === "power") return value === 1 ? "Power Required" : "No Power";
-    if (type === "nda") return value === 1 ? "NDA Required" : "No NDA";
-    return "Unknown";
-  };
+  const formatSelectedSemester = () =>
+  {
+    const selectedSemester = getSelectedSemester();
+    console.log("Selected Semester from Context:", selectedSemester);
+    let semester = selectedSemester ? selectedSemester.split('-')[0] : null;
+    let year = selectedSemester ? selectedSemester.split('-')[1] : null;
+    console.log("Semester:", semester, "Year:", year);
+    if (semester === 'sp') return `Spring ${year}`;
+    if (semester === 'fa') return `Fall ${year}`;
+    return "Semester Not Set";
+  }
 
   const getBadgeClass = (value: number) => {
     return value === 1 ? "badge-required" : "badge-not-required";
@@ -107,33 +125,21 @@ export  function SurveyDetails() {
           Back to Projects
         </button>
       </div>
-      {/* main content */}
       <div>
         {/* title  */}
         <div className="survey-title-div">
           <div className="project-badges">
-            <span className="major-badge">{project.major}</span>
             <span
-              className={`requirement-badge ${getBadgeClass(project.demo)}`}
+              className={`requirement-badge`}
             >
-              <Award size={16} />
-              {getBadgeText(project.demo, "demo")}
+              <Calendar size={16} />
+              {formatSelectedSemester() }
             </span>
-            <span
-              className={`requirement-badge ${getBadgeClass(project.power)}`}
-            >
-              <Zap size={16} />
-              {getBadgeText(project.power, "power")}
-            </span>
-            <span className={`requirement-badge ${getBadgeClass(project.nda)}`}>
-              <Shield size={16} />
-              {getBadgeText(project.nda, "nda")}
-            </span>
+            
           </div>
           <p className="survey-project-title">{project.projectTitle}</p>
         </div>
 
-        {/* project desc  */}
         <div className="project-description-section">
           <h3>Project Description</h3>
           <p className="project-description-text">
@@ -141,7 +147,6 @@ export  function SurveyDetails() {
           </p>
         </div>
 
-        {/* video and team members */}
         <div className="video-and-members">
           {project.youtubeLink && (
             <div className="video-container">
@@ -202,14 +207,13 @@ export  function SurveyDetails() {
             </div>
           </div>
         </div>
-        {/* black asu logo  */}
-        {/* <div className="asu-branding">
+        <div className="asu-branding">
         <img 
           src="https://innovationshowcase.engineering.asu.edu/wp-content/themes/pitchfork/src/endorsed-logos/asu_fultonengineering_white.png" 
           alt="ASU Fulton Engineering" 
-          className="survey-details__asu-logo"
+          className="asu-logo"
         />
-      </div> */}
+      </div>
       <Footer />
       </div>
     </div>
