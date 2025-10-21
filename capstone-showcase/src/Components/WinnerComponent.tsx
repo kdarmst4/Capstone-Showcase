@@ -1,14 +1,7 @@
 
 import { Divide, ImageMinus } from "lucide-react";
-import { Divide, ImageMinus } from "lucide-react";
 
 import "../CSS/WinnerComponent.css";
-import firstPlaceTeam from "../assets/winners/team-1.jpg";
-import secondPlaceTeam from "../assets/winners/team-2.jpg";
-import thirdPlaceTeam from "../assets/winners/team-3.jpg";
-import firstPlacePoster from "../assets/winners/poster-1.jpg";
-import secondPlacePoster from "../assets/winners/poster-2.jpg";
-import thirdPlacePoster from "../assets/winners/poster-3.jpg";
 import firstPlaceTeam from "../assets/winners/team-1.jpg";
 import secondPlaceTeam from "../assets/winners/team-2.jpg";
 import thirdPlaceTeam from "../assets/winners/team-3.jpg";
@@ -79,30 +72,7 @@ export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
     {
       title: "Third Place",
       project: "IEE-024 - Banner 2: Emergency Department(ED) Simulation 2",
-      members: "(Pictured left to right)Ethan McLaughlin, Amanda Zaccardi, Ryan Cassara",
-      teamImage: thirdPlaceTeam,
-      posterImage: thirdPlacePoster,
-    },
-  ];
-  const winnersList = [
-    {
-      title: "First Place",
-      project: "CS/E-026 - ASU - NASA - Web-Based Game for Psyche Mission to Educate and Engage the Public about Asteroid Exploration",
-      members: "(Pictured left to right) Andrew Rodriguez, Elias Hilaneh, Munghoon Cho(Not Present)",
-      teamImage: firstPlaceTeam,
-      posterImage: firstPlacePoster,
-    },
-    {
-      title: "Second Place",
-      project: "CS/E-173 - Varsity Media Foundation - Varsity Sports Show subscription internet channel to view sporting events",
-      members: "(Pictured left to right) Evangelos Leros, Marisol Alvira, Nilay Patel (Not Present)",
-      teamImage: secondPlaceTeam,
-      posterImage: secondPlacePoster,
-    },
-    {
-      title: "Third Place",
-      project: "IEE-024 - Banner 2: Emergency Department(ED) Simulation 2",
-      members: "(Pictured left to right)Ethan McLaughlin, Amanda Zaccardi, Ryan Cassara",
+      members: "(Pictured left to right) Ethan McLaughlin, Amanda Zaccardi, Ryan Cassara",
       teamImage: thirdPlaceTeam,
       posterImage: thirdPlacePoster,
     },
@@ -143,33 +113,6 @@ export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
           )})}
       </div>
     </div>
-              // <div className="winner-container">
-              //   <p className="place-header">
-              //     Second Place Winner
-              //   </p>
-                //   <div className="text-subgroup">
-                //     <p className='winner-title-text'>
-                //       CS/E-173 - Varsity Media Foundation - Varsity Sports Show subscription internet channel to view sporting events
-                //     </p>
-                //     <p className='winner-desc-text'>
-                //       (Pictured left to right) Evangelos Leros, Marisol Alvira, Nilay Patel (Not Present)
-                //     </p>
-                //   </div>
-                //   <div className="image-container">
-                //     <img src={secondPlaceTeam} alt="Second Place Team" className="winner-image" />
-                //     <img src={secondPlacePoster} alt="Second Place Poster" className="winner-image" />
-                //     {/* <img src={secondPlaceGroup} alt="Second Place Group" className="group-image" /> */}
-                //     {/*Add a link to redirect to the project here?*/}
-                //   </div>
-                // </div>
-                // <div className="winner-container">
-                //   Third Place Winner: IEE-024 - Banner 2: Emergency Department(ED) Simulation 2
-                //   (Pictured left to right)Ethan McLaughlin, Amanda Zaccardi, Ryan Cassara
-                //   <img src={thirdPlaceTeam} alt="Third Place Team" className="winner-image" />
-                //   <img src={thirdPlacePoster} alt="Third Place Poster" className="winner-image" />
-                //   {/* <img src={thirdPlaceGroup} alt="Third Place Group" className="group-image" /> */}
-                //   {/*Add a link to redirect to the project here?*/}
-                // </div>
     // </div>
     // <div className="winner-component__parent-container">
     //   {winners.length === 0
@@ -216,80 +159,5 @@ export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
     //             ))}
     //       </div>      
     //   }
-    // </div>
-              // <div className="winner-container">
-              //   <p className="place-header">
-              //     Second Place Winner
-              //   </p>
-                //   <div className="text-subgroup">
-                //     <p className='winner-title-text'>
-                //       CS/E-173 - Varsity Media Foundation - Varsity Sports Show subscription internet channel to view sporting events
-                //     </p>
-                //     <p className='winner-desc-text'>
-                //       (Pictured left to right) Evangelos Leros, Marisol Alvira, Nilay Patel (Not Present)
-                //     </p>
-                //   </div>
-                //   <div className="image-container">
-                //     <img src={secondPlaceTeam} alt="Second Place Team" className="winner-image" />
-                //     <img src={secondPlacePoster} alt="Second Place Poster" className="winner-image" />
-                //     {/* <img src={secondPlaceGroup} alt="Second Place Group" className="group-image" /> */}
-                //     {/*Add a link to redirect to the project here?*/}
-                //   </div>
-                // </div>
-                // <div className="winner-container">
-                //   Third Place Winner: IEE-024 - Banner 2: Emergency Department(ED) Simulation 2
-                //   (Pictured left to right)Ethan McLaughlin, Amanda Zaccardi, Ryan Cassara
-                //   <img src={thirdPlaceTeam} alt="Third Place Team" className="winner-image" />
-                //   <img src={thirdPlacePoster} alt="Third Place Poster" className="winner-image" />
-                //   {/* <img src={thirdPlaceGroup} alt="Third Place Group" className="group-image" /> */}
-                //   {/*Add a link to redirect to the project here?*/}
-                // </div>
-    // </div>
-    // <div className="winner-component__parent-container">
-    //   {winners.length === 0
-    //     ? <p className="winner-component__no-results">No results found.</p> 
-    //     : <div className="winner-component__winner-container">
-    //       {winners.map((winner: ShowcaseEntry, index: number) => (
-    //               <div key={index} className="winner-component__winner-card">
-    //                 {/* Image placeholder */}
-    //                 <div className="winner-component__winner-image">
-    //                   <ImageMinus size={80} />
-    //                   <img
-    //                     src={getSource(winner.position)}
-    //                     alt={winner.ProjectTitle}
-    //                     className="winner-component__winner-medal"
-    //                     style={{ background: getbackground(winner.position) }}
-    //                   />
-    //                 </div>
-
-    //                 {/* Text section */}
-    //                 <div className="winner-component__winner-text-section">
-    //                   <p className="winner-component__winner-project" title={winner.ProjectTitle}>{winner.ProjectTitle}</p>
-    //                   <p className="winner-component__winner-author" title={winner.Sponsor || "John Doe"}>by {winner.Sponsor || "John Doe"}</p>
-    //                   <div className="winner-component__winner-info-row">
-    //                     <span className="winner-component__winner-semester">
-    //                       {winner.semester} {winner.year}
-    //                     </span>
-    //                     <span className="winner-component__winner-department">{winner.department || "Computer Science"}</span>
-    //                   </div>
-    //                   <p className="winner-component__winner-description">{winner.description}</p>
-    //                   <div className="winner-component__winner-details-link-container">
-    //                     <button
-    //                       onClick={() => {
-    //                       const encodedWinner = encodeURIComponent(JSON.stringify(winner));
-    //                       console.log('encodedWinner', encodedWinner);
-    //                       window.location.href = `/winners/entry/${winner.EntryID || 1}?data=${encodedWinner}`;
-    //                       }}
-    //                       className="winner-component__winner-details-link"
-    //                     >
-    //                       More Details
-    //                     </button>
-    //                   </div>
-    //                 </div>
-    //               </div>
-    //             ))}
-    //       </div>      
-    //   }
-    // </div>
   );
 }

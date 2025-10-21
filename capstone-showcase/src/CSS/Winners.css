@@ -91,7 +91,6 @@ body
 }
 
 .winners__form .winners__item-container {
-.winners__form .winners__item-container {
   display: flex;
   flex-direction: column;
   min-width: 180px;
