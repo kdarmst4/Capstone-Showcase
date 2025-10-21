@@ -19,87 +19,95 @@ const Winner: React.FC = () => {
 
   return (
     <div className="winners__form-container">
-      <h1 style={{ color: "#8C1D40", fontFamily: "sans-serif", paddingTop: "1rem" }}>
+      <h1 className="winners__showcase-title">
         ASU Winners Showcase
       </h1>
-      <p style={{color:'black'}}>Celebrating academic excellence and innovation through outstanding student achievements at Arizona State University.</p>
+      <p className="winners__showcase-desc">Celebrating academic excellence and innovation through outstanding student achievements at Arizona State University.</p>
 
-      <form className="winners__form" onSubmit={handleFilterSubmit}>
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchValue}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="winners__filter-param"
-        />
+      <div className="winners__search-bar-container">
+        <form className="winners__form" onSubmit={handleFilterSubmit}>
+          <div className="winners__left-search-bar">
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="winners__filter-param"
+              />
 
-        <span>
-          <label htmlFor="semester">Semester:</label>
-          <select
-            name="semester"
-            id="semester"
-            className="winners__filter-param"
-            value={filters.semester}
-            onChange={(e) => setFilters({ ...filters, semester: e.target.value })}
-          >
-            <option value="all">All</option>
-            <option value="spring">Spring</option>
-            <option value="summer">Summer</option>
-            <option value="fall">Fall</option>
-          </select>
-        </span>
+              <div className="winners__item-container">
+                <label htmlFor="semester"></label>
+                <select
+                  name="semester"
+                  id="semester"
+                  className="winners__filter-param"
+                  value={filters.semester}
+                  onChange={(e) => setFilters({ ...filters, semester: e.target.value })}
+                >
+                  <option value="all">Semester</option>
+                  <option value="spring">Spring</option>
+                  <option value="summer">Summer</option>
+                  <option value="fall">Fall</option>
+                </select>
+              </div>
 
-        <span>
-          <label htmlFor="year">Year:</label>
-          <select
-            name="year"
-            id="year"
-            className="winners__filter-param"
-            value={filters.year}
-            onChange={(e) => setFilters({ ...filters, year: e.target.value })}
-          >
-            <option value="all">All</option>
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </span>
+              <div className="winners__item-container">
+                <label htmlFor="year"></label>
+                <select
+                  name="year"
+                  id="year"
+                  className="winners__filter-param"
+                  value={filters.year}
+                  onChange={(e) => setFilters({ ...filters, year: e.target.value })}
+                >
+                  <option value="all">Year</option>
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <span>
-          <label htmlFor="department">Department:</label>
-          <select
-            name="department"
-            id="department"
-            className="winners__filter-param"
-            value={filters.department}
-            onChange={(e) => setFilters({ ...filters, department: e.target.value })}
-          >
-            <option value="all">All</option>
-            <option value="computer-science">Computer Science</option>
-            <option value="computer-systems-engineering">Computer Systems Engineering</option>
-            <option value="biomedical-engineering">Biomedical Engineering</option>
-            <option value="mechanical-engineering">Mechanical Engineering</option>
-            <option value="electrical-engineering">Electrical Engineering</option>
-            <option value="industrial-engineering">Industrial Engineering</option>
-            <option value="informatics">Informatics</option>
-            <option value="interdisciplinary">Interdisciplinary</option>
-          </select>
-        </span>
+              <div className="winners__item-container">
+                <label htmlFor="department"></label>
+                <select
+                  name="department"
+                  id="department"
+                  className="winners__filter-param"
+                  value={filters.department}
+                  onChange={(e) => setFilters({ ...filters, department: e.target.value })}
+                >
+                  <option value="all">Department</option>
+                  <option value="computer-science">Computer Science</option>
+                  <option value="computer-systems-engineering">Computer Systems Engineering</option>
+                  <option value="biomedical-engineering">Biomedical Engineering</option>
+                  <option value="mechanical-engineering">Mechanical Engineering</option>
+                  <option value="electrical-engineering">Electrical Engineering</option>
+                  <option value="industrial-engineering">Industrial Engineering</option>
+                  <option value="informatics">Informatics</option>
+                  <option value="interdisciplinary">Interdisciplinary</option>
+                </select>
+              </div>
+          </div>
 
-        <div className="winners__button-container">
-          <button type="submit" className="winners__form-button">
-            Filter
-          </button>
-          <button className="winners__form-button" onClick={clearFilters}>
-            Clear Filters
-          </button>
-        </div>
-      </form>
+          <div className="winners__item-container">
+            <div className="winners__button-container">
+              <button type="submit" className="winners__form-button">
+                Filter
+              </button>
+              <button className="winners__form-button" onClick={clearFilters}>
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
 
       <WinnerComponent winners={hasFiltered ? filteredWinnersData : pastWinnersData} />
-      <Footer />
+      {/* <div className="winners__z-index"> */}
+        <Footer />
+      {/* </div> */}
     </div>
   );
 };
