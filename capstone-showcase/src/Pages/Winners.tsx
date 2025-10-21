@@ -105,9 +105,9 @@ const Winner: React.FC = () => {
       </div>
 
       <WinnerComponent winners={hasFiltered ? filteredWinnersData : pastWinnersData} />
-      <div className="winners__z-index">
+      {/* <div className="winners__z-index"> */}
         <Footer />
-      </div>
+      {/* </div> */}
     </div>
   );
 };
