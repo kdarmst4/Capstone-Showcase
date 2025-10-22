@@ -12,7 +12,7 @@
 .survey-details-container {
   min-height: 100vh;
   background: linear-gradient(135deg, var(--asu-light-gray) 0%, #f0f0f0 100%);
-  padding: 2rem;
+  padding: 1rem;
   font-family: 'Arial', sans-serif;
 }
 
@@ -137,19 +137,81 @@
 
 .video-and-members {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 2rem;
   align-items: flex-start;
 }
+
 
 .video-container {
   flex: 1;
   position: relative;
   width: 100%;
   height: auto;
-  padding-bottom: 50%; 
+  padding-bottom: 45%; 
   overflow: hidden;
   border-radius: 12px;
+}
+.poster-container 
+{
+  flex:1;
+  min-width: 490px;
+
+}
+
+.second-team-members-section
+{
+  /* give me two column */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  color: black;
+  
+}
+.second-team-members-section-first-span .team-members-list
+{
+  display: flex;
+  justify-content: center !important;
+  text-align: left;
+}
+.second-team-members-section h3 
+{
+  color: var(--asu-maroon);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--asu-light-gray);
+  text-decoration: underline;
+}
+.second-team-members-section span 
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.second-team-members-section .sub-member-tag 
+{
+  font-size: 0.85rem;
+  color: var(--asu-dark-gray);
+  font-weight: 700;
+  text-align: left;
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: 1px solid black;
+}
+.second-team-members-section .sub-member-tag:hover 
+{
+  background: var(--asu-gold);
+  color: var(--asu-dark-gray);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border: 1px solid black;
 }
 
 .video-iframe {
@@ -164,11 +226,13 @@
 
 .team-members-section {
   flex: 1;
+  flex-grow: 1;
   padding: 1.5rem 0 0 0;
   min-height: fit-content;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  min-width: 490px;
 }
 
 .team-members-section h3 {
@@ -185,16 +249,21 @@
 
 .team-members-list {
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  flex-wrap: wrap;
   gap: 0.75rem;
 }
+
+
 
 .member-tag {
   display: flex;
   align-items: center;
-  max-width: 200px ;
+  display: flex;
+  flex-direction: column;
+  max-width: 136px ;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  margin: 1px;
   background: var(--asu-white);
   color: var(--asu-maroon);
   border: 2px solid var(--asu-maroon);
@@ -209,6 +278,18 @@
   width: 100%;
   height: 80%;
 
+}
+.team-members-section div h3 
+{
+  margin: 0;
+  padding:0
+}
+.sub-member-tag 
+{
+  font-size: 0.85rem;
+  color: var(--asu-dark-gray);
+  font-weight: 700;
+  text-align: left;
 }
 .survey-detail-img-container img 
 {
@@ -321,7 +402,7 @@
 .video-container {
   position: relative; 
   width: 100%;
-  padding-bottom: 56.25%; 
+  padding-bottom: 50.25%; 
 }
 
 .video-iframe {
