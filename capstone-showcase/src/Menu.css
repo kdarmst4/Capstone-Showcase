@@ -3,6 +3,12 @@
 .asu-logo-nav {
   width: 200px;
 }
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
 
 .asu-branding .asu-logo
 {
@@ -68,7 +74,7 @@
   top: 0;
   background-color: white;
   z-index: 102;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 60px rgba(50, 50, 93, 0.18);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-size: 18px;
 }

@@ -180,7 +180,9 @@ const Menu: React.FC = () => {
           </ul>
         </div>
         <Link to="/" className="">
-          <img src={asuLogo} alt="ASU Logo" className="asu-logo-nav" width={450}/>
+          <div className="logo-container">
+            <img src={asuLogo} alt="ASU Logo" className="asu-logo-nav" width={450}/>
+          </div>
         </Link>
         <div
           className="burger-menu"
