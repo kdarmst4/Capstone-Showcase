@@ -221,7 +221,7 @@ export function SurveyDetails() {
                       }}
                     />
                   </span>
-                  <p>{name}</p>
+                  {/* <p>{name}</p> */}
                 </span>
               ))}
             </div>

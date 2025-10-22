@@ -276,7 +276,8 @@
 .survey-detail-img-container 
 {
   width: 100%;
-  height: 80%;
+  /* height: 80%; */
+  height: 100%;
 
 }
 .team-members-section div h3 
