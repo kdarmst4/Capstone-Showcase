@@ -581,20 +581,20 @@ app.put("/api/:id/update", (req, res) => {
   });
 });
 
-// Configure Multer for presentation file storage (uncomment and fix this section)
+// Configure Multer for presentation file storage 
 const presentationStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = './public/uploads/';
     // Create directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    // Create unique filename with timestamp
-    const uniqueName = 'presentation-' + Date.now() + path.extname(file.originalname);
-    cb(null, uniqueName);
+    // Rename the file to "presentation" with its original extension
+    const newName = `presentation${path.extname(file.originalname)}`;
+    cb(null, newName);
   }
 });
 
@@ -621,54 +621,47 @@ const uploadPresentation = multer({
 app.use('/uploads', express.static('public/uploads'));
 
 // Update your presentation endpoint to use the middleware
-app.post('/api/presentation/update', uploadPresentation.single('presentationFile'), (req, res) => {
-    console.log('Request body:', req.body);
-    console.log('Request file:', req.file);
-    
-    const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
-    
-    if (req.file) {
-        console.log('File received:', req.file);
-        
-        // Here you can save the presentation details to your database
-        const presentationData = {
-            presentationDate,
-            presentationLocation, 
-            checkingTime,
-            presentationTime,
-            filePath: `/uploads/${req.file.filename}`
-        };
-        
-        // Add database insert/update logic here if needed
-        // const sql = 'INSERT INTO presentations (date, location, checking_time, presentation_time, file_path) VALUES (?, ?, ?, ?, ?)';
-        // db.query(sql, [presentationDate, presentationLocation, checkingTime, presentationTime, presentationData.filePath], (err, result) => {
-        //     if (err) {
-        //         console.error('Error saving presentation:', err);
-        //         return res.status(500).json({ error: 'Failed to save presentation' });
-        //     }
-        //     res.status(200).json({ message: 'Presentation updated successfully', data: presentationData });
-        // });
-        
-        res.status(200).json({ 
-            message: 'Presentation updated successfully', 
-            data: presentationData 
-        });
-    } else {
-        console.log('No file received, updating other fields only');
-        
-        // Handle case where only text fields are updated (no file)
-        const presentationData = {
-            presentationDate,
-            presentationLocation,
-            checkingTime, 
-            presentationTime
-        };
-        
-        res.status(200).json({ 
-            message: 'Presentation details updated successfully', 
-            data: presentationData 
-        });
-    }
+app.post('/api/presentation/update', (req, res) => {
+    uploadPresentation.single('presentationFile')(req, res, (err) => {
+        if (err) {
+            // Handle multer errors
+            console.error('File upload error:', err.message);
+            return res.status(400).json({ error: err.message });
+        }
+
+        const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
+
+        if (req.file) {
+            console.log('File received:', req.file);
+
+            const presentationData = {
+                presentationDate,
+                presentationLocation,
+                checkingTime,
+                presentationTime,
+                filePath: `/uploads/presentation`
+            };
+
+            res.status(200).json({ 
+                message: 'Presentation updated successfully', 
+                data: presentationData 
+            });
+        } else {
+            console.log('No file received, updating other fields only');
+
+            const presentationData = {
+                presentationDate,
+                presentationLocation,
+                checkingTime,
+                presentationTime
+            };
+
+            res.status(200).json({ 
+                message: 'Presentation details updated successfully', 
+                data: presentationData 
+            });
+        }
+    });
 });
 
 

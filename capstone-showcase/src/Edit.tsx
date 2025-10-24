@@ -120,15 +120,19 @@ export function Edit() {
       
       const res = await fetch(`${API_BASE_URL}/presentation/update`, {
         method: "POST",
-        body: formData, // Send FormData instead of JSON
-        // Don't set Content-Type header - let browser set it with boundary
+        body: formData,
       });
       
       const data = await res.json();
       console.log(data);
       
-      if (res.ok) {
+      if (res.status === 200) {
         alert('Presentation updated successfully!');
+      }
+      else 
+      {
+        console.log(data);
+        alert(data.error);
       }
     } catch (error) {
       console.error("Error in form submission:", error);
