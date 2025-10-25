@@ -1,5 +1,8 @@
-import './CSS/SelectModalWinner.css'
-import { ProjectObj } from './SiteInterface';
+import "./CSS/SelectModalWinner.css";
+import { ProjectObj } from "./SiteInterface";
+import { useState } from "react";
+import MultipleImageUploader from "./MultipleImageUploader"; // Import the component
+
 export function SelectWinnerModal({
   project,
   setSelectionMade,
@@ -9,14 +12,24 @@ export function SelectWinnerModal({
   setSelectionMade: (project: ProjectObj, position: number) => void;
   handleSelectionClose: () => void;
 }) {
-  console.log("Project in Modal:", project);
+   const[wimgs, setWimgs] = useState<File[]>([]);
+  const saveWinner = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSelectionClose();
+  };
+
+  const updateImages = (images: File[]) => {
+    setWimgs(images);
+    console.log("Updated images:", images);
+  };
+
   return (
     <div className="edit-project-container">
       <button onClick={handleSelectionClose} className="edit-close-btn">
         &times;
       </button>
       <h2>Set Project Winner</h2>
-      <form className='modal-winner-form'>
+      <form className="modal-winner-form" onSubmit={saveWinner}>
         <section>
           <h3>Project Title: </h3>
           <p>{project.ProjectTitle}</p>
@@ -31,7 +44,9 @@ export function SelectWinnerModal({
             <select
               name="position"
               id="position"
-              onChange={(e) => setSelectionMade(project, Number(e.target.value))}
+              onChange={(e) =>
+                setSelectionMade(project, Number(e.target.value))
+              }
             >
               <option value="1">1st Place</option>
               <option value="2">2nd Place</option>
@@ -39,7 +54,11 @@ export function SelectWinnerModal({
             </select>
           </section>
         </section>
-        <button type="submit" className='save-btn'>Save</button>
+        {/* Integrate the MultipleImageUploader component */}
+        <MultipleImageUploader onImageUpload={updateImages} img={wimgs} />
+        <button type="submit" className="save-btn">
+          Save
+        </button>
       </form>
     </div>
   );

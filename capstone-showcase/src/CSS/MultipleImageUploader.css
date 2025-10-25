@@ -1,0 +1,43 @@
+.multi-image-uploader {
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  max-width: 100%;
+  box-sizing: border-box;
+  height: auto;
+  border: 1px solid #ccc;
+}
+
+.multi-image-uploader:hover {
+  filter: brightness(80%);
+  transition: filter 0.3s ease;
+}
+.show-winner-image-container {
+  position: relative;
+  display: inline-block;
+  width: 250px;
+  height: 200px;
+}
+
+.chosen-image-container 
+{
+
+
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.dismiss-image-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  color: #ff4d4f;
+  background-color: white;
+  border-radius: 50%;
+  padding: 2px;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
