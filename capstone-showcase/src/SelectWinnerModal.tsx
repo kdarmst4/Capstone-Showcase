@@ -9,12 +9,14 @@ export function SelectWinnerModal({
   handleSelectionClose,
 }: {
   project: ProjectObj;
-  setSelectionMade: (project: ProjectObj, position: number) => void;
+  setSelectionMade: (project: ProjectObj, position: number, imgs: File[]) => void;
   handleSelectionClose: () => void;
 }) {
    const[wimgs, setWimgs] = useState<File[]>([]);
+   const[pos, setPos] = useState<number>();
   const saveWinner = (e: React.FormEvent) => {
     e.preventDefault();
+   setSelectionMade(project, pos || 0, wimgs);
     handleSelectionClose();
   };
 
@@ -45,7 +47,7 @@ export function SelectWinnerModal({
               name="position"
               id="position"
               onChange={(e) =>
-                setSelectionMade(project, Number(e.target.value))
+                setPos(Number((e.target as HTMLSelectElement).value))
               }
             >
               <option value="1">1st Place</option>

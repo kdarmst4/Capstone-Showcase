@@ -18,7 +18,8 @@ export function Winners() {
   useEffect(() => {
     fetchProjects(semester, year);
   }, []);
-  const setSelection = (project: ProjectObj, position: number) => {
+  const setSelection = (project: ProjectObj, position: number, imgs: File[]) => {
+    console.log('a selection was made', project, position, imgs);
     switch (position) {
       case 1:
         project.position = "1";
