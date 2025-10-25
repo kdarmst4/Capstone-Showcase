@@ -11,66 +11,52 @@ export function Winners() {
   const [selectedWinners, setSelectedWinners] = useState<
     WinnerSelection[] | null
   >(null);
-   const [semester, setSemester] = useState(
-    TodaysDate().semester
-   );
-   const [year, setYear] = useState(TodaysDate().year);
+  const [semester, setSemester] = useState(TodaysDate().semester);
+  const [year, setYear] = useState(TodaysDate().year);
   useEffect(() => {
     fetchProjects(semester, year);
   }, []);
-  const setSelection = (project: ProjectObj, position: number, imgs: File[]) => {
-    console.log('a selection was made', project, position, imgs);
-    switch (position) {
-      case 1:
-        project.position = "1";
-        break;
-      case 2:
-        project.position = "2";
-        break;
-      case 3:
-        project.position = "3";
-        break;
-      default:
-        project.position = "Participant";
-        break;
+  const setSelection = (
+    project: ProjectObj,
+    position: number,
+    imgs: File[]
+  ) => {
+    console.log("current position:", position);
+    console.log("position type", typeof position);
+
+    if (position < 1 || position > 3) {
+      console.error("Invalid position selected:", position);
+      return;
     }
+
     setSelectedWinners((prevWinners) => {
-      if (prevWinners) {
-        // Remove any existing winner with the same position
-        const updatedWinners = prevWinners.filter(
-          (winner) => winner.position !== project.position
-        );
-        // Add the new winner
-        updatedWinners.push({
-          projectId: project.EntryID,
-          projectName: project.ProjectTitle,
-          position: project.position,
-          pictures: [],
-        });
-        return updatedWinners;
-      } else {
-        return [
-          {
-            projectId: project.EntryID,
-            projectName: project.ProjectTitle,
-            position: project.position,
-            pictures: [],
-          },
-        ];
-      }
+      const updatedWinners = (prevWinners || []);
+
+      // Remove any existing winner with the same position
+      const filteredWinners = updatedWinners.filter(
+        (winner) => winner.position !== position
+      );
+
+      filteredWinners.push({
+        projectId: project.EntryID,
+        projectName: project.ProjectTitle,
+        position: position,
+        pictures: imgs,
+      });
+
+      console.log("Updated Winners:", filteredWinners);
+      return filteredWinners;
     });
   };
   const handleSelectionClose = () => {
     setSelectionMade(false);
-    setSelectedWinners(null);
+    // setSelectedWinners(null);
   };
-   const API_BASE_URL = 
-    process.env.NODE_ENV === 'production'?
-     "":
-     'http://localhost:3000/api';
-  const STATIC_BASE_URL = 
-   process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
-  
+  const API_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
+  const STATIC_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+
   const fetchProjects = async (semester: string, year: number) => {
     console.log(semester, year);
     try {
@@ -87,7 +73,7 @@ export function Winners() {
   // const currMonth = new Date().getMonth();
   const currYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currYear - i);
-  const semesters = ["fa", "sp", 'su'];
+  const semesters = ["fa", "sp", "su"];
   return (
     <div className="admin-set-winners-page">
       {selectionMade && currSelection && (
@@ -146,13 +132,27 @@ export function Winners() {
           </p>
         ) : (
           <>
-            <div className="edit-submission-table">
-              <div>
-                {selectedWinners &&
-                  selectedWinners.length > 0 &&
-                  selectedWinners.map((winner) => (
-                    <span key={winner.position}>
-                      {winner.position == "1" && (
+            <div className="selected-winners-adminwinners">
+              {selectedWinners &&
+                selectedWinners.length > 0 &&
+                selectedWinners.map((winner) => (
+                  <span key={winner.position} className="adminwinner-selection">
+                    <img
+                      src={
+                        winner.pictures[0] &&
+                        URL.createObjectURL(winner.pictures[0])
+                      }
+                    />
+                    <span>
+                      {winner.position == 1 && "1st Place"}
+                      {winner.position == 2 && "2nd Place"}
+                      {winner.position == 3 && "3rd Place"}
+                    </span>
+                    <span className="project-title-winner">
+                      {winner.projectName}
+                    </span>
+
+                    {/* {winner.position == "1" && (
                         <img
                           src="/1stplace.svg"
                           alt="1st Place"
@@ -172,11 +172,14 @@ export function Winners() {
                           alt="3rd Place"
                           className="admin-podium-highlight"
                         />
-                      )}
-                      <p>{winner.projectName}</p>
-                    </span>
-                  ))}
-              </div>
+                      )} */}
+                  </span>
+                ))}
+              {selectedWinners && selectedWinners.length > 2 && (
+                <button className="fetch-projects-btn">Set Winners</button>
+              )}
+            </div>
+            <div className="edit-submission-table">
               {/* Table of submissions will go here */}
               <table>
                 <tr>

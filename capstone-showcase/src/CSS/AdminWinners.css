@@ -33,6 +33,32 @@
     font-weight: bold;
     color: #8c1d40;
 }
+.adminwinner-selection 
+{
+    display: flex;
+    gap: 5px;
+    color: black;
+    padding: 3px 0;
+
+}
+.adminwinner-selection img 
+{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid #8c1d40;
+}
+.adminwinner-selection span.project-title-winner
+{
+    font-size: medium;
+    font-weight: normal;
+    align-self: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: black;
+}
 
 .admin-set-winners-page form section select 
 {

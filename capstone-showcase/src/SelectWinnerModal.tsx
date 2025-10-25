@@ -16,6 +16,7 @@ export function SelectWinnerModal({
    const[pos, setPos] = useState<number>();
   const saveWinner = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('here is the positin ', pos);
    setSelectionMade(project, pos || 0, wimgs);
     handleSelectionClose();
   };
@@ -46,10 +47,13 @@ export function SelectWinnerModal({
             <select
               name="position"
               id="position"
-              onChange={(e) =>
+              onChange={(e) =>{
+                console.log('selected value ', (e.target as HTMLSelectElement).value),
                 setPos(Number((e.target as HTMLSelectElement).value))
               }
+            }
             >
+              <option value="">--Select Position--</option>
               <option value="1">1st Place</option>
               <option value="2">2nd Place</option>
               <option value="3">3rd Place</option>

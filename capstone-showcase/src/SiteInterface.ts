@@ -15,15 +15,15 @@ export interface ProjectObj {
   VideoLinkRaw: string;
   DateStamp: string;
   ShouldDisplay: string; 
-  position: string;
+  position: string | number;
   winning_pic: string | null;
 }
 
 export interface WinnerSelection {
-  position: string;
+  position: string | number;
   projectId: number;
   projectName: string;
-  pictures: string[];
+  pictures: File[];
 }
 
 export interface ShowcaseEntry {
