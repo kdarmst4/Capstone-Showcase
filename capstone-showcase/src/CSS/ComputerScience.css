@@ -110,3 +110,19 @@
 .more-projects-button:hover {
   background-color: #611029;
 }
+
+.project-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-title-link {
+  color: #8c1d40;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.project-title-link:hover {
+  color: #611029;
+  text-decoration-thickness: 2px;
+}

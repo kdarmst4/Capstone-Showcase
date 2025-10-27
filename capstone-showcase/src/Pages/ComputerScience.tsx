@@ -7,7 +7,6 @@ import "../CSS/ProjectShowcase.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
 
-
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
     ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
@@ -180,12 +179,7 @@ const ComputerScience: React.FC = () => {
               <section className="project-catalog">
                 <div className="projects-grid">
                   {currentProjects.map((project, index) => (
-                    <Link to ={`/survey/${project.id}`} state={{ project }} key={project.id}>
-                    <div
-                      key={project.id || index}
-                      className="project-card"
-                      // onClick={() => handleProjectClick(project)}
-                    >
+                    <div key={project.id || index} className="project-card">
                       {project.youtubeLink && (
                         <img
                           src={extractYouTubeThumbnail(project.youtubeLink) || ""}
@@ -194,7 +188,15 @@ const ComputerScience: React.FC = () => {
                         />
                       )}
                       <div className="project-details">
-                        <h4 className="project-title left-aligned">{project.projectTitle}</h4>
+                        <h4 className="project-title left-aligned">
+                          <Link
+                            to={`/survey/${project.id}`}
+                            state={{ project }}
+                            className="project-title-link"
+                          >
+                            {project.projectTitle}
+                          </Link>
+                        </h4>
                         <p className="project-description left-aligned">
                           {project.projectDescription}
                         </p>
@@ -208,8 +210,6 @@ const ComputerScience: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    </Link> 
-
                   ))}
                 </div>
               </section>
