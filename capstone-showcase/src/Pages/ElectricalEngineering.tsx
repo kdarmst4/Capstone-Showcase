@@ -194,7 +194,15 @@ const ElectricalEngineering: React.FC = () => {
                         />
                       )}
                       <div className="project-details">
-                        <h4 className="project-title left-aligned">{project.projectTitle}</h4>
+                        <h4 className="project-title left-aligned">
+                          <Link
+                            to={`/survey/${project.id}`}
+                            state={{ project }}
+                            className="project-title-link"
+                          >
+                            {project.projectTitle}
+                          </Link>
+                        </h4>
                         <p className="project-description left-aligned">
                           {project.projectDescription}
                         </p>
