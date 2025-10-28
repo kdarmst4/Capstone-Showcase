@@ -45,6 +45,7 @@ export function SurveyDetails() {
   );
   console.log("SurveyDetails project:", project);
 
+// teamMemberNames may use commas or newlines — we'll normalize when building `teamMembers` in effect
   // team member names and final resolved photo URLs
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
   const [teamMemberPhotos, setTeamMemberPhotos] = useState<string[]>([]);
@@ -81,10 +82,10 @@ export function SurveyDetails() {
   useEffect(() => {
     if (!project) return;
 
-    // names
+    // names — accept commas and newlines as separators
     const names = project.teamMemberNames
       ? project.teamMemberNames
-          .split(",")
+          .split(/[,\n\r]+/) // split on commas or newlines (CR/LF)
           .map((n) => n.trim())
           .filter(Boolean)
       : [];
@@ -196,7 +197,7 @@ export function SurveyDetails() {
             <div className="team-members-section">
               <h3>Team Members</h3>
               <div className="team-members-list">
-                {project.teamMemberNames.split(",").map((name, i) => (
+                {teamMembers.map((name, i) => (
                   <span key={i} className="member-tag-names">
                     <p>{name}</p>
                   </span>
@@ -235,16 +236,20 @@ export function SurveyDetails() {
           </span>
         </span>
         <span className="posters-in-survey-details">
-          {
-            project.posterPicturePath ? (
-              <img
-                // src={normalizePathToUrl(project.posterPicturePath)}
-                alt="Project Poster-survey-details"
-              />
-            ) : (
-              <p>No poster available</p>
-            )
-          }
+          {project.posterPicturePath ? (
+            <img
+              src={normalizePathToUrl(project.posterPicturePath)}
+              alt="Project Poster"
+              className="poster-in-survey-details-img"
+            />
+          ) : (
+            <div className="no-poster-found-div">
+              <div className="no-poster-text">
+                <p className="no-poster-title">No poster available</p>
+                <p className="no-poster-sub">This project did not submit a poster.</p>
+              </div>
+            </div>
+          )}
         </span>
       </div>
 

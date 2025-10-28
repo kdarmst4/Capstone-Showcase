@@ -187,17 +187,21 @@
 }
 .video-team-members-posters {
   margin-top: 10px;
-  aspect-ratio: 2/3;
   max-width: 1060px;
   display: flex;
   flex-direction: row;
+  align-items: stretch; /* ensure both columns match height */
+  gap: 1rem;
+
 
 }
-.video-team-members 
-{
+.video-team-members {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  flex-grow: 1;
+  flex: 40%;
+  min-height: 0; /* allow proper flex shrinking */
 }
 .detail-item-survey p:first-child
 {
@@ -209,7 +213,7 @@
 {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: .5rem;
 }
 .extra-details-survey p
 {
@@ -217,6 +221,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
+  margin: 0;
 
 }
 .extra-details-survey span, .extra-details-survey p
@@ -234,6 +239,7 @@
 {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   color: black;
 
 }
@@ -255,11 +261,147 @@
   transition: all 0.3s ease;
 }
 
-.Project Poster-survey-details 
-{
+.Project-Poster-survey-details {
   aspect-ratio: 2/3;
 }
+
+.posters-in-survey-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 40%;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.poster-in-survey-details-img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%; 
+  object-fit: contain;
+  flex: 60%;
+ 
+
+}
+.video-container,.team-members-section
+{
+  width: 100%;
+}
+.no-poster-found-div 
+{
+  background-color: gray;
+  flex-direction: column;
+  padding: 2rem;
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 10px;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  max-width: 100%;
+}
 /* new section ends here  */
+
+.video-team-members-posters {
+  margin: 10px auto;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; 
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center; 
+}
+
+.video-team-members {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 0 0 50%; 
+  min-height: 0; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+}
+
+.posters-in-survey-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 50%; 
+  max-width: 65%;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.poster-in-survey-details-img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%; 
+  object-fit: contain;
+  max-height: 770px;
+}
+
+/* No-poster placeholder styles */
+.no-poster-found-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+  border: 1px dashed var(--asu-maroon);
+  border-radius: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+  color: var(--asu-dark-gray);
+}
+.no-poster-icon {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  opacity: 0.9;
+}
+.no-poster-text .no-poster-title {
+  font-weight: 700;
+  color: var(--asu-maroon);
+  margin: 0;
+}
+.no-poster-text .no-poster-sub {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .video-team-members-posters {
+    flex-direction: column;
+    align-items: center;
+  }
+  .video-team-members, .posters-in-survey-details {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+  }
+  .video-team-members
+  {
+    flex-direction: column-reverse;
+  }
+  .poster-in-survey-details-img {
+    max-height: 360px;
+    width: auto;
+  }
+}
 
 .description-card {
   grid-column: 1 / -1;
@@ -282,6 +424,17 @@
 
 
 @media (max-width: 768px) {
+  img.poster-in-survey-details-img
+  {
+    height: 500px !important;
+    width: auto;
+    max-height: 600px;
+  }
+  .extra-details-survey
+  {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
   .survey-details-container {
     padding: 1rem;
   }
@@ -309,7 +462,6 @@
 .video-container {
   position: relative; 
   width: 100%;
-  padding-bottom: 50.25%; 
 }
 
 
