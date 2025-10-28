@@ -38,13 +38,13 @@ export function WinnerComponent<T extends Record<string, any>>({ winners }: Winn
   return (
     <div className="winner-component__parent-container">
       <div className="winner-container">
-          <div className="grid-line line1"/>
+          {/* <div className="grid-line line1"/>
           <div className="grid-line line2"/>
           <div className="grid-line line3"/>
           <div className="grid-line line4"/>
           <div className="grid-line line5"/>
           <div className="grid-line line6"/>
-          <div className="grid-line line7"/>
+          <div className="grid-line line7"/> */}
           {winners.map((winner, index) => {return(
             <>
               <div className={`text-container ${'text-' + (index + 1)}`}>
