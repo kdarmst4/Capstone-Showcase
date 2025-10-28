@@ -196,13 +196,18 @@ export function SurveyDetails() {
           {project.teamMemberNames && (
             <div className="team-members-section">
               <h3>Team Members</h3>
-              <div className="team-members-list">
+              <img
+                className="team-members-img"
+                src={normalizePathToUrl(project.teamPicturePath)}
+                alt="Team Members"
+              />
+              {/* <div className="team-members-list">
                 {teamMembers.map((name, i) => (
                   <span key={i} className="member-tag-names">
                     <p>{name}</p>
                   </span>
                 ))}
-              </div>
+              </div> */}
             </div>
           )}
           <span className="extra-details-survey">
