@@ -30,7 +30,7 @@ export function Winners() {
     }
 
     setSelectedWinners((prevWinners) => {
-      const updatedWinners = (prevWinners || []);
+      const updatedWinners = prevWinners || [];
 
       // Remove any existing winner with the same position
       const filteredWinners = updatedWinners.filter(
@@ -143,7 +143,7 @@ export function Winners() {
                         URL.createObjectURL(winner.pictures[0])
                       }
                     />
-                    <span>
+                    <span className="position">
                       {winner.position == 1 && "1st Place"}
                       {winner.position == 2 && "2nd Place"}
                       {winner.position == 3 && "3rd Place"}
@@ -152,32 +152,16 @@ export function Winners() {
                       {winner.projectName}
                     </span>
 
-                    {/* {winner.position == "1" && (
-                        <img
-                          src="/1stplace.svg"
-                          alt="1st Place"
-                          className="admin-podium-highlight"
-                        />
-                      )}
-                      {winner.position == "2" && (
-                        <img
-                          src="/2ndplace.svg"
-                          alt="2nd Place"
-                          className="admin-podium-highlight"
-                        />
-                      )}
-                      {winner.position == "3" && (
-                        <img
-                          src="/3rdplace.svg"
-                          alt="3rd Place"
-                          className="admin-podium-highlight"
-                        />
-                      )} */}
                   </span>
                 ))}
-              {selectedWinners && selectedWinners.length > 2 && (
-                <button className="fetch-projects-btn">Set Winners</button>
-              )}
+              <div className="winners-action-in-admin-winner">
+                {selectedWinners && selectedWinners.length > 2 && (
+                  <button className="fetch-projects-btn">Set Winners</button>
+                )}
+                {selectedWinners && selectedWinners.length > 0 && (
+                  <button className="fetch-projects-btn">Clear</button>
+                )}
+              </div>
             </div>
             <div className="edit-submission-table">
               {/* Table of submissions will go here */}
