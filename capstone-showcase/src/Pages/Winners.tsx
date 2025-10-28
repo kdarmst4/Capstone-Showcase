@@ -1,7 +1,38 @@
 import "../CSS/Winners.css";
 import { WinnerComponent } from "../Components/WinnerComponent";
+import { useEffect } from "react";
 import useWinners from "../Hooks/useWinners";
 import Footer from "./Footer";
+import firstPlaceTeam from "../assets/winners/team-1.jpg";
+import secondPlaceTeam from "../assets/winners/team-2.jpg";
+import thirdPlaceTeam from "../assets/winners/team-3.jpg";
+import firstPlacePoster from "../assets/winners/poster-1.jpg";
+import secondPlacePoster from "../assets/winners/poster-2.jpg";
+import thirdPlacePoster from "../assets/winners/poster-3.jpg";
+
+const winners = [
+  {
+    title: "First Place",
+    project: "CS/E-026 - ASU - NASA - Web-Based Game for Psyche Mission to Educate and Engage the Public about Asteroid Exploration",
+    members: "(Pictured left to right) Andrew Rodriguez, Elias Hilaneh, Munghoon Cho(Not Present)",
+    teamImage: firstPlaceTeam,
+    posterImage: firstPlacePoster,
+  },
+  {
+    title: "Second Place",
+    project: "CS/E-173 - Varsity Media Foundation - Varsity Sports Show subscription internet channel to view sporting events",
+    members: "(Pictured left to right) Evangelos Leros, Marisol Alvira, Nilay Patel (Not Present)",
+    teamImage: secondPlaceTeam,
+    posterImage: secondPlacePoster,
+  },
+  {
+    title: "Third Place",
+    project: "IEE-024 - Banner 2: Emergency Department(ED) Simulation 2",
+    members: "(Pictured left to right) Ethan McLaughlin, Amanda Zaccardi, Ryan Cassara",
+    teamImage: thirdPlaceTeam,
+    posterImage: thirdPlacePoster,
+  },
+];
 
 const Winner: React.FC = () => {
   const {
@@ -10,12 +41,26 @@ const Winner: React.FC = () => {
     hasFiltered,
     searchValue,
     filters,
-    years,
     setFilters,
     handleSearchChange,
     handleFilterSubmit,
     clearFilters,
-  } = useWinners();
+  } = useWinners(winners);
+
+  // const currentYear = new Date().getFullYear();
+  // const years = Array.from({ length: currentYear - 2000 + 1 }, (_, i) => 2000 + i);
+  // const API_BASE_URL =
+  // process.env.NODE_ENV === "production"
+  //   ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
+  //   : "http://localhost:3000/api";
+
+  // useEffect(() => {
+  //   fetch(`${API_BASE_URL}/winners`)
+  //     .then((res) => res.json())
+  //     .then((data) => setPastWinnersData(data))
+  //     .catch(() => setPastWinnersData([]));
+  // }, []);
+
 
   return (
     <div className="winners__form-container">
@@ -24,18 +69,12 @@ const Winner: React.FC = () => {
       </h1>
       <p className="winners__showcase-desc">Celebrating academic excellence and innovation through outstanding student achievements at Arizona State University.</p>
 
-      <div className="winners__search-bar-container">
+      <div className="winners__filter-bar-container">
         <form className="winners__form" onSubmit={handleFilterSubmit}>
-          <div className="winners__left-search-bar">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchValue}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                className="winners__filter-param"
-              />
+        {/* <form className="winners__form"> */}
+          <div className="winners__left-filter-bar">
 
-              <div className="winners__item-container">
+              {/* <div className="winners__item-container">
                 <label htmlFor="semester"></label>
                 <select
                   name="semester"
@@ -67,14 +106,14 @@ const Winner: React.FC = () => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
 
               <div className="winners__item-container">
                 <label htmlFor="department"></label>
                 <select
                   name="department"
                   id="department"
-                  className="winners__filter-param"
+                  className="winners__filter-param winners__department-dropdown"
                   value={filters.department}
                   onChange={(e) => setFilters({ ...filters, department: e.target.value })}
                 >
@@ -89,6 +128,14 @@ const Winner: React.FC = () => {
                   <option value="interdisciplinary">Interdisciplinary</option>
                 </select>
               </div>
+
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="winners__filter-param winners__search-input"
+              />
           </div>
 
           <div className="winners__item-container">
