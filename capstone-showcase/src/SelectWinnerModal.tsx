@@ -17,6 +17,10 @@ export function SelectWinnerModal({
   const saveWinner = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('here is the positin ', pos);
+    if (!pos) {
+      alert("Please select a position for the winner.");
+      return;
+    }
    setSelectionMade(project, pos || 0, wimgs);
     handleSelectionClose();
   };

@@ -13,6 +13,7 @@ export function Winners() {
   >(null);
   const [semester, setSemester] = useState(TodaysDate().semester);
   const [year, setYear] = useState(TodaysDate().year);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     fetchProjects(semester, year);
   }, []);
@@ -74,6 +75,25 @@ export function Winners() {
   const currYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currYear - i);
   const semesters = ["fa", "sp", "su"];
+
+  const saveWinners = async () => 
+  {
+    setLoading(true);
+    if (!selectedWinners || selectedWinners.length < 3) {
+      alert("Please select all three winners before saving.");
+      return;
+    }
+    const formData = new FormData();
+    selectedWinners.forEach((winner, index) => {
+      formData.append(`projectId${index + 1}`, winner.projectId.toString());
+      formData.append(`position${index + 1}`, winner.position.toString());
+      winner.pictures.forEach((file, fileIndex) => {
+        formData.append(`picture${index + 1}_${fileIndex + 1}`, file);
+      });
+    });
+
+    console.log('here are the winners ', formData)
+  }
   return (
     <div className="admin-set-winners-page">
       {selectionMade && currSelection && (
@@ -156,10 +176,10 @@ export function Winners() {
                 ))}
               <div className="winners-action-in-admin-winner">
                 {selectedWinners && selectedWinners.length > 2 && (
-                  <button className="fetch-projects-btn">Set Winners</button>
+                  <button className="fetch-projects-btn" onClick={saveWinners}>{loading ? "Saving..." : "Save Winners"}</button>
                 )}
                 {selectedWinners && selectedWinners.length > 0 && (
-                  <button className="fetch-projects-btn">Clear</button>
+                  <button className="fetch-projects-btn" onClick={() => setSelectedWinners([])}>Clear</button>
                 )}
               </div>
             </div>

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { CircleX } from 'lucide-react';
+import { CircleX } from "lucide-react";
 import "./CSS/MultipleImageUploader.css";
+import { Upload } from 'lucide-react';
+
 export function MultipleImageUploader({
-    onImageUpload,
-    img
+  onImageUpload,
+  img,
 }: {
-    onImageUpload: (images: File[]) => void;
-    img?: File[];
+  onImageUpload: (images: File[]) => void;
+  img?: File[];
 }) {
   const [images, setImages] = useState<File[]>(img || []);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -36,18 +38,19 @@ export function MultipleImageUploader({
     onImageUpload(images.filter((_, i) => i !== index));
   };
 
-
-
-
   return (
-    <div style={{width:'100%'}}>
+    <div style={{ width: "100%" }}>
       <h2 className="text-xl font-bold mb-4">Upload and Preview Images</h2>
+      <label htmlFor="customFile" className="custom-file-upload">
+       <Upload className="w-4 h-4 mr-2 upload-icon" /> Choose File
+      </label>
       <input
+        id="customFile"
         type="file"
         accept="image/*"
         multiple
         onChange={handleFileChange}
-        className="mb-4"
+        className="multi-image-uploader-input"
       />
       {previews.length > 0 && (
         <div className="chosen-image-container">
@@ -57,17 +60,17 @@ export function MultipleImageUploader({
                 src={preview}
                 alt={`Preview ${index}`}
                 className="multi-image-uploader "
-
               />
-              <CircleX className="dismiss-image-icon"
-                onClick={() => removeImage(index)} />
+              <CircleX
+                className="dismiss-image-icon"
+                onClick={() => removeImage(index)}
+              />
             </div>
           ))}
         </div>
       )}
-
     </div>
   );
-};
+}
 
 export default MultipleImageUploader;
