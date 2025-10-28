@@ -36,6 +36,10 @@ const Menu: React.FC = () => {
     { name: "Industrial Engineering", path: "/industrial-engineering" },
     { name: "Informatics", path: "/informatics" },
   ];
+  const arrowStyle = {
+    marginTop: 3.5,
+    marginLeft: 3,
+  }
 
   useEffect(() =>
   {
@@ -117,48 +121,66 @@ const Menu: React.FC = () => {
       }
     }
   }, [location.search, pathname]);
-
+  
   const renderSemesterDropdown = () => (
-    <li className="semester-selector">
-      <label htmlFor="semesterDropdown">
-      </label>
-      <select
-        id="semesterDropdown"
-        className="semesterDropdown"
-        value={
-          currentSemester && currentYear
-            ? `${currentSemester}-${currentYear}`
-            : ""
-        }
-        onChange={(e) => {
-          const [sem, yr] = e.target.value.split("-");
-          handleSemesterSelection(sem as "sp" | "fa", yr);
-        }}
-      >
-        <option value="">-- Select --</option>
-        {getAvailableSemesters().map(({ semester, year }) => {
-          const label = `${semester === "sp" ? "Spring" : "Fall"} ${year}`;
-          return (
-            <option key={`${semester}-${year}`} value={`${semester}-${year}`}>
+    <button className="department-button">
+      {currentSemester && currentYear ? `${currentSemester === "sp" ? "Spring" : "Fall"} ${currentYear}` : "Semester"}
+      <ChevronDown size={16} style={arrowStyle} strokeWidth={2} className="arrow" />
+      <div className="department-dropdown">
+         {getAvailableSemesters()
+          .filter(sem => sem.semester != currentSemester || sem.year != currentYear)
+          .map(({ semester, year }) => {
+            const label = `${semester === "sp" ? "Spring" : "Fall"} ${year}`;
+            return (
+              <div key={`${semester}-${year}`} className="menu-item" onClick={() => handleSemesterSelection(semester, year)}>
               {label}
-            </option>
+            </div>
           );
         })}
-      </select>
-      {/* {currentSemester && currentYear && (
-        <div className="selected-semester-label">
-          Showing projects from:{" "}
-          <strong>
-            {currentSemester === "sp" ? "Spring" : "Fall"} {currentYear}
-          </strong>
-        </div>
-      )} */}
-    </li>
+      </div>
+    </button>
   );
+  
+  const renderMobileSemesterDropdown = () => (
+      <li className="semester-selector">
+        <label htmlFor="semesterDropdown">
+        </label>
+        <select
+          id="semesterDropdown"
+          className="semesterDropdown"
+          value={
+            currentSemester && currentYear
+              ? `${currentSemester}-${currentYear}`
+              : ""
+          }
+          onChange={(e) => {
+            const [sem, yr] = e.target.value.split("-");
+            handleSemesterSelection(sem as "sp" | "fa", yr);
+          }}
+        >
+          <option value="">-- Select --</option>
+          {getAvailableSemesters().map(({ semester, year }) => {
+            const label = `${semester === "sp" ? "Spring" : "Fall"} ${year}`;
+            return (
+              <option key={`${semester}-${year}`} value={`${semester}-${year}`}>
+                {label}
+              </option>
+            );
+          })}
+        </select>
+      </li>
+    );
 
   return (
     <div className="parent">
       <div className="nav-container">
+        <div className="left-third">
+          <Link to="/" className="">
+            <div className="logo-container">
+              <img src={asuLogo} alt="ASU Logo" className="asu-logo-nav" width={450}/>
+            </div>
+          </Link>
+        </div>
         <div
           className="nav-mobile-dropdown"
           style={{ height: toggleDropdown ? 525 : 0 }}
@@ -176,14 +198,11 @@ const Menu: React.FC = () => {
                 </Link>
               </li>
             ))}
-            {renderSemesterDropdown()}
+            <li className="menu-item">
+              {renderMobileSemesterDropdown()}
+            </li>
           </ul>
         </div>
-        <Link to="/" className="">
-          <div className="logo-container">
-            <img src={asuLogo} alt="ASU Logo" className="asu-logo-nav" width={450}/>
-          </div>
-        </Link>
         <div
           className="burger-menu"
           onClick={() => setToggleDropdown(!toggleDropdown)}
@@ -217,38 +236,36 @@ const Menu: React.FC = () => {
         </div>
         {/* desktop view menu  */}
         <div className="desktop-menu">
-          <Link to="/winners" className="special-link">
-            {/* <Award size={24} /> */}
-            Winners
-          </Link>
-          <button className="department-button">
-            Department
-            <ChevronDown size={14} style={{ marginLeft: 0 }} strokeWidth={3.5} className="arrow" />
-            <div className="department-dropdown">
-              {menuOptions
-                .filter(option => !['About', 'Winners', 'Home'].includes(option.name))
-                .map(option => (
-                  <Link
-                    key={option.path}
-                    to={option.path}
-                    className={`menu-item ${
-                      pathname === option.path ? "active" : ""
-                    }`}
-                  >
-                    {option.name}
-                  </Link>
-                ))}
-            </div>
-          </button>
-          <div className="semester-dropdown">
+          <div className="center-third">
+            <Link to="/winners" className="special-link">
+              Winners
+            </Link>
+            <button className="department-button">
+              Department
+              <ChevronDown size={16} style={arrowStyle} strokeWidth={2} className="arrow" />
+              <div className="department-dropdown">
+                {menuOptions
+                  .filter(option => !['About', 'Winners', 'Home'].includes(option.name))
+                  .map(option => (
+                    <Link
+                      key={option.path}
+                      to={option.path}
+                      className={`menu-item ${
+                        pathname === option.path ? "active" : ""
+                      }`}
+                    >
+                      {option.name}
+                    </Link>
+                  ))}
+              </div>
+            </button>
             {renderSemesterDropdown()}
           </div>
-        </div>
-        <div className="far-right-container">
-          <Link to="/about" className="special-link">
-            {/* <UsersRound size={24} /> */}
-            About Us
-          </Link>
+          <div className="right-third">
+            <Link to="/about" className="special-link">
+              About Us
+            </Link>
+          </div>
         </div>
       </div>
     </div>
