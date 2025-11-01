@@ -9,6 +9,23 @@ const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// Major -> title prefixes at the very start of projectTitle
+const MAJOR_PREFIXES = {
+  // CS & CSE share CS/E.
+  "computer-science": ["CS/E"],
+  "computer-systems-engineering": ["CS/E"],
+
+  "electrical-engineering": ["EEE"],
+  "mechanical-engineering":  ["MEE"],
+  "biomedical-engineering":  ["BME"],
+  "industrial-engineering":  ["IEE"],
+  "informatics": ["CPI"]
+};
+
+// If on MySQL 8+, keep true to use REGEXP_LIKE() for case-insensitive
+// If on MySQL 5.7, set to false (falls back to UPPER(col) REGEXP ?)
+const USE_MYSQL8 = true;
+
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -201,6 +218,29 @@ http.createServer(app).listen(3000, "127.0.0.1", () => {
   console.log("HTTP Server started on port 3000");
 });
 
+// Build MySQL regex patterns for titles that START with a given major's prefixes:
+// simple prefixes (IEE) and composite (CS/E)     
+function buildTitleStartRegexes(majorSlug) {
+  const list = (MAJOR_PREFIXES[majorSlug] || []).map(p => String(p).toUpperCase());
+  if (!list.length) return [];
+
+  const composite = list.filter(p => p.includes("/")); // e.g., "CS/E"
+  const simple    = list.filter(p => !p.includes("/"));
+
+  const regexes = [];
+
+  if (simple.length) {
+    regexes.push(`^\\s*(?:${simple.join("|")})\\s*[- ]?\\d{2,3}\\b`);
+  }
+
+  for (const c of composite) {
+    const esc = c.replace("/", "\\/");
+    regexes.push(`^\\s*${esc}\\s*[- ]?\\d{2,3}\\b`);
+  }
+
+  return regexes;
+}
+
 // Endpoint to fetch projects by major and semester
 app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const { major, semester, year } = req.params;
@@ -230,9 +270,34 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
 
-  const sql =
-    "SELECT * FROM survey_entries WHERE major = ? AND submitDate BETWEEN ? AND ? ORDER BY projectTitle";
-  db.query(sql, [major, startDate, endDate], (err, results) => {
+  // Build regexes from this major's title prefixes
+  const titleRegexes = buildTitleStartRegexes(major);
+
+  // Always include the native major, optionally include interdisciplinary by title
+  const where =
+    `(
+       major = ?
+       ${titleRegexes.length ? " OR (major = 'interdisciplinary' AND (" : ""}
+       ${
+         titleRegexes.length
+           ? (USE_MYSQL8
+              ? titleRegexes.map(() => "REGEXP_LIKE(projectTitle, ?, 'c')").join(" OR ")
+              : titleRegexes.map(() => "UPPER(projectTitle) REGEXP ?").join(" OR "))
+           : ""
+       }
+       ${titleRegexes.length ? "))" : ""}
+     )
+     AND submitDate BETWEEN ? AND ?`;
+
+  const sql = `SELECT * FROM survey_entries WHERE ${where} ORDER BY projectTitle`;
+
+  const params = [major];
+  if (titleRegexes.length) {
+    params.push(...titleRegexes);
+  }
+  params.push(startDate, endDate);
+  
+  db.query(sql, params, (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
       return res.status(500).send("Server error");
