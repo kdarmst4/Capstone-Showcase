@@ -1,5 +1,10 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
+:root {
+  --nav-item-text-color: rgb(49, 49, 49);
+  --nav-edge-padding: 1.5rem;
+}
+
 .asu-logo-nav {
   width: 200px;
 }
@@ -44,17 +49,13 @@
   color: black;
 }
 
-.semester-dropdown {
-  cursor: pointer;
-}
-
 .semesterDropdown {
-  padding: 5px;
-  border-radius: 5px;
   border: none;
   background-color: white;
   color: black;
-  font-size: 1.20rem;
+  font-size: 16px;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  max-width: 90px;
 }
 
 .nav-container {
@@ -66,7 +67,7 @@
   /* padding: 0 10px; */
   position: relative;
   width: 100%;
-  height: 65px;
+  height: 55px;
 }
 
 .parent {
@@ -76,7 +77,7 @@
   z-index: 102;
   box-shadow: 0 0 60px rgba(50, 50, 93, 0.18);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .nav-mobile-dropdown {
@@ -143,35 +144,34 @@ li {
   display: none;
   flex-direction: row;
   color: black;
-  justify-content: baseline;
+  justify-content: space-between;
   align-items: center;
-  gap: 25px;
-  /* font-size: 1.15rem; */
+  width: 66.7%;
 }
 /* Department dropdown hidden by default, shown on hover */
 .department-button {
   position: relative;
   background: none;
   border: none;
-  cursor: pointer;
   padding: 8px;
-  color: black;
+  box-sizing: border-box;
+  color: var(--nav-item-text-color);
   display: flex;
+  text-wrap: nowrap;
   align-items: center;
-  gap: 4px;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.5;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 .department-button:hover,
 .department-button:focus {
-  background-color: #f0f0f0;
-  border-radius: 4px;
+  color: black;
 }
 
 .department-button:hover .arrow {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
+  color: black;
 }
 
 .department-dropdown {
@@ -188,7 +188,7 @@ li {
 }
 
 .special-link {
-  color: black;
+  color: var(--nav-item-text-color);
   text-decoration: none;
   padding: 8px;
   display: flex;
@@ -196,9 +196,9 @@ li {
   gap: 4px;
   transition: background-color 0.3s, color 0.3s;
 }
+
 .special-link:hover {
-  border-radius: 4px;
-  background-color: #f0f0f0;
+  color: black;
 }
 
 .department-button:hover .department-dropdown,
@@ -209,7 +209,7 @@ li {
 .department-dropdown .menu-item {
   display: block;
   padding: 8px 16px;
-  color: #333;
+  color: var(--nav-item-text-color);
   text-decoration: none;
   transition: all 0.2s;
   /* font-size: 1.25rem; */
@@ -218,13 +218,44 @@ li {
   font-size: 1.25rem;
 } */
 .department-dropdown .menu-item:hover,
-.department-dropdown .menu-item.active {
+.department-dropdown .menu-item .active {
   background: #f0f0f0;
   color: #000;
 }
 
-.far-right-container {
-  padding: 0 16px;
+.department-dropdown .menu-item:hover {
+  cursor: pointer;
+}
+
+.nav-mobile-dropdown .menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-third {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 33.33%;
+  padding-left: var(--nav-edge-padding);
+  box-sizing: border-box;
+}
+.center-third {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  box-sizing: border-box;
+  gap: 20px;
+}
+.right-third {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 50%;
+  padding-right: var(--nav-edge-padding);
+  box-sizing: border-box;
 }
 
 @media (min-width: 913px) {
