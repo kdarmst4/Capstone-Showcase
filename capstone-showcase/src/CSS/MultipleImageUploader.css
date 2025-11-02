@@ -53,15 +53,16 @@
   display: none;
 }
 .custom-file-upload {
-  display: inline-block;
-  padding: 8px 12px;
+  display: flex;  
   cursor: pointer;
-  background-color: #8c1d40;
-  color: white;
-  border-radius: 5px;
-  font-size: medium;
-  font-weight: bold;
-  margin: 1rem 0;
+  min-width: 100%;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
 }
 .upload-icon {
   animation: bounce 2s infinite;

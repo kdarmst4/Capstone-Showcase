@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CircleX } from "lucide-react";
 import "./CSS/MultipleImageUploader.css";
-import { Upload } from 'lucide-react';
+import { Upload, HardDriveUpload  } from 'lucide-react';
 
 export function MultipleImageUploader({
   onImageUpload,
@@ -41,9 +41,11 @@ export function MultipleImageUploader({
   return (
     <div style={{ width: "100%" }}>
       <h2 className="text-xl font-bold mb-4">Upload and Preview Images</h2>
-      <label htmlFor="customFile" className="custom-file-upload">
-       <Upload className="w-4 h-4 mr-2 upload-icon" /> Choose File
-      </label>
+      {previews.length === 0 && (
+        <label htmlFor="customFile" className="custom-file-upload">
+          <HardDriveUpload className="w-4 h-4 mr-2 upload-icon" /> Choose File
+        </label>
+      )}
       <input
         id="customFile"
         type="file"
