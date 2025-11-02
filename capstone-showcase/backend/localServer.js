@@ -45,6 +45,10 @@ if (!fs.existsSync(uploadTeamDir)) {
   fs.mkdirSync(uploadTeamDir);
 }
 
+const uploadWinnerDir = "./winnerUploads";
+if (!fs.existsSync(uploadWinnerDir)) {
+  fs.mkdirSync(uploadWinnerDir);
+}
 //Poster Image Upload Storage
 const storagePoster = multer.diskStorage({
   destination: "./posterUploads/",
@@ -68,6 +72,17 @@ const storageTeam = multer.diskStorage({
   },
 });
 const uploadTeam = multer({ storage: storageTeam });
+//winner upload storage
+const storageWinner = multer.diskStorage({
+  destination: "./winnerUploads/",
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+const uploadWinner = multer({ storage: storageWinner });
 
 app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
@@ -682,4 +697,69 @@ app.get('/api/single_survey/:id', (req, res) => {
     }
     res.status(200).json(results[0]);
   });
+});
+
+
+app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
+  console.log('here is the body', req.body);
+  console.log("/api/set_winners req.files:", req.files && req.files.length);
+try {
+    // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
+    const winners = [];
+    // Determine number of winners by checking body keys for projectIdX
+    const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));
+    const count = projectIdKeys.length;
+
+    for (let i = 1; i <= count; i++) {
+      const projectId = req.body[`projectId${i}`];
+      const position = req.body[`position${i}`];
+
+      // Collect files for this winner (fieldnames like picture{i}_{j})
+      const filesForWinner = (req.files || []).filter((f) => new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname));
+      const filePaths = filesForWinner.map((f) => {
+        // files are stored by multer in the destination configured by uploadWinner
+        return `/winnerUploads/${f.filename}`;
+      });
+
+      winners.push({ projectId: Number(projectId), position: Number(position), pictures: filePaths });
+    }
+
+    console.log("Parsed winners:", winners);
+
+    // TODO: persist winners to DB (not implemented here). For now, return what we parsed.
+    db.beginTransaction((err) => {
+      if (err) {
+        console.error("Transaction error:", err);
+        return res.status(500).json({ success: false, error: "Database transaction error" });
+      }
+      winners.forEach((winner) =>
+      {
+        db.query(
+          "UPDATE showcaseentries SET position = ? , winning_pic = ? WHERE EntryID = ?",
+          [winner.position, winner.pictures.join(","), winner.projectId],
+          (err, results) => {
+            if (err) 
+            {
+              return db.rollback(() => {
+                console.error("Error updating winner:", err);
+                return res.status(500).json({ success: false, error: "Database update error" });
+              });
+            }
+          }
+        );
+      });
+      db.commit((err) => {
+        if (err) {
+          return db.rollback(() => {
+            console.error("Commit error:", err);
+            return res.status(500).json({ success: false, error: "Database commit error" });
+          });
+        }
+      });
+    });
+    return res.status(200).json({ success: true, winners });
+  } catch (err) {
+    console.error("Error handling set_winners:", err);
+    return res.status(500).json({ success: false, error: "Server error parsing winners" });
+  }
 });

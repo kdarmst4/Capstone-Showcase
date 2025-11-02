@@ -92,7 +92,17 @@ export function Winners() {
       });
     });
 
-    console.log('here are the winners ', formData)
+    const res = await fetch(`${API_BASE_URL}/set_winners`, {
+      method: "POST",
+      body: formData,
+    });
+    setLoading(false);
+    if(res.status === 200){
+      alert("Winners saved successfully!");
+    }
+    else{
+      alert("Error saving winners");
+    }
   }
   return (
     <div className="admin-set-winners-page">
