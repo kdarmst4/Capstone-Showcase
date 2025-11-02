@@ -45,7 +45,7 @@ export function SurveyDetails() {
   );
   console.log("SurveyDetails project:", project);
 
-// teamMemberNames may use commas or newlines — we'll normalize when building `teamMembers` in effect
+  // teamMemberNames may use commas or newlines — we'll normalize when building `teamMembers` in effect
   // team member names and final resolved photo URLs
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
   const [teamMemberPhotos, setTeamMemberPhotos] = useState<string[]>([]);
@@ -196,18 +196,21 @@ export function SurveyDetails() {
           {project.teamMemberNames && (
             <div className="team-members-section">
               <h3>Team Members</h3>
-              <img
-                className="team-members-img"
-                src={normalizePathToUrl(project.teamPicturePath)}
-                alt="Team Members"
-              />
-              {/* <div className="team-members-list">
-                {teamMembers.map((name, i) => (
-                  <span key={i} className="member-tag-names">
-                    <p>{name}</p>
-                  </span>
-                ))}
-              </div> */}
+              {project.teamPicturePath ? (
+                <img
+                  className="team-members-img"
+                  src={normalizePathToUrl(project.teamPicturePath)}
+                  alt="Team Members"
+                />
+              ) : (
+                <div className="team-members-list">
+                  {teamMembers.map((name, i) => (
+                    <span key={i} className="member-tag-names">
+                      <p>{name}</p>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           <span className="extra-details-survey">
@@ -227,7 +230,7 @@ export function SurveyDetails() {
                   <User size={16} />
                   Project Name
                 </p>
-                  <p>{project.name}</p>
+                <p>{project.name}</p>
               </span>
             )}
             {project.email && (
@@ -251,7 +254,9 @@ export function SurveyDetails() {
             <div className="no-poster-found-div">
               <div className="no-poster-text">
                 <p className="no-poster-title">No poster available</p>
-                <p className="no-poster-sub">This project did not submit a poster.</p>
+                <p className="no-poster-sub">
+                  This project did not submit a poster.
+                </p>
               </div>
             </div>
           )}
