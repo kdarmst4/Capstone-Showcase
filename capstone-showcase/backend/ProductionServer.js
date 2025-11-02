@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 
 // Major -> title prefixes at the very start of projectTitle
 const MAJOR_PREFIXES = {
-  // CS & CSE share CS/E.
+  // CS & CSE share CS/E. Can add other prefix later.
   "computer-science": ["CS/E"],
   "computer-systems-engineering": ["CS/E"],
 
@@ -21,10 +21,6 @@ const MAJOR_PREFIXES = {
   "industrial-engineering":  ["IEE"],
   "informatics": ["CPI"]
 };
-
-// If on MySQL 8+, keep true to use REGEXP_LIKE() for case-insensitive
-// If on MySQL 5.7, set to false (falls back to UPPER(col) REGEXP ?)
-const USE_MYSQL8 = true;
 
 const dotenv = require("dotenv");
 
@@ -224,18 +220,18 @@ function buildTitleStartRegexes(majorSlug) {
   const list = (MAJOR_PREFIXES[majorSlug] || []).map(p => String(p).toUpperCase());
   if (!list.length) return [];
 
-  const composite = list.filter(p => p.includes("/")); // e.g., "CS/E"
+  const composite = list.filter(p => p.includes("/"));    
   const simple    = list.filter(p => !p.includes("/"));
 
   const regexes = [];
 
   if (simple.length) {
-    regexes.push(`^\\s*(?:${simple.join("|")})\\s*[- ]?\\d{2,3}\\b`);
+    regexes.push(`^[[:space:]]*(?:${simple.join("|")})[[:space:]]*[- ]?[[:digit:]]{2,3}`);
   }
 
   for (const c of composite) {
     const esc = c.replace("/", "\\/");
-    regexes.push(`^\\s*${esc}\\s*[- ]?\\d{2,3}\\b`);
+    regexes.push(`^[[:space:]]*${esc}[[:space:]]*[- ]?[[:digit:]]{2,3}`);
   }
 
   return regexes;
@@ -274,20 +270,15 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const titleRegexes = buildTitleStartRegexes(major);
 
   // Always include the native major, optionally include interdisciplinary by title
-  const where =
-    `(
-       major = ?
-       ${titleRegexes.length ? " OR (major = 'interdisciplinary' AND (" : ""}
-       ${
-         titleRegexes.length
-           ? (USE_MYSQL8
-              ? titleRegexes.map(() => "REGEXP_LIKE(projectTitle, ?, 'c')").join(" OR ")
-              : titleRegexes.map(() => "UPPER(projectTitle) REGEXP ?").join(" OR "))
-           : ""
-       }
-       ${titleRegexes.length ? "))" : ""}
-     )
-     AND submitDate BETWEEN ? AND ?`;
+  const where = `
+  (
+    major = ?
+    ${titleRegexes.length ? " OR (major = 'interdisciplinary' AND (" : ""}
+    ${titleRegexes.length ? titleRegexes.map(() => "projectTitle REGEXP ?").join(" OR ") : ""}
+    ${titleRegexes.length ? "))" : ""}
+  )
+  AND submitDate BETWEEN ? AND ?
+  `;
 
   const sql = `SELECT * FROM survey_entries WHERE ${where} ORDER BY projectTitle`;
 
