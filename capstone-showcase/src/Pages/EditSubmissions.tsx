@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import '../CSS/EditSubmissions.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { MultipleImageUploader } from "../MultipleImageUploader";
+import "../CSS/EditSubmissions.css";
 
 interface Submission {
   id: number;
@@ -16,12 +17,16 @@ interface Submission {
   power: boolean;
   nda: boolean;
   youtubeLink: string;
+  teamPicturePath: string;
+  posterPicturePath: string;
+  pos: string | number;
+  winning_pic: string | null;
 }
 
 const EditSubmissions: React.FC = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [updatedSubmission, setUpdatedSubmission] = useState({
+  const [updatedSubmission, setUpdatedSubmission] = useState<Partial<Submission>>({
     email: "",
     name: "",
     projectTitle: "",
@@ -34,19 +39,24 @@ const EditSubmissions: React.FC = () => {
     power: false,
     nda: false,
     youtubeLink: "",
+    teamPicturePath: "",
+    posterPicturePath: "",
+    pos: "",
+    winning_pic: null,
   });
-  
 
   // Fetch submissions from the backend
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        const response = await axios.get('https://asucapstone.com:3000/api/admin/submissions');
+        const response = await axios.get(
+          "https://asucapstone.com:3000/api/admin/submissions"
+        );
         //const response = await axios.get('http://localhost:3000/api/admin/submissions'); // Ensure this matches your server URL
-        console.log('Fetched submissions:', response.data); // Debug: Log the fetched data
+        console.log("Fetched submissions:", response.data); // Debug: Log the fetched data
         setSubmissions(response.data);
       } catch (error) {
-        console.error('Error fetching submissions:', error); // Debug: Log errors
+        console.error("Error fetching submissions:", error); // Debug: Log errors
       }
     };
 
@@ -54,13 +64,19 @@ const EditSubmissions: React.FC = () => {
   }, []);
 
   // Handle field changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: string
+  ) => {
     if (updatedSubmission) {
       setUpdatedSubmission({ ...updatedSubmission, [field]: e.target.value });
     }
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Submission) => {
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof Submission
+  ) => {
     if (updatedSubmission) {
       setUpdatedSubmission({ ...updatedSubmission, [field]: e.target.checked });
     }
@@ -68,30 +84,33 @@ const EditSubmissions: React.FC = () => {
 
   // Save changes
   const [, setSuccessMessage] = useState("");
-  
+
   const handleSave = async (id: number) => {
     try {
       // Ensure updatedSubmission is being passed correctly
       console.log("Saving updated data:", updatedSubmission);
-  
+
       // Send the updated data to the backend
-      await axios.put(`https://asucapstone.com/api/admin/submissions/${id}`, updatedSubmission);
+      await axios.put(
+        `https://asucapstone.com/api/admin/submissions/${id}`,
+        updatedSubmission
+      );
       //await axios.put(`http://localhost:3000/api/admin/submissions/${id}`, updatedSubmission);
-  
+
       // After successful save, show success message
       setSuccessMessage("Change successful!");
-  
+
       // Optionally, refresh the data after save to update the list of submissions
-      const response = await axios.get('https://asucapstone.com:3000/api/admin/submissions');
+      const response = await axios.get(
+        "https://asucapstone.com:3000/api/admin/submissions"
+      );
       //const response = await axios.get('http://localhost:3000/api/admin/submissions');
       setSubmissions(response.data);
     } catch (error) {
       console.error("Error saving submission:", error);
     }
   };
-  
-  
-  
+
   // Cancel editing
   const initialSubmissionState = {
     email: "",
@@ -106,8 +125,12 @@ const EditSubmissions: React.FC = () => {
     power: false,
     nda: false,
     youtubeLink: "",
+    teamPicturePath: "",
+    posterPicturePath: "",
+    pos: "",
+    winning_pic: null,
   };
-  
+
   const handleCancel = () => {
     setEditingId(null);
     setUpdatedSubmission(initialSubmissionState); // Reset to initial state
@@ -136,15 +159,18 @@ const EditSubmissions: React.FC = () => {
                     <input
                       type="text"
                       value={updatedSubmission?.name || submission.name}
-                      onChange={(e) => handleChange(e, 'name')}
+                      onChange={(e) => handleChange(e, "name")}
                       placeholder="Student Name"
                     />
                   </td>
                   <td>
                     <input
                       type="text"
-                      value={updatedSubmission?.projectTitle || submission.projectTitle}
-                      onChange={(e) => handleChange(e, 'projectTitle')}
+                      value={
+                        updatedSubmission?.projectTitle ||
+                        submission.projectTitle
+                      }
+                      onChange={(e) => handleChange(e, "projectTitle")}
                       placeholder="Project Title"
                     />
                   </td>
@@ -152,12 +178,14 @@ const EditSubmissions: React.FC = () => {
                     <input
                       type="text"
                       value={updatedSubmission?.major || submission.major}
-                      onChange={(e) => handleChange(e, 'major')}
+                      onChange={(e) => handleChange(e, "major")}
                       placeholder="Major"
                     />
                   </td>
                   <td>
-                    <button onClick={() => handleSave(submission.id)}>Save</button>
+                    <button onClick={() => handleSave(submission.id)}>
+                      Save
+                    </button>
                     <button onClick={handleCancel}>Cancel</button>
                   </td>
                 </>
@@ -192,7 +220,7 @@ const EditSubmissions: React.FC = () => {
             <input
               type="email"
               value={updatedSubmission.email}
-              onChange={(e) => handleChange(e, 'email')}
+              onChange={(e) => handleChange(e, "email")}
               placeholder="Email"
             />
           </div>
@@ -201,7 +229,7 @@ const EditSubmissions: React.FC = () => {
             <label>Project Description:</label>
             <textarea
               value={updatedSubmission.projectDescription}
-              onChange={(e) => handleChange(e, 'projectDescription')}
+              onChange={(e) => handleChange(e, "projectDescription")}
               placeholder="Project Description"
             />
           </div>
@@ -211,7 +239,7 @@ const EditSubmissions: React.FC = () => {
             <input
               type="text"
               value={updatedSubmission.sponsor}
-              onChange={(e) => handleChange(e, 'sponsor')}
+              onChange={(e) => handleChange(e, "sponsor")}
               placeholder="Sponsor"
             />
           </div>
@@ -221,7 +249,7 @@ const EditSubmissions: React.FC = () => {
             <input
               type="text"
               value={updatedSubmission.teamMemberNames}
-              onChange={(e) => handleChange(e, 'teamMemberNames')}
+              onChange={(e) => handleChange(e, "teamMemberNames")}
               placeholder="Team Member Names"
             />
           </div>
@@ -231,7 +259,7 @@ const EditSubmissions: React.FC = () => {
             <input
               type="number"
               value={updatedSubmission.numberOfTeamMembers}
-              onChange={(e) => handleChange(e, 'numberOfTeamMembers')}
+              onChange={(e) => handleChange(e, "numberOfTeamMembers")}
               placeholder="Number of Team Members"
             />
           </div>
@@ -241,7 +269,7 @@ const EditSubmissions: React.FC = () => {
             <input
               type="checkbox"
               checked={updatedSubmission.demo}
-              onChange={(e) => handleCheckboxChange(e, 'demo')}
+              onChange={(e) => handleCheckboxChange(e, "demo")}
             />
           </div>
 
@@ -250,7 +278,7 @@ const EditSubmissions: React.FC = () => {
             <input
               type="checkbox"
               checked={updatedSubmission.power}
-              onChange={(e) => handleCheckboxChange(e, 'power')}
+              onChange={(e) => handleCheckboxChange(e, "power")}
             />
           </div>
 
@@ -259,7 +287,7 @@ const EditSubmissions: React.FC = () => {
             <input
               type="checkbox"
               checked={updatedSubmission.nda}
-              onChange={(e) => handleCheckboxChange(e, 'nda')}
+              onChange={(e) => handleCheckboxChange(e, "nda")}
             />
           </div>
 
@@ -268,9 +296,31 @@ const EditSubmissions: React.FC = () => {
             <input
               type="text"
               value={updatedSubmission.youtubeLink}
-              onChange={(e) => handleChange(e, 'youtubeLink')}
+              onChange={(e) => handleChange(e, "youtubeLink")}
               placeholder="YouTube Link"
             />
+          </div>
+          <div className="poster-in-edit-submission">
+            {
+              updatedSubmission.posterPicturePath ? (
+                <img
+                  src={updatedSubmission.posterPicturePath}
+                  alt="Poster"
+                />
+              ) : (
+                <MultipleImageUploader  
+                  onImageUpload={(images) => {
+                    if (images.length > 0) {
+                      const posterPath = URL.createObjectURL(images[0]);
+                      setUpdatedSubmission({
+                        ...updatedSubmission,
+                        posterPicturePath: posterPath,
+                      });
+                    }
+                }}
+              />
+              )
+            }
           </div>
         </div>
       )}

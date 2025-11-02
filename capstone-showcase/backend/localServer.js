@@ -332,26 +332,23 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 //get endpoint to fetch all the winners of prev projects
 app.get("/api/winners", (req, res) => {
   const sql = `SELECT 
-  CourseNumber AS course,
-  VideoLinkRaw AS video,
-  shouldDisplay,
+  Major AS course,
+  youtubeLink AS video,
   position AS position,
-  MemberNames AS members,
+  teamMemberNames AS members,
   Sponsor,
   ProjectDescription AS description,
   ProjectTitle,
   winning_pic,
-  shouldDisplay,
-  NDA,
-  EntryID,
-  YEAR(DateStamp) AS year,
+  id as EntryID,
+  YEAR(submitDate) AS year,
   CASE 
-    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
-    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
-    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
-    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
+    WHEN MONTH(submitDate) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(submitDate) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(submitDate) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
   END AS semester
-FROM showcaseentries
+FROM survey_entries
 WHERE position IS NOT NULL;`;
   db.query(sql, (err, results) => {
     if (err) {
