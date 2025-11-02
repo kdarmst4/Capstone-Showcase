@@ -735,11 +735,10 @@ try {
       winners.forEach((winner) =>
       {
         db.query(
-          "UPDATE showcaseentries SET position = ? , winning_pic = ? WHERE EntryID = ?",
+          "UPDATE survey_entries SET position = ? , winning_pic = ? WHERE id = ?",
           [winner.position, winner.pictures.join(","), winner.projectId],
           (err, results) => {
-            if (err) 
-            {
+            if (err) {
               return db.rollback(() => {
                 console.error("Error updating winner:", err);
                 return res.status(500).json({ success: false, error: "Database update error" });
