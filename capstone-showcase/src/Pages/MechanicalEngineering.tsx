@@ -179,10 +179,9 @@ const MechanicalEngineering: React.FC = () => {
           ) : (
             <>
               {/* Projects Grid */}
-               <section className="project-catalog">
+              <section className="project-catalog">
                 <div className="projects-grid">
                   {currentProjects.map((project, index) => (
-                    <Link to ={`/survey/${project.id}`} state={{ project }} key={project.id}>
                     <div
                       key={project.id || index}
                       className="project-card"
@@ -195,11 +194,22 @@ const MechanicalEngineering: React.FC = () => {
                           className="youtube-thumbnail"
                         />
                       )}
+
                       <div className="project-details">
-                        <h4 className="project-title left-aligned">{project.projectTitle}</h4>
+                        <h4 className="project-title left-aligned">
+                          <Link
+                            to={`/survey/${project.id}`}
+                            state={{ project }}
+                            className="project-title-link"
+                          >
+                            {project.projectTitle}
+                          </Link>
+                        </h4>
+
                         <p className="project-description left-aligned">
                           {project.projectDescription}
                         </p>
+
                         <div className="project-meta">
                           <p>
                             <strong>Team:</strong> {project.teamMemberNames}
@@ -210,8 +220,6 @@ const MechanicalEngineering: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    </Link> 
-
                   ))}
                 </div>
               </section>

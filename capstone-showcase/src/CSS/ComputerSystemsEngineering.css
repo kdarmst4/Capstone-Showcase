@@ -105,3 +105,21 @@
   margin: 5px 0;
   text-align: left;
 }
+
+.project-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-title-link {
+  color: #8c1d40 !important;
+  text-decoration: underline !important;
+  font-weight: bold;
+  text-underline-offset: 2px;
+}
+
+.project-title-link:hover {
+  color: #611029 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px;
+}
