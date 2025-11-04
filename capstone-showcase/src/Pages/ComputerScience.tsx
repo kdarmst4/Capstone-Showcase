@@ -3,11 +3,13 @@ import { useMenuContext } from "../MenuContext";
 import "../CSS/ComputerScience.css";
 import "../CSS/ProjectCards.css";
 import "../CSS/ProjectShowcase.css";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
 import useFetchProjects from "../Hooks/useFetchProjects";
 import usePagination from "../Hooks/usePagination";
 import Pagination, { PaginationProps } from "../Components/Pagination";
+import SurveyFormButton from "../Components/SurveyFormButton";
 
 
 const API_BASE_URL =
@@ -67,10 +69,6 @@ const ComputerScience: React.FC = () => {
     return match ? `https://img.youtube.com/vi/${match[1]}/0.jpg` : null;
   };
 
-  const handleSurveyFormClick = () => {
-    navigate("/survey");
-  };
-
   const handleMoreProjectsClick = () => {
     navigate("/interdisciplinary");
   };
@@ -99,13 +97,7 @@ const ComputerScience: React.FC = () => {
             <img src={asuLogo} alt="ASU Logo" className="asu-logo" />
             <div className="title-container">
               <h3 className="main-page-title">Computer Science</h3>
-              <button
-                className="survey-form-button"
-                onClick={handleSurveyFormClick}
-                aria-label="Survey Form Button"
-              >
-                Survey Form
-              </button>
+              <SurveyFormButton />
             </div>
           </article>
         </section>
