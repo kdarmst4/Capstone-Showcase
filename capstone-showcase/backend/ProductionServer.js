@@ -59,6 +59,7 @@ const credentials = {key: privateKey, cert: certificate};
 
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
+app.use("/winnerUploads", express.static("winnerUploads"));
 
 //Image Upload And Storgae API
 

@@ -20,7 +20,13 @@
   padding: 20px;
   background-color: white;
 }
-
+.winners-winners-winningpic
+{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
 .winner-component__winner-card {
   display: flex;
   flex-direction: column;

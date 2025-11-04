@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export type ShowcaseEntry = {
   course: string;
   video: string;
-  EntryID: number;
+  id: number;
   shouldDisplay: "YES" | "NO";
   position: number;
   members: string;

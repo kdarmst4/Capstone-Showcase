@@ -89,6 +89,20 @@ export default function ProjectDetails() {
       updateNameTag('twitter:image', imageUrl);
     }
   };
+      const STATIC_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+
+  const API_BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? "/api"
+      : "http://localhost:3000/api";
+
+    const normalizePathToUrl = (path: string) => {
+    if (!path) return "";
+    const trimmed = path.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return `${STATIC_BASE_URL}/${trimmed.replace(/^\/+/, "")}`;
+  };
 
   // Update meta tags when component mounts or winner changes
   useEffect(() => {
@@ -232,9 +246,9 @@ export default function ProjectDetails() {
             {projectImages.length > 0 ? (
               <>
                 <img 
-                  src={projectImages[currentImageIndex]} 
+                  src={normalizePathToUrl(projectImages[currentImageIndex])} 
                   alt={`${winner.ProjectTitle} - Image ${currentImageIndex + 1}`} 
-                  className="gallery-image"
+                  className={`gallery-image ${projectImages.length <2 ? 'single-image' : ''}`}
                 />
                 
                 {projectImages.length > 1 && (
