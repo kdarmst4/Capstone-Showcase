@@ -7,7 +7,7 @@ import PreEventLandingPage from "./Pages/PreEventLandingPage";
 import ComputerScience from "./Pages/ComputerScience";
 import ComputerSystemsEngineering from "./Pages/ComputerSystemsEngineering";
 import IndustrialEngineering from "./Pages/IndustrialEngineering";
-//import Survey from "./Pages/Survey";
+import Survey from "./Pages/Survey";
 import Informatics from "./Pages/Informatics";
 import Interdisciplinary from "./Pages/Interdisciplinary";
 import ElectricalEngineering from "./Pages/ElectricalEngineering";
