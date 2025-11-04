@@ -6,6 +6,9 @@ import "../CSS/Pagination.css";
 import "../CSS/ProjectShowcase.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
+import useFetchProjects from "../Hooks/useFetchProjects";
+import usePagination from "../Hooks/usePagination";
+import Pagination, { PaginationProps } from "../Components/Pagination";
 
 
 const API_BASE_URL =
@@ -24,53 +27,39 @@ const ComputerScience: React.FC = () => {
   const selectedSemester = searchParams.get("semester");
   const selectedYear = searchParams.get("year");
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
+
+  // project fetching variables
+  const DEFAULT_SEMESTER = "fa";
+  const DEFAULT_YEAR = "2025";
+  const major = "computer-science";
+  const semester = selectedSemester || DEFAULT_SEMESTER;
+  const year = selectedYear || DEFAULT_YEAR;
+  const { projects, loading, error } = useFetchProjects(major, semester, year);
+
+  // Modal variables 
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Pagination Variables
-  const [currentPage, setCurrentPage] = useState(1);
-  const projectsPerPage = 8;
-  const totalPages = Math.ceil(projects.length / projectsPerPage);
-  const startIndex = (currentPage - 1) * projectsPerPage;
-  const endIndex = startIndex + projectsPerPage;
-  const currentProjects = projects.slice(startIndex, endIndex);
+  const {
+    currentPage,
+    totalPages,
+    currentProjects,
+    goToPage,
+    goToNextPage,
+    goToPreviousPage,
+    getPageNumbers,
+  } = usePagination(projects, 8);
 
-  const DEFAULT_SEMESTER = "fa";
-  const DEFAULT_YEAR = "2025";
-
-  const semester = selectedSemester || DEFAULT_SEMESTER;
-  const year = selectedYear || DEFAULT_YEAR;
-
-  useEffect(() => {
-    let ignore = false;
-
-    console.log("Selected semseter:", semester, year);
-    document.body.classList.add("computer-science-page-body");
-
-    // Fetch projects for the Computer Science major
-    fetch(`${API_BASE_URL}/survey/computer-science/term=${semester}-${year}`)
-      //  fetch(`https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
-      //  fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {if(!ignore) setProjects(data)}) // Populate the state with fetched projects
-      .catch((error) => console.error("Error fetching projects:", error));
-
-    return () => {
-      document.body.classList.remove("computer-science-page-body");
-      ignore = true;
-    };
-  }, [semester, year]);
-
-  // Set starting page to the first page
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [projects]);
+  const paginationProps: PaginationProps = {
+    currentPage,
+    totalPages,
+    totalProjects: projects.length,
+    goToPage,
+    goToNextPage,
+    goToPreviousPage,
+    getPageNumbers,
+  }
 
   const extractYouTubeThumbnail = (url: string): string | null => {
     const regex =
@@ -100,54 +89,6 @@ const ComputerScience: React.FC = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedProject(null);
-  };
-
-  // Pagination function calls
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      goToPage(currentPage - 1);
-    }
-  };
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      goToPage(currentPage + 1);
-    }
-  };
-
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxPagesToShow = 5;
-
-    if (totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-
-      if (startPage > 1) {
-        pages.unshift("...");
-        pages.unshift(1);
-      }
-
-      if (endPage < totalPages) {
-        pages.push("...");
-        pages.push(totalPages);
-      }
-    }
-
-    return pages;
   };
 
   return (
@@ -223,43 +164,7 @@ const ComputerScience: React.FC = () => {
               </section>
 
               {/*Pagination*/}
-              {totalPages > 1 && (
-                <div className="pagination-container">
-                  <button
-                    className="pagination-button"
-                    onClick={goToPreviousPage}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </button>
-
-                  {getPageNumbers().map((page, index) => (
-                    <button
-                      key={index}
-                      className={`page-number ${
-                        page === currentPage ? "active" : ""
-                      }`}
-                      onClick={() => typeof page === "number" && goToPage(page)}
-                      disabled={page === "..."}
-                    >
-                      {page}
-                    </button>
-                  ))}
-
-                  <button
-                    className="pagination-button"
-                    onClick={goToNextPage}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </button>
-
-                  <div className="page-info">
-                    Page {currentPage} of {totalPages} ({projects.length} total
-                    projects)
-                  </div>
-                </div>
-              )}
+              <Pagination {...paginationProps}/>
 
               <button
                 className="more-projects-button"
