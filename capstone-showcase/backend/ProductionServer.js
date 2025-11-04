@@ -626,9 +626,9 @@ app.get('/api/single_survey/:id', (req, res) => {
 });
 
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
-  //need to ensure that not more that 3 winners are selected 
-  //set the 3 prev winners to null in db before setting new winners
+
 try {
+    // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
     const winners = [];
     // Determine number of winners by checking body keys for projectIdX
     const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));
@@ -651,36 +651,41 @@ try {
 
     db.beginTransaction((err) => {
       if (err) {
-        console.error("Transaction error:", err);
         return res.status(500).json({ success: false, error: "Database transaction error" });
       }
-      winners.forEach((winner) =>
-      {
-        db.query(
-          "UPDATE survey_entries SET position = ? , winning_pic = ? WHERE id = ?",
-          [winner.position, winner.pictures.join(","), winner.projectId],
-          (err, results) => {
+
+      const updatePromises = winners.map((winner) => {
+        return new Promise((resolve, reject) => {
+          const sql = "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
+          db.query(
+            sql,
+            [winner.position, winner.pictures.join(","), winner.projectId],
+            (err, results) => {
+              if (err) return reject(err);
+              resolve(results);
+            }
+          );
+        });
+      });
+
+      Promise.all(updatePromises)
+        .then(() => {
+          db.commit((err) => {
             if (err) {
               return db.rollback(() => {
-                console.error("Error updating winner:", err);
-                return res.status(500).json({ success: false, error: "Database update error" });
+                return res.status(500).json({ success: false, error: "Database commit error" });
               });
             }
-          }
-        );
-      });
-      db.commit((err) => {
-        if (err) {
-          return db.rollback(() => {
-            console.error("Commit error:", err);
-            return res.status(500).json({ success: false, error: "Database commit error" });
+            return res.status(200).json({ success: true, winners });
           });
-        }
-      });
+        })
+        .catch((updateErr) => {
+          db.rollback(() => {
+            return res.status(500).json({ success: false, error: "Database update error", details: updateErr.message });
+          });
+        });
     });
-    return res.status(200).json({ success: true, winners });
   } catch (err) {
-    console.error("Error handling set_winners:", err);
     return res.status(500).json({ success: false, error: "Server error parsing winners" });
   }
 });
