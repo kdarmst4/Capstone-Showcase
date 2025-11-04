@@ -332,23 +332,26 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 //get endpoint to fetch all the winners of prev projects
 app.get("/api/winners", (req, res) => {
   const sql = `SELECT 
-  Major AS course,
-  youtubeLink AS video,
+  CourseNumber AS course,
+  VideoLinkRaw AS video,
+  shouldDisplay,
   position AS position,
-  teamMemberNames AS members,
+  MemberNames AS members,
   Sponsor,
   ProjectDescription AS description,
   ProjectTitle,
   winning_pic,
-  id as EntryID,
-  YEAR(submitDate) AS year,
+  shouldDisplay,
+  NDA,
+  EntryID,
+  YEAR(DateStamp) AS year,
   CASE 
-    WHEN MONTH(submitDate) IN (12, 1, 2) THEN 'Winter'
-    WHEN MONTH(submitDate) IN (3, 4, 5) THEN 'Spring'
-    WHEN MONTH(submitDate) IN (6, 7, 8) THEN 'Summer'
-    WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
+    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
   END AS semester
-FROM survey_entries
+FROM showcaseentries
 WHERE position IS NOT NULL;`;
   db.query(sql, (err, results) => {
     if (err) {
@@ -723,37 +726,47 @@ try {
 
     console.log("Parsed winners:", winners);
 
-    // TODO: persist winners to DB (not implemented here). For now, return what we parsed.
     db.beginTransaction((err) => {
       if (err) {
         console.error("Transaction error:", err);
         return res.status(500).json({ success: false, error: "Database transaction error" });
       }
-      winners.forEach((winner) =>
-      {
-        db.query(
-          "UPDATE survey_entries SET position = ? , winning_pic = ? WHERE id = ?",
-          [winner.position, winner.pictures.join(","), winner.projectId],
-          (err, results) => {
+
+      const updatePromises = winners.map((winner) => {
+        return new Promise((resolve, reject) => {
+          const sql = "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
+          db.query(
+            sql,
+            [winner.position, winner.pictures.join(","), winner.projectId],
+            (err, results) => {
+              if (err) return reject(err);
+              resolve(results);
+            }
+          );
+        });
+      });
+
+      Promise.all(updatePromises)
+        .then(() => {
+          db.commit((err) => {
             if (err) {
               return db.rollback(() => {
-                console.error("Error updating winner:", err);
-                return res.status(500).json({ success: false, error: "Database update error" });
+                console.error("Commit error:", err);
+                return res.status(500).json({ success: false, error: "Database commit error" });
               });
             }
-          }
-        );
-      });
-      db.commit((err) => {
-        if (err) {
-          return db.rollback(() => {
-            console.error("Commit error:", err);
-            return res.status(500).json({ success: false, error: "Database commit error" });
+            // commit succeeded
+            return res.status(200).json({ success: true, winners });
           });
-        }
-      });
+        })
+        .catch((updateErr) => {
+          // If any update failed, rollback and report the error
+          db.rollback(() => {
+            console.error("Error updating winner:", updateErr);
+            return res.status(500).json({ success: false, error: "Database update error", details: updateErr.message });
+          });
+        });
     });
-    return res.status(200).json({ success: true, winners });
   } catch (err) {
     console.error("Error handling set_winners:", err);
     return res.status(500).json({ success: false, error: "Server error parsing winners" });

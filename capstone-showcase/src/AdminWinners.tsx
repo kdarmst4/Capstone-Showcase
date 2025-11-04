@@ -98,6 +98,7 @@ export function Winners() {
     });
     setLoading(false);
     if(res.status === 200){
+      console.log('status code', res.status);
       alert("Winners saved successfully!");
     }
     else{
