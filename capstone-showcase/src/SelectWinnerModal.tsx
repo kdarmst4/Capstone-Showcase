@@ -39,13 +39,13 @@ export function SelectWinnerModal({
       <form className="modal-winner-form" onSubmit={saveWinner}>
         <section>
           <h3>Project Title: </h3>
-          <p>{project.ProjectTitle}</p>
+          <p>{project.projectTitle}</p>
           <h3>Project Description</h3>
-          <p>{project.ProjectDescription}</p>
+          <p>{project.projectDescription}</p>
           <h3>Project sponsor: </h3>
-          <p>{project.Sponsor}</p>
+          <p>{project.sponsor}</p>
           <h3>Project Members</h3>
-          <p>{project.MemberNames}</p>
+          <p>{project.teamMemberNames}</p>
           <section>
             <label htmlFor="position">Select Position:</label>
             <select

@@ -320,7 +320,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+ const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -366,27 +366,24 @@ WHERE position IS NOT NULL;`;
 app.get("/api/winner/:id", (req, res) => {
   const { id } = req.params;
   const sql = `SELECT 
-  CourseNumber AS course,
-  VideoLinkRaw AS video,
-  shouldDisplay,
+    Major AS course,
+  youtubeLink AS video,
   position AS position,
-  MemberNames AS members,
+  teamMemberNames AS members,
   Sponsor,
   ProjectDescription AS description,
   ProjectTitle,
   winning_pic,
-  shouldDisplay,
-  NDA,
-  EntryID,
-  YEAR(DateStamp) AS year,
+  id,
+  YEAR(submitDate) AS year,
   CASE 
-    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
-    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
-    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
-    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
+    WHEN MONTH(submitDate) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(submitDate) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(submitDate) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
   END AS semester
-FROM showcaseentries
-WHERE position IS NOT NULL AND EntryID = ?;`;
+FROM survey_entries
+WHERE position IS NOT NULL AND id = ?;`;
   db.query(sql, [id], (err, results) => {
     if (err) {
       console.error("Error retrieving winners data:", err);
@@ -458,7 +455,7 @@ app.get("/api/projects/:semester/:year", (req, res) => {
   const endDate = `${year}-${endMonth}-01 00:00:00`;
   // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
   db.query(
-    "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?",
+    "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?",
     [startDate, endDate],
     (err, results) => {
       // db.query("SELECT * FROM survey_entries;", (err, results) => {
@@ -550,7 +547,7 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
   let query = "";
   let queryParams = [];
   // query = 'select * from survey_entries where submitDate BETWEEN ? AND ? AND major = ?';
-  query = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  query = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   queryParams = [startDate, endDate];
   if (discipline && discipline !== "all") {
     query += " AND major = ?";
@@ -572,25 +569,21 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
 
 app.put("/api/:id/update", (req, res) => {
   const { id } = req.params;
-  console.log("ID to update:", id);
-  // console.log("Request body:", req.body);
   const keys = Object.keys(req.body);
   const values = Object.values(req.body);
 
-  let query = "UPDATE showcaseentries SET ";
+  let query = "UPDATE survey_entries SET ";
   for (const key of keys) {
     query += `${key} = ?, `;
   }
   query = query.slice(0, -2); // Remove trailing comma and space
-  query += ` WHERE EntryID = ${id}`;
-  console.log("Constructed query:", query);
+  query += ` WHERE id = ${id}`;
 
   db.query(query, values, (err) => {
     if (err) {
-      console.error("Error updating entry:", err);
       return res.status(500).send("Server error");
     }
-    console.log("Entry updated successfully");
+  
     res.status(200).json({ message: "Entry updated successfully" });
   });
 });

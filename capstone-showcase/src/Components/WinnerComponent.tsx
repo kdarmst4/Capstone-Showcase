@@ -56,7 +56,9 @@ export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
 
     const normalizePathToUrl = (path: string) => {
     if (!path) return "";
-    const trimmed = path.trim();
+    const thumbnail = path.split(",")[0];
+    if (!thumbnail) return "";
+    const trimmed = thumbnail.trim();
     if (/^https?:\/\//i.test(trimmed)) return trimmed;
     return `${STATIC_BASE_URL}/${trimmed.replace(/^\/+/, "")}`;
   };

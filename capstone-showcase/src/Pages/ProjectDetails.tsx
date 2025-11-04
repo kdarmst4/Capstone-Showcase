@@ -26,9 +26,7 @@ export default function ProjectDetails() {
 
   // Mock images array (replace with actual images from winner object when available)
   const projectImages = winner?.winning_pic && winner?.winning_pic.split(",") || [
-    "https://img.freepik.com/free-photo/cool-geometric-triangular-figure-neon-laser-light-great-backgrounds-wallpapers_181624-9331.jpg",
-    "/src/assets/showcase.jpg",
-    "/src/assets/capstone-showcase/src/assets/asuSquareLogo.png"
+    
   ];
 
   useEffect(() => {

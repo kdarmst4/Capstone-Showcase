@@ -39,8 +39,8 @@ export function Winners() {
       );
 
       filteredWinners.push({
-        projectId: project.EntryID,
-        projectName: project.ProjectTitle,
+        projectId: project.id,
+        projectName: project.projectTitle,
         position: position,
         pictures: imgs,
       });
@@ -198,35 +198,35 @@ export function Winners() {
               {/* Table of submissions will go here */}
               <table>
                 <tr>
-                  <th>EntryId</th>
+                  <th>id</th>
                   <th>Project Title</th>
                   <th>Project Desc</th>
-                  <th>Member Count</th>
+                  <th>Major</th>
                   <th>Project Sponsor</th>
                 </tr>
                 {projects &&
                   projects.map((project: any) => (
                     <tr
-                      key={project.EntryID}
+                      key={project.id}
                       onClick={() => {
                         setSelectionMade(true);
                         setCurrSelection(project);
                       }}
                     >
                       <td>
-                        <div>{project.EntryID}</div>
+                        <div>{project.id}</div>
                       </td>
                       <td>
-                        <div>{project.ProjectTitle}</div>
+                        <div>{project.projectTitle}</div>
                       </td>
                       <td>
-                        <div>{project.ProjectDescription}</div>
+                        <div>{project.projectDescription}</div>
                       </td>
                       <td>
-                        <div>{project.NumberOfMembers}</div>
+                        <div>{project.major}</div>
                       </td>
                       <td>
-                        <div>{project.Sponsor}</div>
+                        <div>{project.sponsor}</div>
                       </td>
                     </tr>
                   ))}

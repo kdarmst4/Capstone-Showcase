@@ -9,8 +9,8 @@ export default function EditProject({
   project: ProjectObj;
   closeFunc: (changeMap?: Map<string, string> | null) => void;
 }) {
-  const initialMembers = project.MemberNames
-    ? project.MemberNames.split(", ")
+  const initialMembers = project.teamMemberNames
+    ? project.teamMemberNames.split(", ")
     : [];
   const [members, setMembers] = useState(initialMembers);
   const [changeMap, setChangeMap] = useState<Map<string, string>>(new Map());
@@ -39,13 +39,13 @@ export default function EditProject({
     const newMembers = [...members];
     newMembers[index] = value;
     setMembers(newMembers);
-    updateChangeMap("MemberNames", newMembers.join(", "));
+    updateChangeMap("teamMemberNames", newMembers.join(", "));
   };
 
   const removeMember = (index: number) => {
     const newMembers = members.filter((_, i) => i !== index);
     setMembers(newMembers);
-    updateChangeMap("MemberNames", newMembers.join(", "));
+    updateChangeMap("teamMemberNames", newMembers.join(", "));
   };
 
 
@@ -71,7 +71,7 @@ export default function EditProject({
     const API_BASE_URL =
       process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
 
-    fetch(`${API_BASE_URL}/${project.EntryID}/update`, {
+    fetch(`${API_BASE_URL}/${project.id}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -82,9 +82,9 @@ export default function EditProject({
       .then(() => {
         // console.log('Data:', data);
 
-        // Create updated changeMap with EntryID for identification
+        // Create updated changeMap with id for identification
         const updatedChangeMap = new Map(changeMap);
-        updatedChangeMap.set("EntryID", project.EntryID.toString());
+        updatedChangeMap.set("EntryId", project.id.toString());
         // console.log("Updated ChangeMap:", Array.from(updatedChangeMap.entries()));  
         // Pass the changes back to the parent
         closeFunc(updatedChangeMap);
@@ -108,8 +108,8 @@ export default function EditProject({
             type="text"
             id="project-title"
             name="project-title"
-            defaultValue={project.ProjectTitle}
-            onChange={(e) => updateChangeMap("ProjectTitle", e.target.value)}
+            defaultValue={project.projectTitle}
+            onChange={(e) => updateChangeMap("projectTitle", e.target.value)}
           />
         </section>
 
@@ -118,9 +118,9 @@ export default function EditProject({
           <textarea
             id="project-description"
             name="project-description"
-            defaultValue={project.ProjectDescription}
+            defaultValue={project.projectDescription}
             onChange={(e) =>
-              updateChangeMap("ProjectDescription", e.target.value)
+              updateChangeMap("projectDescription", e.target.value)
             }
           />
         </section>
@@ -131,8 +131,8 @@ export default function EditProject({
             type="text"
             id="sponsor"
             name="sponsor"
-            defaultValue={project.Sponsor}
-            onChange={(e) => updateChangeMap("Sponsor", e.target.value)}
+            defaultValue={project.sponsor}
+            onChange={(e) => updateChangeMap("sponsor", e.target.value)}
           />
         </section>
 
@@ -142,19 +142,19 @@ export default function EditProject({
             type="email"
             id="email"
             name="email"
-            defaultValue={project.Email}
-            onChange={(e) => updateChangeMap("Email", e.target.value)}
+            defaultValue={project.email}
+            onChange={(e) => updateChangeMap("email", e.target.value)}
           />
         </section>
 
         <section>
-          <label>Course Number:</label>
+          <label>Major:</label>
           <input
             type="text"
             id="course-number"
             name="course-number"
-            defaultValue={project.CourseNumber}
-            onChange={(e) => updateChangeMap("CourseNumber", e.target.value)}
+            defaultValue={project.major}
+            onChange={(e) => updateChangeMap("major", e.target.value)}
           />
         </section>
 
@@ -188,68 +188,14 @@ export default function EditProject({
           </div>
         </section>
 
-        <section className="checkbox-group">
-          <div>
-            <input
-              type="checkbox"
-              id="demo"
-              name="demo"
-              defaultChecked={project.Demo === "Yes"}
-              onChange={(e) =>
-                updateChangeMap("Demo", e.target.checked ? "Yes" : "No")
-              }
-            />
-            <label htmlFor="demo">Demo Required</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              id="power"
-              name="power"
-              defaultChecked={project.Power === "Yes"}
-              onChange={(e) =>
-                updateChangeMap("Power", e.target.checked ? "Yes" : "No")
-              }
-            />
-            <label htmlFor="power">Power Required</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              id="nda"
-              name="nda"
-              defaultChecked={project.NDA === "Yes"}
-              onChange={(e) =>
-                updateChangeMap("NDA", e.target.checked ? "Yes" : "No")
-              }
-            />
-            <label htmlFor="nda">NDA Required</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              id="should-display"
-              name="should-display"
-              defaultChecked={project.ShouldDisplay === "Yes"}
-              onChange={(e) =>
-                updateChangeMap(
-                  "ShouldDisplay",
-                  e.target.checked ? "Yes" : "No"
-                )
-              }
-            />
-            <label htmlFor="should-display">Should Display</label>
-          </div>
-        </section>
-
         <section>
           <label>Video Link:</label>
           <input
             type="url"
             id="video-link"
             name="video-link"
-            defaultValue={project.VideoLinkRaw}
-            onChange={(e) => updateChangeMap("VideoLinkRaw", e.target.value)}
+            defaultValue={project.youtubeLink}
+            onChange={(e) => updateChangeMap("youtubeLink", e.target.value)}
           />
         </section>
 
