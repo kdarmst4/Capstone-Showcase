@@ -18,7 +18,6 @@
   flex-direction: row;
   gap: 16px;
   padding: 20px;
-  background-color: white;
 }
 .winners-winners-winningpic
 {
@@ -153,7 +152,7 @@
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
   text-decoration: none;
   display: inline-block;
 }

@@ -1,7 +1,11 @@
 import "../CSS/Winners.css";
 import { WinnerComponent } from "../Components/WinnerComponent";
+import { useEffect } from "react";
 import useWinners from "../Hooks/useWinners";
 import Footer from "./Footer";
+
+
+
 
 const Winner: React.FC = () => {
   const {
@@ -10,12 +14,13 @@ const Winner: React.FC = () => {
     hasFiltered,
     searchValue,
     filters,
-    years,
     setFilters,
     handleSearchChange,
     handleFilterSubmit,
     clearFilters,
   } = useWinners();
+
+
 
   return (
     <div className="winners__form-container">
@@ -24,18 +29,12 @@ const Winner: React.FC = () => {
       </h1>
       <p className="winners__showcase-desc">Celebrating academic excellence and innovation through outstanding student achievements at Arizona State University.</p>
 
-      <div className="winners__search-bar-container">
+      <div className="winners__filter-bar-container">
         <form className="winners__form" onSubmit={handleFilterSubmit}>
-          <div className="winners__left-search-bar">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchValue}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                className="winners__filter-param"
-              />
+        {/* <form className="winners__form"> */}
+          <div className="winners__left-filter-bar">
 
-              <div className="winners__item-container">
+              {/* <div className="winners__item-container">
                 <label htmlFor="semester"></label>
                 <select
                   name="semester"
@@ -67,14 +66,14 @@ const Winner: React.FC = () => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
 
               <div className="winners__item-container">
                 <label htmlFor="department"></label>
                 <select
                   name="department"
                   id="department"
-                  className="winners__filter-param"
+                  className="winners__filter-param winners__department-dropdown"
                   value={filters.department}
                   onChange={(e) => setFilters({ ...filters, department: e.target.value })}
                 >
@@ -89,6 +88,14 @@ const Winner: React.FC = () => {
                   <option value="interdisciplinary">Interdisciplinary</option>
                 </select>
               </div>
+
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="winners__filter-param winners__search-input"
+              />
           </div>
 
           <div className="winners__item-container">

@@ -48,7 +48,7 @@ const Informatics: React.FC = () => {
     document.body.classList.add("informatics-page-body");
 
     //fetch(`http://localhost:3000/api/survey/informatics/term=${selectedSemester}-${selectedYear}`)// Fetch projects for the Computer Science major
-    fetch(`${API_BASE_URL}/api/survey/informatics/term=${semester}-${year}`) // Fetch projects for the Computer Science major
+    fetch(`${API_BASE_URL}/survey/informatics/term=${semester}-${year}`) // Fetch projects for the Computer Science major
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -179,7 +179,6 @@ const Informatics: React.FC = () => {
                <section className="project-catalog">
                 <div className="projects-grid">
                   {currentProjects.map((project, index) => (
-                    <Link to ={`/survey/${project.id}`} state={{ project }} key={project.id}>
                     <div
                       key={project.id || index}
                       className="project-card"
@@ -192,11 +191,22 @@ const Informatics: React.FC = () => {
                           className="youtube-thumbnail"
                         />
                       )}
+
                       <div className="project-details">
-                        <h4 className="project-title left-aligned">{project.projectTitle}</h4>
+                        <h4 className="project-title left-aligned">
+                          <Link
+                            to={`/survey/${project.id}`}
+                            state={{ project }}
+                            className="project-title-link"
+                          >
+                            {project.projectTitle}
+                          </Link>
+                        </h4>
+
                         <p className="project-description left-aligned">
                           {project.projectDescription}
                         </p>
+
                         <div className="project-meta">
                           <p>
                             <strong>Team:</strong> {project.teamMemberNames}
@@ -207,12 +217,9 @@ const Informatics: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    </Link> 
-
                   ))}
                 </div>
               </section>
-
 
               {/*Pagination*/}
               {totalPages > 1 && (
