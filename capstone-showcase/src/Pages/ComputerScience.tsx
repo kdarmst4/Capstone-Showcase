@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/ComputerScience.css";
 import "../CSS/ProjectCards.css";
-import "../CSS/Pagination.css";
 import "../CSS/ProjectShowcase.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
