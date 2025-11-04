@@ -687,7 +687,8 @@ app.get('/api/single_survey/:id', (req, res) => {
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
 
 try {
-    // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
+      // add functionality to clear previous winners before setting new ones
+
     const winners = [];
     // Determine number of winners by checking body keys for projectIdX
     const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));

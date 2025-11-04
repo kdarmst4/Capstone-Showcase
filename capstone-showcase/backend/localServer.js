@@ -695,6 +695,7 @@ app.get('/api/single_survey/:id', (req, res) => {
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
   console.log('here is the body', req.body);
   console.log("/api/set_winners req.files:", req.files && req.files.length);
+  // add functionality to clear previous winners before setting new ones
 try {
     // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
     const winners = [];
