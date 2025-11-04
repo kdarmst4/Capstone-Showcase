@@ -105,51 +105,6 @@
   /* transform: scaleY(.5);
   transform-origin: top; */
 }
-.line1 {
-  position: absolute;
-  left: 8%;
-  top: 35%;
-  height: 225vh;
-}
-.line2 {
-  position: absolute;
-  left: 37%;
-  top: 50%;
-  height: 210vh;
-}
-.line3 {
-  position: absolute;
-  left: 75.4%;
-  top: 50%;
-  height: 210vh;
-}
-.line4 {
-  position: absolute;
-  left: 96.9%;
-  top: 50%;
-  height: 210vh;
-}
-.line5 {
-  position: absolute;
-  top: -65.1%;
-  /* left: 80%; */
-  transform: rotate(90deg) translateY(-55%);
-  height: 100vw;
-}
-.line6 {
-  position: absolute;
-  top: 11.1%;
-  /* left: 80%; */
-  transform: rotate(90deg) translateY(-55%);
-  height: 100vw;
-}
-.line7 {
-  position: absolute;
-  top: 87.3%;
-  /* left: 80%; */
-  transform: rotate(90deg) translateY(-55%);
-  height: 100vw;
-}
 
 @media(max-width: 1440px) {
   .winner-container {

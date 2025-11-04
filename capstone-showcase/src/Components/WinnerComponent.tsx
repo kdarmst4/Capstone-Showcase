@@ -38,13 +38,6 @@ export function WinnerComponent<T extends Record<string, any>>({ winners }: Winn
   return (
     <div className="winner-component__parent-container">
       <div className="winner-container">
-          {/* <div className="grid-line line1"/>
-          <div className="grid-line line2"/>
-          <div className="grid-line line3"/>
-          <div className="grid-line line4"/>
-          <div className="grid-line line5"/>
-          <div className="grid-line line6"/>
-          <div className="grid-line line7"/> */}
           {winners.map((winner, index) => {return(
             <>
               <div className={`text-container ${'text-' + (index + 1)}`}>
@@ -61,8 +54,8 @@ export function WinnerComponent<T extends Record<string, any>>({ winners }: Winn
                 </div>
               </div>
               <div className={`image-container ${'pic-' + (index + 1)}`}>
-                <img src={winner.teamImage} alt="Team" className="winner-image" />
-                <img src={winner.posterImage} alt="Poster" className="winner-image" />
+                <img src={winner.teamImage} alt="winner-image" className="winner-image"/>
+                <img src={winner.posterImage} alt="winner-image" className="winner-image"/>
                 {/* <img src={firstPlaceGroup} alt="First Place Group" className="group-image" /> */}
                 {/*Add a link to redirect to the project here?*/}
               </div>

@@ -3,12 +3,18 @@ import { WinnerComponent } from "../Components/WinnerComponent";
 import { useEffect } from "react";
 import useWinners from "../Hooks/useWinners";
 import Footer from "./Footer";
-import firstPlaceTeam from "../assets/winners/team-1.jpg";
-import secondPlaceTeam from "../assets/winners/team-2.jpg";
-import thirdPlaceTeam from "../assets/winners/team-3.jpg";
-import firstPlacePoster from "../assets/winners/poster-1.jpg";
-import secondPlacePoster from "../assets/winners/poster-2.jpg";
-import thirdPlacePoster from "../assets/winners/poster-3.jpg";
+import firstPlaceTeam from "../assets/winners/team-1.webp";
+import secondPlaceTeam from "../assets/winners/team-2.webp";
+import thirdPlaceTeam from "../assets/winners/team-3.webp";
+import firstPlacePoster from "../assets/winners/poster-1.webp";
+import secondPlacePoster from "../assets/winners/poster-2.webp";
+import thirdPlacePoster from "../assets/winners/poster-3.webp";
+import firstPlaceTeamJPG from "../assets/winners/team-1.jpg";
+import secondPlaceTeamJPG from "../assets/winners/team-2.jpg";
+import thirdPlaceTeamJPG from "../assets/winners/team-3.jpg";
+import firstPlacePosterJPG from "../assets/winners/poster-1.jpg";
+import secondPlacePosterJPG from "../assets/winners/poster-2.jpg";
+import thirdPlacePosterJPG from "../assets/winners/poster-3.jpg";
 
 const winners = [
   {
@@ -16,21 +22,27 @@ const winners = [
     project: "CS/E-026 - ASU - NASA - Web-Based Game for Psyche Mission to Educate and Engage the Public about Asteroid Exploration",
     members: "(Pictured left to right) Andrew Rodriguez, Elias Hilaneh, Munghoon Cho(Not Present)",
     teamImage: firstPlaceTeam,
+    teamImageJPG: firstPlaceTeamJPG,
     posterImage: firstPlacePoster,
+    posterImageJPG: firstPlacePosterJPG,
   },
   {
     title: "Second Place",
     project: "CS/E-173 - Varsity Media Foundation - Varsity Sports Show subscription internet channel to view sporting events",
     members: "(Pictured left to right) Evangelos Leros, Marisol Alvira, Nilay Patel (Not Present)",
     teamImage: secondPlaceTeam,
+    teamImageJPG: secondPlaceTeamJPG,
     posterImage: secondPlacePoster,
+    posterImageJPG: secondPlacePosterJPG,
   },
   {
     title: "Third Place",
     project: "IEE-024 - Banner 2: Emergency Department(ED) Simulation 2",
     members: "(Pictured left to right) Ethan McLaughlin, Amanda Zaccardi, Ryan Cassara",
     teamImage: thirdPlaceTeam,
+    teamImageJPG: thirdPlaceTeamJPG,
     posterImage: thirdPlacePoster,
+    posterImageJPG: thirdPlacePosterJPG,
   },
 ];
 
