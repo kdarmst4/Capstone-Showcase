@@ -1,29 +1,30 @@
 export interface ProjectObj {
-  EntryID: number;
-  Email: string;
+  id: number;
+  email: string;
+  major: string;
   Name: string;
-  ProjectTitle: string;
-  ProjectDescription: string;
-  Sponsor: string;
+  projectTitle: string;
+  projectDescription: string;
+  sponsor: string;
   NumberOfMembers: number;
-  MemberNames: string;
+  teamMemberNames: string;
   CourseNumber: string;
   Demo: string;  
   Power: string; 
   NDA: string;   
   VideoLink: string;
-  VideoLinkRaw: string;
+  youtubeLink: string;
   DateStamp: string;
   ShouldDisplay: string; 
-  position: string;
+  position: string | number;
   winning_pic: string | null;
 }
 
 export interface WinnerSelection {
-  position: string;
+  position: string | number;
   projectId: number;
   projectName: string;
-  pictures: string[];
+  pictures: File[];
 }
 
 export interface ShowcaseEntry {

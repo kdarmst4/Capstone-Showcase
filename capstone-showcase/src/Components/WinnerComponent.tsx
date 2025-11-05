@@ -1,14 +1,26 @@
-
-import { Divide, ImageMinus } from "lucide-react";
+import { ImageMinus } from "lucide-react";
 
 import "../CSS/WinnerComponent.css";
-import type { ShowcaseEntry } from "../Hooks/useWinners";
 
-interface WinnerComponentProps<T extends Record<string, any>> {
-  winners: T[];
-}
+import { Link } from "react-router-dom";
+type ShowcaseEntry = {
+  course: string;
+  id: number;
+  video: string;
+  shouldDisplay: "YES" | "NO";
+  position: number;
+  members: string;
+  Sponsor: string;
+  description: string;
+  ProjectTitle: string;
+  winning_pic: string | null;
+  department?: string;
+  NDA: "Yes" | "No";
+  year: number;
+  semester: "Spring" | "Summer" | "Fall" | "Winter";
+};
 
-export function WinnerComponent<T extends Record<string, any>>({ winners }: WinnerComponentProps<T>) {
+export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
   const getSource = (position?: number) => {
     switch (position) {
       case 1:
@@ -34,87 +46,86 @@ export function WinnerComponent<T extends Record<string, any>>({ winners }: Winn
         return "";
     }
   };
+    const STATIC_BASE_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+
+  const API_BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? "/api"
+      : "http://localhost:3000/api";
+
+    const normalizePathToUrl = (path: string) => {
+    if (!path) return "";
+    const thumbnail = path.split(",")[0];
+    if (!thumbnail) return "";
+    const trimmed = thumbnail.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return `${STATIC_BASE_URL}/${trimmed.replace(/^\/+/, "")}`;
+  };
 
   return (
     <div className="winner-component__parent-container">
-      <div className="winner-container">
-          {/* <div className="grid-line line1"/>
-          <div className="grid-line line2"/>
-          <div className="grid-line line3"/>
-          <div className="grid-line line4"/>
-          <div className="grid-line line5"/>
-          <div className="grid-line line6"/>
-          <div className="grid-line line7"/> */}
-          {winners.map((winner, index) => {return(
-            <>
-              <div className={`text-container ${'text-' + (index + 1)}`}>
-                <p className="place-header">
-                {winner.title}
+      {winners.length === 0 ? (
+        <p className="winner-component__no-results">No results found.</p>
+      ) : (
+        <div className="winner-component__winner-container">
+          {winners.map((winner: ShowcaseEntry, index: number) => (
+            <div key={index} className="winner-component__winner-card">
+              {/* Image placeholder */}
+              <div className="winner-component__winner-image">
+                <img
+                  src={normalizePathToUrl(winner.winning_pic || "")}
+                  alt={winner.ProjectTitle}
+                  className="winners-winners-winningpic"
+                />
+                <img
+                  src={getSource(winner.position) || ""}
+                  alt={winner.ProjectTitle}
+                  className="winner-component__winner-medal"
+                  style={{ background: getbackground(winner.position) }}
+                />
+              </div>
+
+              {/* Text section */}
+              <div className="winner-component__winner-text-section">
+                <p
+                  className="winner-component__winner-project"
+                  title={winner.ProjectTitle}
+                >
+                  {winner.ProjectTitle}
                 </p>
-                <div className="text-subgroup">
-                  <p className='winner-title-text'>
-                    {winner.project}
-                  </p>
-                  <p className='winner-desc-text'>
-                    {winner.members}
-                  </p>
+                <p
+                  className="winner-component__winner-author"
+                  title={winner.Sponsor || "John Doe"}
+                >
+                  by {winner.Sponsor || "John Doe"}
+                </p>
+                <div className="winner-component__winner-info-row">
+                  <span className="winner-component__winner-semester">
+                    {winner.semester} {winner.year}
+                  </span>
+                  <span className="winner-component__winner-department">
+                    {winner.department || "Computer Science"}
+                  </span>
+                </div>
+                <p className="winner-component__winner-description">
+                  {winner.description}
+                </p>
+                <div className="winner-component__winner-details-link-container">
+                  <Link
+                    to={`/winners/entry/${winner.id || 0}`}
+                    state={winner}
+                    className="winner-component__winner-details-link"
+                  >
+                    More Details
+                  </Link>
+                  
                 </div>
               </div>
-              <div className={`image-container ${'pic-' + (index + 1)}`}>
-                <img src={winner.teamImage} alt="Team" className="winner-image" />
-                <img src={winner.posterImage} alt="Poster" className="winner-image" />
-                {/* <img src={firstPlaceGroup} alt="First Place Group" className="group-image" /> */}
-                {/*Add a link to redirect to the project here?*/}
-              </div>
-            </>
-          )})}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-    // </div>
-    // <div className="winner-component__parent-container">
-    //   {winners.length === 0
-    //     ? <p className="winner-component__no-results">No results found.</p> 
-    //     : <div className="winner-component__winner-container">
-    //       {winners.map((winner: ShowcaseEntry, index: number) => (
-    //               <div key={index} className="winner-component__winner-card">
-    //                 {/* Image placeholder */}
-    //                 <div className="winner-component__winner-image">
-    //                   <ImageMinus size={80} />
-    //                   <img
-    //                     src={getSource(winner.position)}
-    //                     alt={winner.ProjectTitle}
-    //                     className="winner-component__winner-medal"
-    //                     style={{ background: getbackground(winner.position) }}
-    //                   />
-    //                 </div>
-
-    //                 {/* Text section */}
-    //                 <div className="winner-component__winner-text-section">
-    //                   <p className="winner-component__winner-project" title={winner.ProjectTitle}>{winner.ProjectTitle}</p>
-    //                   <p className="winner-component__winner-author" title={winner.Sponsor || "John Doe"}>by {winner.Sponsor || "John Doe"}</p>
-    //                   <div className="winner-component__winner-info-row">
-    //                     <span className="winner-component__winner-semester">
-    //                       {winner.semester} {winner.year}
-    //                     </span>
-    //                     <span className="winner-component__winner-department">{winner.department || "Computer Science"}</span>
-    //                   </div>
-    //                   <p className="winner-component__winner-description">{winner.description}</p>
-    //                   <div className="winner-component__winner-details-link-container">
-    //                     <button
-    //                       onClick={() => {
-    //                       const encodedWinner = encodeURIComponent(JSON.stringify(winner));
-    //                       console.log('encodedWinner', encodedWinner);
-    //                       window.location.href = `/winners/entry/${winner.EntryID || 1}?data=${encodedWinner}`;
-    //                       }}
-    //                       className="winner-component__winner-details-link"
-    //                     >
-    //                       More Details
-    //                     </button>
-    //                   </div>
-    //                 </div>
-    //               </div>
-    //             ))}
-    //       </div>      
-    //   }
   );
 }

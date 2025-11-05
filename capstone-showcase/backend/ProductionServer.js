@@ -72,6 +72,7 @@ const credentials = {key: privateKey, cert: certificate};
 
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
+app.use("/winnerUploads", express.static("winnerUploads"));
 
 //Image Upload And Storgae API
 
@@ -85,6 +86,12 @@ if (!fs.existsSync(uploadDir)) {
 const uploadTeamDir = "./teamUploads";
 if (!fs.existsSync(uploadTeamDir)) {
   fs.mkdirSync(uploadTeamDir);
+}
+
+//Winner Images Directory
+const uploadWinnerDir = "./winnerUploads";
+if (!fs.existsSync(uploadWinnerDir)) {
+  fs.mkdirSync(uploadWinnerDir);
 }
 
 //Poster Image Upload Storage
@@ -110,6 +117,17 @@ const storageTeam = multer.diskStorage({
   },
 });
 const uploadTeam = multer({ storage: storageTeam });
+//winner upload storage
+const storageWinner = multer.diskStorage({
+  destination: "./winnerUploads/",
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+const uploadWinner = multer({ storage: storageWinner });
 
 app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
@@ -499,7 +517,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 
   // console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -535,7 +553,7 @@ app.get("/api/projects/:semester/:year", (req, res) => {
   const endDate = `${year}-${endMonth}-01 00:00:00`;
   // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
   db.query(
-    "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?",
+    "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?",
     [startDate, endDate],
     (err, results) => {
       // db.query("SELECT * FROM survey_entries;", (err, results) => {
@@ -606,7 +624,7 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
   let query = "";
   let queryParams = [];
   // query = 'select * from survey_entries where submitDate BETWEEN ? AND ? AND major = ?';
-  query = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  query = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   queryParams = [startDate, endDate];
   if (discipline && discipline !== "all") {
     query += " AND major = ?";
@@ -615,8 +633,10 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
   try {
     db.query(query, queryParams, (err, results) => {
       if (err) {
+        console.error("Error fetching projects:", err);
         return res.status(500).json({ error: "Database query failed" });
       }
+      console.log("Fetched projects:", results);
       res.status(200).json({ results });
     });
   } catch (error) {
@@ -629,12 +649,12 @@ app.put("/api/:id/update", (req, res) => {
   const keys = Object.keys(req.body);
   const values = Object.values(req.body);
 
-  let query = "UPDATE showcaseentries SET ";
+  let query = "UPDATE survey_entries SET ";
   for (const key of keys) {
     query += `${key} = ?, `;
   }
   query = query.slice(0, -2); // Remove trailing comma and space
-  query += ` WHERE EntryID = ${id}`;
+  query += ` WHERE id = ${id}`;
 
   db.query(query, values, (err) => {
     if (err) {
@@ -661,5 +681,133 @@ app.get('/api/single_survey/:id', (req, res) => {
       return res.status(404).send("Survey entry not found");
     }
     res.status(200).json(results[0]);
+  });
+});
+
+app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
+
+try {
+      // add functionality to clear previous winners before setting new ones
+
+    const winners = [];
+    // Determine number of winners by checking body keys for projectIdX
+    const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));
+    const count = projectIdKeys.length;
+
+    for (let i = 1; i <= count; i++) {
+      const projectId = req.body[`projectId${i}`];
+      const position = req.body[`position${i}`];
+
+      // Collect files for this winner (fieldnames like picture{i}_{j})
+      const filesForWinner = (req.files || []).filter((f) => new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname));
+      const filePaths = filesForWinner.map((f) => {
+        return `/winnerUploads/${f.filename}`;
+      });
+
+      winners.push({ projectId: Number(projectId), position: Number(position), pictures: filePaths });
+    }
+
+    console.log("Parsed winners:", winners);
+
+    db.beginTransaction((err) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: "Database transaction error" });
+      }
+
+      const updatePromises = winners.map((winner) => {
+        return new Promise((resolve, reject) => {
+          const sql = "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
+          db.query(
+            sql,
+            [winner.position, winner.pictures.join(","), winner.projectId],
+            (err, results) => {
+              if (err) return reject(err);
+              resolve(results);
+            }
+          );
+        });
+      });
+
+      Promise.all(updatePromises)
+        .then(() => {
+          db.commit((err) => {
+            if (err) {
+              return db.rollback(() => {
+                return res.status(500).json({ success: false, error: "Database commit error" });
+              });
+            }
+            return res.status(200).json({ success: true, winners });
+          });
+        })
+        .catch((updateErr) => {
+          db.rollback(() => {
+            return res.status(500).json({ success: false, error: "Database update error", details: updateErr.message });
+          });
+        });
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: "Server error parsing winners" });
+  }
+});
+
+app.get("/api/winners", (req, res) => {
+  const sql = `SELECT 
+  Major AS course,
+  youtubeLink AS video,
+  position AS position,
+  teamMemberNames AS members,
+  Sponsor,
+  ProjectDescription AS description,
+  ProjectTitle,
+  winning_pic,
+  id,
+  YEAR(submitDate) AS year,
+  CASE 
+    WHEN MONTH(submitDate) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(submitDate) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(submitDate) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
+  END AS semester
+FROM survey_entries
+WHERE position IS NOT NULL;`;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error retrieving winners data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
+});
+
+//getting a specific winner by id
+app.get("/api/winner/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = `SELECT 
+    Major AS course,
+  youtubeLink AS video,
+  position AS position,
+  teamMemberNames AS members,
+  Sponsor,
+  ProjectDescription AS description,
+  ProjectTitle,
+  winning_pic,
+  id,
+  YEAR(submitDate) AS year,
+  CASE 
+    WHEN MONTH(submitDate) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(submitDate) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(submitDate) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
+  END AS semester
+FROM survey_entries
+WHERE position IS NOT NULL AND id = ?;`;
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error retrieving winners data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
   });
 });

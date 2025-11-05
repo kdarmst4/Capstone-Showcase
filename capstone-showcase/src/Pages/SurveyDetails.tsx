@@ -20,7 +20,7 @@ interface ProjectData {
   power: number;
   nda: number;
   youtubeLink: string;
-  teamPicturePath: string; 
+  teamPicturePath: string;
   posterPicturePath: string;
 }
 
@@ -45,9 +45,10 @@ export function SurveyDetails() {
   );
   console.log("SurveyDetails project:", project);
 
+  // teamMemberNames may use commas or newlines — we'll normalize when building `teamMembers` in effect
   // team member names and final resolved photo URLs
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
-  const [teamMemberPhotos, setTeamMemberPhotos] = useState<string[]>([]); 
+  const [teamMemberPhotos, setTeamMemberPhotos] = useState<string[]>([]);
 
   const normalizePathToUrl = (path: string) => {
     if (!path) return "";
@@ -78,14 +79,13 @@ export function SurveyDetails() {
     };
   }, [API_BASE_URL, id, project]);
 
-
   useEffect(() => {
     if (!project) return;
 
-    // names
+    // names — accept commas and newlines as separators
     const names = project.teamMemberNames
       ? project.teamMemberNames
-          .split(",")
+          .split(/[,\n\r]+/) // split on commas or newlines (CR/LF)
           .map((n) => n.trim())
           .filter(Boolean)
       : [];
@@ -179,133 +179,89 @@ export function SurveyDetails() {
         <p className="project-description-text">{project.projectDescription}</p>
       </div>
 
-      <div className="video-and-members">
-        {project.youtubeLink && (
-          <div className="video-container">
-            <iframe
-              src={getYouTubeEmbedUrl(project.youtubeLink)}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="video-iframe"
-            />
-          </div>
-        )}
-
-        {project.posterPicturePath ? (
-          <div className="poster-container">
-            <img
-              src={`${STATIC_BASE_URL}${project.posterPicturePath}`}
-              alt="Project Poster"
-            />
-          </div>
-        ) : (
-          <div
-            className="team-members-section"
-          >
-            <h3>
-              <Users size={20} />
-              Team Members
-            </h3>
-            <div className="team-members-list">
-              {teamMembers.map((name, i) => (
-                <span key={i} className="member-tag">
-                  <span className="survey-detail-img-container">
-                    <img
-                      src={teamMemberPhotos[i] ?? Missing_photo}
-                      alt={name}
-                      onError={(e) => {
-                        const target = e.currentTarget as HTMLImageElement;
-                        if (target.src !== Missing_photo)
-                          target.src = Missing_photo;
-                      }}
-                    />
-                  </span>
-                  {/* <p>{name}</p> */}
-                </span>
-              ))}
+      <div className="video-team-members-posters">
+        <span className="video-team-members">
+          {project.youtubeLink && (
+            <div className="video-container">
+              <iframe
+                src={getYouTubeEmbedUrl(project.youtubeLink)}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="video-iframe"
+              />
             </div>
+          )}
 
-            <div style={{ width: "136px" }}>
-              <h3>
-                <Building size={20} />
-                Sponsor
-              </h3>
-              <span className="sub-member-tag">{project.sponsor}</span>
+          {project.teamMemberNames && (
+            <div className="team-members-section">
+              <h3>Team Members</h3>
+              {project.teamPicturePath ? (
+                <img
+                  className="team-members-img"
+                  src={normalizePathToUrl(project.teamPicturePath)}
+                  alt="Team Members"
+                />
+              ) : (
+                <div className="team-members-list">
+                  {teamMembers.map((name, i) => (
+                    <span key={i} className="member-tag-names">
+                      <p>{name}</p>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
+          )}
+          <span className="extra-details-survey">
+            {project.sponsor && (
+              <span className="detail-item-survey">
+                <p>
+                  <Building size={16} /> Project Sponsor
+                </p>
 
-            <div>
-              <h3>
-                <User size={20} />
-                Project Lead
-              </h3>
-              <span className="sub-member-tag">{project.name}</span>
-            </div>
-
-            <div>
-              <h3>
-                <Mail size={20} />
-                Contact Email
-              </h3>
-              <span className="sub-member-tag">{project.email}</span>
-            </div>
-          </div>
-        )}
-      </div>
-      {!project.projectDescription && (
-        
-      <div className="second-team-members-section">
-        <span className="second-team-members-section-first-span">
-          <h3>
-            <Users size={20} />
-            Team Members
-          </h3>
-          <div className="team-members-list">
-            {teamMembers.map((name, i) => (
-              <span key={i} className="member-tag">
-                <span className="survey-detail-img-container">
-                  <img
-                    src={teamMemberPhotos[i] ?? Missing_photo}
-                    alt={name}
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      if (target.src !== Missing_photo)
-                        target.src = Missing_photo;
-                    }}
-                  />
-                </span>
-                <p>{name}</p>
+                <p>{project.sponsor}</p>
               </span>
-            ))}
-          </div>
+            )}
+
+            {project.name && (
+              <span className="detail-item-survey">
+                <p>
+                  <User size={16} />
+                  Project Name
+                </p>
+                <p>{project.name}</p>
+              </span>
+            )}
+            {project.email && (
+              <span className="detail-item-survey">
+                <p>
+                  <Mail size={16} /> Contact Email
+                </p>
+                <p>{project.email}</p>
+              </span>
+            )}
+          </span>
         </span>
-        <span>
-          <div >
-            <h3>
-              <Building size={20} />
-              Sponsor
-            </h3>
-            <span className="sub-member-tag">{project.sponsor}</span>
-          </div>
-
-          <div>
-            <h3>
-              <User size={20} />
-              Project Lead
-            </h3>
-            <span className="sub-member-tag">{project.name}</span>
-          </div>
-
-          <div>
-            <h3>
-              <Mail size={20} />
-              Contact Email
-            </h3>
-            <span className="sub-member-tag">{project.email}</span>
-          </div>
+        <span className="posters-in-survey-details">
+          {project.posterPicturePath ? (
+            <img
+              src={normalizePathToUrl(project.posterPicturePath)}
+              alt="Project Poster"
+              className="poster-in-survey-details-img"
+            />
+          ) : (
+            <div className="no-poster-found-div">
+              <div className="no-poster-text">
+                <p className="no-poster-title">No poster available</p>
+                <p className="no-poster-sub">
+                  This project did not submit a poster.
+                </p>
+              </div>
+            </div>
+          )}
         </span>
-      </div>      )}
-
+      </div>
 
       <div className="asu-branding">
         <img

@@ -95,28 +95,8 @@
   background-color: var(--asu-gold);
 }
 
-.badge-required {
-  background: var(--asu-gold);
-  color: var(--asu-dark-gray);
-}
 
-.badge-not-required {
-  background: #e9ecef;
-  color: #6c757d;
-}
-.team-dynamics 
-{
-    display: flex;
-    justify-content: space-around;
-    color: black;
-}
-.team-dynamics p 
-{
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--asu-dark-gray);
-    margin: 0.5rem 0;
-}
+
 .project-description-section 
 {
     text-align: left;
@@ -135,144 +115,12 @@
     cursor: pointer;
 }
 
-.video-and-members {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 2rem;
-  align-items: flex-start;
-}
-
-
-.video-container {
-  flex: 1;
-  position: relative;
-  width: 100%;
-  height: auto;
-  padding-bottom: 45%; 
-  overflow: hidden;
-  border-radius: 12px;
-}
-.poster-container 
-{
-  flex:1;
-  min-width: 490px;
-
-}
-
-.second-team-members-section
-{
-  /* give me two column */
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  color: black;
-  
-}
-.second-team-members-section-first-span .team-members-list
-{
-  display: flex;
-  justify-content: center !important;
-  text-align: left;
-}
-.second-team-members-section h3 
-{
-  color: var(--asu-maroon);
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--asu-light-gray);
-  text-decoration: underline;
-}
-.second-team-members-section span 
-{
-  display: flex;
-  flex-direction: column;
-}
-
-.second-team-members-section .sub-member-tag 
-{
-  font-size: 0.85rem;
-  color: var(--asu-dark-gray);
-  font-weight: 700;
-  text-align: left;
-  border-radius: 8px;
-  padding: 0.5rem;
-  border: 1px solid black;
-}
-.second-team-members-section .sub-member-tag:hover 
-{
-  background: var(--asu-gold);
-  color: var(--asu-dark-gray);
-  transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  border: 1px solid black;
-}
-
-.video-iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 65%;
-  border-radius: 12px;
-  padding: 24px 0;
-}
-
-.team-members-section {
-  flex: 1;
-  flex-grow: 1;
-  padding: 1.5rem 0 0 0;
-  min-height: fit-content;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  min-width: 490px;
-}
-
-.team-members-section h3 {
-  color: var(--asu-maroon);
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--asu-light-gray);
-}
-
-.team-members-list {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
 
 
 
-.member-tag {
-  display: flex;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  max-width: 136px ;
-  gap: 0.5rem;
-  margin: 1px;
-  background: var(--asu-white);
-  color: var(--asu-maroon);
-  border: 2px solid var(--asu-maroon);
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+
+
+
 .survey-detail-img-container 
 {
   width: 100%;
@@ -306,16 +154,6 @@
   font-weight: 600;
 }
 
-/* .member-tag:hover {
-  background: var(--asu-gold);
-  color: var(--asu-dark-gray);
-  transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.member-tag svg {
-  color: var(--asu-maroon);
-} */
 
 .survey-details-content {
   max-width: 1200px;
@@ -341,19 +179,229 @@
 }
 
 
-
-.team-members {
-  margin-top: 1rem;
+/* new poster and teams start here  */
+.video-iframe 
+{
+  width: 100%;
+  height: 300px;
 }
-
-.members-list {
+.video-team-members-posters {
+  margin-top: 10px;
+  max-width: 1060px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+  flex-direction: row;
+  align-items: stretch; /* ensure both columns match height */
+  gap: 1rem;
+
+
+}
+.video-team-members {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex-grow: 1;
+  flex: 40%;
+  min-height: 0; /* allow proper flex shrinking */
+}
+.detail-item-survey p:first-child
+{
+  color: var(--asu-maroon);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.extra-details-survey 
+{
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
+}
+.extra-details-survey p
+{
+  color:var(--asu-maroon);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin: 0;
+
+}
+.extra-details-survey span, .extra-details-survey p
+{
+  color: black;
+  font-size: 1rem;
+}
+.extra-details-survey span 
+{
+  display: flex;
+  flex-direction: column;
+
+}
+.team-members-section 
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: black;
+
+}
+.member-tag-names > p {
+ 
+  color: black;
+  padding: 0.3rem 1rem;
+  border: 1px solid var(--asu-maroon);
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+.member-tag-names > p:hover {
+  background-color: var(--asu-maroon);
+  color: var(--asu-white);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.Project-Poster-survey-details {
+  aspect-ratio: 2/3;
+}
 
+.posters-in-survey-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 40%;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.poster-in-survey-details-img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%; 
+  object-fit: contain;
+  flex: 60%;
+ 
+
+}
+.video-container,.team-members-section
+{
+  width: 100%;
+}
+.no-poster-found-div 
+{
+  background-color: gray;
+  flex-direction: column;
+  padding: 2rem;
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 10px;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+/* new section ends here  */
+
+.video-team-members-posters {
+  margin: 10px auto;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; 
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center; 
+}
+
+.video-team-members {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 0 0 50%; 
+  min-height: 0; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+}
+
+.posters-in-survey-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 50%; 
+  max-width: 65%;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.poster-in-survey-details-img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%; 
+  object-fit: contain;
+  max-height: 770px;
+}
+
+/* No-poster placeholder styles */
+.no-poster-found-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+  border: 1px dashed var(--asu-maroon);
+  border-radius: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+  color: var(--asu-dark-gray);
+}
+.no-poster-icon {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  opacity: 0.9;
+}
+.no-poster-text .no-poster-title {
+  font-weight: 700;
+  color: var(--asu-maroon);
+  margin: 0;
+}
+.no-poster-text .no-poster-sub {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .video-team-members-posters {
+    flex-direction: column;
+    align-items: center;
+  }
+  .video-team-members, .posters-in-survey-details {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+  }
+  .video-team-members
+  {
+    flex-direction: column-reverse;
+  }
+  .poster-in-survey-details-img {
+    max-height: 360px;
+    width: auto;
+  }
+}
 
 .description-card {
   grid-column: 1 / -1;
@@ -376,6 +424,17 @@
 
 
 @media (max-width: 768px) {
+  img.poster-in-survey-details-img
+  {
+    height: 500px !important;
+    width: auto;
+    max-height: 600px;
+  }
+  .extra-details-survey
+  {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
   .survey-details-container {
     padding: 1rem;
   }
@@ -403,16 +462,9 @@
 .video-container {
   position: relative; 
   width: 100%;
-  padding-bottom: 50.25%; 
 }
 
-.video-iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 90%; 
-}
+
 
 .team-members-section {
   flex: none;

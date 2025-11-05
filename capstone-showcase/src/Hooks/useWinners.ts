@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 
 export type ShowcaseEntry = {
   course: string;
   video: string;
-  EntryID: number;
+  id: number;
   shouldDisplay: "YES" | "NO";
   position: number;
   members: string;
@@ -24,25 +23,28 @@ interface Filters {
   department: string;
 };
 
-export default function useWinnersM<T extends Record<string, any>>(initData: T[] = []) {
-  const { semesterParam, yearParam } = useParams<{ semesterParam?: string; yearParam?: string }>();
-
-  const [pastWinnersData, setPastWinnersData] = useState<T[]>(initData);
-  const [filteredWinnersData, setFilteredWinnersData] = useState<T[]>([]);
+export default function useWinners() {
+  const [pastWinnersData, setPastWinnersData] = useState<ShowcaseEntry[]>([]);
+  const [filteredWinnersData, setFilteredWinnersData] = useState<ShowcaseEntry[]>([]);
   const [hasFiltered, setHasFiltered] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [filters, setFilters] = useState<Filters>({
-    semester: semesterParam ?? "all",
-    year: yearParam ?? "all",
+    semester: "all",
+    year: "all",
     department: "all",
   });
 
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 2000 + 1 }, (_, i) => 2000 + i);
+  const API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
+    : "http://localhost:3000/api";
   useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      semester: semesterParam ?? "all",
-      year: yearParam ?? "all",
-    }))
+    fetch(`${API_BASE_URL}/winners`)
+      .then((res) => res.json())
+      .then((data) => setPastWinnersData(data))
+      .catch(() => setPastWinnersData([]));
   }, []);
 
   const departmentMap: Record<string, string> = {
@@ -56,46 +58,37 @@ export default function useWinnersM<T extends Record<string, any>>(initData: T[]
     "interdisciplinary": "Interdisciplinary",
   };
 
-  function applyTextSearch(data: T[], text: string): T[] {
+  function applyTextSearch(data: ShowcaseEntry[], text: string) {
     if (!text) return data;
     const value = text.toLowerCase();
     return data.filter((entry) => {
-      // return (
-      //   entry.ProjectTitle.toLowerCase().includes(value) ||
-      //   entry.members.toLowerCase().includes(value) ||
-      //   entry.description.toLowerCase().includes(value) ||
-      //   entry.Sponsor.toLowerCase().includes(value)
-      // );
-      return Object.values(entry).some((field) => String(field).toLowerCase().includes(value));
+      return (
+        entry.ProjectTitle.toLowerCase().includes(value) ||
+        entry.members.toLowerCase().includes(value) ||
+        entry.description.toLowerCase().includes(value) ||
+        entry.Sponsor.toLowerCase().includes(value)
+      );
     });
   }
 
-function applySelectFilters(data: T[], f: Filters) {
-  return data.filter((entry) => {
-    return Object.entries(f).every(([key, value]) => {
-      if (value.toLowerCase() === "all") return true; 
+  function applySelectFilters(data: ShowcaseEntry[], f: Filters) {
+    return data.filter((entry) => {
+      const semester = f.semester.toLowerCase();
+      const year = f.year.toLowerCase();
+      const department = f.department.toLowerCase();
 
-      const entryValue = entry[key as keyof T];
-
-      // Special handling for department mapping
-      if (key === "department" && departmentMap[value.toLowerCase() as keyof typeof departmentMap]) {
-        const mapped = departmentMap[value.toLowerCase() as keyof typeof departmentMap];
-        return Object.values(entry).some((field) =>
-          String(field).toLowerCase().includes(mapped.toLowerCase())
-        );
-      }
-
-      return String(entryValue).toLowerCase() === value.toLowerCase();
+      return (
+        (semester === "all" || entry.semester.toLowerCase() === semester) &&
+        (year === "all" || entry.year.toString() === year) &&
+        (department === "all" || entry.ProjectTitle.includes(departmentMap[department as keyof typeof departmentMap]))
+      );
     });
-  });
-}
-
+  }
 
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
     setHasFiltered(true);
     const searched = applyTextSearch(pastWinnersData, value);
-    console.log('searched', searched);
     setFilteredWinnersData(searched);
   };
 
@@ -110,19 +103,19 @@ function applySelectFilters(data: T[], f: Filters) {
     e?.preventDefault();
     setHasFiltered(false);
     setSearchValue("");
-    setFilteredWinnersData(pastWinnersData);
+    setFilteredWinnersData([]);
     setFilters({ semester: "all", year: "all", department: "all" });
   };
 
   return {
     pastWinnersData,
-    setPastWinnersData,
     filteredWinnersData,
     hasFiltered,
     searchValue,
     setSearchValue,
     filters,
     setFilters,
+    years,
     handleSearchChange,
     handleFilterSubmit,
     clearFilters,

@@ -53,8 +53,9 @@ export function Edit() {
       if (selection) {
         setProjects((prevProjects) =>
           prevProjects.map((proj: ProjectObj) => {
-            const entryId = selection.get("EntryID");
-            if (entryId !== undefined && proj.EntryID === +entryId) {
+            const entryId = selection.get("EntryId");
+            console.log("Updating project with EntryID:", entryId);
+            if (entryId !== undefined && proj.id === +entryId) {
               return { ...proj, ...Object.fromEntries(selection) };
             }
             return proj;
@@ -120,15 +121,19 @@ export function Edit() {
       
       const res = await fetch(`${API_BASE_URL}/presentation/update`, {
         method: "POST",
-        body: formData, // Send FormData instead of JSON
-        // Don't set Content-Type header - let browser set it with boundary
+        body: formData,
       });
       
       const data = await res.json();
       console.log(data);
       
-      if (res.ok) {
+      if (res.status === 200) {
         alert('Presentation updated successfully!');
+      }
+      else 
+      {
+        console.log(data);
+        alert(data.error);
       }
     } catch (error) {
       console.error("Error in form submission:", error);
@@ -356,23 +361,23 @@ export function Edit() {
               <tbody>
                 {projects.map((project: any) => (
                   <tr
-                    key={project.EntryID}
+                    key={project.id}
                     onClick={() => setSubmissionSelected(project)}
                   >
                     <td>
-                      <div>{project.EntryID}</div>
+                      <div>{project.id}</div>
                     </td>
                     <td>
-                      <div>{project.ProjectTitle}</div>
+                      <div>{project.projectTitle}</div>
                     </td>
                     <td>
-                      <div>{project.ProjectDescription}</div>
+                      <div>{project.projectDescription}</div>
                     </td>
                     <td>
-                      <div>{project.NumberOfMembers}</div>
+                      <div>{project.numberOfTeamMembers}</div>
                     </td>
                     <td>
-                      <div>{project.Sponsor}</div>
+                      <div>{project.sponsor}</div>
                     </td>
                   </tr>
                 ))}

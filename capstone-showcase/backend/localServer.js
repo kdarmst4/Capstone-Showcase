@@ -45,6 +45,10 @@ if (!fs.existsSync(uploadTeamDir)) {
   fs.mkdirSync(uploadTeamDir);
 }
 
+const uploadWinnerDir = "./winnerUploads";
+if (!fs.existsSync(uploadWinnerDir)) {
+  fs.mkdirSync(uploadWinnerDir);
+}
 //Poster Image Upload Storage
 const storagePoster = multer.diskStorage({
   destination: "./posterUploads/",
@@ -68,6 +72,17 @@ const storageTeam = multer.diskStorage({
   },
 });
 const uploadTeam = multer({ storage: storageTeam });
+//winner upload storage
+const storageWinner = multer.diskStorage({
+  destination: "./winnerUploads/",
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+const uploadWinner = multer({ storage: storageWinner });
 
 app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
@@ -225,6 +240,8 @@ app.post("/api/survey", (req, res) => {
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
 
+app.use("/winnerUploads", express.static("winnerUploads"));
+
 app.listen(3000, () => {
   console.log("Server started on port 3000");
 });
@@ -303,7 +320,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
-  const sql = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+ const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -317,26 +334,23 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 //get endpoint to fetch all the winners of prev projects
 app.get("/api/winners", (req, res) => {
   const sql = `SELECT 
-  CourseNumber AS course,
-  VideoLinkRaw AS video,
-  shouldDisplay,
+  Major AS course,
+  youtubeLink AS video,
   position AS position,
-  MemberNames AS members,
+  teamMemberNames AS members,
   Sponsor,
   ProjectDescription AS description,
   ProjectTitle,
   winning_pic,
-  shouldDisplay,
-  NDA,
-  EntryID,
-  YEAR(DateStamp) AS year,
+  id,
+  YEAR(submitDate) AS year,
   CASE 
-    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
-    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
-    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
-    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
+    WHEN MONTH(submitDate) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(submitDate) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(submitDate) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
   END AS semester
-FROM showcaseentries
+FROM survey_entries
 WHERE position IS NOT NULL;`;
   db.query(sql, (err, results) => {
     if (err) {
@@ -352,27 +366,24 @@ WHERE position IS NOT NULL;`;
 app.get("/api/winner/:id", (req, res) => {
   const { id } = req.params;
   const sql = `SELECT 
-  CourseNumber AS course,
-  VideoLinkRaw AS video,
-  shouldDisplay,
+    Major AS course,
+  youtubeLink AS video,
   position AS position,
-  MemberNames AS members,
+  teamMemberNames AS members,
   Sponsor,
   ProjectDescription AS description,
   ProjectTitle,
   winning_pic,
-  shouldDisplay,
-  NDA,
-  EntryID,
-  YEAR(DateStamp) AS year,
+  id,
+  YEAR(submitDate) AS year,
   CASE 
-    WHEN MONTH(DateStamp) IN (12, 1, 2) THEN 'Winter'
-    WHEN MONTH(DateStamp) IN (3, 4, 5) THEN 'Spring'
-    WHEN MONTH(DateStamp) IN (6, 7, 8) THEN 'Summer'
-    WHEN MONTH(DateStamp) IN (9, 10, 11) THEN 'Fall'
+    WHEN MONTH(submitDate) IN (12, 1, 2) THEN 'Winter'
+    WHEN MONTH(submitDate) IN (3, 4, 5) THEN 'Spring'
+    WHEN MONTH(submitDate) IN (6, 7, 8) THEN 'Summer'
+    WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
   END AS semester
-FROM showcaseentries
-WHERE position IS NOT NULL AND EntryID = ?;`;
+FROM survey_entries
+WHERE position IS NOT NULL AND id = ?;`;
   db.query(sql, [id], (err, results) => {
     if (err) {
       console.error("Error retrieving winners data:", err);
@@ -444,7 +455,7 @@ app.get("/api/projects/:semester/:year", (req, res) => {
   const endDate = `${year}-${endMonth}-01 00:00:00`;
   // db.query('SELECT * FROM project_entries WHERE submitDate BETWEEN ? AND ? AND department = ?', [startDate, endDate, department], (err, results) => {
   db.query(
-    "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?",
+    "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?",
     [startDate, endDate],
     (err, results) => {
       // db.query("SELECT * FROM survey_entries;", (err, results) => {
@@ -536,7 +547,7 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
   let query = "";
   let queryParams = [];
   // query = 'select * from survey_entries where submitDate BETWEEN ? AND ? AND major = ?';
-  query = "SELECT * FROM showcaseentries WHERE DateStamp BETWEEN ? AND ?";
+  query = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   queryParams = [startDate, endDate];
   if (discipline && discipline !== "all") {
     query += " AND major = ?";
@@ -558,43 +569,39 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
 
 app.put("/api/:id/update", (req, res) => {
   const { id } = req.params;
-  console.log("ID to update:", id);
-  // console.log("Request body:", req.body);
   const keys = Object.keys(req.body);
   const values = Object.values(req.body);
 
-  let query = "UPDATE showcaseentries SET ";
+  let query = "UPDATE survey_entries SET ";
   for (const key of keys) {
     query += `${key} = ?, `;
   }
   query = query.slice(0, -2); // Remove trailing comma and space
-  query += ` WHERE EntryID = ${id}`;
-  console.log("Constructed query:", query);
+  query += ` WHERE id = ${id}`;
 
   db.query(query, values, (err) => {
     if (err) {
-      console.error("Error updating entry:", err);
       return res.status(500).send("Server error");
     }
-    console.log("Entry updated successfully");
+  
     res.status(200).json({ message: "Entry updated successfully" });
   });
 });
 
-// Configure Multer for presentation file storage (uncomment and fix this section)
+// Configure Multer for presentation file storage 
 const presentationStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = './public/uploads/';
     // Create directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    // Create unique filename with timestamp
-    const uniqueName = 'presentation-' + Date.now() + path.extname(file.originalname);
-    cb(null, uniqueName);
+    // Rename the file to "presentation" with its original extension
+    const newName = `presentation${path.extname(file.originalname)}`;
+    cb(null, newName);
   }
 });
 
@@ -621,54 +628,47 @@ const uploadPresentation = multer({
 app.use('/uploads', express.static('public/uploads'));
 
 // Update your presentation endpoint to use the middleware
-app.post('/api/presentation/update', uploadPresentation.single('presentationFile'), (req, res) => {
-    console.log('Request body:', req.body);
-    console.log('Request file:', req.file);
-    
-    const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
-    
-    if (req.file) {
-        console.log('File received:', req.file);
-        
-        // Here you can save the presentation details to your database
-        const presentationData = {
-            presentationDate,
-            presentationLocation, 
-            checkingTime,
-            presentationTime,
-            filePath: `/uploads/${req.file.filename}`
-        };
-        
-        // Add database insert/update logic here if needed
-        // const sql = 'INSERT INTO presentations (date, location, checking_time, presentation_time, file_path) VALUES (?, ?, ?, ?, ?)';
-        // db.query(sql, [presentationDate, presentationLocation, checkingTime, presentationTime, presentationData.filePath], (err, result) => {
-        //     if (err) {
-        //         console.error('Error saving presentation:', err);
-        //         return res.status(500).json({ error: 'Failed to save presentation' });
-        //     }
-        //     res.status(200).json({ message: 'Presentation updated successfully', data: presentationData });
-        // });
-        
-        res.status(200).json({ 
-            message: 'Presentation updated successfully', 
-            data: presentationData 
-        });
-    } else {
-        console.log('No file received, updating other fields only');
-        
-        // Handle case where only text fields are updated (no file)
-        const presentationData = {
-            presentationDate,
-            presentationLocation,
-            checkingTime, 
-            presentationTime
-        };
-        
-        res.status(200).json({ 
-            message: 'Presentation details updated successfully', 
-            data: presentationData 
-        });
-    }
+app.post('/api/presentation/update', (req, res) => {
+    uploadPresentation.single('presentationFile')(req, res, (err) => {
+        if (err) {
+            // Handle multer errors
+            console.error('File upload error:', err.message);
+            return res.status(400).json({ error: err.message });
+        }
+
+        const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
+
+        if (req.file) {
+            console.log('File received:', req.file);
+
+            const presentationData = {
+                presentationDate,
+                presentationLocation,
+                checkingTime,
+                presentationTime,
+                filePath: `/uploads/presentation`
+            };
+
+            res.status(200).json({ 
+                message: 'Presentation updated successfully', 
+                data: presentationData 
+            });
+        } else {
+            console.log('No file received, updating other fields only');
+
+            const presentationData = {
+                presentationDate,
+                presentationLocation,
+                checkingTime,
+                presentationTime
+            };
+
+            res.status(200).json({ 
+                message: 'Presentation details updated successfully', 
+                data: presentationData 
+            });
+        }
+    });
 });
 
 
@@ -689,4 +689,79 @@ app.get('/api/single_survey/:id', (req, res) => {
     }
     res.status(200).json(results[0]);
   });
+});
+
+
+app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
+  console.log('here is the body', req.body);
+  console.log("/api/set_winners req.files:", req.files && req.files.length);
+  // add functionality to clear previous winners before setting new ones
+try {
+    // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
+    const winners = [];
+    // Determine number of winners by checking body keys for projectIdX
+    const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));
+    const count = projectIdKeys.length;
+
+    for (let i = 1; i <= count; i++) {
+      const projectId = req.body[`projectId${i}`];
+      const position = req.body[`position${i}`];
+
+      // Collect files for this winner (fieldnames like picture{i}_{j})
+      const filesForWinner = (req.files || []).filter((f) => new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname));
+      const filePaths = filesForWinner.map((f) => {
+        // files are stored by multer in the destination configured by uploadWinner
+        return `/winnerUploads/${f.filename}`;
+      });
+
+      winners.push({ projectId: Number(projectId), position: Number(position), pictures: filePaths });
+    }
+
+    console.log("Parsed winners:", winners);
+
+    db.beginTransaction((err) => {
+      if (err) {
+        console.error("Transaction error:", err);
+        return res.status(500).json({ success: false, error: "Database transaction error" });
+      }
+
+      const updatePromises = winners.map((winner) => {
+        return new Promise((resolve, reject) => {
+          const sql = "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
+          db.query(
+            sql,
+            [winner.position, winner.pictures.join(","), winner.projectId],
+            (err, results) => {
+              if (err) return reject(err);
+              resolve(results);
+            }
+          );
+        });
+      });
+
+      Promise.all(updatePromises)
+        .then(() => {
+          db.commit((err) => {
+            if (err) {
+              return db.rollback(() => {
+                console.error("Commit error:", err);
+                return res.status(500).json({ success: false, error: "Database commit error" });
+              });
+            }
+            // commit succeeded
+            return res.status(200).json({ success: true, winners });
+          });
+        })
+        .catch((updateErr) => {
+          // If any update failed, rollback and report the error
+          db.rollback(() => {
+            console.error("Error updating winner:", updateErr);
+            return res.status(500).json({ success: false, error: "Database update error", details: updateErr.message });
+          });
+        });
+    });
+  } catch (err) {
+    console.error("Error handling set_winners:", err);
+    return res.status(500).json({ success: false, error: "Server error parsing winners" });
+  }
 });
