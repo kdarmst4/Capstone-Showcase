@@ -38,7 +38,6 @@ const ComputerScience: React.FC = () => {
   const [selectedSponsor, setSelectedSponsor] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ADD: unique sponsors (case-insensitive; sorted)
   const uniqueSponsors = useMemo(() => {
     const sponsors = new Set(
       projects.map((p) => (p.sponsor ?? "").toString().trim()).filter(Boolean)
@@ -46,7 +45,6 @@ const ComputerScience: React.FC = () => {
     return ["all", ...Array.from(sponsors).sort((a, b) => a.localeCompare(b))];
   }, [projects]);
 
-  // ADD: compute filtered list from search + sponsor
   const filterProjects = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const sponsor = (selectedSponsor || "all").toLowerCase();
