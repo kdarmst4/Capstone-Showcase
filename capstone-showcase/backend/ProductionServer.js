@@ -8,6 +8,7 @@ const path = require("path");
 const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 
 // Major -> title prefixes at the very start of projectTitle
 const MAJOR_PREFIXES = {
@@ -73,6 +74,34 @@ const credentials = {key: privateKey, cert: certificate};
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
 
+// reCAPTCHA configuration
+const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
+const RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
+
+async function verifyRecaptcha(token) {
+  if (!token) {
+    return { success: false, error: "reCAPTCHA token is missing" };
+  }
+
+  try {
+    const response = await axios.post(RECAPTCHA_VERIFY_URL, null, {
+      params: {
+        secret: RECAPTCHA_SECRET_KEY,
+        response: token,
+      },
+    });
+
+    if (response.data.success) {
+      return { success: true };
+    } else {
+      return { success: false, error: "reCAPTCHA verification failed", errors: response.data["error-codes"] };
+    }
+  } catch (error) {
+    console.error("reCAPTCHA verification error:", error);
+    return { success: false, error: "Failed to verify reCAPTCHA" };
+  }
+}
+
 //Image Upload And Storgae API
 
 //Poster Image Directory
@@ -136,7 +165,7 @@ app.post(
 );
 
 //Survey Upload API
-app.post("/api/survey", (req, res) => {
+app.post("/api/survey", async (req, res) => {
   const {
     email,
     name,
@@ -155,7 +184,15 @@ app.post("/api/survey", (req, res) => {
     youtubeLink,
     posterPicturePath,
     teamPicturePath,
+    captchaToken,
   } = req.body;
+
+  // Verify reCAPTCHA
+  const recaptchaResult = await verifyRecaptcha(captchaToken);
+  if (!recaptchaResult.success) {
+    console.log("reCAPTCHA verification failed:", recaptchaResult.error);
+    return res.status(400).json({ error: "reCAPTCHA verification failed. Please try again." });
+  }
 
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
@@ -564,39 +601,38 @@ app.post("/api/signin", (req, res) => {
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) throw err;
 
-    // Querying the SQL server for the given username
+  // Querying the SQL server for the given username
     const sql =
       "SELECT * FROM admin_pass_hash WHERE username = ? OR email = ? AND PASS_HASH = ? LIMIT 1";
     db.query(sql, [username, username, hash], (err, results) => {
-      if (err) {
-        return res.status(500).send("Server error");
-      }
-      // Checking the fetched user data
-      try {
-        if (results.length === 0) {
-          return res.status(401).json({ error: "Invalid credentials" });
-        }
-        // Comparing the password hashes
-        bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
-          if (err) throw err;
-          if (pwmatches) {
-            const jwtToken = jwt.sign(
-              {
-                username: results[0].username,
-                email: results[0].email,
-              },
-              secretJWTKey,
-              { expiresIn: "30d" } // Token expiring in 1 month
-            );
-            return res.status(200).json({ jwtToken });
-          } else {
-            return res.status(401).json({ error: "Invalid credentials" });
-          }
-        });
-      } catch {
+    if (err) {
+      return res.status(500).send("Server error");
+    }
+    // Checking the fetched user data
+    try {
+      if (results.length === 0) {
         return res.status(401).json({ error: "Invalid credentials" });
       }
-    });
+      // Comparing the password hashes
+      bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
+        if (err) throw err;
+        if (pwmatches) {
+          const jwtToken = jwt.sign(
+            {
+              username: results[0].username,
+              email: results[0].email,
+            },
+            secretJWTKey,
+            { expiresIn: "30d" } // Token expiring in 1 month
+          );
+          return res.status(200).json({ jwtToken });
+        } else {
+          return res.status(401).json({ error: "Invalid credentials" });
+        }
+      });
+    } catch {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
   });
 });
 

@@ -1,6 +1,7 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect,useState, useRef } from "react";
 import { useNavigate} from "react-router-dom";
 import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
 import "../CSS/Survey.css";
 
 
@@ -43,6 +44,7 @@ interface FormErrors {
   youtubeLink: string;
   teamPicturePath ?: string;
   posterPicturePath ?: string;
+  captcha: string;
 }
 
 interface Project {
@@ -88,6 +90,7 @@ const Survey: React.FC = () => {
         youtubeLink: "",
         teamPicturePath: "",
         posterPicturePath: "",
+        captcha: "",
     };
     const [formData, setFormData] = useState < FormData > (initialFormData);
     const [errors, setErrors] = useState < FormErrors > (initialFormErrors);
@@ -96,6 +99,10 @@ const Survey: React.FC = () => {
     const [projects, setProjects] = useState < Project[] > ([]);
     const [, setSelectedProject] = useState < string > ('');
     const [contentTeamFiles, setContentTeamFiles] = useState<File[]>([]);
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
+    
+    const RECAPTCHA_SITE_KEY = "6Lc6ZvErAAAAAI0phQR-AzbJIcalP2Uc9daTksKn";
     
 
     const navigate = useNavigate();
@@ -156,6 +163,11 @@ const Survey: React.FC = () => {
       console.log(`Field: ${name}, Value: ${value}`);
     };
       
+    const handleCaptchaChange = (token: string | null) => {
+      setCaptchaToken(token);
+      setErrors({ ...errors, captcha: "" });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       console.log("Form submitted");
@@ -164,6 +176,12 @@ const Survey: React.FC = () => {
       setErrors(formErrors);
     
       if (hasErrors(formErrors)) {
+        scrollToFirstError();
+        return;
+      }
+
+      if (!captchaToken) {
+        setErrors({ ...formErrors, captcha: "Please complete the reCAPTCHA verification." });
         scrollToFirstError();
         return;
       }
@@ -208,7 +226,7 @@ const Survey: React.FC = () => {
           teamPicturePath: teamImagePaths.join(", "), 
         };
     
-        const submissionData = prepareSubmissionData(updatedFormData);
+        const submissionData = prepareSubmissionData(updatedFormData, captchaToken);
     
         // Final survey data submission
         // await axios.post("http://localhost:3000/api/survey", submissionData);
@@ -217,12 +235,17 @@ const Survey: React.FC = () => {
         handleSuccessfulSubmission();
       } catch (error) {
         console.error("Error during form submission:", error);
+        setCaptchaToken(null);
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset();
+        }
         alert("An error occurred while submitting. Please try again.");
       }
     };
-    const prepareSubmissionData = (formData: FormData) => {
-        const submissionData = {
-            ...formData
+    const prepareSubmissionData = (formData: FormData, captchaToken: string | null) => {
+        const submissionData: any = {
+            ...formData,
+            captchaToken: captchaToken
         };
         if (formData.demo === "no") {
             delete submissionData.power;
@@ -261,6 +284,7 @@ const Survey: React.FC = () => {
         attendance: !attendance ? "Please specify your attendance type." : "",
         posterApproved: nda === "yes" && !posterApproved ? "Please specify if your sponsor approved your poster or not." : "",
         youtubeLink: !youtubeLink ? "Please include the YouTube link of your presentation video." : "",
+        captcha: "",
       };
     
       if (!email.endsWith("@asu.edu")) {
@@ -301,6 +325,10 @@ const Survey: React.FC = () => {
     const handleSuccessfulSubmission = () => {
         setFormData(initialFormData);
         setSelectedFile(undefined);
+        setCaptchaToken(null);
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset();
+        }
         setIsSubmitted(true);
           setTimeout(() => {
            setIsSubmitted(false);
@@ -681,6 +709,17 @@ const Survey: React.FC = () => {
         {errors.teamPicturePath && (
           <p className="error-message">{errors.teamPicturePath}</p>
         )}
+      </div>
+
+      <div className="form-box">
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey={RECAPTCHA_SITE_KEY}
+          onChange={handleCaptchaChange}
+          theme="light"
+          size="normal"
+        />
+        {errors.captcha && <p className="error-message">{errors.captcha}</p>}
       </div>
 
       <div className="form-box">

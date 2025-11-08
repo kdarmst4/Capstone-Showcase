@@ -97,59 +97,83 @@ app.post(
 // this is the api route in the localserver.js file
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 const saltRounds = 10; // Number of hashing rounds
 const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
-app.post("/api/signin", (req, res) => {
+
+// reCAPTCHA configuration
+const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
+const RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
+
+async function verifyRecaptcha(token) {
+  if (!token) {
+    return { success: false, error: "reCAPTCHA token is missing" };
+  }
+
+  try {
+    const response = await axios.post(RECAPTCHA_VERIFY_URL, null, {
+      params: {
+        secret: RECAPTCHA_SECRET_KEY,
+        response: token,
+      },
+    });
+
+    if (response.data.success) {
+      return { success: true };
+    } else {
+      return { success: false, error: "reCAPTCHA verification failed", errors: response.data["error-codes"] };
+    }
+  } catch (error) {
+    console.error("reCAPTCHA verification error:", error);
+    return { success: false, error: "Failed to verify reCAPTCHA" };
+  }
+}
+app.post("/api/signin", async (req, res) => {
   // defining variables from request body
   const { username, password } = req.body;
-  console.log("Signin attempt for user:", username, password);
+  console.log("Signin attempt for user:", username);
   console.log("Using JWT Secret Key:", secretJWTKey);
-  // Hashing the password
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) throw err;
-    console.log("Hashed Password:", hash);
 
-    // Querying the SQL server for the given username
+  // Querying the SQL server for the given username
     const sql =
       "SELECT * FROM admin_pass_hash WHERE username = ? OR email = ? AND PASS_HASH = ? LIMIT 1";
     db.query(sql, [username, username, hash], (err, results) => {
-      if (err) {
-        console.error("Error retrieving data:", err);
-        return res.status(500).send("Server error");
-      }
-      console.log("Query results:", results); // Loging query results
-      // Checking the fetched user data
-      try {
-        if (results.length === 0) {
-          return res.status(401).json({ error: "Invalid credentials" });
-        }
-        // Comparing the password hashes
-        bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
-          if (err) throw err;
-          if (pwmatches) {
-            const jwtToken = jwt.sign(
-              {
-                username: results[0].username,
-                email: results[0].email,
-              },
-              secretJWTKey,
-              { expiresIn: "30d" } // Token expiring in 1 month
-            );
-            console.log("Allowing sign in! JWT Token generated.", pwmatches);
-            return res.status(200).json({ jwtToken });
-          } else {
-            return res.status(401).json({ error: "Invalid credentials" });
-          }
-        });
-      } catch {
-        console.log("Credential Error Caught");
+    if (err) {
+      console.error("Error retrieving data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results); // Loging query results
+    // Checking the fetched user data
+    try {
+      if (results.length === 0) {
         return res.status(401).json({ error: "Invalid credentials" });
       }
-    });
+      // Comparing the password hashes
+      bcrypt.compare(password, results[0].pass_hash, (err, pwmatches) => {
+        if (err) throw err;
+        if (pwmatches) {
+          const jwtToken = jwt.sign(
+            {
+              username: results[0].username,
+              email: results[0].email,
+            },
+            secretJWTKey,
+            { expiresIn: "30d" } // Token expiring in 1 month
+          );
+          console.log("Allowing sign in! JWT Token generated.", pwmatches);
+          return res.status(200).json({ jwtToken });
+        } else {
+          return res.status(401).json({ error: "Invalid credentials" });
+        }
+      });
+    } catch {
+      console.log("Credential Error Caught");
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
   });
 });
 
-app.post("/api/survey", (req, res) => {
+app.post("/api/survey", async (req, res) => {
   const {
     email,
     name,
@@ -168,7 +192,15 @@ app.post("/api/survey", (req, res) => {
     youtubeLink,
     posterPicturePath,
     teamPicturePath,
+    captchaToken,
   } = req.body;
+
+  // Verify reCAPTCHA
+  const recaptchaResult = await verifyRecaptcha(captchaToken);
+  if (!recaptchaResult.success) {
+    console.log("reCAPTCHA verification failed:", recaptchaResult.error);
+    return res.status(400).json({ error: "reCAPTCHA verification failed. Please try again." });
+  }
 
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
