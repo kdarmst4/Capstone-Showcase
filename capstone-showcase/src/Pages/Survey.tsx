@@ -99,10 +99,15 @@ const Survey: React.FC = () => {
     
 
     const navigate = useNavigate();
+
+    const API_BASE_URL =
+      process.env.NODE_ENV === "production"
+        ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
+        : "http://localhost:3000/api";
     
     useEffect(() => {
         // Fetch the list of projects from the backend API
-        fetch('https://asucapstone.com:3000/api/projects')
+        fetch(`${API_BASE_URL}/projects`)
         // fetch('http://localhost:3000/api/projects')
         .then((response) => 
             response.json()).then((data) =>
