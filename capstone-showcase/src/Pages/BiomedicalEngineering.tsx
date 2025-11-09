@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/BiomedicalEngineering.css";
 import "../CSS/Pagination.css";
 import "../CSS/ProjectCards.css";
 import "../CSS/ProjectShowcase.css";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";import asuLogo from "../assets/asuLogo.png";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
 
 const API_BASE_URL =
@@ -27,19 +28,52 @@ const BiomedicalEngineering: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Pagination variables
-  const [currentPage, setCurrentPage] = useState(1);
-  const projectsPerPage = 8;
-  const totalPages = Math.ceil(projects.length / projectsPerPage);
-  const startIndex = (currentPage - 1) * projectsPerPage;
-  const endIndex = startIndex + projectsPerPage;
-  const currentProjects = projects.slice(startIndex, endIndex);
-
   const DEFAULT_SEMESTER = "fa";
   const DEFAULT_YEAR = "2025";
 
   const semester = selectedSemester || DEFAULT_SEMESTER;
   const year = selectedYear || DEFAULT_YEAR;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSponsor, setSelectedSponsor] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const uniqueSponsors = useMemo(() => {
+    const sponsors = new Set(
+      projects.map((p) => (p.sponsor ?? "").toString().trim()).filter(Boolean)
+    );
+    return ["all", ...Array.from(sponsors).sort((a, b) => a.localeCompare(b))];
+  }, [projects]);
+
+  const filterProjects = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const sponsor = (selectedSponsor || "all").toLowerCase();
+
+    return projects.filter((p) => {
+      const title = (p.projectTitle ?? "").toString().toLowerCase();
+      const desc = (p.projectDescription ?? "").toString().toLowerCase();
+      const team = (p.teamMemberNames ?? "").toString().toLowerCase();
+      const sp = (p.sponsor ?? "").toString().toLowerCase();
+
+      const matchesSearch =
+        q === "" || title.includes(q) || desc.includes(q) || team.includes(q);
+
+      const matchesSponsor = sponsor === "all" || sp === sponsor;
+
+      return matchesSearch && matchesSponsor;
+    });
+  }, [projects, searchQuery, selectedSponsor]);
+
+  // Pagination Variables - computed from filterProjects
+  const projectsPerPage = 8;
+  const totalPages = Math.ceil(filterProjects.length / projectsPerPage);
+  const startIndex = (currentPage - 1) * projectsPerPage;
+  const endIndex = startIndex + projectsPerPage;
+  const currentProjects = filterProjects.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterProjects]);
 
   useEffect(() => {
     let ignore = false;
@@ -63,11 +97,6 @@ const BiomedicalEngineering: React.FC = () => {
       ignore = true;
     };
   }, [semester, year]);
-
-  // Set Starting Page to the first page
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [projects]);
 
   // Pagination function calls
   const goToPage = (page: number) => {
@@ -176,8 +205,35 @@ const BiomedicalEngineering: React.FC = () => {
             <p>No projects available for Biomedical Engineering.</p>
           ) : (
             <>
+              {/* Search and Filter Section */}
+              <section className="search-filter-section">
+                <div className="search-bar-container">
+                  <input
+                    type="text"
+                    className="search-bar"
+                    placeholder="Search projects..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+
+                <div className="filter-container">
+                  <select
+                    className="sponsor-filter"
+                    value={selectedSponsor}
+                    onChange={(e) => setSelectedSponsor(e.target.value)}
+                  >
+                    {uniqueSponsors.map((sponsor, index) => (
+                      <option key={index} value={sponsor}>
+                        {sponsor === "all" ? "All Sponsors" : sponsor}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </section>
+
               {/* Projects Grid */}
-               <section className="project-catalog">
+              <section className="project-catalog">
                 <div className="projects-grid">
                   {currentProjects.map((project, index) => (
                     <div
@@ -253,8 +309,7 @@ const BiomedicalEngineering: React.FC = () => {
                   </button>
 
                   <div className="page-info">
-                    Page {currentPage} of {totalPages} ({projects.length} total
-                    projects)
+                    Page {currentPage} of {totalPages} ({filterProjects.length} total projects)
                   </div>
                 </div>
               )}
