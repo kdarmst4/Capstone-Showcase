@@ -184,7 +184,7 @@ const Survey: React.FC = () => {
           posterData.append("poster", selectedFile);
 
           // const posterRes = await axios.post("http://localhost:3000/api/survey/uploadsPoster", posterData, {
-           const posterRes = await axios.post("https://asucapstone.com:3000/api/survey/uploadsPoster", posterData, {
+           const posterRes = await axios.post(`${API_BASE_URL}/survey/uploadsPoster`, posterData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
     
@@ -199,7 +199,7 @@ const Survey: React.FC = () => {
           });
           
           // const teamRes = await axios.post("http://localhost:3000/api/survey/uploadsTeam", teamData, {
-           const teamRes = await axios.post("https://asucapstone.com:3000/api/survey/uploadsTeam", teamData, {
+           const teamRes = await axios.post(`${API_BASE_URL}/survey/uploadsTeam`, teamData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
     
@@ -217,7 +217,7 @@ const Survey: React.FC = () => {
     
         // Final survey data submission
         // await axios.post("http://localhost:3000/api/survey", submissionData);
-         await axios.post("https://asucapstone.com:3000/api/survey", submissionData);
+         await axios.post(`${API_BASE_URL}/survey`, submissionData);
     
         handleSuccessfulSubmission();
       } catch (error) {
