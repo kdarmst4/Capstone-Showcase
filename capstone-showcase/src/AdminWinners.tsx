@@ -54,9 +54,9 @@ export function Winners() {
     // setSelectedWinners(null);
   };
   const API_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
+    import.meta.env.PROD ? "" : "http://localhost:3000/api";
   const STATIC_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+    import.meta.env.PROD ? "" : "http://localhost:3000";
 
   const fetchProjects = async (semester: string, year: number) => {
     console.log(semester, year);

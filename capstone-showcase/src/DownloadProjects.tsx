@@ -126,7 +126,7 @@ const downloadCSV = (csvString: string, filename: string) => {
   const handleDownloadClicked = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const API_BASE_URL =
-      process.env.NODE_ENV === "production" ? "/api" : "http://localhost:3000/api";
+      import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
 
     if (!startDate || !endDate) {
       setError("Please select both start and end dates.");
