@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "./CSS/edit.css";
-import EditProject from "./EditProject";
-import { TodaysDate } from "./AdminDate";
-import {ProjectObj} from "./SiteInterface";
+import EditProject from "../EditProject";
+import { TodaysDate } from "../AdminDate";
+import {ProjectObj} from "../SiteInterface";
 
 export function Edit() {
   const [presentationEdit, setPresentationEdit] = useState<boolean>(false);
@@ -32,7 +32,7 @@ export function Edit() {
   const API_BASE_URL =
     import.meta.env.PROD ? "" : "http://localhost:3000/api";
   // const STATIC_BASE_URL =
-  //  process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
+  //  import.meta.env.PROD ? "" : 'http://localhost:3000'
 
   const fetchProjects = async (semester: string, year: number) => {
     try {

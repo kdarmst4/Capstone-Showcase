@@ -10,12 +10,12 @@ import Footer from "./Footer";
 
 
 const API_BASE_URL =
-  process.env.NODE_ENV === "production"
+  import.meta.env.PROD
     ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
     : "http://localhost:3000/api";
 
 const STATIC_BASE_URL =
-  process.env.NODE_ENV === "production"
+  import.meta.env.PROD
     ? "" // Relative URL - will use https://showcase.asucapstone.com/api
     : "http://localhost:3000";
 

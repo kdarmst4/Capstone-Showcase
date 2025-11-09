@@ -101,7 +101,7 @@ const Survey: React.FC = () => {
     const navigate = useNavigate();
 
     const API_BASE_URL =
-      process.env.NODE_ENV === "production"
+      import.meta.env.PROD
         ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
         : "http://localhost:3000/api";
     

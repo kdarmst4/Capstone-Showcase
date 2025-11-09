@@ -47,10 +47,10 @@ export function WinnerComponent({ winners }: { winners: ShowcaseEntry[] }) {
     }
   };
     const STATIC_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+    import.meta.env.PROD ? "" : "http://localhost:3000";
 
   const API_BASE_URL =
-    process.env.NODE_ENV === "production"
+    import.meta.env.PROD
       ? "/api"
       : "http://localhost:3000/api";
 
