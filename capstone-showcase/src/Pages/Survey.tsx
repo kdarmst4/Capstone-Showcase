@@ -159,7 +159,7 @@ const Survey: React.FC = () => {
             }
 
             try {
-                    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+                //const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
                 recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
                     sitekey: siteKey,
                     callback: (token: string) => {
@@ -464,8 +464,8 @@ const Survey: React.FC = () => {
     };
     
     return (
-    <div className="content-container" style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', width: '100%' }}>
-      <div className="form-container" style={{ backgroundColor: 'white', color: 'black' }}>
+    <div className="content-container">
+      <div className="form-container">
         {isSubmitted && (
           <div className="success-message">
             <p>Thank you for submitting your survey! Your responses have been recorded successfully.</p>
@@ -851,13 +851,12 @@ const Survey: React.FC = () => {
                     backgroundColor: 'transparent',
                     border: '1px dashed #ccc'
                   }}
-                >
-                  {!recaptchaToken && import.meta.env.VITE_RECAPTCHA_SITE_KEY && (
+                ></div>
+                  {!recaptchaToken && import.meta.env.RECAPTCHA_SITE_KEY && (
                     <div style={{ padding: '20px', color: '#666', fontSize: '12px' }}>
                       Loading reCAPTCHA...
                     </div>
                   )}
-                </div>
               </div>
               <button type="submit" className="submit-button">
                 Submit
