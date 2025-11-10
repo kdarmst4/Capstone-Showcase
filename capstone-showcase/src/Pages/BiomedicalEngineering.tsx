@@ -236,45 +236,44 @@ const BiomedicalEngineering: React.FC = () => {
               <section className="project-catalog">
                 <div className="projects-grid">
                   {currentProjects.map((project, index) => (
-                    <div
+                    <Link
                       key={project.id || index}
-                      className="project-card"
-                      // onClick={() => handleProjectClick(project)}
+                      to={`/survey/${project.id}`}
+                      state={{ project }}
+                      className="project-card-link"
                     >
-                      {project.youtubeLink && (
-                        <img
-                          src={extractYouTubeThumbnail(project.youtubeLink) || ""}
-                          alt={`${project.projectTitle} Thumbnail`}
-                          className="youtube-thumbnail"
-                        />
-                      )}
-                      <div className="project-details">
-                        <h4 className="project-title left-aligned">
-                          <Link
-                            to={`/survey/${project.id}`}
-                            state={{ project }}
-                            className="project-title-link"
-                          >
+                      <div className="project-card">
+                        {project.youtubeLink && (
+                          <img
+                            src={extractYouTubeThumbnail(project.youtubeLink) || ""}
+                            alt={`${project.projectTitle} Thumbnail`}
+                            className="youtube-thumbnail"
+                          />
+                        )}
+
+                        <div className="project-details">
+                          <h4 className="project-title left-aligned">
                             {project.projectTitle}
-                          </Link>
-                        </h4>
-                        <p className="project-description left-aligned">
-                          {project.projectDescription}
-                        </p>
-                        <div className="project-meta">
-                          <p>
-                            <strong>Team:</strong> {project.teamMemberNames}
+                          </h4>
+
+                          <p className="project-description left-aligned">
+                            {project.projectDescription}
                           </p>
-                          <p>
-                            <strong>Sponsor:</strong> {project.sponsor}
-                          </p>
+
+                          <div className="project-meta">
+                            <p>
+                              <strong>Team:</strong> {project.teamMemberNames}
+                            </p>
+                            <p>
+                              <strong>Sponsor:</strong> {project.sponsor}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </section>
-
 
               {/*Pagination*/}
               {totalPages > 1 && (

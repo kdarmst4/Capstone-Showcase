@@ -101,20 +101,36 @@
   background-color: #611029;
 }
 
-.project-card a {
-  text-decoration: none;
+.project-card-link {
+  display: block;
+  text-decoration: none !important;
   color: inherit;
 }
 
-.project-title-link {
-  color: #8c1d40 !important;          
-  text-decoration: underline !important;
+.project-card-link * {
+  text-decoration: none;
+}
+
+.project-card-link .project-card {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.project-card-link:hover .project-card,
+.project-card-link:focus-visible .project-card {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+}
+
+.project-card-link .project-title {
+  color: #8c1d40;
+  text-decoration: underline;
   font-weight: bold;
   text-underline-offset: 2px;
 }
 
-.project-title-link:hover {
-  color: #611029 !important;          
-  text-decoration: underline !important;
+.project-card-link:hover .project-title,
+.project-card-link:focus-visible .project-title {
+  color: #611029;
   text-decoration-thickness: 2px;
 }

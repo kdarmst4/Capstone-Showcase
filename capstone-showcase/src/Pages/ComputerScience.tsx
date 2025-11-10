@@ -214,42 +214,42 @@ const ComputerScience: React.FC = () => {
             <>
             {/* Search and Filter Section */}
             <section className="search-filter-section">
-                                  <div className="search-bar-container">
-                                      <input
-                                          type="text"
-                                          className="search-bar"
-                                          placeholder="Search projects..."
-                                          value={searchQuery}
-                                          onChange={(e) => setSearchQuery(e.target.value)}
-                                      />
-                                  </div>
+              <div className="search-bar-container">
+                  <input
+                      type="text"
+                      className="search-bar"
+                      placeholder="Search projects..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+              </div>
 
-                                  <div className="filter-container">
-                                      <select
-                                          className="sponsor-filter"
-                                          value={selectedSponsor}
-                                          onChange={(e) => setSelectedSponsor(e.target.value)}
-                                      >
-                                          {uniqueSponsors.map((sponsor, index) => (
-                                              <option key={index} value={sponsor}>
-                                                  {sponsor === "all" ? "All Sponsors" : sponsor}
-                                              </option>
-                                          ))}
-                                      </select>
-                                  </div>
+              <div className="filter-container">
+                  <select
+                      className="sponsor-filter"
+                      value={selectedSponsor}
+                      onChange={(e) => setSelectedSponsor(e.target.value)}
+                  >
+                      {uniqueSponsors.map((sponsor, index) => (
+                          <option key={index} value={sponsor}>
+                              {sponsor === "all" ? "All Sponsors" : sponsor}
+                          </option>
+                      ))}
+                  </select>
+              </div>
             </section>
 
-
-              {/* Projects Grid */}
-              <section className="project-catalog">
-                <div className="projects-grid">
-                  {currentProjects.map((project, index) => (
-                    <Link to ={`/survey/${project.id}`} state={{ project }} key={project.id}>
-                    <div
-                      key={project.id || index}
-                      className="project-card"
-                      // onClick={() => handleProjectClick(project)}
-                    >
+            {/* Projects Grid */}
+            <section className="project-catalog">
+              <div className="projects-grid">
+                {currentProjects.map((project, index) => (
+                  <Link
+                    key={project.id || index}
+                    to={`/survey/${project.id}`}
+                    state={{ project }}
+                    className="project-card-link"
+                  >
+                    <div className="project-card">
                       {project.youtubeLink && (
                         <img
                           src={extractYouTubeThumbnail(project.youtubeLink) || ""}
@@ -257,11 +257,16 @@ const ComputerScience: React.FC = () => {
                           className="youtube-thumbnail"
                         />
                       )}
+
                       <div className="project-details">
-                        <h4 className="project-title left-aligned">{project.projectTitle}</h4>
+                        <h4 className="project-title left-aligned">
+                          {project.projectTitle}
+                        </h4>
+
                         <p className="project-description left-aligned">
                           {project.projectDescription}
                         </p>
+
                         <div className="project-meta">
                           <p>
                             <strong>Team:</strong> {project.teamMemberNames}
@@ -272,11 +277,10 @@ const ComputerScience: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    </Link> 
-
-                  ))}
-                </div>
-              </section>
+                  </Link>
+                ))}
+              </div>
+            </section>
 
               {/*Pagination*/}
               {totalPages > 1 && (
