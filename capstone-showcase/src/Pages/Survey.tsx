@@ -1,7 +1,13 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect,useState, useRef } from "react";
 import { useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../CSS/Survey.css";
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
 
 
 
@@ -96,7 +102,9 @@ const Survey: React.FC = () => {
     const [projects, setProjects] = useState < Project[] > ([]);
     const [, setSelectedProject] = useState < string > ('');
     const [contentTeamFiles, setContentTeamFiles] = useState<File[]>([]);
-    
+    const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+    const recaptchaRef = useRef<HTMLDivElement>(null);
+    const recaptchaWidgetId = useRef<number | null>(null);
 
     const navigate = useNavigate();
 
@@ -113,6 +121,68 @@ const Survey: React.FC = () => {
             response.json()).then((data) =>
             setProjects(data)).catch((error) => 
             console.error('Error fetching projects:', error));
+    }, []);
+
+    // Load reCAPTCHA script
+    useEffect(() => {
+        const renderRecaptcha = () => {
+            if (window.grecaptcha && window.grecaptcha.render && recaptchaRef.current) {
+                try {
+                    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+                    recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
+                        sitekey: siteKey,
+                        callback: (token: string) => {
+                            setRecaptchaToken(token);
+                        },
+                        'expired-callback': () => {
+                            setRecaptchaToken("");
+                        },
+                        'error-callback': () => {
+                            setRecaptchaToken("");
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error rendering reCAPTCHA:', error);
+                }
+            }
+        };
+
+        // Check if reCAPTCHA is already loaded
+        if (window.grecaptcha && window.grecaptcha.render) {
+            // delay to make sure DOM is ready
+            setTimeout(renderRecaptcha, 100);
+        } else {
+            const existingScript = document.querySelector('script[src*="recaptcha/api.js"]');
+            if (existingScript) {
+                existingScript.addEventListener('load', renderRecaptcha);
+                // if loaded render immediately
+                if (window.grecaptcha && window.grecaptcha.render) {
+                    setTimeout(renderRecaptcha, 100);
+                }
+            } else {
+                const script = document.createElement('script');
+                script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+                script.async = true;
+                script.defer = true;
+                script.onload = () => {
+                    setTimeout(renderRecaptcha, 100);
+                };
+                script.onerror = () => {
+                    console.error('Failed to load reCAPTCHA script');
+                };
+                document.body.appendChild(script);
+            }
+        }
+
+        return () => {
+            if (recaptchaWidgetId.current !== null && window.grecaptcha && window.grecaptcha.reset) {
+                try {
+                    window.grecaptcha.reset(recaptchaWidgetId.current);
+                } catch (error) {
+                    console.error('Error resetting reCAPTCHA:', error);
+                }
+            }
+        };
     }, []);
 
 
@@ -167,9 +237,18 @@ const Survey: React.FC = () => {
     
       const formErrors = validateFormData(formData);
       setErrors(formErrors);
-    
+
       if (hasErrors(formErrors)) {
         scrollToFirstError();
+        return;
+      }
+
+      // Check if reCAPTCHA is completed
+      if (!recaptchaToken) {
+        alert("Please complete the reCAPTCHA verification.");
+        if (recaptchaRef.current) {
+          recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
         return;
       }
       console.log("Calling API");
@@ -213,16 +292,31 @@ const Survey: React.FC = () => {
           teamPicturePath: teamImagePaths.join(", "), 
         };
     
-        const submissionData = prepareSubmissionData(updatedFormData);
-    
+        const submissionData = {
+          ...prepareSubmissionData(updatedFormData),
+          recaptchaToken: recaptchaToken
+        };
+
         // Final survey data submission
         // await axios.post("http://localhost:3000/api/survey", submissionData);
          await axios.post(`${API_BASE_URL}/survey`, submissionData);
     
         handleSuccessfulSubmission();
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error during form submission:", error);
-        alert("An error occurred while submitting. Please try again.");
+        if (error.response?.data?.error) {
+          if (error.response.data.error.includes("reCAPTCHA")) {
+            alert("reCAPTCHA verification failed. Please try again.");
+            if (recaptchaWidgetId.current !== null && window.grecaptcha && window.grecaptcha.reset) {
+              window.grecaptcha.reset(recaptchaWidgetId.current);
+            }
+            setRecaptchaToken("");
+          } else {
+            alert(error.response.data.error);
+          }
+        } else {
+          alert("An error occurred while submitting. Please try again.");
+        }
       }
     };
     const prepareSubmissionData = (formData: FormData) => {
@@ -306,6 +400,11 @@ const Survey: React.FC = () => {
     const handleSuccessfulSubmission = () => {
         setFormData(initialFormData);
         setSelectedFile(undefined);
+        setContentTeamFiles([]);
+        setRecaptchaToken("");
+        if (recaptchaWidgetId.current !== null && window.grecaptcha) {
+            window.grecaptcha.reset(recaptchaWidgetId.current);
+        }
         setIsSubmitted(true);
           setTimeout(() => {
            setIsSubmitted(false);
@@ -691,6 +790,7 @@ const Survey: React.FC = () => {
         </div>
 
         <div className="form-box">
+              <div ref={recaptchaRef} style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}></div>
               <button type="submit" className="submit-button">
                 Submit
               </button>
