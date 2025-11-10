@@ -879,7 +879,6 @@ WHERE position IS NOT NULL AND id = ?;`;
   });
 });
 
-app.use("/uploads", express.static("public/uploads"));
 
 // Update your presentation endpoint to use the middleware
 app.post("/api/presentation/update", (req, res) => {
@@ -944,14 +943,14 @@ app.post("/api/presentation/update", (req, res) => {
   });
 });
 
-app.get("/api/presentation", (req, res) => {
-  const sql = "SELECT * FROM presentation WHERE id = 1";
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Error fetching presentation data:", err);
-      return res.status(500).send("Server error");
-    }
-    console.log("Query results:", results);
-    res.json(results);
-  });
+app.get('/api/presentation', (req, res) => {
+    const sql = 'SELECT * FROM presentation WHERE id = 1';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching presentation data:', err);
+            return res.status(500).send('Server error');
+        }
+        console.log('Query results:', results);
+        res.json(results);
+    });
 });

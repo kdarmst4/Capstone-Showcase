@@ -628,67 +628,66 @@ const uploadPresentation = multer({
 app.use('/public/uploads', express.static('public/uploads'));
 
 // Update your presentation endpoint to use the middleware
-app.post('/api/presentation/update', (req, res) => {
-    uploadPresentation.single('presentationFile')(req, res, (err) => {
-        if (err) {
-            // Handle multer errors
-            console.error('File upload error:', err.message);
-            return res.status(400).json({ error: err.message });
+app.post("/api/presentation/update", (req, res) => {
+  uploadPresentation.single("presentationFile")(req, res, (err) => {
+    if (err) {
+      // Handle multer errors
+      return res.status(400).json({ error: err.message });
+    }
+
+    const {
+      presentationDate,
+      presentationLocation,
+      checkingTime,
+      presentationTime,
+    } = req.body;
+
+    const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
+    const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
+    if (req.file) {
+      const sql =
+        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
+
+      const values = [
+        presentationDate,
+        presentationLocation,
+        checkingTimeStamp,
+        presentationTimeStamp,
+        `public/uploads/presentation.pdf`,
+      ];
+      db.query(sql, values, (dbErr) => {
+        if (dbErr) {
+          return res.status(500).json({ error: "Database update failed" });
         }
+      });
 
-        const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
+      res.status(200).json({
+        message: "Presentation updated successfully",
+      });
+    } else {
+      console.log("No file received, updating other fields only");
 
-        const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
-        const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
-        if (req.file) {
-            console.log('File received:', req.file);
+      const sql =
+        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
 
-            const sql = 'UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1';
-
-            const values = [
-                presentationDate,
-                presentationLocation,
-                checkingTimeStamp,
-                presentationTimeStamp,
-                `public/uploads/presentation.pdf`
-            ];
-            db.query(sql, values, (dbErr) => {
-                if (dbErr) {
-                    console.error('Database update error:', dbErr);
-                    return res.status(500).json({ error: 'Database update failed' });
-                }
-            });
-
-            res.status(200).json({ 
-                message: 'Presentation updated successfully', 
-            });
-        } else {
-            console.log('No file received, updating other fields only');
-
-
-             const sql = 'UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1';
-
-            const values = [
-                presentationDate,
-                presentationLocation,
-                checkingTimeStamp,
-                presentationTimeStamp,
-                `public/uploads/presentation.pdf`
-            ];
-            db.query(sql, values, (dbErr) => {
-                if (dbErr) {
-                    console.error('Database update error:', dbErr);
-                    return res.status(500).json({ error: 'Database update failed' });
-                }
-            });
-
-            
-
-            res.status(200).json({ 
-                message: 'Presentation details updated successfully', 
-            });
+      const values = [
+        presentationDate,
+        presentationLocation,
+        checkingTimeStamp,
+        presentationTimeStamp,
+        `public/uploads/presentation.pdf`,
+      ];
+      db.query(sql, values, (dbErr) => {
+        if (dbErr) {
+          return res.status(500).json({ error: "Database update failed" });
         }
-    });
+      });
+
+      res.status(200).json({
+        message: "Presentation details updated successfully",
+      });
+    }
+  });
 });
 
 
