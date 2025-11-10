@@ -464,7 +464,6 @@ const Survey: React.FC = () => {
     };
     
     return (
-    // change this back before PR
     <div className="content-container" style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', width: '100%' }}>
       <div className="form-container" style={{ backgroundColor: 'white', color: 'black' }}>
         {isSubmitted && (
