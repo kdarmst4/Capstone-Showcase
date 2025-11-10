@@ -907,7 +907,7 @@ app.post("/api/presentation/update", (req, res) => {
         presentationLocation,
         checkingTimeStamp,
         presentationTimeStamp,
-        `/uploads/presentation`,
+        `public/uploads/presentation.pdf`,
       ];
       db.query(sql, values, (dbErr) => {
         if (dbErr) {
@@ -929,7 +929,7 @@ app.post("/api/presentation/update", (req, res) => {
         presentationLocation,
         checkingTimeStamp,
         presentationTimeStamp,
-        `/uploads/presentation`,
+        `public/uploads/presentation.pdf`,
       ];
       db.query(sql, values, (dbErr) => {
         if (dbErr) {

@@ -242,6 +242,7 @@ export function Edit() {
                 <label htmlFor="location-file">Location:</label>
                 <input
                   type="file"
+                  accept=".pdf"
                   id="location-file"
                   name="location-file"
                   placeholder="Enter location"
