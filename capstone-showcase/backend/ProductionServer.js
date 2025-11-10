@@ -105,7 +105,21 @@ const storagePoster = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storagePoster });
-
+const presentationStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = './public/uploads/';
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Rename the file to "presentation" with its original extension
+    const newName = `presentation${path.extname(file.originalname)}`;
+    cb(null, newName);
+  }
+});
 //Team Images Upload Storage
 const storageTeam = multer.diskStorage({
   destination: "./teamUploads/",
@@ -115,6 +129,25 @@ const storageTeam = multer.diskStorage({
       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
     );
   },
+});
+
+const uploadPresentation = multer({ 
+    storage: presentationStorage,
+    limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        // Accept common presentation file types
+        const allowedTypes = /pdf|ppt|pptx|doc|docx/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)'));
+        }
+    }
 });
 const uploadTeam = multer({ storage: storageTeam });
 //winner upload storage
@@ -810,4 +843,66 @@ WHERE position IS NOT NULL AND id = ?;`;
     console.log("Query results:", results);
     res.json(results);
   });
+});
+
+app.use('/uploads', express.static('public/uploads'));
+
+// Update your presentation endpoint to use the middleware
+app.post('/api/presentation/update', (req, res) => {
+    uploadPresentation.single('presentationFile')(req, res, (err) => {
+        if (err) {
+            // Handle multer errors
+            return res.status(400).json({ error: err.message });
+        }
+
+        const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
+
+        const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
+        const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
+        if (req.file) {
+
+            const sql = 'UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1';
+
+            const values = [
+                presentationDate,
+                presentationLocation,
+                checkingTimeStamp,
+                presentationTimeStamp,
+                `/uploads/presentation`
+            ];
+            db.query(sql, values, (dbErr) => {
+                if (dbErr) {
+                    return res.status(500).json({ error: 'Database update failed' });
+                }
+            });
+
+            res.status(200).json({ 
+                message: 'Presentation updated successfully', 
+            });
+        } else {
+            console.log('No file received, updating other fields only');
+
+
+             const sql = 'UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1';
+
+            const values = [
+                presentationDate,
+                presentationLocation,
+                checkingTimeStamp,
+                presentationTimeStamp,
+                `/uploads/presentation`
+            ];
+            db.query(sql, values, (dbErr) => {
+                if (dbErr) {
+                    return res.status(500).json({ error: 'Database update failed' });
+                }
+            });
+
+            
+
+            res.status(200).json({ 
+                message: 'Presentation details updated successfully', 
+            });
+        }
+    });
 });

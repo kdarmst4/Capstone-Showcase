@@ -638,34 +638,54 @@ app.post('/api/presentation/update', (req, res) => {
 
         const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
 
+        const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
+        const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
         if (req.file) {
             console.log('File received:', req.file);
 
-            const presentationData = {
+            const sql = 'UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1';
+
+            const values = [
                 presentationDate,
                 presentationLocation,
-                checkingTime,
-                presentationTime,
-                filePath: `/uploads/presentation`
-            };
+                checkingTimeStamp,
+                presentationTimeStamp,
+                `/uploads/presentation`
+            ];
+            db.query(sql, values, (dbErr) => {
+                if (dbErr) {
+                    console.error('Database update error:', dbErr);
+                    return res.status(500).json({ error: 'Database update failed' });
+                }
+            });
 
             res.status(200).json({ 
                 message: 'Presentation updated successfully', 
-                data: presentationData 
             });
         } else {
             console.log('No file received, updating other fields only');
 
-            const presentationData = {
+
+             const sql = 'UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1';
+
+            const values = [
                 presentationDate,
                 presentationLocation,
-                checkingTime,
-                presentationTime
-            };
+                checkingTimeStamp,
+                presentationTimeStamp,
+                `/uploads/presentation`
+            ];
+            db.query(sql, values, (dbErr) => {
+                if (dbErr) {
+                    console.error('Database update error:', dbErr);
+                    return res.status(500).json({ error: 'Database update failed' });
+                }
+            });
+
+            
 
             res.status(200).json({ 
                 message: 'Presentation details updated successfully', 
-                data: presentationData 
             });
         }
     });
