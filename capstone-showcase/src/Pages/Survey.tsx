@@ -1,7 +1,13 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect,useState, useRef } from "react";
 import { useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../CSS/Survey.css";
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
 
 
 
@@ -96,7 +102,9 @@ const Survey: React.FC = () => {
     const [projects, setProjects] = useState < Project[] > ([]);
     const [, setSelectedProject] = useState < string > ('');
     const [contentTeamFiles, setContentTeamFiles] = useState<File[]>([]);
-    
+    const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+    const recaptchaRef = useRef<HTMLDivElement>(null);
+    const recaptchaWidgetId = useRef<number | null>(null);
 
     const navigate = useNavigate();
 
@@ -113,6 +121,110 @@ const Survey: React.FC = () => {
             response.json()).then((data) =>
             setProjects(data)).catch((error) => 
             console.error('Error fetching projects:', error));
+    }, []);
+
+    // Load reCAPTCHA script
+    useEffect(() => {
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        
+        console.log('Initializing reCAPTCHA...');
+
+        if (!siteKey) {
+            console.error('reCAPTCHA site key is not available');
+            return;
+        }
+
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        let isRendered = false;
+
+        const renderRecaptcha = () => {
+            if (isRendered || recaptchaWidgetId.current !== null) {
+                console.log('reCAPTCHA already rendered, skipping');
+                return;
+            }
+
+            if (!recaptchaRef.current) {
+                console.warn('reCAPTCHA ref not available, retrying...');
+                setTimeout(renderRecaptcha, 500);
+                return;
+            }
+
+            if (!window.grecaptcha || typeof window.grecaptcha.render !== 'function') {
+                console.warn('grecaptcha not loaded yet, retrying...');
+                setTimeout(renderRecaptcha, 500);
+                return;
+            }
+
+            try {
+                //const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
+                recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
+                    sitekey: siteKey,
+                    callback: (token: string) => {
+                        setRecaptchaToken(token);
+                    },
+                    'expired-callback': () => {
+                        console.log('reCAPTCHA token expired');
+                        setRecaptchaToken("");
+                    },
+                    'error-callback': () => {
+                        console.error('reCAPTCHA error');
+                        setRecaptchaToken("");
+                    }
+                });
+                isRendered = true;
+                console.log('reCAPTCHA widget rendered successfully, ID:', recaptchaWidgetId.current);
+            } catch (error) {
+                console.error('Error rendering reCAPTCHA:', error);
+            }
+        };
+
+        const loadScript = () => {
+            const existingScript = document.querySelector('script[src*="recaptcha/api.js"]');
+            if (existingScript) {
+                console.log('reCAPTCHA script already exists');
+                if (window.grecaptcha && window.grecaptcha.render) {
+                    setTimeout(renderRecaptcha, 300);
+                } else {
+                    existingScript.addEventListener('load', () => {
+                        console.log('Existing reCAPTCHA script loaded');
+                        setTimeout(renderRecaptcha, 300);
+                    }, { once: true });
+                }
+                return;
+            }
+
+            console.log('Loading reCAPTCHA script...');
+            const script = document.createElement('script');
+            script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                setTimeout(renderRecaptcha, 300);
+            };
+            script.onerror = (error) => {
+                console.error('Failed to load reCAPTCHA script:', error);
+            };
+            document.head.appendChild(script);
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadScript);
+        } else {
+            setTimeout(loadScript, 100);
+        }
+
+        return () => {
+            if (recaptchaWidgetId.current !== null && window.grecaptcha && window.grecaptcha.reset) {
+                try {
+                    window.grecaptcha.reset(recaptchaWidgetId.current);
+                } catch (error) {
+                    console.error('Error resetting reCAPTCHA:', error);
+                }
+            }
+        };
     }, []);
 
 
@@ -167,9 +279,19 @@ const Survey: React.FC = () => {
     
       const formErrors = validateFormData(formData);
       setErrors(formErrors);
-    
+
       if (hasErrors(formErrors)) {
         scrollToFirstError();
+        return;
+      }
+
+      // Check if reCAPTCHA is completed
+      const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+      if (siteKey && !recaptchaToken) {
+        alert("Please complete the reCAPTCHA verification.");
+        if (recaptchaRef.current) {
+          recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
         return;
       }
       console.log("Calling API");
@@ -213,16 +335,35 @@ const Survey: React.FC = () => {
           teamPicturePath: teamImagePaths.join(", "), 
         };
     
-        const submissionData = prepareSubmissionData(updatedFormData);
-    
+        const submissionData: any = {
+          ...prepareSubmissionData(updatedFormData),
+        };
+        
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        if (siteKey && recaptchaToken) {
+          submissionData.recaptchaToken = recaptchaToken;
+        }
+
         // Final survey data submission
         // await axios.post("http://localhost:3000/api/survey", submissionData);
          await axios.post(`${API_BASE_URL}/survey`, submissionData);
     
         handleSuccessfulSubmission();
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error during form submission:", error);
-        alert("An error occurred while submitting. Please try again.");
+        if (error.response?.data?.error) {
+          if (error.response.data.error.includes("reCAPTCHA")) {
+            alert("reCAPTCHA verification failed. Please try again.");
+            if (recaptchaWidgetId.current !== null && window.grecaptcha && window.grecaptcha.reset) {
+              window.grecaptcha.reset(recaptchaWidgetId.current);
+            }
+            setRecaptchaToken("");
+          } else {
+            alert(error.response.data.error);
+          }
+        } else {
+          alert("An error occurred while submitting. Please try again.");
+        }
       }
     };
     const prepareSubmissionData = (formData: FormData) => {
@@ -306,6 +447,11 @@ const Survey: React.FC = () => {
     const handleSuccessfulSubmission = () => {
         setFormData(initialFormData);
         setSelectedFile(undefined);
+        setContentTeamFiles([]);
+        setRecaptchaToken("");
+        if (recaptchaWidgetId.current !== null && window.grecaptcha) {
+            window.grecaptcha.reset(recaptchaWidgetId.current);
+        }
         setIsSubmitted(true);
           setTimeout(() => {
            setIsSubmitted(false);
@@ -316,6 +462,7 @@ const Survey: React.FC = () => {
         setIsSubmitted(false);
         navigate("/");
     };
+    
     return (
     <div className="content-container">
       <div className="form-container">
@@ -368,7 +515,7 @@ const Survey: React.FC = () => {
             onChange={handleChange}
           >
             <option value="">Select a project</option>
-            {projects.map((project) => {
+            {projects && projects.length > 0 && projects.map((project) => {
               const fullName = `${project.project_id} - ${project.project_title}`;
               return (
                 <option key={project.project_id} value={fullName}>
@@ -691,6 +838,26 @@ const Survey: React.FC = () => {
         </div>
 
         <div className="form-box">
+              <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                <div 
+                  ref={recaptchaRef} 
+                  id="recaptcha-container"
+                  data-testid="recaptcha-widget"
+                  style={{ 
+                    display: 'inline-block',
+                    margin: '20px auto',
+                    minHeight: '78px',
+                    minWidth: '304px',
+                    backgroundColor: 'transparent',
+                    border: '1px dashed #ccc'
+                  }}
+                ></div>
+                  {!recaptchaToken && import.meta.env.RECAPTCHA_SITE_KEY && (
+                    <div style={{ padding: '20px', color: '#666', fontSize: '12px' }}>
+                      Loading reCAPTCHA...
+                    </div>
+                  )}
+              </div>
               <button type="submit" className="submit-button">
                 Submit
               </button>

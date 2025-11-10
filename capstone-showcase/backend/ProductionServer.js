@@ -8,6 +8,8 @@ const path = require("path");
 const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const https = require("https");
+const querystring = require("querystring");
 
 // Major -> title prefixes at the very start of projectTitle
 const MAJOR_PREFIXES = {
@@ -61,6 +63,56 @@ db.connect((err) => {
   }
   console.log("MySQL Connected...");
 });
+
+// reCAPTCHA verification function
+const verifyRecaptcha = (token) => {
+  return new Promise((resolve, reject) => {
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    if (!secretKey) {
+      reject(new Error("RECAPTCHA_SECRET_KEY is not set in environment variables"));
+      return;
+    }
+    const postData = querystring.stringify({
+      secret: secretKey,
+      response: token,
+    });
+
+    const options = {
+      hostname: "www.google.com",
+      port: 443,
+      path: "/recaptcha/api/siteverify",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": Buffer.byteLength(postData),
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          const result = JSON.parse(data);
+          resolve(result.success === true);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.write(postData);
+    req.end();
+  });
+};
 
 /*
 //PERMS to Connect/Create Server Note ***Removed to test new proxy method***
@@ -154,7 +206,7 @@ app.post(
 );
 
 //Survey Upload API
-app.post("/api/survey", (req, res) => {
+app.post("/api/survey", async (req, res) => {
   const {
     email,
     name,
@@ -173,7 +225,26 @@ app.post("/api/survey", (req, res) => {
     youtubeLink,
     posterPicturePath,
     teamPicturePath,
+    recaptchaToken,
   } = req.body;
+
+  // Verify reCAPTCHA token
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  if (secretKey) {
+    if (!recaptchaToken) {
+      return res.status(400).json({ error: "reCAPTCHA token is required" });
+    }
+
+    try {
+      const isValid = await verifyRecaptcha(recaptchaToken);
+      if (!isValid) {
+        return res.status(400).json({ error: "reCAPTCHA verification failed" });
+      }
+    } catch (error) {
+      console.error("reCAPTCHA verification error:", error);
+      return res.status(500).json({ error: "reCAPTCHA verification error" });
+    }
+  }
 
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
