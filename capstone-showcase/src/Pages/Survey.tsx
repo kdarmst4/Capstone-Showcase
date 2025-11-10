@@ -508,22 +508,25 @@ const Survey: React.FC = () => {
             />
             {errors.email && <p className="error-message">{errors.email}</p>}
           </div>
-          <select
-            name="projectTitle"
-            id="projectTitle"
-            value={formData.projectTitle}
-            onChange={handleChange}
-          >
-            <option value="">Select a project</option>
-            {projects && projects.length > 0 && projects.map((project) => {
-              const fullName = `${project.project_id} - ${project.project_title}`;
-              return (
-                <option key={project.project_id} value={fullName}>
-                  {fullName}
-                </option>
-              );
-            })}
-          </select>
+          <div className="form-box">
+            <label htmlFor="projectTitle">Project:</label>
+            <select
+              name="projectTitle"
+              id="projectTitle"
+              value={formData.projectTitle}
+              onChange={handleChange}
+            >
+              <option value="">Select a project</option>
+              {projects && projects.length > 0 && projects.map((project) => {
+                const fullName = `${project.project_id} - ${project.project_title}`;
+                return (
+                  <option key={project.project_id} value={fullName}>
+                    {fullName}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
           <div className="form-box">
             <label htmlFor="projectDescription">
               Project Description (3 sentences max):
