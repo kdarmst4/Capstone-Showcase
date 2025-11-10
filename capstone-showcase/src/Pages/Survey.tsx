@@ -125,53 +125,95 @@ const Survey: React.FC = () => {
 
     // Load reCAPTCHA script
     useEffect(() => {
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        
+        console.log('Initializing reCAPTCHA...');
+
+        if (!siteKey) {
+            console.error('reCAPTCHA site key is not available');
+            return;
+        }
+
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        let isRendered = false;
+
         const renderRecaptcha = () => {
-            if (window.grecaptcha && window.grecaptcha.render && recaptchaRef.current) {
-                try {
+            if (isRendered || recaptchaWidgetId.current !== null) {
+                console.log('reCAPTCHA already rendered, skipping');
+                return;
+            }
+
+            if (!recaptchaRef.current) {
+                console.warn('reCAPTCHA ref not available, retrying...');
+                setTimeout(renderRecaptcha, 500);
+                return;
+            }
+
+            if (!window.grecaptcha || typeof window.grecaptcha.render !== 'function') {
+                console.warn('grecaptcha not loaded yet, retrying...');
+                setTimeout(renderRecaptcha, 500);
+                return;
+            }
+
+            try {
                     const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-                    recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
-                        sitekey: siteKey,
-                        callback: (token: string) => {
-                            setRecaptchaToken(token);
-                        },
-                        'expired-callback': () => {
-                            setRecaptchaToken("");
-                        },
-                        'error-callback': () => {
-                            setRecaptchaToken("");
-                        }
-                    });
-                } catch (error) {
-                    console.error('Error rendering reCAPTCHA:', error);
-                }
+                recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
+                    sitekey: siteKey,
+                    callback: (token: string) => {
+                        setRecaptchaToken(token);
+                    },
+                    'expired-callback': () => {
+                        console.log('reCAPTCHA token expired');
+                        setRecaptchaToken("");
+                    },
+                    'error-callback': () => {
+                        console.error('reCAPTCHA error');
+                        setRecaptchaToken("");
+                    }
+                });
+                isRendered = true;
+                console.log('reCAPTCHA widget rendered successfully, ID:', recaptchaWidgetId.current);
+            } catch (error) {
+                console.error('Error rendering reCAPTCHA:', error);
             }
         };
 
-        // Check if reCAPTCHA is already loaded
-        if (window.grecaptcha && window.grecaptcha.render) {
-            // delay to make sure DOM is ready
-            setTimeout(renderRecaptcha, 100);
-        } else {
+        const loadScript = () => {
             const existingScript = document.querySelector('script[src*="recaptcha/api.js"]');
             if (existingScript) {
-                existingScript.addEventListener('load', renderRecaptcha);
-                // if loaded render immediately
+                console.log('reCAPTCHA script already exists');
                 if (window.grecaptcha && window.grecaptcha.render) {
-                    setTimeout(renderRecaptcha, 100);
+                    setTimeout(renderRecaptcha, 300);
+                } else {
+                    existingScript.addEventListener('load', () => {
+                        console.log('Existing reCAPTCHA script loaded');
+                        setTimeout(renderRecaptcha, 300);
+                    }, { once: true });
                 }
-            } else {
-                const script = document.createElement('script');
-                script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
-                script.async = true;
-                script.defer = true;
-                script.onload = () => {
-                    setTimeout(renderRecaptcha, 100);
-                };
-                script.onerror = () => {
-                    console.error('Failed to load reCAPTCHA script');
-                };
-                document.body.appendChild(script);
+                return;
             }
+
+            console.log('Loading reCAPTCHA script...');
+            const script = document.createElement('script');
+            script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                setTimeout(renderRecaptcha, 300);
+            };
+            script.onerror = (error) => {
+                console.error('Failed to load reCAPTCHA script:', error);
+            };
+            document.head.appendChild(script);
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadScript);
+        } else {
+            setTimeout(loadScript, 100);
         }
 
         return () => {
@@ -244,7 +286,8 @@ const Survey: React.FC = () => {
       }
 
       // Check if reCAPTCHA is completed
-      if (!recaptchaToken) {
+      const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+      if (siteKey && !recaptchaToken) {
         alert("Please complete the reCAPTCHA verification.");
         if (recaptchaRef.current) {
           recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -292,10 +335,14 @@ const Survey: React.FC = () => {
           teamPicturePath: teamImagePaths.join(", "), 
         };
     
-        const submissionData = {
+        const submissionData: any = {
           ...prepareSubmissionData(updatedFormData),
-          recaptchaToken: recaptchaToken
         };
+        
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        if (siteKey && recaptchaToken) {
+          submissionData.recaptchaToken = recaptchaToken;
+        }
 
         // Final survey data submission
         // await axios.post("http://localhost:3000/api/survey", submissionData);
@@ -415,9 +462,11 @@ const Survey: React.FC = () => {
         setIsSubmitted(false);
         navigate("/");
     };
+    
     return (
-    <div className="content-container">
-      <div className="form-container">
+    // change this back before PR
+    <div className="content-container" style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', width: '100%' }}>
+      <div className="form-container" style={{ backgroundColor: 'white', color: 'black' }}>
         {isSubmitted && (
           <div className="success-message">
             <p>Thank you for submitting your survey! Your responses have been recorded successfully.</p>
@@ -467,7 +516,7 @@ const Survey: React.FC = () => {
             onChange={handleChange}
           >
             <option value="">Select a project</option>
-            {projects.map((project) => {
+            {projects && projects.length > 0 && projects.map((project) => {
               const fullName = `${project.project_id} - ${project.project_title}`;
               return (
                 <option key={project.project_id} value={fullName}>
@@ -790,7 +839,27 @@ const Survey: React.FC = () => {
         </div>
 
         <div className="form-box">
-              <div ref={recaptchaRef} style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}></div>
+              <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                <div 
+                  ref={recaptchaRef} 
+                  id="recaptcha-container"
+                  data-testid="recaptcha-widget"
+                  style={{ 
+                    display: 'inline-block',
+                    margin: '20px auto',
+                    minHeight: '78px',
+                    minWidth: '304px',
+                    backgroundColor: 'transparent',
+                    border: '1px dashed #ccc'
+                  }}
+                >
+                  {!recaptchaToken && import.meta.env.VITE_RECAPTCHA_SITE_KEY && (
+                    <div style={{ padding: '20px', color: '#666', fontSize: '12px' }}>
+                      Loading reCAPTCHA...
+                    </div>
+                  )}
+                </div>
+              </div>
               <button type="submit" className="submit-button">
                 Submit
               </button>

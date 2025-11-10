@@ -239,18 +239,21 @@ app.post("/api/survey", async (req, res) => {
   } = req.body;
 
   // Verify reCAPTCHA token
-  if (!recaptchaToken) {
-    return res.status(400).json({ error: "reCAPTCHA token is required" });
-  }
-
-  try {
-    const isValid = await verifyRecaptcha(recaptchaToken);
-    if (!isValid) {
-      return res.status(400).json({ error: "reCAPTCHA verification failed" });
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  if (secretKey) {
+    if (!recaptchaToken) {
+      return res.status(400).json({ error: "reCAPTCHA token is required" });
     }
-  } catch (error) {
-    console.error("reCAPTCHA verification error:", error);
-    return res.status(500).json({ error: "reCAPTCHA verification error" });
+
+    try {
+      const isValid = await verifyRecaptcha(recaptchaToken);
+      if (!isValid) {
+        return res.status(400).json({ error: "reCAPTCHA verification failed" });
+      }
+    } catch (error) {
+      console.error("reCAPTCHA verification error:", error);
+      return res.status(500).json({ error: "reCAPTCHA verification error" });
+    }
   }
 
   // Convert string values to correct types
