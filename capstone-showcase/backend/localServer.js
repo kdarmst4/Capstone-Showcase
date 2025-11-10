@@ -625,7 +625,7 @@ const uploadPresentation = multer({
 });
 
 // Serve static files from uploads directory
-app.use('/uploads', express.static('public/uploads'));
+app.use('/public/uploads', express.static('public/uploads'));
 
 // Update your presentation endpoint to use the middleware
 app.post('/api/presentation/update', (req, res) => {
@@ -784,4 +784,16 @@ try {
     console.error("Error handling set_winners:", err);
     return res.status(500).json({ success: false, error: "Server error parsing winners" });
   }
+});
+
+app.get('/api/presentation', (req, res) => {
+    const sql = 'SELECT * FROM presentation WHERE id = 1';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching presentation data:', err);
+            return res.status(500).send('Server error');
+        }
+        console.log('Query results:', results);
+        res.json(results);
+    });
 });
