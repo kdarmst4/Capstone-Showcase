@@ -526,7 +526,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 app.get("/api/winners", async (req, res) => {
 
   // Ensuring all below necessary columns exist locally first
-  await ensureColumns("survey_entries", survey_entries_Columns);
+  await ensureColumns("survey_entries", LOCAL_DBSCHEMA.survey_entries_Columns);
 
   // The below "SELECT" code needs to match the "survey_entries_Columns" constant above.
   // Any additions the below code makes needs to be reflected in the "survey_entries_Columns" constant above
@@ -984,7 +984,7 @@ try {
 
 app.get('/api/presentation', async (req, res) => {
   // Ensure table and columns exist before querying
-  await ensureColumns("presentation", presentation_Columns);
+  await ensureColumns("presentation", LOCAL_DBSCHEMA.presentation_Columns);
     const sql = 'SELECT * FROM presentation WHERE id = 1';
     db.query(sql, (err, results) => {
         if (err) {
