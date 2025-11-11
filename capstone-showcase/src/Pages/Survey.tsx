@@ -492,6 +492,7 @@ const Survey: React.FC = () => {
               type="text"
               name="name"
               id="name"
+              autoComplete="name"
               value={formData.name}
               onChange={handleChange}
             />
@@ -503,6 +504,7 @@ const Survey: React.FC = () => {
               type="email"
               name="email"
               id="email"
+              autoComplete="email"
               value={formData.email}
               onChange={handleChange}
             />
@@ -614,7 +616,7 @@ const Survey: React.FC = () => {
             )}
           </div>
           <div className="form-box">
-      <label>Are you online or in-person?</label>
+      <label htmlFor="attendance">Are you online or in-person?</label>
       <select
         name="attendance"
         id="attendance"
