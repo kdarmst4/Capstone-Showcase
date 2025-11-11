@@ -41,7 +41,7 @@ export function Edit() {
       );
       const data = await response.json();
       setProjects(data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
@@ -54,7 +54,7 @@ export function Edit() {
         setProjects((prevProjects) =>
           prevProjects.map((proj: ProjectObj) => {
             const entryId = selection.get("EntryId");
-            console.log("Updating project with EntryID:", entryId);
+            // console.log("Updating project with EntryID:", entryId);
             if (entryId !== undefined && proj.id === +entryId) {
               return { ...proj, ...Object.fromEntries(selection) };
             }
@@ -242,6 +242,7 @@ export function Edit() {
                 <label htmlFor="location-file">Location:</label>
                 <input
                   type="file"
+                  accept=".pdf"
                   id="location-file"
                   name="location-file"
                   placeholder="Enter location"

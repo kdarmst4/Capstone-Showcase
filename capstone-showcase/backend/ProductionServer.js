@@ -18,10 +18,10 @@ const MAJOR_PREFIXES = {
   "computer-systems-engineering": ["CS/E"],
 
   "electrical-engineering": ["EEE"],
-  "mechanical-engineering":  ["MEE"],
-  "biomedical-engineering":  ["BME"],
-  "industrial-engineering":  ["IEE"],
-  "informatics": ["CPI"]
+  "mechanical-engineering": ["MEE"],
+  "biomedical-engineering": ["BME"],
+  "industrial-engineering": ["IEE"],
+  informatics: ["CPI"],
 };
 
 const dotenv = require("dotenv");
@@ -125,6 +125,7 @@ const credentials = {key: privateKey, cert: certificate};
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
 app.use("/winnerUploads", express.static("winnerUploads"));
+app.use("/public/uploads", express.static("public/uploads"));
 
 //Image Upload And Storgae API
 
@@ -157,7 +158,21 @@ const storagePoster = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storagePoster });
-
+const presentationStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = "./public/uploads/";
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Rename the file to "presentation" with its original extension
+    const newName = `presentation${path.extname(file.originalname)}`;
+    cb(null, newName);
+  },
+});
 //Team Images Upload Storage
 const storageTeam = multer.diskStorage({
   destination: "./teamUploads/",
@@ -166,6 +181,31 @@ const storageTeam = multer.diskStorage({
       null,
       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
     );
+  },
+});
+
+const uploadPresentation = multer({
+  storage: presentationStorage,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept common presentation file types
+    const allowedTypes = /pdf|ppt|pptx|doc|docx/;
+    const extname = allowedTypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)"
+        )
+      );
+    }
   },
 });
 const uploadTeam = multer({ storage: storageTeam });
@@ -304,18 +344,22 @@ http.createServer(app).listen(3000, "127.0.0.1", () => {
 });
 
 // Build MySQL regex patterns for titles that START with a given major's prefixes:
-// simple prefixes (IEE) and composite (CS/E)     
+// simple prefixes (IEE) and composite (CS/E)
 function buildTitleStartRegexes(majorSlug) {
-  const list = (MAJOR_PREFIXES[majorSlug] || []).map(p => String(p).toUpperCase());
+  const list = (MAJOR_PREFIXES[majorSlug] || []).map((p) =>
+    String(p).toUpperCase()
+  );
   if (!list.length) return [];
 
-  const composite = list.filter(p => p.includes("/"));    
-  const simple    = list.filter(p => !p.includes("/"));
+  const composite = list.filter((p) => p.includes("/"));
+  const simple = list.filter((p) => !p.includes("/"));
 
   const regexes = [];
 
   if (simple.length) {
-    regexes.push(`^[[:space:]]*(?:${simple.join("|")})[[:space:]]*[- ]?[[:digit:]]{2,3}`);
+    regexes.push(
+      `^[[:space:]]*(?:${simple.join("|")})[[:space:]]*[- ]?[[:digit:]]{2,3}`
+    );
   }
 
   for (const c of composite) {
@@ -363,7 +407,11 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   (
     major = ?
     ${titleRegexes.length ? " OR (major = 'interdisciplinary' AND (" : ""}
-    ${titleRegexes.length ? titleRegexes.map(() => "projectTitle REGEXP ?").join(" OR ") : ""}
+    ${
+      titleRegexes.length
+        ? titleRegexes.map(() => "projectTitle REGEXP ?").join(" OR ")
+        : ""
+    }
     ${titleRegexes.length ? "))" : ""}
   )
   AND submitDate BETWEEN ? AND ?
@@ -376,7 +424,7 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
     params.push(...titleRegexes);
   }
   params.push(startDate, endDate);
-  
+
   db.query(sql, params, (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -689,7 +737,6 @@ app.post("/api/signin", (req, res) => {
   });
 });
 
-
 app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
   const { startDate, endDate, discipline } = req.params;
   let query = "";
@@ -731,12 +778,12 @@ app.put("/api/:id/update", (req, res) => {
     if (err) {
       return res.status(500).send("Server error");
     }
-  
+
     res.status(200).json({ message: "Entry updated successfully" });
   });
 });
 
-app.get('/api/single_survey/:id', (req, res) => {
+app.get("/api/single_survey/:id", (req, res) => {
   const { id } = req.params;
   if (!id || isNaN(Number(id))) {
     return res.status(400).send("Bad request");
@@ -756,13 +803,14 @@ app.get('/api/single_survey/:id', (req, res) => {
 });
 
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
-
-try {
-      // add functionality to clear previous winners before setting new ones
+  try {
+    // add functionality to clear previous winners before setting new ones
 
     const winners = [];
     // Determine number of winners by checking body keys for projectIdX
-    const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));
+    const projectIdKeys = Object.keys(req.body).filter((k) =>
+      /^projectId\d+$/.test(k)
+    );
     const count = projectIdKeys.length;
 
     for (let i = 1; i <= count; i++) {
@@ -770,24 +818,33 @@ try {
       const position = req.body[`position${i}`];
 
       // Collect files for this winner (fieldnames like picture{i}_{j})
-      const filesForWinner = (req.files || []).filter((f) => new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname));
+      const filesForWinner = (req.files || []).filter((f) =>
+        new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname)
+      );
       const filePaths = filesForWinner.map((f) => {
         return `/winnerUploads/${f.filename}`;
       });
 
-      winners.push({ projectId: Number(projectId), position: Number(position), pictures: filePaths });
+      winners.push({
+        projectId: Number(projectId),
+        position: Number(position),
+        pictures: filePaths,
+      });
     }
 
     console.log("Parsed winners:", winners);
 
     db.beginTransaction((err) => {
       if (err) {
-        return res.status(500).json({ success: false, error: "Database transaction error" });
+        return res
+          .status(500)
+          .json({ success: false, error: "Database transaction error" });
       }
 
       const updatePromises = winners.map((winner) => {
         return new Promise((resolve, reject) => {
-          const sql = "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
+          const sql =
+            "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
           db.query(
             sql,
             [winner.position, winner.pictures.join(","), winner.projectId],
@@ -804,7 +861,9 @@ try {
           db.commit((err) => {
             if (err) {
               return db.rollback(() => {
-                return res.status(500).json({ success: false, error: "Database commit error" });
+                return res
+                  .status(500)
+                  .json({ success: false, error: "Database commit error" });
               });
             }
             return res.status(200).json({ success: true, winners });
@@ -812,12 +871,20 @@ try {
         })
         .catch((updateErr) => {
           db.rollback(() => {
-            return res.status(500).json({ success: false, error: "Database update error", details: updateErr.message });
+            return res
+              .status(500)
+              .json({
+                success: false,
+                error: "Database update error",
+                details: updateErr.message,
+              });
           });
         });
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: "Server error parsing winners" });
+    return res
+      .status(500)
+      .json({ success: false, error: "Server error parsing winners" });
   }
 });
 
@@ -881,4 +948,80 @@ WHERE position IS NOT NULL AND id = ?;`;
     console.log("Query results:", results);
     res.json(results);
   });
+});
+
+
+// Update your presentation endpoint to use the middleware
+app.post("/api/presentation/update", (req, res) => {
+  uploadPresentation.single("presentationFile")(req, res, (err) => {
+    if (err) {
+      // Handle multer errors
+      return res.status(400).json({ error: err.message });
+    }
+
+    const {
+      presentationDate,
+      presentationLocation,
+      checkingTime,
+      presentationTime,
+    } = req.body;
+
+    const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
+    const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
+    if (req.file) {
+      const sql =
+        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
+
+      const values = [
+        presentationDate,
+        presentationLocation,
+        checkingTimeStamp,
+        presentationTimeStamp,
+        `public/uploads/presentation.pdf`,
+      ];
+      db.query(sql, values, (dbErr) => {
+        if (dbErr) {
+          return res.status(500).json({ error: "Database update failed" });
+        }
+      });
+
+      res.status(200).json({
+        message: "Presentation updated successfully",
+      });
+    } else {
+      console.log("No file received, updating other fields only");
+
+      const sql =
+        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
+
+      const values = [
+        presentationDate,
+        presentationLocation,
+        checkingTimeStamp,
+        presentationTimeStamp,
+        `public/uploads/presentation.pdf`,
+      ];
+      db.query(sql, values, (dbErr) => {
+        if (dbErr) {
+          return res.status(500).json({ error: "Database update failed" });
+        }
+      });
+
+      res.status(200).json({
+        message: "Presentation details updated successfully",
+      });
+    }
+  });
+});
+
+app.get('/api/presentation', (req, res) => {
+    const sql = 'SELECT * FROM presentation WHERE id = 1';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching presentation data:', err);
+            return res.status(500).send('Server error');
+        }
+        console.log('Query results:', results);
+        res.json(results);
+    });
 });
