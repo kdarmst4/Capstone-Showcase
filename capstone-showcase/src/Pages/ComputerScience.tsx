@@ -7,12 +7,10 @@ import "../CSS/ProjectShowcase.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
-
-
-const API_BASE_URL =
-  import.meta.env.PROD
-    ? "/api" // Relative URL - will use https://showcase.asucapstone.com/api
-    : "http://localhost:3000/api";
+import Pagination from "../Components/Pagination";
+import useFetchProjects from "../Hooks/useFetchProjects";
+import useFilterProjects from "../Hooks/useFilterProjects";
+import usePagination from "../Hooks/usePagination";
 
 const STATIC_BASE_URL =
   import.meta.env.PROD
@@ -25,88 +23,54 @@ const ComputerScience: React.FC = () => {
   const selectedSemester = searchParams.get("semester");
   const selectedYear = searchParams.get("year");
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<any[]>([]); // State to store fetched projects
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Fetch Projects based on selected semester and year
   const DEFAULT_SEMESTER = "fa";
   const DEFAULT_YEAR = "2025";
-
   const semester = selectedSemester || DEFAULT_SEMESTER;
   const year = selectedYear || DEFAULT_YEAR;
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSponsor, setSelectedSponsor] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
+  const major = "computer-science";
+  const { projects, loading, error } = useFetchProjects(major, semester, year);
+  
+  // Filtering Variables and functions
+  const {
+    searchQuery,
+    setSearchQuery, 
+    selectedSponsor, 
+    setSelectedSponsor, 
+    uniqueSponsors, 
+    filterProjects
+  } = useFilterProjects(projects);
 
-  const uniqueSponsors = useMemo(() => {
-    const sponsors = new Set(
-      projects.map((p) => (p.sponsor ?? "").toString().trim()).filter(Boolean)
-    );
-    return ["all", ...Array.from(sponsors).sort((a, b) => a.localeCompare(b))];
-  }, [projects]);
-
-  const filterProjects = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    const sponsor = (selectedSponsor || "all").toLowerCase();
-
-    return projects.filter((p) => {
-      const title = (p.projectTitle ?? "").toString().toLowerCase();
-      const desc = (p.projectDescription ?? "").toString().toLowerCase();
-      const team = (p.teamMemberNames ?? "").toString().toLowerCase();
-      const sp = (p.sponsor ?? "").toString().toLowerCase();
-
-      const matchesSearch =
-        q === "" || title.includes(q) || desc.includes(q) || team.includes(q);
-
-      const matchesSponsor = sponsor === "all" || sp === sponsor;
-
-      return matchesSearch && matchesSponsor;
-    });
-  }, [projects, searchQuery, selectedSponsor]);
-
-  // Pagination Variables - computed from filteredProjects
+  // Pagination Variables and functions - computed from filteredProjects
   const projectsPerPage = 8;
-  const totalPages = Math.ceil(filterProjects.length / projectsPerPage);
-  const startIndex = (currentPage - 1) * projectsPerPage;
-  const endIndex = startIndex + projectsPerPage;
-  const currentProjects = filterProjects.slice(startIndex, endIndex);
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    currentProjects,
+    goToPage,
+    goToNextPage,
+    goToPreviousPage,
+    getPageNumbers,
+  } = usePagination(filterProjects, projectsPerPage);
+
+  const paginationProps = {
+    currentPage,
+    totalPages,
+    goToPage,
+    goToNextPage,
+    goToPreviousPage,
+    getPageNumbers,
+    totalProjects: filterProjects.length,
+  }
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [filterProjects]);
-
-
-
-  useEffect(() => {
-    let ignore = false;
-
-    console.log("Selected semseter:", semester, year);
-    document.body.classList.add("computer-science-page-body");
-
-    // Fetch projects for the Computer Science major
-    fetch(`${API_BASE_URL}/survey/computer-science/term=${semester}-${year}`)
-      //  fetch(`https://asucapstone.com:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
-      //  fetch(`http://localhost:3000/api/survey/computer-science/term=${selectedSemester}-${selectedYear}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {if(!ignore) setProjects(data)}) // Populate the state with fetched projects
-      .catch((error) => console.error("Error fetching projects:", error));
-
-    return () => {
-      document.body.classList.remove("computer-science-page-body");
-      ignore = true;
-    };
-  }, [semester, year]);
-
-  // Set starting page to the first page
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [projects]);
+  }, [projects, filterProjects]);
 
   const extractYouTubeThumbnail = (url: string): string | null => {
     const regex =
@@ -138,53 +102,7 @@ const ComputerScience: React.FC = () => {
     setSelectedProject(null);
   };
 
-  // Pagination function calls
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      goToPage(currentPage - 1);
-    }
-  };
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      goToPage(currentPage + 1);
-    }
-  };
-
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxPagesToShow = 5;
-
-    if (totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-
-      if (startPage > 1) {
-        pages.unshift("...");
-        pages.unshift(1);
-      }
-
-      if (endPage < totalPages) {
-        pages.push("...");
-        pages.push(totalPages);
-      }
-    }
-
-    return pages;
-  };
+  //TODO:: handle repeated jsx
 
   return (
     <div className={`computer-science ${isSideMenu ? "compressed" : ""}`}>
@@ -282,43 +200,7 @@ const ComputerScience: React.FC = () => {
               </div>
             </section>
 
-              {/*Pagination*/}
-              {totalPages > 1 && (
-                <div className="pagination-container">
-                  <button
-                    className="pagination-button"
-                    onClick={goToPreviousPage}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </button>
-
-                  {getPageNumbers().map((page, index) => (
-                    <button
-                      key={index}
-                      className={`page-number ${
-                        page === currentPage ? "active" : ""
-                      }`}
-                      onClick={() => typeof page === "number" && goToPage(page)}
-                      disabled={page === "..."}
-                    >
-                      {page}
-                    </button>
-                  ))}
-
-                  <button
-                    className="pagination-button"
-                    onClick={goToNextPage}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </button>
-
-                  <div className="page-info">
-                    Page {currentPage} of {totalPages} ({filterProjects.length} total projects)
-                  </div>
-                </div>
-              )}
+            <Pagination {...paginationProps} />
 
               <button
                 className="more-projects-button"
