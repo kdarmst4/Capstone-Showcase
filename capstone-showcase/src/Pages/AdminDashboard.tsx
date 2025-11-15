@@ -46,28 +46,42 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [loading, setLoading] = useState(true);
   const { isSignedIn, isTokenValid, setIsSignedIn, setToken } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = () => {
+    setIsLoggingOut(true);
+    setLoggingOut(false);
     setIsSignedIn(false);
     setToken(null);
-    navigate("/admin");
+
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {
+    if (isLoggingOut) return;
     if (!isSignedIn) {
+      console.warn("User is not signed in. Redirecting to /admin.");
       navigate("/admin");
-    } else if (!isTokenValid()) {
+      return;
+    }
+
+    if (!isTokenValid()) {
+      console.warn("Token is invalid. Logging out and redirecting to /admin.");
       setIsSignedIn(false);
       setToken(null);
       navigate("/admin");
+      return;
     }
 
     setLoading(false);
-  }, [isSignedIn, navigate]);
-
-  const changeTitle = (title: string) => {
-    setPageTitle(title);
-  };
+  }, [
+    isSignedIn,
+    isTokenValid,
+    navigate,
+    setIsSignedIn,
+    setToken,
+    isLoggingOut,
+  ]);
 
   return (
     <>
