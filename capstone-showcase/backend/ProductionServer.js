@@ -73,6 +73,7 @@ const credentials = {key: privateKey, cert: certificate};
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
 app.use("/winnerUploads", express.static("winnerUploads"));
+app.use('/uploads', express.static('public/uploads'));
 
 //Image Upload And Storgae API
 
@@ -105,6 +106,41 @@ const storagePoster = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storagePoster });
+// Configure Multer for presentation file storage 
+const presentationStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = './public/uploads/';
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Rename the file to "presentation" with its original extension
+    const newName = `presentation${path.extname(file.originalname)}`;
+    cb(null, newName);
+  }
+});
+
+const uploadPresentation = multer({ 
+    storage: presentationStorage,
+    limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        // Accept common presentation file types
+        const allowedTypes = /pdf|ppt|pptx|doc|docx/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)'));
+        }
+    }
+});
 
 //Team Images Upload Storage
 const storageTeam = multer.diskStorage({
@@ -810,4 +846,49 @@ WHERE position IS NOT NULL AND id = ?;`;
     console.log("Query results:", results);
     res.json(results);
   });
+});
+
+
+// Update your presentation endpoint to use the middleware
+app.post('/api/presentation/update', (req, res) => {
+    uploadPresentation.single('presentationFile')(req, res, (err) => {
+        if (err) {
+            // Handle multer errors
+            console.error('File upload error:', err.message);
+            return res.status(400).json({ error: err.message });
+        }
+
+        const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
+
+        if (req.file) {
+            console.log('File received:', req.file);
+
+            const presentationData = {
+                presentationDate,
+                presentationLocation,
+                checkingTime,
+                presentationTime,
+                filePath: `/uploads/presentation`
+            };
+
+            res.status(200).json({ 
+                message: 'Presentation updated successfully', 
+                data: presentationData 
+            });
+        } else {
+            console.log('No file received, updating other fields only');
+
+            const presentationData = {
+                presentationDate,
+                presentationLocation,
+                checkingTime,
+                presentationTime
+            };
+
+            res.status(200).json({ 
+                message: 'Presentation details updated successfully', 
+                data: presentationData 
+            });
+        }
+    });
 });
