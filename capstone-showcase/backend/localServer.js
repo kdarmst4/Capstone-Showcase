@@ -31,8 +31,6 @@ db.connect((err) => {
   console.log("MySQL Connected...");
 });
 
-//SAME AS PROD DB
-
 //Poster Image Directory
 const uploadDir = "./posterUploads";
 if (!fs.existsSync(uploadDir)) {
@@ -709,8 +707,14 @@ app.get("/api/single_survey/:id", (req, res) => {
 });
 
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
-  console.log("here is the body", req.body);
-  console.log("/api/set_winners req.files:", req.files && req.files.length);
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
+
   // add functionality to clear previous winners before setting new ones
   try {
     // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
@@ -785,13 +789,11 @@ app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
           // If any update failed, rollback and report the error
           db.rollback(() => {
             console.error("Error updating winner:", updateErr);
-            return res
-              .status(500)
-              .json({
-                success: false,
-                error: "Database update error",
-                details: updateErr.message,
-              });
+            return res.status(500).json({
+              success: false,
+              error: "Database update error",
+              details: updateErr.message,
+            });
           });
         });
     });

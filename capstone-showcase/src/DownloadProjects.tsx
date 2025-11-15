@@ -74,6 +74,10 @@ export function DownloadProjects() {
     const csvRows = [];
     const headerRow = headers.join(",");
     csvRows.push(headerRow);
+    console.log('length of data:', data.length);
+    if (data.length === 0 || data.length === undefined) {
+      return csvRows.join("\n");
+    }
 
     for (const row of data) {
       console.log("Processing row:", row);
@@ -157,7 +161,7 @@ export function DownloadProjects() {
     setError("");
     const header = {
       "Content-Type": "application/json",
-      Authorization: `Bearer thisisatesttoken`,
+      Authorization: `Bearer ${token}`,
     };
     const response = await fetch(
       `${API_BASE_URL}/downloadProjects/${startDate}/${endDate}/${selectedMajor}`,
