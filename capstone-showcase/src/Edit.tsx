@@ -2,10 +2,15 @@ import { useState, useEffect } from "react";
 import "./CSS/edit.css";
 import EditProject from "./EditProject";
 import { TodaysDate } from "./AdminDate";
-import {ProjectObj} from "./SiteInterface";
+import { ProjectObj } from "./SiteInterface";
+import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function Edit() {
   const [presentationEdit, setPresentationEdit] = useState<boolean>(false);
+  const { isSignedIn, isTokenValid, token } = useAuth();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     semester:
       new Date().getMonth() < 5
@@ -46,23 +51,30 @@ export function Edit() {
       console.error("Error fetching projects:", error);
     }
   };
+  useEffect(() => {
+    if (!isSignedIn || !isTokenValid()) {
+      navigate("/admin");
+    }
+  }, [isSignedIn, isTokenValid, navigate, token]);
 
-  const handleSelectionClose = (selection: Map<String, String> | null | undefined) => {
-      setSubmissionSelected(null);
-      console.log("Selection closed with:", selection);
-      if (selection) {
-        setProjects((prevProjects) =>
-          prevProjects.map((proj: ProjectObj) => {
-            const entryId = selection.get("EntryId");
-            console.log("Updating project with EntryID:", entryId);
-            if (entryId !== undefined && proj.id === +entryId) {
-              return { ...proj, ...Object.fromEntries(selection) };
-            }
-            return proj;
-          })
-        );
-      }
-    };
+  const handleSelectionClose = (
+    selection: Map<String, String> | null | undefined
+  ) => {
+    setSubmissionSelected(null);
+    console.log("Selection closed with:", selection);
+    if (selection) {
+      setProjects((prevProjects) =>
+        prevProjects.map((proj: ProjectObj) => {
+          const entryId = selection.get("EntryId");
+          console.log("Updating project with EntryID:", entryId);
+          if (entryId !== undefined && proj.id === +entryId) {
+            return { ...proj, ...Object.fromEntries(selection) };
+          }
+          return proj;
+        })
+      );
+    }
+  };
 
   useEffect(() => {
     const { year: curr_year, semester } = TodaysDate();
@@ -85,11 +97,11 @@ export function Edit() {
   ) => {
     const target = e.target as HTMLInputElement;
     const { name, value, files } = target;
-    
-    if (name === 'location-file' && files && files[0]) {
+
+    if (name === "location-file" && files && files[0]) {
       setEditPresentationData((prevData) => ({
         ...prevData,
-        presentationFile: files[0]
+        presentationFile: files[0],
       }));
     } else {
       setEditPresentationData((prevData) => ({
@@ -97,7 +109,7 @@ export function Edit() {
         [name]: value,
       }));
     }
-    
+
     console.log(editpresentationData);
   };
   const handlePresentationSubmit = async (
@@ -105,39 +117,52 @@ export function Edit() {
   ) => {
     e.preventDefault();
     console.log("Form submitted with data:", editpresentationData);
-    
+
     try {
       // Create FormData to handle file upload
       const formData = new FormData();
-      formData.append('presentationDate', editpresentationData.presentationDate);
-      formData.append('presentationLocation', editpresentationData.presentationLocation);
-      formData.append('checkingTime', editpresentationData.checkingTime);
-      formData.append('presentationTime', editpresentationData.presentationTime);
-      
+      formData.append(
+        "presentationDate",
+        editpresentationData.presentationDate
+      );
+      formData.append(
+        "presentationLocation",
+        editpresentationData.presentationLocation
+      );
+      formData.append("checkingTime", editpresentationData.checkingTime);
+      formData.append(
+        "presentationTime",
+        editpresentationData.presentationTime
+      );
+
       // Only append file if one was selected
       if (editpresentationData.presentationFile) {
-        formData.append('presentationFile', editpresentationData.presentationFile);
+        formData.append(
+          "presentationFile",
+          editpresentationData.presentationFile
+        );
       }
-      
+      const header = {
+        Authorization: `Bearer ${token}`,
+      };
       const res = await fetch(`${API_BASE_URL}/presentation/update`, {
         method: "POST",
+        headers: header,
         body: formData,
       });
-      
+
       const data = await res.json();
       console.log(data);
-      
+
       if (res.status === 200) {
-        alert('Presentation updated successfully!');
-      }
-      else 
-      {
+        alert("Presentation updated successfully!");
+      } else {
         console.log(data);
         alert(data.error);
       }
     } catch (error) {
       console.error("Error in form submission:", error);
-      alert('Error updating presentation');
+      alert("Error updating presentation");
     }
   };
   const fetchSubmission = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -264,7 +289,9 @@ export function Edit() {
             <div className="edit-project-submission">
               <EditProject
                 project={submissionSelected}
-                closeFunc={(changeMap?: Map<string, string> | null | undefined) => handleSelectionClose(changeMap)}
+                closeFunc={(
+                  changeMap?: Map<string, string> | null | undefined
+                ) => handleSelectionClose(changeMap)}
               />
             </div>
           )}

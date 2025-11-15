@@ -573,6 +573,14 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
 });
 
 app.put("/api/:id/update", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
   const { id } = req.params;
   const keys = Object.keys(req.body);
   const values = Object.values(req.body);
@@ -640,6 +648,14 @@ app.use("/uploads", express.static("public/uploads"));
 
 // Update your presentation endpoint to use the middleware
 app.post("/api/presentation/update", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
   uploadPresentation.single("presentationFile")(req, res, (err) => {
     if (err) {
       // Handle multer errors

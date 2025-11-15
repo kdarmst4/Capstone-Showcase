@@ -36,7 +36,6 @@ const AdminLogin: React.FC = () => {
       }
     ).then((res) => res.json())
     .then((data) => {
-      console.log(data);
       if (data && data.jwtToken) {
         setToken(data.jwtToken);
         setIsSignedIn(true);
