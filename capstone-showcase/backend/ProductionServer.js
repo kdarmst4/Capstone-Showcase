@@ -164,6 +164,7 @@ const storageWinner = multer.diskStorage({
   },
 });
 const uploadWinner = multer({ storage: storageWinner });
+const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
 
 app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
@@ -607,7 +608,6 @@ app.post("/api/signin", (req, res) => {
   // defining variables from request body
   const { username, password } = req.body;
   const saltRounds = 10; // Number of hashing rounds
-  const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
 
   if (!username || !password) {
     return res
@@ -656,6 +656,15 @@ app.post("/api/signin", (req, res) => {
 
 
 app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
+
   const { startDate, endDate, discipline } = req.params;
   let query = "";
   let queryParams = [];

@@ -94,7 +94,6 @@ app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   res.json({ path: filePath });
 });
 
-
 app.post(
   "/api/survey/uploadsTeam",
   uploadTeam.array("contentTeamFiles", 10),
@@ -275,8 +274,7 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
 
-  const sql =
-    "SELECT * FROM survey_entries ORDER BY projectTitle";
+  const sql = "SELECT * FROM survey_entries ORDER BY projectTitle";
   db.query(sql, [major, startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -320,7 +318,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
- const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
+  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -543,6 +541,15 @@ app.put("/api/admin/submissions/:id", (req, res) => {
 });
 
 app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
+
   const { startDate, endDate, discipline } = req.params;
   let query = "";
   let queryParams = [];
@@ -583,15 +590,15 @@ app.put("/api/:id/update", (req, res) => {
     if (err) {
       return res.status(500).send("Server error");
     }
-  
+
     res.status(200).json({ message: "Entry updated successfully" });
   });
 });
 
-// Configure Multer for presentation file storage 
+// Configure Multer for presentation file storage
 const presentationStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = './public/uploads/';
+    const uploadDir = "./public/uploads/";
     // Create directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -602,77 +609,87 @@ const presentationStorage = multer.diskStorage({
     // Rename the file to "presentation" with its original extension
     const newName = `presentation${path.extname(file.originalname)}`;
     cb(null, newName);
-  }
+  },
 });
 
-const uploadPresentation = multer({ 
-    storage: presentationStorage,
-    limits: {
-        fileSize: 50 * 1024 * 1024, // 50MB limit
-    },
-    fileFilter: (req, file, cb) => {
-        // Accept common presentation file types
-        const allowedTypes = /pdf|ppt|pptx|doc|docx/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = allowedTypes.test(file.mimetype);
-        
-        if (mimetype && extname) {
-            return cb(null, true);
-        } else {
-            cb(new Error('Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)'));
-        }
+const uploadPresentation = multer({
+  storage: presentationStorage,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept common presentation file types
+    const allowedTypes = /pdf|ppt|pptx|doc|docx/;
+    const extname = allowedTypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)"
+        )
+      );
     }
+  },
 });
 
 // Serve static files from uploads directory
-app.use('/uploads', express.static('public/uploads'));
+app.use("/uploads", express.static("public/uploads"));
 
 // Update your presentation endpoint to use the middleware
-app.post('/api/presentation/update', (req, res) => {
-    uploadPresentation.single('presentationFile')(req, res, (err) => {
-        if (err) {
-            // Handle multer errors
-            console.error('File upload error:', err.message);
-            return res.status(400).json({ error: err.message });
-        }
+app.post("/api/presentation/update", (req, res) => {
+  uploadPresentation.single("presentationFile")(req, res, (err) => {
+    if (err) {
+      // Handle multer errors
+      console.error("File upload error:", err.message);
+      return res.status(400).json({ error: err.message });
+    }
 
-        const { presentationDate, presentationLocation, checkingTime, presentationTime } = req.body;
+    const {
+      presentationDate,
+      presentationLocation,
+      checkingTime,
+      presentationTime,
+    } = req.body;
 
-        if (req.file) {
-            console.log('File received:', req.file);
+    if (req.file) {
+      console.log("File received:", req.file);
 
-            const presentationData = {
-                presentationDate,
-                presentationLocation,
-                checkingTime,
-                presentationTime,
-                filePath: `/uploads/presentation`
-            };
+      const presentationData = {
+        presentationDate,
+        presentationLocation,
+        checkingTime,
+        presentationTime,
+        filePath: `/uploads/presentation`,
+      };
 
-            res.status(200).json({ 
-                message: 'Presentation updated successfully', 
-                data: presentationData 
-            });
-        } else {
-            console.log('No file received, updating other fields only');
+      res.status(200).json({
+        message: "Presentation updated successfully",
+        data: presentationData,
+      });
+    } else {
+      console.log("No file received, updating other fields only");
 
-            const presentationData = {
-                presentationDate,
-                presentationLocation,
-                checkingTime,
-                presentationTime
-            };
+      const presentationData = {
+        presentationDate,
+        presentationLocation,
+        checkingTime,
+        presentationTime,
+      };
 
-            res.status(200).json({ 
-                message: 'Presentation details updated successfully', 
-                data: presentationData 
-            });
-        }
-    });
+      res.status(200).json({
+        message: "Presentation details updated successfully",
+        data: presentationData,
+      });
+    }
+  });
 });
 
-
-app.get('/api/single_survey/:id', (req, res) => {
+app.get("/api/single_survey/:id", (req, res) => {
   const { id } = req.params;
   if (!id || isNaN(Number(id))) {
     return res.status(400).send("Bad request");
@@ -691,16 +708,17 @@ app.get('/api/single_survey/:id', (req, res) => {
   });
 });
 
-
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
-  console.log('here is the body', req.body);
+  console.log("here is the body", req.body);
   console.log("/api/set_winners req.files:", req.files && req.files.length);
   // add functionality to clear previous winners before setting new ones
-try {
+  try {
     // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
     const winners = [];
     // Determine number of winners by checking body keys for projectIdX
-    const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));
+    const projectIdKeys = Object.keys(req.body).filter((k) =>
+      /^projectId\d+$/.test(k)
+    );
     const count = projectIdKeys.length;
 
     for (let i = 1; i <= count; i++) {
@@ -708,13 +726,19 @@ try {
       const position = req.body[`position${i}`];
 
       // Collect files for this winner (fieldnames like picture{i}_{j})
-      const filesForWinner = (req.files || []).filter((f) => new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname));
+      const filesForWinner = (req.files || []).filter((f) =>
+        new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname)
+      );
       const filePaths = filesForWinner.map((f) => {
         // files are stored by multer in the destination configured by uploadWinner
         return `/winnerUploads/${f.filename}`;
       });
 
-      winners.push({ projectId: Number(projectId), position: Number(position), pictures: filePaths });
+      winners.push({
+        projectId: Number(projectId),
+        position: Number(position),
+        pictures: filePaths,
+      });
     }
 
     console.log("Parsed winners:", winners);
@@ -722,12 +746,15 @@ try {
     db.beginTransaction((err) => {
       if (err) {
         console.error("Transaction error:", err);
-        return res.status(500).json({ success: false, error: "Database transaction error" });
+        return res
+          .status(500)
+          .json({ success: false, error: "Database transaction error" });
       }
 
       const updatePromises = winners.map((winner) => {
         return new Promise((resolve, reject) => {
-          const sql = "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
+          const sql =
+            "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
           db.query(
             sql,
             [winner.position, winner.pictures.join(","), winner.projectId],
@@ -745,7 +772,9 @@ try {
             if (err) {
               return db.rollback(() => {
                 console.error("Commit error:", err);
-                return res.status(500).json({ success: false, error: "Database commit error" });
+                return res
+                  .status(500)
+                  .json({ success: false, error: "Database commit error" });
               });
             }
             // commit succeeded
@@ -756,12 +785,20 @@ try {
           // If any update failed, rollback and report the error
           db.rollback(() => {
             console.error("Error updating winner:", updateErr);
-            return res.status(500).json({ success: false, error: "Database update error", details: updateErr.message });
+            return res
+              .status(500)
+              .json({
+                success: false,
+                error: "Database update error",
+                details: updateErr.message,
+              });
           });
         });
     });
   } catch (err) {
     console.error("Error handling set_winners:", err);
-    return res.status(500).json({ success: false, error: "Server error parsing winners" });
+    return res
+      .status(500)
+      .json({ success: false, error: "Server error parsing winners" });
   }
 });
