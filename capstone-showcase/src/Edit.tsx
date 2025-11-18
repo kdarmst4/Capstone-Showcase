@@ -383,7 +383,7 @@ export function Edit() {
                 Clear Filters
               </button>
             </div>
-            <input type="text" className="search-bar" placeholder="Search by project title" onChange={(e) => setSearchValue(e.target.value)}></input>
+            <input type="text" className="admin-search-bar" placeholder="Search by project title" onChange={(e) => setSearchValue(e.target.value)}></input>
           </form>
 
           <div className="edit-submission-table">

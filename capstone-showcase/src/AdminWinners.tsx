@@ -168,7 +168,7 @@ export function Winners() {
         </section>
       </form>
       <div className="projects-list">
-      <input type="text" className="search-bar" placeholder="Search by project title" onChange={(e) => setSearchValue(e.target.value)}></input>
+      <input type="text" className="admin-search-bar" placeholder="Search by project title" onChange={(e) => setSearchValue(e.target.value)}></input>
         {projects && projects.length === 0 ? (
           <p className="winner-small-title" style={{ fontSize: "" }}>
             No projects available for the selected semester and year.
