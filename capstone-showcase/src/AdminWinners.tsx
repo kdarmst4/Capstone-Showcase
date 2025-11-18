@@ -54,7 +54,7 @@ export function Winners() {
     // setSelectedWinners(null);
   };
   const API_BASE_URL =
-    import.meta.env.PROD ? "" : "http://localhost:3000/api";
+    import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
   const STATIC_BASE_URL =
     import.meta.env.PROD ? "" : "http://localhost:3000";
 
