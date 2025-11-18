@@ -19,8 +19,10 @@ export function Edit() {
   const [editpresentationData, setEditPresentationData] = useState({
     presentationDate: new Date().toISOString().split("T")[0],
     presentationLocation: "Memorial Union - Second floor",
-    checkingTime: "",
     presentationTime: "",
+    checkingTime: "",
+    startDisplayTime: "",
+    endDisplayTime: "",
     presentationFile: null as File | null,
   });
   const years = Array.from(
@@ -126,8 +128,10 @@ export function Edit() {
       formData.append('presentationDate', editpresentationData.presentationDate);
       formData.append('presentationLocation', editpresentationData.presentationLocation);
       formData.append('checkingTime', editpresentationData.checkingTime);
+      formData.append('startDisplayTime', editpresentationData.startDisplayTime);
+      formData.append('endDisplayTime', editpresentationData.endDisplayTime);
       formData.append('presentationTime', editpresentationData.presentationTime);
-      
+
       // Only append file if one was selected
       if (editpresentationData.presentationFile) {
         formData.append('presentationFile', editpresentationData.presentationFile);
@@ -249,6 +253,26 @@ export function Edit() {
                   id="presentation-time"
                   name="presentationTime"
                   value={editpresentationData.presentationTime}
+                  onChange={handlePresentationInputChange}
+                />
+              </span>
+               <span>
+                <label htmlFor="start-display-time">Start Display:</label>
+                <input
+                  type='date'
+                  id="start-display-time"
+                  name="startDisplayTime"
+                  value={editpresentationData.startDisplayTime}
+                  onChange={handlePresentationInputChange}
+                />
+              </span>
+               <span>
+                <label htmlFor="end-display-time">End Display:</label>
+                <input
+                  type='date'
+                  id="end-display-time"
+                  name="endDisplayTime"
+                  value={editpresentationData.endDisplayTime}
                   onChange={handlePresentationInputChange}
                 />
               </span>
