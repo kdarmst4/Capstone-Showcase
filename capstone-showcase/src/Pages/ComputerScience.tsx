@@ -11,6 +11,7 @@ import Pagination from "../Components/Pagination";
 import useFetchProjects from "../Hooks/useFetchProjects";
 import useFilterProjects from "../Hooks/useFilterProjects";
 import usePagination from "../Hooks/usePagination";
+import useMajorTabHelpers from "../Hooks/useMajorTabHelpers";
 
 const STATIC_BASE_URL =
   import.meta.env.PROD
@@ -66,31 +67,26 @@ const ComputerScience: React.FC = () => {
     getPageNumbers,
     totalProjects: filterProjects.length,
   }
+  
+  // Major Tab Helpers
+  const { 
+    extractYouTubeThumbnail,
+    getSemesterLabel,
+    handleSurveyFormClick, 
+    handleMoreProjectsClick 
+  } = useMajorTabHelpers();
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [projects, filterProjects]);
 
-  const extractYouTubeThumbnail = (url: string): string | null => {
-    const regex =
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i;
-    const match = url.match(regex);
-    return match ? `https://img.youtube.com/vi/${match[1]}/0.jpg` : null;
-  };
-
-  const handleSurveyFormClick = () => {
-    navigate("/survey");
-  };
-
-  const handleMoreProjectsClick = () => {
-    navigate("/interdisciplinary");
-  };
-  const getSemesterLabel = () => {
-    if (selectedSemester === "fa") return `Fall ${selectedYear}`;
-    if (selectedSemester === "sp") return `Spring ${selectedYear}`;
-    return "";
-  };
+  useEffect(() => {
+    document.body.classList.add(`${major}-page-body`);
+    return () => {
+      document.body.classList.remove(`${major}-page-body`);
+    }
+  }, []);
 
   const handleProjectClick = (project: any) => {
     setSelectedProject(project);
