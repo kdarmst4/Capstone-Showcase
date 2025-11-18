@@ -344,6 +344,7 @@ export function Edit() {
                 Clear Filters
               </button>
             </div>
+            
           </form>
 
           <div className="edit-submission-table">

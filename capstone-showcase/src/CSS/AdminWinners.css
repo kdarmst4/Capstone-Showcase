@@ -45,18 +45,34 @@
     align-content: center;
     justify-content: start;
 }
-.search-bar
-{
+.search-bar {
     width: min(90%, 500px);
-    height: 35px;
+    height: 20px;
+    padding: 8px 14px;
+
     border: 2px solid #8c1d40;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: medium;
-    margin-bottom: 20px;
-    background-color: white;
-    color: black;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #1a1a1a;
+    font-size: 1rem;
+
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
+
+.search-bar:focus {
+    outline: none;
+    border-color: #a72852;
+    box-shadow:
+        0 0 0 3px rgba(140, 29, 64, 0.2),
+        0 3px 10px rgba(0,0,0,0.12);
+}
+
+.search-bar:hover {
+    border-color: #9e234c;
+}
+
 .adminwinner-selection .position 
 {
     font-size: larger;
@@ -129,6 +145,7 @@
 }
 .winner-small-title 
 {
+    
     font-size: large;
     font-weight: bold;
     margin-bottom: 10px;
