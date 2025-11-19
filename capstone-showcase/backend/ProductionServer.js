@@ -269,6 +269,8 @@ app.post("/api/survey", async (req, res) => {
     recaptchaToken,
   } = req.body;
 
+
+  /*
   // Verify reCAPTCHA token
   const secretKey = process.env.RECAPTCHA_SECRET_KEY;
   if (secretKey) {
@@ -286,7 +288,9 @@ app.post("/api/survey", async (req, res) => {
       return res.status(500).json({ error: "reCAPTCHA verification error" });
     }
   }
+  */
 
+  
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
   let zoomLinkValue = zoomLink || null;

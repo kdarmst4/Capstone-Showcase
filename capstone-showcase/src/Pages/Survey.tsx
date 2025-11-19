@@ -125,9 +125,9 @@ const Survey: React.FC = () => {
 
     // Load reCAPTCHA script
     useEffect(() => {
-        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeRpgcsAAAAAIV7UOuvWeJfQTUlzizmRKhMWn3J";
         
-        console.log('Initializing reCAPTCHA...');
+        console.log('Initializing reCAPTCHA...', { siteKey: siteKey ? 'present' : 'missing'});
 
         if (!siteKey) {
             console.error('reCAPTCHA site key is not available');
@@ -138,28 +138,33 @@ const Survey: React.FC = () => {
             return;
         }
 
-        let isRendered = false;
+        let cleanupDone = false;
 
         const renderRecaptcha = () => {
-            if (isRendered || recaptchaWidgetId.current !== null) {
+            if (cleanupDone) return;
+
+            if (recaptchaWidgetId.current !== null) {
                 console.log('reCAPTCHA already rendered, skipping');
                 return;
             }
 
             if (!recaptchaRef.current) {
                 console.warn('reCAPTCHA ref not available, retrying...');
-                setTimeout(renderRecaptcha, 500);
+                setTimeout(renderRecaptcha, 100);
                 return;
             }
 
             if (!window.grecaptcha || typeof window.grecaptcha.render !== 'function') {
                 console.warn('grecaptcha not loaded yet, retrying...');
-                setTimeout(renderRecaptcha, 500);
+                setTimeout(renderRecaptcha, 100);
                 return;
             }
 
             try {
-                //const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
+                if (recaptchaRef.current) {
+                  recaptchaRef.current.innerHTML = '';
+                }
+
                 recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
                     sitekey: siteKey,
                     callback: (token: string) => {
@@ -174,10 +179,12 @@ const Survey: React.FC = () => {
                         setRecaptchaToken("");
                     }
                 });
-                isRendered = true;
                 console.log('reCAPTCHA widget rendered successfully, ID:', recaptchaWidgetId.current);
             } catch (error) {
                 console.error('Error rendering reCAPTCHA:', error);
+                if (!cleanupDone) {
+                  setTimeout(renderRecaptcha, 500);
+                }
             }
         };
 
@@ -185,13 +192,14 @@ const Survey: React.FC = () => {
             const existingScript = document.querySelector('script[src*="recaptcha/api.js"]');
             if (existingScript) {
                 console.log('reCAPTCHA script already exists');
-                if (window.grecaptcha && window.grecaptcha.render) {
+                if (window.grecaptcha?.render) {
                     setTimeout(renderRecaptcha, 300);
                 } else {
-                    existingScript.addEventListener('load', () => {
+                    const handleLoad = () => {
                         console.log('Existing reCAPTCHA script loaded');
                         setTimeout(renderRecaptcha, 300);
-                    }, { once: true });
+                    };
+                    existingScript.addEventListener('load', handleLoad, { once: true });
                 }
                 return;
             }
@@ -202,6 +210,7 @@ const Survey: React.FC = () => {
             script.async = true;
             script.defer = true;
             script.onload = () => {
+                console.log('reCAPTCHA script loaded');
                 setTimeout(renderRecaptcha, 300);
             };
             script.onerror = (error) => {
@@ -210,22 +219,28 @@ const Survey: React.FC = () => {
             document.head.appendChild(script);
         };
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadScript);
-        } else {
-            setTimeout(loadScript, 100);
-        }
+        const timeoutID = setTimeout(() => {
+          if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', loadScript, { once: true });
+          } else {
+              loadScript();
+          }
+        }, 200);
 
         return () => {
-            if (recaptchaWidgetId.current !== null && window.grecaptcha && window.grecaptcha.reset) {
-                try {
-                    window.grecaptcha.reset(recaptchaWidgetId.current);
-                } catch (error) {
-                    console.error('Error resetting reCAPTCHA:', error);
-                }
+        cleanupDone = true;
+        clearTimeout(timeoutID);
+        
+        if (recaptchaWidgetId.current !== null && window.grecaptcha?.reset) {
+            try {
+                window.grecaptcha.reset(recaptchaWidgetId.current);
+                recaptchaWidgetId.current = null;
+            } catch (error) {
+                console.error('Error resetting reCAPTCHA:', error);
             }
-        };
-    }, []);
+        }
+    };
+}, []);
 
 
     const handleChange = (
@@ -286,8 +301,7 @@ const Survey: React.FC = () => {
       }
 
       // Check if reCAPTCHA is completed
-      const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-      if (siteKey && !recaptchaToken) {
+      if (!recaptchaToken) {
         alert("Please complete the reCAPTCHA verification.");
         if (recaptchaRef.current) {
           recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -339,8 +353,7 @@ const Survey: React.FC = () => {
           ...prepareSubmissionData(updatedFormData),
         };
         
-        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-        if (siteKey && recaptchaToken) {
+        if (recaptchaToken) {
           submissionData.recaptchaToken = recaptchaToken;
         }
 
