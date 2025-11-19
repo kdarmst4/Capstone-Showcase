@@ -12,16 +12,16 @@ const querystring = require("querystring");
 // the || was an addition make sure to recomove it
 const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE || "mysql2");
 
-// Allows interaction with local terminal for troubleshooting 
+// Allows interaction with local terminal for troubleshooting
 const readline = require("readline");
 
-const LOCAL_DBSCHEMA = require('./dbschema_local.js');
+const LOCAL_DBSCHEMA = require("./dbschema_local.js");
 
 /**
  * -- HELPER FUNCTION --
  * Checks if a table exists and creates it if missing (prompts in terminal).
  * Then checks all columns in that table and creates any missing columns (also prompts).
- * 
+ *
  * @param {string} table - Table name
  * @param {string} createTableSQL - SQL to create table if missing
  * @param {Array<{name: string, definition: string}>} columns - Array of columns to check/create
@@ -36,7 +36,10 @@ async function ensureTableAndColumns(table, createTableSQL, columns) {
       // Table exists
       if (results.length === 0) {
         console.log(`\x1b[31mError:\x1b[0m Table "${table}" does not exist.`);
-        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout,
+        });
         rl.question(`Create it now? (y/n): `, async (answer) => {
           rl.close();
           if (answer.toLowerCase() === "y") {
@@ -89,19 +92,28 @@ async function ensureColumnExists(table, column, columnDefinition) {
 
       if (results.length > 0) return resolve();
 
-      console.log(`\x1b[31mError:\x1b[0m Column "${column}" does not exist in table "${table}".`);
-      const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+      console.log(
+        `\x1b[31mError:\x1b[0m Column "${column}" does not exist in table "${table}".`
+      );
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
       rl.question(`Create it now? (y/n): `, (answer) => {
         rl.close();
         if (answer.toLowerCase() === "y") {
           const alterSql = `ALTER TABLE \`${table}\` ADD COLUMN \`${column}\` ${columnDefinition}`;
           db.query(alterSql, (alterErr) => {
             if (alterErr) return reject(alterErr);
-            console.log(`Column "${column}" created successfully in table "${table}".`);
+            console.log(
+              `Column "${column}" created successfully in table "${table}".`
+            );
             resolve();
           });
         } else {
-          console.error(`Exiting.. Column "${column}" missing in table "${table}".`);
+          console.error(
+            `Exiting.. Column "${column}" missing in table "${table}".`
+          );
           process.exit(1);
         }
       });
@@ -113,7 +125,7 @@ async function ensureColumnExists(table, column, columnDefinition) {
  * -- HELPER FUNCTION --
  * Loops through an array of tables and ensures each table + columns exist.
  * Example usage:    await ensureDB(allTables);
- * 
+ *
  * @param {Array<{name: string, createSQL: string, columns: Array<{name:string, definition:string}>}>} tables
  */
 async function ensureDB(tables) {
@@ -145,12 +157,13 @@ db.connect(async (err) => {
   try {
     // Ensures all tables and columns exist in local DB
     await ensureDB(LOCAL_DBSCHEMA.allLocalTables);
-    console.log("All tables/columns constants in localServer.js successfully match local db.");
+    console.log(
+      "All tables/columns constants in localServer.js successfully match local db."
+    );
   } catch (error) {
     console.error("Error ensuring tables/columns:", error);
     process.exit(1);
   }
-
 });
 
 // reCAPTCHA verification
@@ -158,7 +171,9 @@ const verifyRecaptcha = (token) => {
   return new Promise((resolve, reject) => {
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
     if (!secretKey) {
-      reject(new Error("RECAPTCHA_SECRET_KEY is not set in environment variables"));
+      reject(
+        new Error("RECAPTCHA_SECRET_KEY is not set in environment variables")
+      );
       return;
     }
     const postData = querystring.stringify({
@@ -265,7 +280,6 @@ app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   console.log("Picture Path:", filePath);
   res.json({ path: filePath });
 });
-
 
 app.post(
   "/api/survey/uploadsTeam",
@@ -466,8 +480,7 @@ app.get("/api/survey/:major/term=:semester-:year", (req, res) => {
   const startDate = `${year}-${startMonth}-01 00:00:00`;
   const endDate = `${year}-${endMonth}-01 00:00:00`;
 
-  const sql =
-    "SELECT * FROM survey_entries ORDER BY projectTitle";
+  const sql = "SELECT * FROM survey_entries ORDER BY projectTitle";
   db.query(sql, [major, startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -511,7 +524,7 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 
   console.log(`Querying from ${startDate} to ${endDate}`);
 
- const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
+  const sql = "SELECT * FROM survey_entries WHERE submitDate BETWEEN ? AND ?";
   db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       console.error("Error retrieving data:", err);
@@ -524,7 +537,6 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 
 //get endpoint to fetch all the winners of prev projects
 app.get("/api/winners", async (req, res) => {
-
   // Ensuring all below necessary columns exist locally first
   await ensureColumns("survey_entries", LOCAL_DBSCHEMA.survey_entries_Columns);
 
@@ -740,6 +752,15 @@ app.put("/api/admin/submissions/:id", (req, res) => {
 });
 
 app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
+
   const { startDate, endDate, discipline } = req.params;
   let query = "";
   let queryParams = [];
@@ -765,6 +786,14 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
 });
 
 app.put("/api/:id/update", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
   const { id } = req.params;
   const keys = Object.keys(req.body);
   const values = Object.values(req.body);
@@ -780,15 +809,15 @@ app.put("/api/:id/update", (req, res) => {
     if (err) {
       return res.status(500).send("Server error");
     }
-  
+
     res.status(200).json({ message: "Entry updated successfully" });
   });
 });
 
-// Configure Multer for presentation file storage 
+// Configure Multer for presentation file storage
 const presentationStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = './public/uploads/';
+    const uploadDir = "./public/uploads/";
     // Create directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -799,30 +828,36 @@ const presentationStorage = multer.diskStorage({
     // Rename the file to "presentation" with its original extension
     const newName = `presentation${path.extname(file.originalname)}`;
     cb(null, newName);
-  }
+  },
 });
 
-const uploadPresentation = multer({ 
-    storage: presentationStorage,
-    limits: {
-        fileSize: 50 * 1024 * 1024, // 50MB limit
-    },
-    fileFilter: (req, file, cb) => {
-        // Accept common presentation file types
-        const allowedTypes = /pdf|ppt|pptx|doc|docx/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = allowedTypes.test(file.mimetype);
-        
-        if (mimetype && extname) {
-            return cb(null, true);
-        } else {
-            cb(new Error('Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)'));
-        }
+const uploadPresentation = multer({
+  storage: presentationStorage,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept common presentation file types
+    const allowedTypes = /pdf|ppt|pptx|doc|docx/;
+    const extname = allowedTypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Only presentation files are allowed (PDF, PPT, PPTX, DOC, DOCX)"
+        )
+      );
     }
+  },
 });
 
 // Serve static files from uploads directory
-app.use('/public/uploads', express.static('public/uploads'));
+app.use("/public/uploads", express.static("public/uploads"));
 
 // Update your presentation endpoint to use the middleware
 app.post("/api/presentation/update", (req, res) => {
@@ -837,58 +872,61 @@ app.post("/api/presentation/update", (req, res) => {
       presentationLocation,
       checkingTime,
       presentationTime,
+      startDisplayTime,
+      endDisplayTime,
     } = req.body;
 
     const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
     const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
+    let filepath = null;
     if (req.file) {
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation updated successfully",
-      });
-    } else {
-      console.log("No file received, updating other fields only");
-
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation details updated successfully",
-      });
+      filepath = `public/uploads/presentation.pdf`;
     }
+    const sql = `INSERT INTO presentation (
+    id,
+    p_date,
+    p_loca,
+    p_checking_time,
+    p_presentation_time,
+    file_path,
+    s_date,
+    e_date,
+    created_at
+)
+VALUES (1, ?, ?, ?, ?, ?, ?, ?, NOW())
+ON DUPLICATE KEY UPDATE
+    p_date = VALUES(p_date),
+    p_loca = VALUES(p_loca),
+    p_checking_time = VALUES(p_checking_time),
+    p_presentation_time = VALUES(p_presentation_time),
+    file_path = VALUES(file_path),
+    s_date = VALUES(s_date),
+    e_date = VALUES(e_date),
+    created_at = NOW();
+`;
+
+    const values = [
+      presentationDate,
+      presentationLocation,
+      checkingTimeStamp,
+      presentationTimeStamp,
+      filepath,
+      startDisplayTime,
+      endDisplayTime,
+    ];
+    db.query(sql, values, (dbErr) => {
+      if (dbErr) {
+        return res
+          .status(500)
+          .json({ error: "Database update failed" + dbErr });
+      }
+
+      res.status(200).json({ message: "Presentation updated successfully" });
+    });
   });
 });
 
-
-app.get('/api/single_survey/:id', (req, res) => {
+app.get("/api/single_survey/:id", (req, res) => {
   const { id } = req.params;
   if (!id || isNaN(Number(id))) {
     return res.status(400).send("Bad request");
@@ -907,16 +945,23 @@ app.get('/api/single_survey/:id', (req, res) => {
   });
 });
 
-
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
-  console.log('here is the body', req.body);
-  console.log("/api/set_winners req.files:", req.files && req.files.length);
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
+
   // add functionality to clear previous winners before setting new ones
-try {
+  try {
     // Expect fields like projectId1, position1, picture1_1, picture1_2, projectId2, ...
     const winners = [];
     // Determine number of winners by checking body keys for projectIdX
-    const projectIdKeys = Object.keys(req.body).filter((k) => /^projectId\d+$/.test(k));
+    const projectIdKeys = Object.keys(req.body).filter((k) =>
+      /^projectId\d+$/.test(k)
+    );
     const count = projectIdKeys.length;
 
     for (let i = 1; i <= count; i++) {
@@ -924,13 +969,19 @@ try {
       const position = req.body[`position${i}`];
 
       // Collect files for this winner (fieldnames like picture{i}_{j})
-      const filesForWinner = (req.files || []).filter((f) => new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname));
+      const filesForWinner = (req.files || []).filter((f) =>
+        new RegExp(`^picture${i}(_\\d+)?$`).test(f.fieldname)
+      );
       const filePaths = filesForWinner.map((f) => {
         // files are stored by multer in the destination configured by uploadWinner
         return `/winnerUploads/${f.filename}`;
       });
 
-      winners.push({ projectId: Number(projectId), position: Number(position), pictures: filePaths });
+      winners.push({
+        projectId: Number(projectId),
+        position: Number(position),
+        pictures: filePaths,
+      });
     }
 
     console.log("Parsed winners:", winners);
@@ -938,12 +989,15 @@ try {
     db.beginTransaction((err) => {
       if (err) {
         console.error("Transaction error:", err);
-        return res.status(500).json({ success: false, error: "Database transaction error" });
+        return res
+          .status(500)
+          .json({ success: false, error: "Database transaction error" });
       }
 
       const updatePromises = winners.map((winner) => {
         return new Promise((resolve, reject) => {
-          const sql = "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
+          const sql =
+            "UPDATE survey_entries SET position = ?, winning_pic = ? WHERE id = ?";
           db.query(
             sql,
             [winner.position, winner.pictures.join(","), winner.projectId],
@@ -961,7 +1015,9 @@ try {
             if (err) {
               return db.rollback(() => {
                 console.error("Commit error:", err);
-                return res.status(500).json({ success: false, error: "Database commit error" });
+                return res
+                  .status(500)
+                  .json({ success: false, error: "Database commit error" });
               });
             }
             // commit succeeded
@@ -972,26 +1028,33 @@ try {
           // If any update failed, rollback and report the error
           db.rollback(() => {
             console.error("Error updating winner:", updateErr);
-            return res.status(500).json({ success: false, error: "Database update error", details: updateErr.message });
+            return res.status(500).json({
+              success: false,
+              error: "Database update error",
+              details: updateErr.message,
+            });
           });
         });
     });
   } catch (err) {
     console.error("Error handling set_winners:", err);
-    return res.status(500).json({ success: false, error: "Server error parsing winners" });
+    return res
+      .status(500)
+      .json({ success: false, error: "Server error parsing winners" });
   }
 });
 
-app.get('/api/presentation', async (req, res) => {
+app.get("/api/presentation", async (req, res) => {
   // Ensure table and columns exist before querying
   await ensureColumns("presentation", LOCAL_DBSCHEMA.presentation_Columns);
-    const sql = 'SELECT * FROM presentation WHERE id = 1';
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error fetching presentation data:', err);
-            return res.status(500).send('Server error');
-        }
-        console.log('Query results:', results);
-        res.json(results);
-    });
+  const sql =
+    "SELECT * FROM presentation WHERE s_date <= NOW() AND e_date >= NOW() ORDER BY id DESC LIMIT 1";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching presentation data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
 });

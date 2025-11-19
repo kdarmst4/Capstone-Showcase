@@ -1,6 +1,8 @@
 import "./CSS/EditProject.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProjectObj } from "./SiteInterface";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 export default function EditProject({
   project,
@@ -14,16 +16,22 @@ export default function EditProject({
     : [];
   const [members, setMembers] = useState(initialMembers);
   const [changeMap, setChangeMap] = useState<Map<string, string>>(new Map());
-
+  const { isSignedIn, isTokenValid, token } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isSignedIn || !isTokenValid()) {
+      navigate("/admin");
+    }
+  }, [isSignedIn, isTokenValid, navigate, token]);
   const updateChangeMap = (key: string, value: string) => {
     setChangeMap((prev) => {
       const newMap = new Map(prev);
       const originalValue = project[key as keyof ProjectObj];
 
       if (value !== originalValue) {
-        newMap.set(key, value); 
+        newMap.set(key, value);
       } else {
-        newMap.delete(key); 
+        newMap.delete(key);
       }
       console.log("ChangeMap Updated:", Array.from(newMap.entries()));
 
@@ -48,7 +56,6 @@ export default function EditProject({
     updateChangeMap("teamMemberNames", newMembers.join(", "));
   };
 
-
   const handleCloseEvent = (changes?: Map<string, string>) => {
     if (changeMap.size > 0) {
       //create a custom confirm dialog later
@@ -62,42 +69,45 @@ export default function EditProject({
     closeFunc(changes || null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (changeMap.size === 0) {
       closeFunc();
       return;
     }
     const API_BASE_URL =
-      import.meta.env.PROD ? "" : "http://localhost:3000/api";
+      import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
 
-    fetch(`${API_BASE_URL}/${project.id}/update`, {
+    const header = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    const res = await fetch(`${API_BASE_URL}/${project.id}/update`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: header,
       body: JSON.stringify({ ...Object.fromEntries(changeMap) }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        // console.log('Data:', data);
-
-        // Create updated changeMap with id for identification
-        const updatedChangeMap = new Map(changeMap);
-        updatedChangeMap.set("EntryId", project.id.toString());
-        // console.log("Updated ChangeMap:", Array.from(updatedChangeMap.entries()));  
-        // Pass the changes back to the parent
-        closeFunc(updatedChangeMap);
-      })
-      .catch((error) => {
-        console.log(error);
-        closeFunc();
-      });
+    });
+    const data = await res.json();
+    if (res.status !== 200) {
+      alert(data.error || "Failed to update project.");
+      closeFunc();
+      return;
+    }
+    alert("Project updated successfully!");
+    // Create updated changeMap with id for identification
+    const updatedChangeMap = new Map(changeMap);
+    updatedChangeMap.set("EntryId", project.id.toString());
+    // Pass the changes back to the parent
+    closeFunc(updatedChangeMap);
+    
   };
 
   return (
     <div className="edit-project-container">
-      <button onClick={() => handleCloseEvent(changeMap)} className="edit-close-btn">
+      <button
+        onClick={() => handleCloseEvent(changeMap)}
+        className="edit-close-btn"
+      >
         &times;
       </button>
       <h2>Edit Project</h2>

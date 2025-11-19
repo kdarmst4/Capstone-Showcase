@@ -3,10 +3,15 @@ import "./CSS/AdminWinners.css";
 import { SelectWinnerModal } from "./SelectWinnerModal";
 import { ProjectObj, WinnerSelection } from "./SiteInterface";
 import { TodaysDate } from "./AdminDate";
+import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function Winners() {
   const [projects, setProjects] = useState<ProjectObj[] | null>(null);
   const [selectionMade, setSelectionMade] = useState<boolean>(false);
+  const { isSignedIn, isTokenValid, token } = useAuth();
+  const navigate = useNavigate();
+
   const [currSelection, setCurrSelection] = useState<ProjectObj | null>(null);
   const [selectedWinners, setSelectedWinners] = useState<
     WinnerSelection[] | null
@@ -103,19 +108,26 @@ export function Winners() {
       });
     });
 
+    const header = {
+      Authorization: `Bearer ${token}`,
+    };
+
     const res = await fetch(`${API_BASE_URL}/set_winners`, {
       method: "POST",
+      headers: header,
       body: formData,
     });
+    const data = await res.json();
+    if (res.status !== 200) {
+      alert(data.error || "Failed to save winners.");
+      setLoading(false);
+      return;
+    }
+    alert("Winners saved successfully!");
+    setSelectedWinners(null);
+    fetchProjects(semester, year);
     setLoading(false);
-    if(res.status === 200){
-      console.log('status code', res.status);
-      alert("Winners saved successfully!");
-    }
-    else{
-      alert("Error saving winners");
-    }
-  }
+  };
   return (
     <div className="admin-set-winners-page">
       {selectionMade && currSelection && (
@@ -194,15 +206,21 @@ export function Winners() {
                     <span className="project-title-winner">
                       {winner.projectName}
                     </span>
-
                   </span>
                 ))}
               <div className="winners-action-in-admin-winner">
                 {selectedWinners && selectedWinners.length > 2 && (
-                  <button className="fetch-projects-btn" onClick={saveWinners}>{loading ? "Saving..." : "Save Winners"}</button>
+                  <button className="fetch-projects-btn" onClick={saveWinners}>
+                    {loading ? "Saving..." : "Save Winners"}
+                  </button>
                 )}
                 {selectedWinners && selectedWinners.length > 0 && (
-                  <button className="fetch-projects-btn" onClick={() => setSelectedWinners([])}>Clear</button>
+                  <button
+                    className="fetch-projects-btn"
+                    onClick={() => setSelectedWinners([])}
+                  >
+                    Clear
+                  </button>
                 )}
               </div>
             </div>

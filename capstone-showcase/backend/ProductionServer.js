@@ -220,6 +220,7 @@ const storageWinner = multer.diskStorage({
   },
 });
 const uploadWinner = multer({ storage: storageWinner });
+const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
 
 app.post("/api/survey/uploadsPoster", upload.single("poster"), (req, res) => {
   if (!req.file) {
@@ -690,7 +691,6 @@ app.post("/api/signin", (req, res) => {
   // defining variables from request body
   const { username, password } = req.body;
   const saltRounds = 10; // Number of hashing rounds
-  const secretJWTKey = process.env.JWT_SECRET_KEY || "test-key"; // Using a test key for now
 
   if (!username || !password) {
     return res
@@ -738,6 +738,15 @@ app.post("/api/signin", (req, res) => {
 });
 
 app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
+
   const { startDate, endDate, discipline } = req.params;
   let query = "";
   let queryParams = [];
@@ -763,6 +772,14 @@ app.get("/api/downloadProjects/:startDate/:endDate/:discipline", (req, res) => {
 });
 
 app.put("/api/:id/update", (req, res) => {
+  const header = req.headers;
+  const authToken = header.authorization && header.authorization.split(" ")[1];
+  // verifying the token
+  try {
+    jwt.verify(authToken, secretJWTKey);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
   const { id } = req.params;
   const keys = Object.keys(req.body);
   const values = Object.values(req.body);
@@ -964,64 +981,68 @@ app.post("/api/presentation/update", (req, res) => {
       presentationLocation,
       checkingTime,
       presentationTime,
+      startDisplayTime,
+      endDisplayTime,
     } = req.body;
 
     const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
     const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
+    let filepath = null;
     if (req.file) {
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation updated successfully",
-      });
-    } else {
-      console.log("No file received, updating other fields only");
-
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation details updated successfully",
-      });
+      filepath = `public/uploads/presentation.pdf`;
     }
+    const sql = `INSERT INTO presentation (
+    id,
+    p_date,
+    p_loca,
+    p_checking_time,
+    p_presentation_time,
+    file_path,
+    s_date,
+    e_date,
+    created_at
+)
+VALUES (1, ?, ?, ?, ?, ?, ?, ?, NOW())
+ON DUPLICATE KEY UPDATE
+    p_date = VALUES(p_date),
+    p_loca = VALUES(p_loca),
+    p_checking_time = VALUES(p_checking_time),
+    p_presentation_time = VALUES(p_presentation_time),
+    file_path = VALUES(file_path),
+    s_date = VALUES(s_date),
+    e_date = VALUES(e_date),
+    created_at = NOW();
+`;
+
+    const values = [
+      presentationDate,
+      presentationLocation,
+      checkingTimeStamp,
+      presentationTimeStamp,
+      filepath,
+      startDisplayTime,
+      endDisplayTime,
+    ];
+    db.query(sql, values, (dbErr) => {
+      if (dbErr) {
+        return res
+          .status(500)
+          .json({ error: "Database update failed" + dbErr });
+      }
+
+      res.status(200).json({ message: "Presentation updated successfully" });
+    });
   });
 });
 
-app.get('/api/presentation', (req, res) => {
-    const sql = 'SELECT * FROM presentation WHERE id = 1';
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error fetching presentation data:', err);
-            return res.status(500).send('Server error');
-        }
-        console.log('Query results:', results);
-        res.json(results);
-    });
+
+app.get("/api/presentation", async (req, res) => {
+  const sql = "SELECT * FROM presentation WHERE s_date <= NOW() AND e_date >= NOW() ORDER BY created_at DESC LIMIT 1";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching presentation data:", err);
+      return res.status(500).send("Server error");
+    }
+    res.json(results);
+  });
 });
