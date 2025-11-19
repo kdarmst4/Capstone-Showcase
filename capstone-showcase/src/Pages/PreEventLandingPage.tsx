@@ -18,7 +18,7 @@ const PreEventLandingPage: React.FC = () => {
   const [, setSavedImage] = useState<string | null>(null);
   const [presentation, setPresentation] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const API_BASE_URL = import.meta.env.PROD ? "" : "http://localhost:3000/api";
+  const API_BASE_URL = import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
   const STATIC_BASE_URL = import.meta.env.PROD ? "" : "http://localhost:3000";
   const normalizePathToUrl = (path: string) => {
     console.log("Original URL:", path);
