@@ -20,7 +20,7 @@ const AdminLogin: React.FC = () => {
   }
   }, [isSignedIn, isTokenValid, navigate]);
   
-  const API_BASE_URL = process.env.NODE_ENV === 'production' ? 
+  const API_BASE_URL = import.meta.env.PROD ? 
   'api' : 'http://localhost:3000/api';
 
   const handleSubmit = (event: React.FormEvent) => {

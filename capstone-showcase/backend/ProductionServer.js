@@ -8,6 +8,8 @@ const path = require("path");
 const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const https = require("https");
+const querystring = require("querystring");
 
 // Major -> title prefixes at the very start of projectTitle
 const MAJOR_PREFIXES = {
@@ -62,6 +64,56 @@ db.connect((err) => {
   console.log("MySQL Connected...");
 });
 
+// reCAPTCHA verification function
+const verifyRecaptcha = (token) => {
+  return new Promise((resolve, reject) => {
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    if (!secretKey) {
+      reject(new Error("RECAPTCHA_SECRET_KEY is not set in environment variables"));
+      return;
+    }
+    const postData = querystring.stringify({
+      secret: secretKey,
+      response: token,
+    });
+
+    const options = {
+      hostname: "www.google.com",
+      port: 443,
+      path: "/recaptcha/api/siteverify",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": Buffer.byteLength(postData),
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          const result = JSON.parse(data);
+          resolve(result.success === true);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.write(postData);
+    req.end();
+  });
+};
+
 /*
 //PERMS to Connect/Create Server Note ***Removed to test new proxy method***
 const privateKey = fs.readFileSync("./keySSL.pem", "utf8")
@@ -73,7 +125,7 @@ const credentials = {key: privateKey, cert: certificate};
 app.use("/posterUploads", express.static("posterUploads"));
 app.use("/teamUploads", express.static("teamUploads"));
 app.use("/winnerUploads", express.static("winnerUploads"));
-app.use("/uploads", express.static("public/uploads"));
+app.use("/public/uploads", express.static("public/uploads"));
 
 //Image Upload And Storgae API
 
@@ -106,7 +158,6 @@ const storagePoster = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storagePoster });
-// Configure Multer for presentation file storage
 const presentationStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = "./public/uploads/";
@@ -120,6 +171,16 @@ const presentationStorage = multer.diskStorage({
     // Rename the file to "presentation" with its original extension
     const newName = `presentation${path.extname(file.originalname)}`;
     cb(null, newName);
+  },
+});
+//Team Images Upload Storage
+const storageTeam = multer.diskStorage({
+  destination: "./teamUploads/",
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
   },
 });
 
@@ -145,17 +206,6 @@ const uploadPresentation = multer({
         )
       );
     }
-  },
-});
-
-//Team Images Upload Storage
-const storageTeam = multer.diskStorage({
-  destination: "./teamUploads/",
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
   },
 });
 const uploadTeam = multer({ storage: storageTeam });
@@ -197,7 +247,7 @@ app.post(
 );
 
 //Survey Upload API
-app.post("/api/survey", (req, res) => {
+app.post("/api/survey", async (req, res) => {
   const {
     email,
     name,
@@ -216,7 +266,26 @@ app.post("/api/survey", (req, res) => {
     youtubeLink,
     posterPicturePath,
     teamPicturePath,
+    recaptchaToken,
   } = req.body;
+
+  // Verify reCAPTCHA token
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  if (secretKey) {
+    if (!recaptchaToken) {
+      return res.status(400).json({ error: "reCAPTCHA token is required" });
+    }
+
+    try {
+      const isValid = await verifyRecaptcha(recaptchaToken);
+      if (!isValid) {
+        return res.status(400).json({ error: "reCAPTCHA verification failed" });
+      }
+    } catch (error) {
+      console.error("reCAPTCHA verification error:", error);
+      return res.status(500).json({ error: "reCAPTCHA verification error" });
+    }
+  }
 
   // Convert string values to correct types
   let youtubeLinkValue = youtubeLink || null;
@@ -751,13 +820,6 @@ app.get("/api/single_survey/:id", (req, res) => {
 });
 
 app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
-  const header = req.headers;
-  const authToken = header.authorization && header.authorization.split(" ")[1];
-  try {
-    jwt.verify(authToken, secretJWTKey);
-  } catch (error) {
-    return res.status(401).json({ error: "Unauthorized User Access" });
-  }
   try {
     // add functionality to clear previous winners before setting new ones
 
@@ -826,11 +888,13 @@ app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
         })
         .catch((updateErr) => {
           db.rollback(() => {
-            return res.status(500).json({
-              success: false,
-              error: "Database update error",
-              details: updateErr.message,
-            });
+            return res
+              .status(500)
+              .json({
+                success: false,
+                error: "Database update error",
+                details: updateErr.message,
+              });
           });
         });
     });
@@ -903,12 +967,12 @@ WHERE position IS NOT NULL AND id = ?;`;
   });
 });
 
+
 // Update your presentation endpoint to use the middleware
 app.post("/api/presentation/update", (req, res) => {
   uploadPresentation.single("presentationFile")(req, res, (err) => {
     if (err) {
       // Handle multer errors
-      console.error("File upload error:", err.message);
       return res.status(400).json({ error: err.message });
     }
 
@@ -919,35 +983,62 @@ app.post("/api/presentation/update", (req, res) => {
       presentationTime,
     } = req.body;
 
+    const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
+    const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
     if (req.file) {
-      console.log("File received:", req.file);
+      const sql =
+        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
 
-      const presentationData = {
+      const values = [
         presentationDate,
         presentationLocation,
-        checkingTime,
-        presentationTime,
-        filePath: `/uploads/presentation`,
-      };
+        checkingTimeStamp,
+        presentationTimeStamp,
+        `public/uploads/presentation.pdf`,
+      ];
+      db.query(sql, values, (dbErr) => {
+        if (dbErr) {
+          return res.status(500).json({ error: "Database update failed" });
+        }
+      });
 
       res.status(200).json({
         message: "Presentation updated successfully",
-        data: presentationData,
       });
     } else {
       console.log("No file received, updating other fields only");
 
-      const presentationData = {
+      const sql =
+        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
+
+      const values = [
         presentationDate,
         presentationLocation,
-        checkingTime,
-        presentationTime,
-      };
+        checkingTimeStamp,
+        presentationTimeStamp,
+        `public/uploads/presentation.pdf`,
+      ];
+      db.query(sql, values, (dbErr) => {
+        if (dbErr) {
+          return res.status(500).json({ error: "Database update failed" });
+        }
+      });
 
       res.status(200).json({
         message: "Presentation details updated successfully",
-        data: presentationData,
       });
     }
   });
+});
+
+app.get('/api/presentation', (req, res) => {
+    const sql = 'SELECT * FROM presentation WHERE id = 1';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching presentation data:', err);
+            return res.status(500).send('Server error');
+        }
+        console.log('Query results:', results);
+        res.json(results);
+    });
 });

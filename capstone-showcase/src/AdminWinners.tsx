@@ -19,11 +19,7 @@ export function Winners() {
   const [semester, setSemester] = useState(TodaysDate().semester);
   const [year, setYear] = useState(TodaysDate().year);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    if (!isSignedIn || !isTokenValid()) {
-      navigate("/admin");
-    }
-  }, [isSignedIn, isTokenValid, navigate, token]);
+  const[filteredProjects, setFilteredProjects] = useState<ProjectObj[] | null>(null);
   useEffect(() => {
     fetchProjects(semester, year);
   }, []);
@@ -64,9 +60,9 @@ export function Winners() {
     // setSelectedWinners(null);
   };
   const API_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
+    import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
   const STATIC_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+    import.meta.env.PROD ? "" : "http://localhost:3000";
 
   const fetchProjects = async (semester: string, year: number) => {
     console.log(semester, year);
@@ -76,7 +72,7 @@ export function Winners() {
       );
       const data = await response.json();
       setProjects(data);
-      console.log(data);
+      setFilteredProjects(data);
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
@@ -85,8 +81,19 @@ export function Winners() {
   const currYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currYear - i);
   const semesters = ["fa", "sp", "su"];
-
-  const saveWinners = async () => {
+  const setSearchValue = (value: string) => {
+    if (value === "") {
+      setFilteredProjects(projects);
+      return;
+    }
+    if (!projects) return;
+    const filtered = projects.filter((project) =>
+      project.projectTitle.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredProjects(filtered);
+  }
+  const saveWinners = async () => 
+  {
     setLoading(true);
     if (!selectedWinners || selectedWinners.length < 3) {
       alert("Please select all three winners before saving.");
@@ -173,6 +180,7 @@ export function Winners() {
         </section>
       </form>
       <div className="projects-list">
+      <input type="text" className="admin-search-bar" placeholder="Search by project title" onChange={(e) => setSearchValue(e.target.value)}></input>
         {projects && projects.length === 0 ? (
           <p className="winner-small-title" style={{ fontSize: "" }}>
             No projects available for the selected semester and year.
@@ -226,8 +234,8 @@ export function Winners() {
                   <th>Major</th>
                   <th>Project Sponsor</th>
                 </tr>
-                {projects &&
-                  projects.map((project: any) => (
+                {filteredProjects &&
+                  filteredProjects.map((project: any) => (
                     <tr
                       key={project.id}
                       onClick={() => {

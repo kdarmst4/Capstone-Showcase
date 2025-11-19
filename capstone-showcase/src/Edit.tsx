@@ -24,8 +24,10 @@ export function Edit() {
   const [editpresentationData, setEditPresentationData] = useState({
     presentationDate: new Date().toISOString().split("T")[0],
     presentationLocation: "Memorial Union - Second floor",
-    checkingTime: "",
     presentationTime: "",
+    checkingTime: "",
+    startDisplayTime: "",
+    endDisplayTime: "",
     presentationFile: null as File | null,
   });
   const years = Array.from(
@@ -33,9 +35,10 @@ export function Edit() {
     (_, i) => new Date().getFullYear() - i
   );
   const [projects, setProjects] = useState<ProjectObj[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<ProjectObj[]>([]);
   const [submissionSelected, setSubmissionSelected] = useState(null);
   const API_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
+    import.meta.env.PROD ? "" : "http://localhost:3000/api";
   // const STATIC_BASE_URL =
   //  process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
 
@@ -46,35 +49,41 @@ export function Edit() {
       );
       const data = await response.json();
       setProjects(data);
-      console.log(data);
+      setFilteredProjects(data);
+      // console.log(data);
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
   };
-  useEffect(() => {
-    if (!isSignedIn || !isTokenValid()) {
-      navigate("/admin");
-    }
-  }, [isSignedIn, isTokenValid, navigate, token]);
 
-  const handleSelectionClose = (
-    selection: Map<String, String> | null | undefined
-  ) => {
-    setSubmissionSelected(null);
-    console.log("Selection closed with:", selection);
-    if (selection) {
-      setProjects((prevProjects) =>
-        prevProjects.map((proj: ProjectObj) => {
-          const entryId = selection.get("EntryId");
-          console.log("Updating project with EntryID:", entryId);
-          if (entryId !== undefined && proj.id === +entryId) {
-            return { ...proj, ...Object.fromEntries(selection) };
-          }
-          return proj;
-        })
-      );
+  const setSearchValue = (value: string) => {
+    if (value === "") {
+      setFilteredProjects(projects);
+      return;
     }
+    if (!projects) return;
+    const filtered = projects.filter((project) =>
+      project.projectTitle.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredProjects(filtered);
   };
+
+  const handleSelectionClose = (selection: Map<String, String> | null | undefined) => {
+      setSubmissionSelected(null);
+      console.log("Selection closed with:", selection);
+      if (selection) {
+        setProjects((prevProjects) =>
+          prevProjects.map((proj: ProjectObj) => {
+            const entryId = selection.get("EntryId");
+            // console.log("Updating project with EntryID:", entryId);
+            if (entryId !== undefined && proj.id === +entryId) {
+              return { ...proj, ...Object.fromEntries(selection) };
+            }
+            return proj;
+          })
+        );
+      }
+    };
 
   useEffect(() => {
     const { year: curr_year, semester } = TodaysDate();
@@ -121,19 +130,12 @@ export function Edit() {
     try {
       // Create FormData to handle file upload
       const formData = new FormData();
-      formData.append(
-        "presentationDate",
-        editpresentationData.presentationDate
-      );
-      formData.append(
-        "presentationLocation",
-        editpresentationData.presentationLocation
-      );
-      formData.append("checkingTime", editpresentationData.checkingTime);
-      formData.append(
-        "presentationTime",
-        editpresentationData.presentationTime
-      );
+      formData.append('presentationDate', editpresentationData.presentationDate);
+      formData.append('presentationLocation', editpresentationData.presentationLocation);
+      formData.append('checkingTime', editpresentationData.checkingTime);
+      formData.append('startDisplayTime', editpresentationData.startDisplayTime);
+      formData.append('endDisplayTime', editpresentationData.endDisplayTime);
+      formData.append('presentationTime', editpresentationData.presentationTime);
 
       // Only append file if one was selected
       if (editpresentationData.presentationFile) {
@@ -263,10 +265,31 @@ export function Edit() {
                   onChange={handlePresentationInputChange}
                 />
               </span>
+               <span>
+                <label htmlFor="start-display-time">Start Display:</label>
+                <input
+                  type='date'
+                  id="start-display-time"
+                  name="startDisplayTime"
+                  value={editpresentationData.startDisplayTime}
+                  onChange={handlePresentationInputChange}
+                />
+              </span>
+               <span>
+                <label htmlFor="end-display-time">End Display:</label>
+                <input
+                  type='date'
+                  id="end-display-time"
+                  name="endDisplayTime"
+                  value={editpresentationData.endDisplayTime}
+                  onChange={handlePresentationInputChange}
+                />
+              </span>
               <span>
                 <label htmlFor="location-file">Location:</label>
                 <input
                   type="file"
+                  accept=".pdf"
                   id="location-file"
                   name="location-file"
                   placeholder="Enter location"
@@ -371,6 +394,7 @@ export function Edit() {
                 Clear Filters
               </button>
             </div>
+            <input type="text" className="admin-search-bar" placeholder="Search by project title" onChange={(e) => setSearchValue(e.target.value)}></input>
           </form>
 
           <div className="edit-submission-table">
@@ -386,7 +410,7 @@ export function Edit() {
                 </tr>
               </thead>
               <tbody>
-                {projects.map((project: any) => (
+                {filteredProjects.map((project: any) => (
                   <tr
                     key={project.id}
                     onClick={() => setSubmissionSelected(project)}

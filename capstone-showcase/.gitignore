@@ -32,3 +32,4 @@ backend/winnerUploads/
 *.sw?
 *.env
 *.pem
+backend/public/

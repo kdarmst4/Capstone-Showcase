@@ -149,6 +149,8 @@ export function DownloadProjects() {
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    const API_BASE_URL =
+      import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
 
     if (!startDate || !endDate) {
       setError("Please select both start and end dates.");

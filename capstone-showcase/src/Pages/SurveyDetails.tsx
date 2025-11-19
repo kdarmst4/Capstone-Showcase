@@ -32,10 +32,10 @@ export function SurveyDetails() {
   const { getSelectedSemester } = useMenuContext();
 
   const STATIC_BASE_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+    import.meta.env.PROD ? "" : "http://localhost:3000";
 
   const API_BASE_URL =
-    process.env.NODE_ENV === "production"
+    import.meta.env.PROD
       ? "/api"
       : "http://localhost:3000/api";
 
@@ -125,13 +125,28 @@ export function SurveyDetails() {
   }, [project]);
 
   // Helpers (YouTube / semester / badges)
-  const getYouTubeEmbedUrl = (url: string) => {
+  const extractYouTubeId = (url: string) => {
     if (!url) return "";
-    if (url.includes("embed/")) return url;
-    const idFromV = url.split("v=")[1]?.split("&")[0];
-    const lastSegment = url.split("/").pop();
-    const videoId = idFromV || lastSegment;
-    return `https://www.youtube.com/embed/${videoId}`;
+    // try common patterns: v=VIDEOID, youtu.be/VIDEOID, /embed/VIDEOID
+    const patterns = [
+      /[?&]v=([0-9A-Za-z_-]{11})/, // watch?v=
+      /youtu\.be\/([0-9A-Za-z_-]{11})/, // youtu.be/
+      /embed\/([0-9A-Za-z_-]{11})/, // /embed/
+      /\/v\/([0-9A-Za-z_-]{11})/,
+    ];
+    for (const re of patterns) {
+      const m = url.match(re);
+      if (m && m[1]) return m[1];
+    }
+    // fallback: last path segment (may include query params)
+    const last = url.split("/").pop() || "";
+    return last.split("?")[0].split("&")[0];
+  };
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    const id = extractYouTubeId(url);
+    if (!id) return "";
+    return `https://www.youtube.com/embed/${id}`;
   };
 
   const formatSelectedSemester = () => {
@@ -181,17 +196,39 @@ export function SurveyDetails() {
 
       <div className="video-team-members-posters">
         <span className="video-team-members">
-          {project.youtubeLink && (
-            <div className="video-container">
-              <iframe
-                src={getYouTubeEmbedUrl(project.youtubeLink)}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="video-iframe"
-              />
-            </div>
-          )}
+          {project.youtubeLink && (() => {
+            const embedUrl = getYouTubeEmbedUrl(project.youtubeLink);
+            const id = extractYouTubeId(project.youtubeLink);
+            const thumb = id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+            console.log("YouTube embedUrl:", embedUrl);
+
+            if (embedUrl) {
+              return (
+                <div className="video-container">
+                  <iframe
+                    src={embedUrl}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="video-iframe"
+                  />
+                </div>
+              );
+            }
+
+            // fallback: show clickable thumbnail that opens the YouTube page
+            return (
+              <div className="video-container">
+                {thumb ? (
+                  <a href={project.youtubeLink} target="_blank" rel="noreferrer">
+                    <img src={thumb} alt="YouTube thumbnail" style={{ width: '100%', maxHeight: 360, objectFit: 'cover', borderRadius: 8 }} />
+                  </a>
+                ) : (
+                  <a href={project.youtubeLink} target="_blank" rel="noreferrer">Watch on YouTube</a>
+                )}
+              </div>
+            );
+          })()}
 
           {project.teamMemberNames && (
             <div className="team-members-section">

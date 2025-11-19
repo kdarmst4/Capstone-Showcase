@@ -76,7 +76,7 @@ export default function EditProject({
       return;
     }
     const API_BASE_URL =
-      process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/api";
+      import.meta.env.PROD ? "" : "http://localhost:3000/api";
 
     const header = {
       "Content-Type": "application/json",
