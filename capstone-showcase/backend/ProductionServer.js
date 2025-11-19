@@ -1015,14 +1015,13 @@ app.post("/api/presentation/update", (req, res) => {
   });
 });
 
-app.get('/api/presentation', (req, res) => {
-    const sql = 'SELECT * FROM presentation WHERE id = 1';
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error fetching presentation data:', err);
-            return res.status(500).send('Server error');
-        }
-        console.log('Query results:', results);
-        res.json(results);
-    });
+app.get("/api/presentation", async (req, res) => {
+  const sql = "SELECT * FROM presentation WHERE s_date <= NOW() AND e_date >= NOW() ORDER BY created_at DESC LIMIT 1";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching presentation data:", err);
+      return res.status(500).send("Server error");
+    }
+    res.json(results);
+  });
 });

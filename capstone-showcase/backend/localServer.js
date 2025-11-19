@@ -1027,7 +1027,7 @@ app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
 app.get("/api/presentation", async (req, res) => {
   // Ensure table and columns exist before querying
   await ensureColumns("presentation", LOCAL_DBSCHEMA.presentation_Columns);
-  const sql = "SELECT * FROM presentation WHERE id = 1";
+  const sql = "SELECT * FROM presentation WHERE s_date <= NOW() AND e_date >= NOW() ORDER BY created_at DESC LIMIT 1";
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error fetching presentation data:", err);

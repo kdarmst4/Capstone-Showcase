@@ -18,11 +18,13 @@ const PreEventLandingPage: React.FC = () => {
   const [, setSavedImage] = useState<string | null>(null);
   const [presentation, setPresentation] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const API_BASE_URL = import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
+  const API_BASE_URL = import.meta.env.PROD
+    ? "/api"
+    : "http://localhost:3000/api";
   const STATIC_BASE_URL = import.meta.env.PROD ? "" : "http://localhost:3000";
   const normalizePathToUrl = (path: string) => {
     console.log("Original URL:", path);
-    if (!path)  return;
+    if (!path) return;
     const trimmed = path.trim();
     console.log(
       "Normalized URL:",
@@ -51,7 +53,7 @@ const PreEventLandingPage: React.FC = () => {
       setLoading(false);
     };
     fetchData();
-    console.log('here is the presentation data', presentation);
+    console.log("here is the presentation data", presentation);
   }, []);
 
   return (
@@ -75,71 +77,77 @@ const PreEventLandingPage: React.FC = () => {
           <section className="event-details" aria-label="Event Details Section">
             <article>
               {presentation && (
-                <p>
-                  <strong>Showcase Date:</strong> {presentation?.p_date.slice(0, 10)}
-                  <br />
-                  <strong>Location:</strong> {" "}Memorial Union - Second floor
-                  <br />
-                  <strong>Check In & Poster Pickup Time:</strong>{" "}
-                  {presentation?.p_checking_time.slice(11, 16)}
-                  <br />
-                  <strong>Event Time:</strong>{" "}
-                  {presentation?.p_presentation_time.slice(11, 16)}
-                  <br />
-                </p>
-              )}
+                <>
+                  <p>
+                    <strong>Showcase Date:</strong>{" "}
+                    {presentation?.p_date.slice(0, 10)}
+                    <br />
+                    <strong>Location:</strong> {presentation?.p_loca}
+                    <br />
+                    <strong>Check In & Poster Pickup Time:</strong>{" "}
+                    {presentation?.p_checking_time.slice(11, 16)}
+                    <br />
+                    <strong>Event Time:</strong>{" "}
+                    {presentation?.p_presentation_time.slice(11, 16)}
+                    <br />
+                  </p>
 
-              <section
-                className="pdf-section"
-                aria-label="Event Map and Resourses"
-                style={{
-                  marginTop: "40px",
-                  textAlign: "center",
-                  color: "#333",
-                }}
-              >
-                <h2>Event Map & Resources</h2>
-                <p>
-                  Explore the venue maps and download the showcase materials
-                  below.
-                </p>
-
-                <div
-                  style={{
-                    marginTop: "30px",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  {loading ? (
-                    <p>Loading presentation details...</p>
-                  ) : (
-                    <>
-                      <iframe
-                        src={normalizePathToUrl(presentation?.file_path || "")}
-                        width="100%"
-                        height="600px"
-                        title="Presentation"
-                      />
-                    </>
-                  )}
-                </div>
-
-                <div style={{ marginTop: "20px" }}>
-                  <a
-                    href={normalizePathToUrl(presentation?.file_path || "")}
-                    download
+                  <section
+                    className="pdf-section"
+                    aria-label="Event Map and Resourses"
                     style={{
-                      color: "#8C1D40",
-                      fontSize: "18px",
-                      fontWeight: "bold",
-                      textDecoration: "underline",
+                      marginTop: "40px",
+                      textAlign: "center",
+                      color: "#333",
                     }}
                   >
-                    Download Capstone Locations and Diagrams (PDF)
-                  </a>
-                </div>
-              </section>
+                    <h2>Event Map & Resources</h2>
+                    <p>
+                      Explore the venue maps and download the showcase materials
+                      below.
+                    </p>
+
+                    <div
+                      style={{
+                        marginTop: "30px",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {loading ? (
+                        <p>Loading presentation details...</p>
+                      ) : (
+                        <>
+                          <iframe
+                            src={normalizePathToUrl(
+                              presentation?.file_path || ""
+                            )}
+                            width="100%"
+                            height="600px"
+                            title="Presentation"
+                          />
+                        </>
+                      )}
+                    </div>
+
+                    <div style={{ marginTop: "20px" }}>
+                      <a
+                        href={normalizePathToUrl(presentation?.file_path || "")}
+                        download
+                        style={{
+                          color: "#8C1D40",
+                          fontSize: "18px",
+                          fontWeight: "bold",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        Download Capstone Locations and Diagrams (PDF)
+                      </a>
+                    </div>
+                  </section>
+                </>
+              )}
+
               <p>{landingPageIntro}</p>
               <p>{capstoneDescription}</p>
               <p>{navigationInstructions}</p>
