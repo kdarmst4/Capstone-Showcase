@@ -38,7 +38,7 @@ export function Edit() {
   const [filteredProjects, setFilteredProjects] = useState<ProjectObj[]>([]);
   const [submissionSelected, setSubmissionSelected] = useState(null);
   const API_BASE_URL =
-    import.meta.env.PROD ? "api/" : "http://localhost:3000/api";
+    import.meta.env.PROD ? "/api" : "http://localhost:3000/api";
   // const STATIC_BASE_URL =
   //  process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
 
