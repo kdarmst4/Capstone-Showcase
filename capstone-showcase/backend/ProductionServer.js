@@ -981,53 +981,37 @@ app.post("/api/presentation/update", (req, res) => {
       presentationLocation,
       checkingTime,
       presentationTime,
+      startDisplayTime,
+      endDisplayTime,
     } = req.body;
 
     const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
     const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
+    let filepath = null;
     if (req.file) {
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation updated successfully",
-      });
-    } else {
-      console.log("No file received, updating other fields only");
-
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation details updated successfully",
-      });
+      filepath = `public/uploads/presentation.pdf`;
     }
+    const sql =
+      "INSERT INTO presentation (p_date, p_loca, p_checking_time, p_presentation_time, file_path, s_date, e_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    const values = [
+      presentationDate,
+      presentationLocation,
+      checkingTimeStamp,
+      presentationTimeStamp,
+      filepath,
+      startDisplayTime,
+      endDisplayTime,
+    ];
+    db.query(sql, values, (dbErr) => {
+      if (dbErr) {
+        return res.status(500).json({ error: "Database update failed" });
+      }
+    });
+
+    res.status(200).json({
+      message: "Presentation updated successfully",
+    });
   });
 });
 

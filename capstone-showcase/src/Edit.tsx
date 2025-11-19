@@ -38,7 +38,7 @@ export function Edit() {
   const [filteredProjects, setFilteredProjects] = useState<ProjectObj[]>([]);
   const [submissionSelected, setSubmissionSelected] = useState(null);
   const API_BASE_URL =
-    import.meta.env.PROD ? "" : "http://localhost:3000/api";
+    import.meta.env.PROD ? "api/" : "http://localhost:3000/api";
   // const STATIC_BASE_URL =
   //  process.env.NODE_ENV === 'production' ? "" : 'http://localhost:3000'
 
@@ -133,9 +133,9 @@ export function Edit() {
       formData.append('presentationDate', editpresentationData.presentationDate);
       formData.append('presentationLocation', editpresentationData.presentationLocation);
       formData.append('checkingTime', editpresentationData.checkingTime);
+      formData.append('presentationTime', editpresentationData.presentationTime);
       formData.append('startDisplayTime', editpresentationData.startDisplayTime);
       formData.append('endDisplayTime', editpresentationData.endDisplayTime);
-      formData.append('presentationTime', editpresentationData.presentationTime);
 
       // Only append file if one was selected
       if (editpresentationData.presentationFile) {

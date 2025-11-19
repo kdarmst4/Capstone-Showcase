@@ -102,8 +102,11 @@ const allLocalTables = [
     p_loca VARCHAR(255) NOT NULL,
     p_checking_time DATETIME NOT NULL,
     p_presentation_time DATETIME NOT NULL,
-    file_path VARCHAR(255) DEFAULT NULL
-  )`,
+    file_path VARCHAR(255) DEFAULT NULL,
+    s_date DATE DEFAULT (CURRENT_DATE),
+    e_date DATE DEFAULT (DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY)),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`,
   columns: presentation_Columns,
   },
   {

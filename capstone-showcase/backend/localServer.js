@@ -12,16 +12,16 @@ const querystring = require("querystring");
 // the || was an addition make sure to recomove it
 const mysql = require(process.env.LOCAL_DB_MYSQL_PACKAGE || "mysql2");
 
-// Allows interaction with local terminal for troubleshooting 
+// Allows interaction with local terminal for troubleshooting
 const readline = require("readline");
 
-const LOCAL_DBSCHEMA = require('./dbschema_local.js');
+const LOCAL_DBSCHEMA = require("./dbschema_local.js");
 
 /**
  * -- HELPER FUNCTION --
  * Checks if a table exists and creates it if missing (prompts in terminal).
  * Then checks all columns in that table and creates any missing columns (also prompts).
- * 
+ *
  * @param {string} table - Table name
  * @param {string} createTableSQL - SQL to create table if missing
  * @param {Array<{name: string, definition: string}>} columns - Array of columns to check/create
@@ -36,7 +36,10 @@ async function ensureTableAndColumns(table, createTableSQL, columns) {
       // Table exists
       if (results.length === 0) {
         console.log(`\x1b[31mError:\x1b[0m Table "${table}" does not exist.`);
-        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout,
+        });
         rl.question(`Create it now? (y/n): `, async (answer) => {
           rl.close();
           if (answer.toLowerCase() === "y") {
@@ -89,19 +92,28 @@ async function ensureColumnExists(table, column, columnDefinition) {
 
       if (results.length > 0) return resolve();
 
-      console.log(`\x1b[31mError:\x1b[0m Column "${column}" does not exist in table "${table}".`);
-      const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+      console.log(
+        `\x1b[31mError:\x1b[0m Column "${column}" does not exist in table "${table}".`
+      );
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
       rl.question(`Create it now? (y/n): `, (answer) => {
         rl.close();
         if (answer.toLowerCase() === "y") {
           const alterSql = `ALTER TABLE \`${table}\` ADD COLUMN \`${column}\` ${columnDefinition}`;
           db.query(alterSql, (alterErr) => {
             if (alterErr) return reject(alterErr);
-            console.log(`Column "${column}" created successfully in table "${table}".`);
+            console.log(
+              `Column "${column}" created successfully in table "${table}".`
+            );
             resolve();
           });
         } else {
-          console.error(`Exiting.. Column "${column}" missing in table "${table}".`);
+          console.error(
+            `Exiting.. Column "${column}" missing in table "${table}".`
+          );
           process.exit(1);
         }
       });
@@ -113,7 +125,7 @@ async function ensureColumnExists(table, column, columnDefinition) {
  * -- HELPER FUNCTION --
  * Loops through an array of tables and ensures each table + columns exist.
  * Example usage:    await ensureDB(allTables);
- * 
+ *
  * @param {Array<{name: string, createSQL: string, columns: Array<{name:string, definition:string}>}>} tables
  */
 async function ensureDB(tables) {
@@ -145,12 +157,13 @@ db.connect(async (err) => {
   try {
     // Ensures all tables and columns exist in local DB
     await ensureDB(LOCAL_DBSCHEMA.allLocalTables);
-    console.log("All tables/columns constants in localServer.js successfully match local db.");
+    console.log(
+      "All tables/columns constants in localServer.js successfully match local db."
+    );
   } catch (error) {
     console.error("Error ensuring tables/columns:", error);
     process.exit(1);
   }
-
 });
 
 // reCAPTCHA verification
@@ -158,7 +171,9 @@ const verifyRecaptcha = (token) => {
   return new Promise((resolve, reject) => {
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
     if (!secretKey) {
-      reject(new Error("RECAPTCHA_SECRET_KEY is not set in environment variables"));
+      reject(
+        new Error("RECAPTCHA_SECRET_KEY is not set in environment variables")
+      );
       return;
     }
     const postData = querystring.stringify({
@@ -522,7 +537,6 @@ app.get("/api/survey/:semester/:year", (req, res) => {
 
 //get endpoint to fetch all the winners of prev projects
 app.get("/api/winners", async (req, res) => {
-
   // Ensuring all below necessary columns exist locally first
   await ensureColumns("survey_entries", LOCAL_DBSCHEMA.survey_entries_Columns);
 
@@ -843,7 +857,7 @@ const uploadPresentation = multer({
 });
 
 // Serve static files from uploads directory
-app.use('/public/uploads', express.static('public/uploads'));
+app.use("/public/uploads", express.static("public/uploads"));
 
 // Update your presentation endpoint to use the middleware
 app.post("/api/presentation/update", (req, res) => {
@@ -858,53 +872,37 @@ app.post("/api/presentation/update", (req, res) => {
       presentationLocation,
       checkingTime,
       presentationTime,
+      startDisplayTime,
+      endDisplayTime,
     } = req.body;
 
     const checkingTimeStamp = `${presentationDate} ${checkingTime}:00`;
     const presentationTimeStamp = `${presentationDate} ${presentationTime}:00`;
+    let filepath = null;
     if (req.file) {
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation updated successfully",
-      });
-    } else {
-      console.log("No file received, updating other fields only");
-
-      const sql =
-        "UPDATE presentation SET p_date = ?, p_loca = ?, p_checking_time = ?, p_presentation_time = ?, file_path = ? WHERE id = 1";
-
-      const values = [
-        presentationDate,
-        presentationLocation,
-        checkingTimeStamp,
-        presentationTimeStamp,
-        `public/uploads/presentation.pdf`,
-      ];
-      db.query(sql, values, (dbErr) => {
-        if (dbErr) {
-          return res.status(500).json({ error: "Database update failed" });
-        }
-      });
-
-      res.status(200).json({
-        message: "Presentation details updated successfully",
-      });
+      filepath = `public/uploads/presentation.pdf`;
     }
+    const sql =
+      "INSERT INTO presentation (p_date, p_loca, p_checking_time, p_presentation_time, file_path, s_date, e_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    const values = [
+      presentationDate,
+      presentationLocation,
+      checkingTimeStamp,
+      presentationTimeStamp,
+      filepath,
+      startDisplayTime,
+      endDisplayTime,
+    ];
+    db.query(sql, values, (dbErr) => {
+      if (dbErr) {
+        return res.status(500).json({ error: "Database update failed" });
+      }
+    });
+
+    res.status(200).json({
+      message: "Presentation updated successfully",
+    });
   });
 });
 
@@ -1026,16 +1024,16 @@ app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
   }
 });
 
-app.get('/api/presentation', async (req, res) => {
+app.get("/api/presentation", async (req, res) => {
   // Ensure table and columns exist before querying
   await ensureColumns("presentation", LOCAL_DBSCHEMA.presentation_Columns);
-    const sql = 'SELECT * FROM presentation WHERE id = 1';
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error fetching presentation data:', err);
-            return res.status(500).send('Server error');
-        }
-        console.log('Query results:', results);
-        res.json(results);
-    });
+  const sql = "SELECT * FROM presentation WHERE id = 1";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching presentation data:", err);
+      return res.status(500).send("Server error");
+    }
+    console.log("Query results:", results);
+    res.json(results);
+  });
 });
