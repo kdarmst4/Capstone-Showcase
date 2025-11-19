@@ -21,7 +21,7 @@ const PreEventLandingPage: React.FC = () => {
   const API_BASE_URL = import.meta.env.PROD
     ? "/api"
     : "http://localhost:3000/api";
-  const STATIC_BASE_URL = import.meta.env.PROD ? "https://showcase.asucapstone.com" : "http://localhost:3000";
+  const STATIC_BASE_URL = import.meta.env.PROD ? "" : "http://localhost:3000";
   const normalizePathToUrl = (path: string) => {
     console.log("Original URL:", path);
     if (!path) return;
@@ -118,14 +118,14 @@ const PreEventLandingPage: React.FC = () => {
                         <p>Loading presentation details...</p>
                       ) : (
                         <>
-                          <iframe
-                            src={normalizePathToUrl(
+                          <object
+                            data={normalizePathToUrl(
                               presentation?.file_path || ""
                             )}
                             width="100%"
                             height="600px"
                             title="Presentation"
-                          />
+                          ></object>
                         </>
                       )}
                     </div>
