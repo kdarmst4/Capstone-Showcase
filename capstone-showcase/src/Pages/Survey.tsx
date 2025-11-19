@@ -857,7 +857,7 @@ const Survey: React.FC = () => {
                     border: '1px dashed #ccc'
                   }}
                 ></div>
-                  {!recaptchaToken && import.meta.env.RECAPTCHA_SITE_KEY && (
+                  {!recaptchaToken && import.meta.env.VITE_RECAPTCHA_SITE_KEY && (
                     <div style={{ padding: '20px', color: '#666', fontSize: '12px' }}>
                       Loading reCAPTCHA...
                     </div>
