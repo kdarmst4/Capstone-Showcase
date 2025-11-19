@@ -116,17 +116,23 @@ const PreEventLandingPage: React.FC = () => {
                     >
                       {loading ? (
                         <p>Loading presentation details...</p>
-                      ) : (
-                        <>
+                      ) : presentation?.file_path ? (
                           <object
                             data={normalizePathToUrl(
-                              presentation?.file_path || ""
+                              presentation.file_path
                             )}
+                            type = "application/pdf"
                             width="100%"
                             height="600px"
+                            style = {{border: "1px solid #ccc"}}
                             title="Presentation"
-                          ></object>
-                        </>
+                          >
+                            <p>
+                              Map not available.
+                            </p>
+                          </object>
+                      ) : (
+                          <p>Map not available.</p>
                       )}
                     </div>
 
