@@ -882,8 +882,28 @@ app.post("/api/presentation/update", (req, res) => {
     if (req.file) {
       filepath = `public/uploads/presentation.pdf`;
     }
-    const sql =
-      "INSERT INTO presentation (p_date, p_loca, p_checking_time, p_presentation_time, file_path, s_date, e_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+    const sql = `INSERT INTO presentation (
+    id,
+    p_date,
+    p_loca,
+    p_checking_time,
+    p_presentation_time,
+    file_path,
+    s_date,
+    e_date,
+    created_at
+)
+VALUES (1, ?, ?, ?, ?, ?, ?, ?, NOW())
+ON DUPLICATE KEY UPDATE
+    p_date = VALUES(p_date),
+    p_loca = VALUES(p_loca),
+    p_checking_time = VALUES(p_checking_time),
+    p_presentation_time = VALUES(p_presentation_time),
+    file_path = VALUES(file_path),
+    s_date = VALUES(s_date),
+    e_date = VALUES(e_date),
+    created_at = NOW();
+`;
 
     const values = [
       presentationDate,
@@ -896,12 +916,12 @@ app.post("/api/presentation/update", (req, res) => {
     ];
     db.query(sql, values, (dbErr) => {
       if (dbErr) {
-        return res.status(500).json({ error: "Database update failed" });
+        return res
+          .status(500)
+          .json({ error: "Database update failed" + dbErr });
       }
-    });
 
-    res.status(200).json({
-      message: "Presentation updated successfully",
+      res.status(200).json({ message: "Presentation updated successfully" });
     });
   });
 });
@@ -1027,7 +1047,8 @@ app.post("/api/set_winners", uploadWinner.any(), (req, res) => {
 app.get("/api/presentation", async (req, res) => {
   // Ensure table and columns exist before querying
   await ensureColumns("presentation", LOCAL_DBSCHEMA.presentation_Columns);
-  const sql = "SELECT * FROM presentation WHERE s_date <= NOW() AND e_date >= NOW() ORDER BY created_at DESC LIMIT 1";
+  const sql =
+    "SELECT * FROM presentation WHERE s_date <= NOW() AND e_date >= NOW() ORDER BY id DESC LIMIT 1";
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error fetching presentation data:", err);
