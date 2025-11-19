@@ -105,6 +105,7 @@ const Survey: React.FC = () => {
     const [recaptchaToken, setRecaptchaToken] = useState<string>("");
     const recaptchaRef = useRef<HTMLDivElement>(null);
     const recaptchaWidgetId = useRef<number | null>(null);
+    const tokenRefreshResolver = useRef<((token: string) => void) | null>(null);
 
     const navigate = useNavigate();
 
@@ -159,19 +160,30 @@ const Survey: React.FC = () => {
             }
 
             try {
-                //const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
                 recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
                     sitekey: siteKey,
                     callback: (token: string) => {
                         setRecaptchaToken(token);
+                        if (tokenRefreshResolver.current) {
+                            tokenRefreshResolver.current(token);
+                            tokenRefreshResolver.current = null;
+                        }
                     },
                     'expired-callback': () => {
                         console.log('reCAPTCHA token expired');
                         setRecaptchaToken("");
+                        if (tokenRefreshResolver.current) {
+                            tokenRefreshResolver.current("");
+                            tokenRefreshResolver.current = null;
+                        }
                     },
                     'error-callback': () => {
                         console.error('reCAPTCHA error');
                         setRecaptchaToken("");
+                        if (tokenRefreshResolver.current) {
+                            tokenRefreshResolver.current("");
+                            tokenRefreshResolver.current = null;
+                        }
                     }
                 });
                 isRendered = true;
@@ -217,6 +229,11 @@ const Survey: React.FC = () => {
         }
 
         return () => {
+            // Clear any pending token refresh resolver
+            if (tokenRefreshResolver.current) {
+                tokenRefreshResolver.current = null;
+            }
+            
             if (recaptchaWidgetId.current !== null && window.grecaptcha && window.grecaptcha.reset) {
                 try {
                     window.grecaptcha.reset(recaptchaWidgetId.current);
@@ -272,7 +289,49 @@ const Survey: React.FC = () => {
       setErrors({ ...errors, [name]: "" });
       console.log(`Field: ${name}, Value: ${value}`);
     };
-      
+
+    const refreshRecaptchaToken = (): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        
+        if (!siteKey) {
+          // proceed without token
+          resolve("");
+          return;
+        }
+
+        if (!window.grecaptcha || recaptchaWidgetId.current === null) {
+          reject(new Error("reCAPTCHA not initialized"));
+          return;
+        }
+
+        try {
+          const currentResponse = window.grecaptcha.getResponse(recaptchaWidgetId.current);
+          
+          window.grecaptcha.reset(recaptchaWidgetId.current);
+          setRecaptchaToken("");
+          
+          tokenRefreshResolver.current = (token: string) => {
+            if (token) {
+              resolve(token);
+            } else {
+              reject(new Error("reCAPTCHA token refresh failed"));
+            }
+          };
+          
+          setTimeout(() => {
+            if (tokenRefreshResolver.current) {
+              tokenRefreshResolver.current = null;
+              reject(new Error("reCAPTCHA token refresh timeout. Please complete the verification again."));
+            }
+          }, 300000);
+          
+        } catch (error) {
+          reject(error);
+        }
+      });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       console.log("Form submitted");
@@ -285,14 +344,41 @@ const Survey: React.FC = () => {
         return;
       }
 
-      // Check if reCAPTCHA is completed
       const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-      if (siteKey && !recaptchaToken) {
-        alert("Please complete the reCAPTCHA verification.");
-        if (recaptchaRef.current) {
-          recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      let freshRecaptchaToken = recaptchaToken;
+      
+      if (siteKey) {
+        try {
+          console.log("Refreshing reCAPTCHA token before submission...");
+          
+          if (recaptchaWidgetId.current !== null && window.grecaptcha && window.grecaptcha.reset) {
+            freshRecaptchaToken = await refreshRecaptchaToken();
+            
+            if (!freshRecaptchaToken) {
+              alert("Please complete the reCAPTCHA verification to continue.");
+              if (recaptchaRef.current) {
+                recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+              return;
+            }
+            
+            console.log("reCAPTCHA token refreshed successfully");
+          } else if (!recaptchaToken) {
+            alert("Please complete the reCAPTCHA verification.");
+            if (recaptchaRef.current) {
+              recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            return;
+          }
+        } catch (error: any) {
+          console.error("Error refreshing reCAPTCHA:", error);
+          const errorMessage = error.message || "There was an issue with reCAPTCHA verification. Please try again.";
+          alert(errorMessage);
+          if (recaptchaRef.current) {
+            recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+          return;
         }
-        return;
       }
       console.log("Calling API");
       try {
@@ -339,9 +425,8 @@ const Survey: React.FC = () => {
           ...prepareSubmissionData(updatedFormData),
         };
         
-        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-        if (siteKey && recaptchaToken) {
-          submissionData.recaptchaToken = recaptchaToken;
+        if (siteKey && freshRecaptchaToken) {
+          submissionData.recaptchaToken = freshRecaptchaToken;
         }
 
         // Final survey data submission
@@ -857,9 +942,8 @@ const Survey: React.FC = () => {
                     border: '1px dashed #ccc'
                   }}
                 ></div>
-                  {!recaptchaToken && import.meta.env.RECAPTCHA_SITE_KEY && (
+                  {!recaptchaToken && import.meta.env.VITE_RECAPTCHA_SITE_KEY && (
                     <div style={{ padding: '20px', color: '#666', fontSize: '12px' }}>
-                      Loading reCAPTCHA...
                     </div>
                   )}
               </div>
