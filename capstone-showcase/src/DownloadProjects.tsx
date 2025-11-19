@@ -69,7 +69,7 @@ export function DownloadProjects() {
 
   const jsonToCSV = (data: any[], headers: string[]) => {
     console.log("Converting to CSV with data:", data);
-    console.log("Using headers:", headers);
+    // console.log("Using headers:", headers);
 
     const csvRows = [];
     const headerRow = headers.join(",");
@@ -180,9 +180,9 @@ export function DownloadProjects() {
       return;
     }
     if (response.status === 200) {
-      const projects = responseData;
+      const projects = responseData.results; 
       if (selectedFormat === "csv") {
-        const csvString = jsonToCSV(projects, csvHeaders);
+        const csvString = jsonToCSV(projects, csvHeaders); 
         downloadCSV(
           csvString,
           `capstone_projects_${startDate}_to_${endDate}.csv`
