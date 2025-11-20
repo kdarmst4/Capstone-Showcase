@@ -233,21 +233,28 @@ export function SurveyDetails() {
           {project.teamMemberNames && (
             <div className="team-members-section">
               <h3>Team Members</h3>
-              {project.teamPicturePath ? (
-                <img
-                  className="team-members-img"
-                  src={normalizePathToUrl(project.teamPicturePath)}
-                  alt="Team Members"
-                />
-              ) : (
-                <div className="team-members-list">
-                  {teamMembers.map((name, i) => (
-                    <span key={i} className="member-tag-names">
-                      <p>{name}</p>
-                    </span>
+              
+              {teamMemberPhotos.length > 0 && (
+                <div className="team-photos-grid">
+                  {teamMemberPhotos.map((photoUrl, i) => (
+                    <div key={i} className="team-photo-wrapper">
+                      <img
+                        src={photoUrl}
+                        alt="Team photo"
+                        className="team-members-img"
+                      />
+                    </div>
                   ))}
                 </div>
               )}
+
+              <div className="team-members-list">
+                {teamMembers.map((name, i) => (
+                  <span key={i} className="member-tag-names">
+                    <p>{name}</p>
+                  </span>
+                ))}
+              </div>
             </div>
           )}
           <span className="extra-details-survey">
