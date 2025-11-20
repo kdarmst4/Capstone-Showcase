@@ -24,14 +24,10 @@ export default function useMajorTabHelpers() {
     navigate("/survey");
   };
 
-  const handleMoreProjectsClick = () => {
-    navigate("/interdisciplinary");
-  };
 
   return {
     extractYouTubeThumbnail,
     getSemesterLabel,
     handleSurveyFormClick,
-    handleMoreProjectsClick,
   };
 }

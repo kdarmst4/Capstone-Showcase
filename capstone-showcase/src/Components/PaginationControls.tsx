@@ -1,4 +1,5 @@
 import React from "react";
+import { useProjects } from "../context/ProjectsProvider";
 
 interface PaginationProps {
   currentPage: number;
@@ -10,15 +11,17 @@ interface PaginationProps {
   totalProjects: number;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
-  currentPage,
-  totalPages,
-  goToPage,
-  goToNextPage,
-  goToPreviousPage,
-  getPageNumbers,
-  totalProjects,
-}) => {
+const PaginationControls = () => {
+  const {
+    currentPage,
+    totalPages,
+    goToPage,
+    goToNextPage,
+    goToPreviousPage,
+    getPageNumbers,
+    totalProjects,
+  } = useProjects();
+  
   if (totalPages <= 1) return null;
 
   return (
@@ -57,4 +60,4 @@ const Pagination: React.FC<PaginationProps> = ({
   );
 };
 
-export default Pagination;
+export default PaginationControls;

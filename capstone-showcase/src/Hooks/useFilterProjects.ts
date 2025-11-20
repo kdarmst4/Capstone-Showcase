@@ -1,6 +1,14 @@
 import { useMemo, useState } from "react";
 
-export default function useFilterProjects(projects: any[]) {
+export interface FilterableProject {
+  id?: string | number;
+  sponsor?: string;
+  projectTitle?: string;
+  projectDescription?: string;
+  teamMemberNames?: string;
+}
+
+export default function useFilterProjects<T extends FilterableProject>(projects: T[]) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSponsor, setSelectedSponsor] = useState("all");
 
@@ -36,5 +44,8 @@ export default function useFilterProjects(projects: any[]) {
     setSelectedSponsor,
     uniqueSponsors,
     filterProjects,
+    totalProjects: filterProjects.length,
   };
 }
+
+export type FilterState<T extends FilterableProject> = ReturnType<typeof useFilterProjects<T>>;

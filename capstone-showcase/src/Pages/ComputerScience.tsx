@@ -4,14 +4,16 @@ import "../CSS/ComputerScience.css";
 import "../CSS/ProjectCards.css";
 import "../CSS/Pagination.css";
 import "../CSS/ProjectShowcase.css";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import asuLogo from "../assets/asuLogo.png";
 import Footer from "./Footer";
-import Pagination from "../Components/Pagination";
+import PaginationControls from "../Components/PaginationControls";
 import useFetchProjects from "../Hooks/useFetchProjects";
-import useFilterProjects from "../Hooks/useFilterProjects";
-import usePagination from "../Hooks/usePagination";
 import useMajorTabHelpers from "../Hooks/useMajorTabHelpers";
+import { ProjectsProvider } from "../context/ProjectsProvider";
+import SearchAndFilterControls from "../Components/SearchAndFilterControls";
+import ProjectsGrid from "../Components/ProjectsGrid";
+import MoreProjectsButton from "../Components/MoreProjectsButton";
 
 const STATIC_BASE_URL =
   import.meta.env.PROD
@@ -23,7 +25,6 @@ const ComputerScience: React.FC = () => {
   const [searchParams] = useSearchParams();
   const selectedSemester = searchParams.get("semester");
   const selectedYear = searchParams.get("year");
-  const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,51 +36,13 @@ const ComputerScience: React.FC = () => {
   const major = "computer-science";
   const { projects, loading, error } = useFetchProjects(major, semester, year);
   
-  // Filtering Variables and functions
-  const {
-    searchQuery,
-    setSearchQuery, 
-    selectedSponsor, 
-    setSelectedSponsor, 
-    uniqueSponsors, 
-    filterProjects
-  } = useFilterProjects(projects);
-
-  // Pagination Variables and functions - computed from filteredProjects
-  const projectsPerPage = 8;
-  const {
-    currentPage,
-    setCurrentPage,
-    totalPages,
-    currentProjects,
-    goToPage,
-    goToNextPage,
-    goToPreviousPage,
-    getPageNumbers,
-  } = usePagination(filterProjects, projectsPerPage);
-
-  const paginationProps = {
-    currentPage,
-    totalPages,
-    goToPage,
-    goToNextPage,
-    goToPreviousPage,
-    getPageNumbers,
-    totalProjects: filterProjects.length,
-  }
-  
   // Major Tab Helpers
   const { 
     extractYouTubeThumbnail,
     getSemesterLabel,
     handleSurveyFormClick, 
-    handleMoreProjectsClick 
   } = useMajorTabHelpers();
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [projects, filterProjects]);
 
   useEffect(() => {
     document.body.classList.add(`${major}-page-body`);
@@ -88,10 +51,10 @@ const ComputerScience: React.FC = () => {
     }
   }, []);
 
-  const handleProjectClick = (project: any) => {
-    setSelectedProject(project);
-    setIsModalOpen(true);
-  };
+  // const handleProjectClick = (project: any) => {
+  //   setSelectedProject(project);
+  //   setIsModalOpen(true);
+  // };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -126,86 +89,15 @@ const ComputerScience: React.FC = () => {
             <p>No projects available for Computer Science.</p>
           ) : (
             <>
-            {/* Search and Filter Section */}
-            <section className="search-filter-section">
-              <div className="search-bar-container">
-                  <input
-                      type="text"
-                      className="search-bar"
-                      placeholder="Search projects..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-              </div>
-
-              <div className="filter-container">
-                  <select
-                      className="sponsor-filter"
-                      value={selectedSponsor}
-                      onChange={(e) => setSelectedSponsor(e.target.value)}
-                  >
-                      {uniqueSponsors.map((sponsor, index) => (
-                          <option key={index} value={sponsor}>
-                              {sponsor === "all" ? "All Sponsors" : sponsor}
-                          </option>
-                      ))}
-                  </select>
-              </div>
-            </section>
-
-            {/* Projects Grid */}
-            <section className="project-catalog">
-              <div className="projects-grid">
-                {currentProjects.map((project, index) => (
-                  <Link
-                    key={project.id || index}
-                    to={`/survey/${project.id}`}
-                    state={{ project }}
-                    className="project-card-link"
-                  >
-                    <div className="project-card">
-                      {project.youtubeLink && (
-                        <img
-                          src={extractYouTubeThumbnail(project.youtubeLink) || ""}
-                          alt={`${project.projectTitle} Thumbnail`}
-                          className="youtube-thumbnail"
-                        />
-                      )}
-
-                      <div className="project-details">
-                        <h4 className="project-title left-aligned">
-                          {project.projectTitle}
-                        </h4>
-
-                        <p className="project-description left-aligned">
-                          {project.projectDescription}
-                        </p>
-
-                        <div className="project-meta">
-                          <p>
-                            <strong>Team:</strong> {project.teamMemberNames}
-                          </p>
-                          <p>
-                            <strong>Sponsor:</strong> {project.sponsor}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-
-            <Pagination {...paginationProps} />
-
-              <button
-                className="more-projects-button"
-                onClick={handleMoreProjectsClick}
-                aria-label="More Projects Button"
-              >
-                Like what you see or don't see your project? Click here to see
-                interdisciplinary projects!
-              </button>
+              <ProjectsProvider projects={projects}>
+                {/* Search and Filter Section */}
+                <SearchAndFilterControls/>
+                {/* Projects Grid */}
+                <ProjectsGrid/>
+                {/* Pagination Controls */}
+                <PaginationControls/>
+              </ProjectsProvider>
+              <MoreProjectsButton/>
             </>
           )}
         </section>

@@ -73,3 +73,5 @@ export default function usePagination<T>(projects: T[], perPage: number = 8) {
     getPageNumbers,
   };
 }
+
+export type PaginationState<T> = ReturnType<typeof usePagination<T>>;
