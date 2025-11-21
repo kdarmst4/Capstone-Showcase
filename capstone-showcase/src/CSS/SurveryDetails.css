@@ -96,7 +96,6 @@
 }
 
 
-
 .project-description-section 
 {
     text-align: left;
@@ -114,11 +113,6 @@
     transition: all 0.3s ease;
     cursor: pointer;
 }
-
-
-
-
-
 
 
 .survey-detail-img-container 
@@ -235,6 +229,16 @@
   flex-direction: column;
 
 }
+
+.team-members-section 
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: black;
+
+}
+
 .team-photos-grid {
   display: flex;
   flex-wrap: wrap;
@@ -258,14 +262,23 @@
   border: 1px solid var(--asu-maroon);
 }
 
-.team-members-section 
-{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: black;
-
+.team-photos-grid.single-photo-grid {
+  justify-content: center;
 }
+
+.team-photo-wrapper.single-photo-wrapper {
+  max-width: 800px;   /* bigger group photo */
+  width: 100%;
+  align-items: stretch;
+}
+
+.team-photo-wrapper.single-photo-wrapper .team-members-img {
+  width: 100%;
+  height: auto;        
+  max-height: 600px;   
+  object-fit: cover;
+}
+
 .member-tag-names > p {
  
   color: black;
