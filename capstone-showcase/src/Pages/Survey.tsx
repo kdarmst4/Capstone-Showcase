@@ -287,29 +287,44 @@ const Survey: React.FC = () => {
       setErrors({ ...errors, [name]: "" });
       console.log(`Field: ${name}, Value: ${value}`);
     };
+
+    const [submitting, setSubmitting] = useState(false);
       
     const handleSubmit = async (e: React.FormEvent) => {
+      
       e.preventDefault();
-      console.log("Form submitted");
+
+      if (submitting) return;                   // disable submission if one is already in progress
+      
+      console.log("[Client] Submit started");
+
+      setSubmitting(true);
     
-      const formErrors = validateFormData(formData);
-      setErrors(formErrors);
 
-      if (hasErrors(formErrors)) {
-        scrollToFirstError();
-        return;
-      }
-
-      // Check if reCAPTCHA is completed
-      if (!recaptchaToken) {
-        alert("Please complete the reCAPTCHA verification.");
-        if (recaptchaRef.current) {
-          recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-        return;
-      }
       console.log("Calling API");
+      
       try {
+
+        const formErrors = validateFormData(formData);
+        setErrors(formErrors);
+        if (hasErrors(formErrors)) {
+          scrollToFirstError();
+          throw new Error("__VALIDATION_ERROR__");
+          //return;
+          }
+
+        // Check if reCAPTCHA is completed
+        if (!recaptchaToken) {
+          alert("Please complete the reCAPTCHA verification.");
+          if (recaptchaRef.current) {
+            recaptchaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+          throw new Error("__RECAPTCHA_MISSING__");
+          //return;
+        }
+
+
+
         console.log("here1")
         let posterPath = "";
         let teamImagePaths: string[] = [];
@@ -318,7 +333,7 @@ const Survey: React.FC = () => {
         if (selectedFile) {
           const posterData = new FormData();
           posterData.append("poster", selectedFile);
-
+          console.log("[Client] Selected poster file:", selectedFile);
           // const posterRes = await axios.post("http://localhost:3000/api/survey/uploadsPoster", posterData, {
            const posterRes = await axios.post(`${API_BASE_URL}/survey/uploadsPoster`, posterData, {
             headers: { "Content-Type": "multipart/form-data" },
@@ -357,13 +372,20 @@ const Survey: React.FC = () => {
           submissionData.recaptchaToken = recaptchaToken;
         }
 
+        console.log("[Client] FINAL PAYLOAD being sent to /api/survey:", submissionData);
         // Final survey data submission
         // await axios.post("http://localhost:3000/api/survey", submissionData);
          await axios.post(`${API_BASE_URL}/survey`, submissionData);
+
+         console.log("[Client] Submission success!");
     
         handleSuccessfulSubmission();
       } catch (error: any) {
         console.error("Error during form submission:", error);
+        
+        if (error.message === "__VALIDATION_ERROR__") return;  // controlled exit for validation
+        if (error.message === "__RECAPTCHA_MISSING__") return; // controlled exit for missing captcha
+        
         if (error.response?.data?.error) {
           if (error.response.data.error.includes("reCAPTCHA")) {
             alert("reCAPTCHA verification failed. Please try again.");
@@ -377,6 +399,8 @@ const Survey: React.FC = () => {
         } else {
           alert("An error occurred while submitting. Please try again.");
         }
+      } finally {
+        setSubmitting(false);   // allow submissions if the current one is done
       }
     };
     const prepareSubmissionData = (formData: FormData) => {
@@ -876,9 +900,9 @@ const Survey: React.FC = () => {
                     </div>
                   )}
               </div>
-              <button type="submit" className="submit-button">
-                Submit
-              </button>
+              <button type="submit" className="submit-button" disabled={submitting}>
+                {submitting ? "Submitting..." : "Submit"}
+                </button>
             </div>
 
           </form>
