@@ -1058,3 +1058,29 @@ app.get("/api/presentation", async (req, res) => {
     res.json(results);
   });
 });
+
+
+// #get the full url 
+app.get("/api/getFullUrl/:id", (req, res) => {
+  const { id } = req.params;
+  const site_secret = process.env.TEMP_URL_SECRET;
+  if (id)
+  {
+    const jwtToken = jwt.sign(
+      {
+        id: id,
+      },
+      site_secret,
+      {
+        expiresIn: "30d",
+      }
+    );
+    return res.status(200).json({
+      url: req.protocol + "://" + req.get("host") + "/student/survey/edit/" + jwtToken,
+    })
+
+  }else 
+  {
+    return res.status(400).json({ error: "No id provided" });
+  }
+});
