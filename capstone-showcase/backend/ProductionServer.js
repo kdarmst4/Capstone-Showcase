@@ -1050,3 +1050,45 @@ app.get("/api/presentation", async (req, res) => {
     res.json(results);
   });
 });
+
+app.get("/api/surveyEdit/:id", (req, res) => {
+  const { id } = req.params;
+  const site_secret = process.env.TEMP_URL_SECRET;
+  if (id)
+  {
+    const jwtToken = jwt.sign(
+      {
+        id: id,
+      },
+      site_secret,
+      {
+        expiresIn: "30d",
+      }
+    );
+    return res.status(200).json({
+      url: req.protocol + "://" + req.get("host") + "/student/survey/edit/" + jwtToken,
+    })
+
+  }else 
+  {
+    return res.status(400).json({ error: "No id provided" });
+  }
+});
+
+app.get("/api/student/survey/edit/:token", (req, res) => {
+  const { token } = req.params;
+  const site_secret = process.env.TEMP_URL_SECRET;
+  try {
+    const decoded = jwt.verify(token, site_secret);
+    const id = decoded.id;
+    const sql = "SELECT * FROM survey_entries WHERE id = ?";
+    db.query(sql, [id], (err, results) => {
+      if (err) {
+        return res.status(500).send("Server error");
+      }
+      res.json(results);
+    });
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
+  }
+});

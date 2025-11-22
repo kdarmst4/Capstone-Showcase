@@ -1059,13 +1059,11 @@ app.get("/api/presentation", async (req, res) => {
   });
 });
 
-
-// #get the full url 
-app.get("/api/getFullUrl/:id", (req, res) => {
+// #get the full url
+app.get("/api/surveyEdit/:id", (req, res) => {
   const { id } = req.params;
   const site_secret = process.env.TEMP_URL_SECRET;
-  if (id)
-  {
+  if (id) {
     const jwtToken = jwt.sign(
       {
         id: id,
@@ -1076,11 +1074,34 @@ app.get("/api/getFullUrl/:id", (req, res) => {
       }
     );
     return res.status(200).json({
-      url: req.protocol + "://" + req.get("host") + "/student/survey/edit/" + jwtToken,
-    })
-
-  }else 
-  {
+      url:
+        req.protocol +
+        "://" +
+        req.get("host") +
+        "/student/survey/edit/" +
+        jwtToken,
+    });
+  } else {
     return res.status(400).json({ error: "No id provided" });
+  }
+});
+
+app.get("/api/student/survey/edit/:token", (req, res) => {
+  const { token } = req.params;
+  const site_secret = process.env.TEMP_URL_SECRET;
+  try {
+    const decoded = jwt.verify(token, site_secret);
+    const id = decoded.id;
+    const sql = "SELECT * FROM survey_entries WHERE id = ?";
+    db.query(sql, [id], (err, results) => {
+      if (err) {
+        console.error("Error fetching project data:", err);
+        return res.status(500).send("Server error");
+      }
+      console.log("Query results:", results);
+      res.json(results);
+    });
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized User Access" });
   }
 });
