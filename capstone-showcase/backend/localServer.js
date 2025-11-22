@@ -1078,7 +1078,7 @@ app.get("/api/surveyEdit/:id", (req, res) => {
         req.protocol +
         "://" +
         req.get("host") +
-        "/student/survey/edit/" +
+        "/student/survey-edit/" +
         jwtToken,
     });
   } else {
@@ -1086,7 +1086,7 @@ app.get("/api/surveyEdit/:id", (req, res) => {
   }
 });
 
-app.get("/api/student/survey/edit/:token", (req, res) => {
+app.get("/api/student/survey-edit/:token", (req, res) => {
   const { token } = req.params;
   const site_secret = process.env.TEMP_URL_SECRET;
   try {

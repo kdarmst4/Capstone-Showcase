@@ -23,6 +23,7 @@ import Winners from "./Pages/Winners";
 import ProjectDetails from "./Pages/ProjectDetails";
 import { SurveyDetails } from "./Pages/SurveyDetails";
 import { AuthProvider } from "./AuthContext";
+import { StudentEdit } from "./Pages/StudentEdit";
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -53,6 +54,7 @@ const AppContent: React.FC = () => {
           <Route path="admin-dashboard/edit/presentation" element={<EditPresentation />} />
           <Route path="admin-dashboard/edit/submissions" element={<EditSubmissions />} />
           <Route path="admin-dashboard/support" element={<ContactSupport />} />
+          <Route path="/student-edit/:token" element={<StudentEdit />} />
         </Routes>
       </div>
       </AuthProvider>
