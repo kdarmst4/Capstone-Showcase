@@ -112,15 +112,42 @@ export function SurveyDetails() {
     };
 
     (async () => {
-      const validated: string[] = [];
-      for (let i = 0; i < Math.max(names.length, rawPaths.length); i++) {
-        const path = rawPaths[i] ?? "";
-        const result = await checkImage(path);
-        validated.push(result);
+      // Validate all provided image paths
+      const validatedRaw: string[] = [];
+      for (const path of rawPaths) {
+          const result = await checkImage(path);
+          validatedRaw.push(result);
       }
-      while (validated.length < names.length) validated.push(Missing_photo);
 
-      setTeamMemberPhotos(validated);
+      // Keep only actually valid images (not Missing_photo)
+      const validImages = validatedRaw.filter((url) => url !== Missing_photo);
+
+      // CASE 1: No images submitted OR all invalid -> placeholders per team member
+      if (rawPaths.length === 0 || validImages.length === 0) {
+        const placeholders = names.map(() => Missing_photo);
+        setTeamMemberPhotos(placeholders);
+        return;
+      }
+
+      // CASE 2: Exactly ONE valid image -> show only that image (group photo)
+      if (validImages.length === 1) {
+        setTeamMemberPhotos(validImages); 
+        return;
+      }
+
+      // CASE 3: More than one valid image
+      // If fewer images than team members -> pad with placeholders
+      if (names.length > 0 && validImages.length < names.length) {
+        const withPlaceholders = [...validImages];
+        while (withPlaceholders.length < names.length) {
+          withPlaceholders.push(Missing_photo);
+        }
+        setTeamMemberPhotos(withPlaceholders);
+        return;
+      }
+
+      // CASE 4: Images >= team members -> just show all valid images for now
+      setTeamMemberPhotos(validImages);
     })();
   }, [project]);
 
@@ -235,12 +262,25 @@ export function SurveyDetails() {
               <h3>Team Members</h3>
               
               {teamMemberPhotos.length > 0 && (
-                <div className="team-photos-grid">
+                <div
+                  className={
+                    teamMemberPhotos.length === 1
+                      ? "team-photos-grid single-photo-grid"
+                      : "team-photos-grid"
+                  }
+                >
                   {teamMemberPhotos.map((photoUrl, i) => (
-                    <div key={i} className="team-photo-wrapper">
+                    <div
+                      key={i}
+                      className={
+                        teamMemberPhotos.length === 1
+                          ? "team-photo-wrapper single-photo-wrapper"
+                          : "team-photo-wrapper"
+                      }
+                    >
                       <img
                         src={photoUrl}
-                        alt="Team photo"
+                        alt={teamMembers[i] ? `${teamMembers[i]}'s photo` : "Team photo"}
                         className="team-members-img"
                       />
                     </div>
