@@ -215,11 +215,14 @@
   cursor: pointer;
   background-color: var(--asu-maroon);
   color: white;
+  border-radius: 10px;
+
 }
 
-.save-btn:hover {
-  background-color: var(--asu-gold);
+.save-btn:hover, 
+.save-btn span:hover {
   color: var(--asu-maroon);
+  background-color: var(--asu-gold);
 }
 
 .cancel-btn {

@@ -42,6 +42,10 @@
   border-radius: 8px;
   background-color: #f9f9f9;
 }
+.student-edit-project-form textarea
+{
+    height: 100px;
+}
 
 .student-edit-project-form input,
 .student-edit-project-form textarea
