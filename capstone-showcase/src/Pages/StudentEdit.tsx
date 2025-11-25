@@ -3,7 +3,7 @@ import { ProjectObj } from "../SiteInterface";
 import { useParams } from "react-router-dom";
 import asuLogoPlain from "../assets/asuLogoPlain.png";
 import "../CSS/StudentEdit.css";
-import {MultipleImageUploader} from "../MultipleImageUploader";
+import { MultipleImageUploader, UploadableImage } from "../MultipleImageUploader";
 
 export function StudentEdit() {
   const { token } = useParams<{ token: string }>();
@@ -12,11 +12,13 @@ export function StudentEdit() {
   const [project, setProject] = useState<ProjectObj>({} as ProjectObj);
   const [changes, setChanges] = useState<ProjectObj>({} as ProjectObj);
   const [loading, setLoading] = useState<boolean>(true);
-
-  
-  // Add state for multiple images
-  const [posterImages, setPosterImages] = useState<File[]>([]);
-  const [teamImages, setTeamImages] = useState<File[]>([]);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [posterImages, setPosterImages] = useState<UploadableImage[]>([]);
+  const [teamImages, setTeamImages] = useState<UploadableImage[]>([]);
+  const [posterImagesDirty, setPosterImagesDirty] = useState<boolean>(false);
+  const [teamImagesDirty, setTeamImagesDirty] = useState<boolean>(false);
+  const [initialPosterImages, setInitialPosterImages] = useState<string[]>([]);
+  const [initialTeamImages, setInitialTeamImages] = useState<string[]>([]);
 
   const API_BASE_URL = import.meta.env.PROD
     ? "/api"
@@ -24,40 +26,64 @@ export function StudentEdit() {
   const STATIC_BASE_URL = import.meta.env.PROD ? "" : "http://localhost:3000";
   //   fetch the desired survey project
   useEffect(() => {
-    setLoading(true);
+    let isMounted = true;
     const fetchProject = async () => {
-      const res = await fetch(`${API_BASE_URL}/student/survey-edit/${token}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (res.status !== 200) {
-        alert(data.error || "Failed to fetch project.");
-        return;
-      }
-      console.log("Fetched Project Data:", data[0]);
-      setProject(data[0]);
-      setMembers(
-        data[0].teamMemberNames
-          .split(", ")
-          .filter((name: string) => name.trim() !== "")
-      );
-      
-      // Initialize image arrays from existing data
-      if (data[0].posterPicturePath) {
-        const posterPaths = data[0].posterPicturePath.split(',').filter((path: string) => path.trim() !== '');
+      setLoading(true);
+      try {
+        const res = await fetch(`${API_BASE_URL}/student/survey-edit/${token}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        if (res.status !== 200) {
+          alert(data.error || "Failed to fetch project.");
+          return;
+        }
+        if (!isMounted) {
+          return;
+        }
+        const fetchedProject = data[0];
+        console.log("Fetched Project Data:", fetchedProject);
+        setProject(fetchedProject);
+        setMembers(
+          fetchedProject.teamMemberNames
+            .split(", ")
+            .filter((name: string) => name.trim() !== "")
+        );
+        const posterPaths = fetchedProject.posterPicturePath
+          ? fetchedProject.posterPicturePath
+              .split(",")
+              .map((path: string) => path.trim())
+              .filter((path: string) => path !== "")
+          : [];
+        const teamPaths = fetchedProject.teamPicturePath
+          ? fetchedProject.teamPicturePath
+              .split(",")
+              .map((path: string) => path.trim())
+              .filter((path: string) => path !== "")
+          : [];
         setPosterImages(posterPaths);
-      }
-      if (data[0].teamPicturePath) {
-        const teamPaths = data[0].teamPicturePath.split(',').filter((path: string) => path.trim() !== '');
         setTeamImages(teamPaths);
+        setInitialPosterImages(posterPaths);
+        setInitialTeamImages(teamPaths);
+        setPosterImagesDirty(false);
+        setTeamImagesDirty(false);
+      } catch (error) {
+        console.error("Failed to fetch project.", error);
+        alert("Failed to fetch project.");
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
     fetchProject();
-    setLoading(false);
+    return () => {
+      isMounted = false;
+    };
   }, [token]);
   const updateChangeMap = (key: string, value: string) => {
     setChangeMap((prev) => {
@@ -92,43 +118,146 @@ export function StudentEdit() {
     setMembers(newMembers);
     updateChangeMap("teamMemberNames", newMembers.join(", "));
   };
-  const handlePosterImagesChange = (imgs: File[]) => {
-    console.log('in poster images change', imgs);
+  const handlePosterImagesChange = (imgs: UploadableImage[]) => {
     setPosterImages(imgs);
-    updateChangeMap("posterPicturePath", imgs.join(','));
+    setPosterImagesDirty(true);
   };
 
-  const handleTeamImagesChange = (imgs: File[]) => {
-    console.log('in team images change', imgs);
+  const handleTeamImagesChange = (imgs: UploadableImage[]) => {
     setTeamImages(imgs);
-    updateChangeMap("teamPicturePath", imgs.join(','));
+    setTeamImagesDirty(true);
+  };
+
+  const uploadPosterFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("poster", file);
+    const response = await fetch(`${API_BASE_URL}/survey/uploadsPoster`, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    if (response.status !== 200) {
+      throw new Error(data.error || "Failed to upload poster image.");
+    }
+    return data.path as string;
+  };
+
+  const uploadTeamFiles = async (files: File[]) => {
+    const formData = new FormData();
+    files.forEach((file) => formData.append("contentTeamFiles", file));
+    const response = await fetch(`${API_BASE_URL}/survey/uploadsTeam`, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    if (response.status !== 200) {
+      throw new Error(data.error || "Failed to upload team images.");
+    }
+    return data.paths as string[];
+  };
+
+  const resolvePosterPaths = async () => {
+    if (!posterImages.length) {
+      return [] as string[];
+    }
+    const resolvedPaths: string[] = [];
+    for (const image of posterImages) {
+      if (typeof image === "string") {
+        resolvedPaths.push(image);
+      } else {
+        const uploadedPath = await uploadPosterFile(image);
+        resolvedPaths.push(uploadedPath);
+      }
+    }
+    return resolvedPaths;
+  };
+
+  const resolveTeamPaths = async () => {
+    if (!teamImages.length) {
+      return [] as string[];
+    }
+    const resolvedPaths: (string | undefined)[] = new Array(teamImages.length).fill(undefined);
+    const filesToUpload: File[] = [];
+    const filePositions: number[] = [];
+    teamImages.forEach((image, index) => {
+      if (typeof image === "string") {
+        resolvedPaths[index] = image;
+      } else {
+        filesToUpload.push(image);
+        filePositions.push(index);
+      }
+    });
+    if (filesToUpload.length) {
+      const uploadedPaths = await uploadTeamFiles(filesToUpload);
+      filePositions.forEach((position, idx) => {
+        resolvedPaths[position] = uploadedPaths[idx];
+      });
+    }
+    return resolvedPaths
+      .filter((path): path is string => typeof path === "string")
+      .map((path) => path.trim())
+      .filter((path) => path !== "");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (changeMap.size === 0) {
+    if (changeMap.size === 0 && !posterImagesDirty && !teamImagesDirty) {
       return;
     }
-    const API_BASE_URL = import.meta.env.PROD
-      ? "/api"
-      : "http://localhost:3000/api";
 
     const header = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-    const res = await fetch(`${API_BASE_URL}/${project.id}/update`, {
-      method: "PUT",
-      headers: header,
-      body: JSON.stringify({ ...Object.fromEntries(changeMap) }),
-    });
-    const data = await res.json();
-    if (res.status !== 200) {
-      alert(data.error || "Failed to update project.");
-      return;
+    const payload: Record<string, string> = { ...Object.fromEntries(changeMap) };
+
+    try {
+      setSaving(true);
+      let updatedPosterPaths: string[] | undefined;
+      let updatedTeamPaths: string[] | undefined;
+
+      if (posterImagesDirty) {
+        updatedPosterPaths = await resolvePosterPaths();
+        payload.posterPicturePath = updatedPosterPaths.join(", ");
+      }
+      if (teamImagesDirty) {
+        updatedTeamPaths = await resolveTeamPaths();
+        payload.teamPicturePath = updatedTeamPaths.join(", ");
+      }
+
+      const res = await fetch(`${API_BASE_URL}/${project.id}/update`, {
+        method: "PUT",
+        headers: header,
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (res.status !== 200) {
+        alert(data.error || "Failed to update project.");
+        return;
+      }
+      alert("Project updated successfully!");
+      setProject((prev) => ({ ...prev, ...payload }));
+      setChangeMap(new Map());
+      if (posterImagesDirty && updatedPosterPaths) {
+        setPosterImages(updatedPosterPaths);
+        setInitialPosterImages(updatedPosterPaths);
+        setPosterImagesDirty(false);
+      }
+      if (teamImagesDirty && updatedTeamPaths) {
+        setTeamImages(updatedTeamPaths);
+        setInitialTeamImages(updatedTeamPaths);
+        setTeamImagesDirty(false);
+      }
+    } catch (error) {
+      console.error("Failed to save project updates.", error);
+      alert("Failed to save project updates.");
+    } finally {
+      setSaving(false);
     }
-    alert("Project updated successfully!");
   };
+
+  const pendingChangesCount =
+    changeMap.size + (posterImagesDirty ? 1 : 0) + (teamImagesDirty ? 1 : 0);
   if (loading) {
     return  <div className="loading-shade">
           <div className="loading-spinner"></div>
@@ -236,12 +365,23 @@ export function StudentEdit() {
 
           <section>
             <label>Poster Images:</label>
-                <MultipleImageUploader onImageUpload={handlePosterImagesChange} img={posterImages} />
-
+                <MultipleImageUploader
+                  images={posterImages}
+                  onChange={handlePosterImagesChange}
+                  inputId="posterImagesUploader"
+                  multiple={false}
+                  existingBaseUrl={STATIC_BASE_URL}
+                />
           </section>
           <section>
             <label>Team Images:</label>
-                <MultipleImageUploader onImageUpload={handleTeamImagesChange} img={teamImages} />
+                <MultipleImageUploader
+                  images={teamImages}
+                  onChange={handleTeamImagesChange}
+                  inputId="teamImagesUploader"
+                  multiple
+                  existingBaseUrl={STATIC_BASE_URL}
+                />
 
           </section>
 
@@ -263,9 +403,9 @@ export function StudentEdit() {
               <span
                 style={{ color: "gold", fontWeight: "bold", padding: "0.5rem" }}
               >
-                {changeMap.size}
+                {pendingChangesCount}
               </span>
-              Save Changes
+              {saving ? "Saving..." : "Save Changes"}
             </button>
             <span>
               <button
