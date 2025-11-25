@@ -1,0 +1,35 @@
+.no_project_found {
+  text-align: center;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no_project_found h1 {
+  font-size: xx-large;
+  width: 95%;
+  
+}
+
+.no_project_found button {
+  padding: 10px 20px;
+  font-size: large;
+  background-color: #0072c6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 20px;
+}
+
+.no_project_found button:hover {
+  background-color: #005ea2;
+  transition: all 0.3s ease-in-out;
+}
+.no_project_found div 
+{
+    margin-top: 20px;
+    padding: 10px 20px;
+    column-gap: normal;
+}

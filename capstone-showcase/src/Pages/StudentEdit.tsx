@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ProjectObj } from "../SiteInterface";
 import { useParams } from "react-router-dom";
 import asuLogoPlain from "../assets/asuLogoPlain.png";
-
+import "../CSS/StudentEdit.css";
 
 export function StudentEdit() {
   const { token } = useParams<{ token: string }>();
@@ -108,7 +108,7 @@ export function StudentEdit() {
   return (
     <>
       {!project || !project.id ? (
-       <div className="">
+       <div className="no_project_found">
         <img src={asuLogoPlain} alt="ASU Logo" className="asu-logo-nav"></img>
         <h1>Survey could not be found. Please verify the Link and try again.</h1>
         <div>

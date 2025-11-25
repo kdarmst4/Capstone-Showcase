@@ -54,7 +54,7 @@ const AppContent: React.FC = () => {
           <Route path="admin-dashboard/edit/presentation" element={<EditPresentation />} />
           <Route path="admin-dashboard/edit/submissions" element={<EditSubmissions />} />
           <Route path="admin-dashboard/support" element={<ContactSupport />} />
-          <Route path="/student-edit/:token" element={<StudentEdit />} />
+          <Route path="/student/survey-edit/:token" element={<StudentEdit />} />
         </Routes>
       </div>
       </AuthProvider>
