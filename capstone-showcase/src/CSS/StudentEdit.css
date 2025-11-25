@@ -33,3 +33,39 @@
     padding: 10px 20px;
     column-gap: normal;
 }
+
+.student-edit-project-form {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.student-edit-project-form input,
+.student-edit-project-form textarea
+{
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: black;
+}
+.student-edit-project-form input:hover,
+.student-edit-project-form textarea:hover
+ {
+    border-color: var(--asu-maroon);
+    box-shadow: 0 0 5px var(--asu-maroon);
+    transition: all 0.3s ease-in-out;
+}
+.student-edit-project-form input:focus,
+.student-edit-project-form textarea:focus{
+    border-color: var(--asu-maroon);
+    box-shadow: 0 0 8px var(--asu-maroon);
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}

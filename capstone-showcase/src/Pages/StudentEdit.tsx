@@ -20,7 +20,7 @@ export function StudentEdit() {
   useEffect(() => {
     setLoading(true);
     const fetchProject = async () => {
-      const res = await fetch(`${API_BASE_URL}/project`, {
+      const res = await fetch(`${API_BASE_URL}/student/survey-edit/${token}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -32,9 +32,10 @@ export function StudentEdit() {
         alert(data.error || "Failed to fetch project.");
         return;
       }
-      setProject(data.project);
+      console.log("Fetched Project Data:", data[0]);
+      setProject(data[0]);
       setMembers(
-        data.project.teamMemberNames
+        data[0].teamMemberNames
           .split(", ")
           .filter((name: string) => name.trim() !== "")
       );
@@ -118,7 +119,7 @@ export function StudentEdit() {
         </div>
     </div>
       ) : (
-        <form className="edit-project-form" onSubmit={(e) => handleSubmit(e)}>
+        <form className="student-edit-project-form" onSubmit={(e) => handleSubmit(e)}>
           <section>
             <label htmlFor="project-title">Project Title:</label>
             <input
