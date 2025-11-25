@@ -40,7 +40,7 @@ export function MultipleImageUploader({
 
   return (
     <div style={{ width: "100%" }}>
-      <h2 className="text-xl font-bold mb-4">Upload and Preview Images</h2>
+      {/* <h2 className="text-xl font-bold mb-4">Upload and Preview Images</h2> */}
       {previews.length === 0 && (
         <label htmlFor="customFile" className="custom-file-upload">
           <HardDriveUpload className="w-4 h-4 mr-2 upload-icon" /> Choose File

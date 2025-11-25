@@ -3,6 +3,7 @@ import { ProjectObj } from "../SiteInterface";
 import { useParams } from "react-router-dom";
 import asuLogoPlain from "../assets/asuLogoPlain.png";
 import "../CSS/StudentEdit.css";
+import {MultipleImageUploader} from "../MultipleImageUploader";
 
 export function StudentEdit() {
   const { token } = useParams<{ token: string }>();
@@ -11,6 +12,11 @@ export function StudentEdit() {
   const [project, setProject] = useState<ProjectObj>({} as ProjectObj);
   const [changes, setChanges] = useState<ProjectObj>({} as ProjectObj);
   const [loading, setLoading] = useState<boolean>(true);
+
+  
+  // Add state for multiple images
+  const [posterImages, setPosterImages] = useState<File[]>([]);
+  const [teamImages, setTeamImages] = useState<File[]>([]);
 
   const API_BASE_URL = import.meta.env.PROD
     ? "/api"
@@ -39,6 +45,16 @@ export function StudentEdit() {
           .split(", ")
           .filter((name: string) => name.trim() !== "")
       );
+      
+      // Initialize image arrays from existing data
+      if (data[0].posterPicturePath) {
+        const posterPaths = data[0].posterPicturePath.split(',').filter((path: string) => path.trim() !== '');
+        setPosterImages(posterPaths);
+      }
+      if (data[0].teamPicturePath) {
+        const teamPaths = data[0].teamPicturePath.split(',').filter((path: string) => path.trim() !== '');
+        setTeamImages(teamPaths);
+      }
     };
     fetchProject();
     setLoading(false);
@@ -76,6 +92,18 @@ export function StudentEdit() {
     setMembers(newMembers);
     updateChangeMap("teamMemberNames", newMembers.join(", "));
   };
+  const handlePosterImagesChange = (imgs: File[]) => {
+    console.log('in poster images change', imgs);
+    setPosterImages(imgs);
+    updateChangeMap("posterPicturePath", imgs.join(','));
+  };
+
+  const handleTeamImagesChange = (imgs: File[]) => {
+    console.log('in team images change', imgs);
+    setTeamImages(imgs);
+    updateChangeMap("teamPicturePath", imgs.join(','));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (changeMap.size === 0) {
@@ -205,6 +233,19 @@ export function StudentEdit() {
               </button>
             </div>
           </section>
+
+          <section>
+            <label>Poster Images:</label>
+                <MultipleImageUploader onImageUpload={handlePosterImagesChange} img={posterImages} />
+
+          </section>
+          <section>
+            <label>Team Images:</label>
+                <MultipleImageUploader onImageUpload={handleTeamImagesChange} img={teamImages} />
+
+          </section>
+
+
 
           <section>
             <label>Video Link:</label>
