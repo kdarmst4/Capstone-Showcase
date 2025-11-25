@@ -1062,6 +1062,7 @@ app.get("/api/presentation", async (req, res) => {
 // #get the full url
 app.get("/api/surveyEdit/:id", (req, res) => {
   const { id } = req.params;
+  const origin = req.headers.origin; // use this instead
   const site_secret = process.env.TEMP_URL_SECRET;
   if (id) {
     const jwtToken = jwt.sign(
@@ -1104,4 +1105,62 @@ app.get("/api/student/survey-edit/:token", (req, res) => {
   } catch (error) {
     return res.status(401).json({ error: "Unauthorized User Access" });
   }
+});
+
+//student edit submissin starts here
+
+// Endpoint to upload both team photo and team poster
+const uploadTeamFiles = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      const uploadDir =
+        file.fieldname === "teamPhoto" ? "./teamUploads" : "./posterUploads";
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueName = `${Date.now()}-${file.originalname}`;
+      cb(null, uniqueName);
+    },
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|pdf/;
+    const extname = allowedTypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only JPEG, PNG, and PDF files are allowed"));
+    }
+  },
+});
+
+app.post("/api/uploadTeamFiles", (req, res) => {
+  uploadTeamFiles.fields([
+    { name: "teamPhoto", maxCount: 1 },
+    { name: "teamPoster", maxCount: 1 },
+  ])(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    const teamPhotoPath = req.files["teamPhoto"]
+      ? req.files["teamPhoto"][0].path
+      : null;
+    const teamPosterPath = req.files["teamPoster"]
+      ? req.files["teamPoster"][0].path
+      : null;
+
+    res.status(200).json({
+      message: "Files uploaded successfully",
+      teamPhotoPath,
+      teamPosterPath,
+    });
+  });
 });
