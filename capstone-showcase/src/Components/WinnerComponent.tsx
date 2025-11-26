@@ -1,4 +1,3 @@
-import { ImageMinus } from "lucide-react";
 
 import "../CSS/WinnerComponent.css";
 

@@ -1,6 +1,5 @@
 import "../CSS/Winners.css";
 import { WinnerComponent } from "../Components/WinnerComponent";
-import { useEffect } from "react";
 import useWinners from "../Hooks/useWinners";
 import Footer from "./Footer";
 
@@ -33,40 +32,6 @@ const Winner: React.FC = () => {
         <form className="winners__form" onSubmit={handleFilterSubmit}>
         {/* <form className="winners__form"> */}
           <div className="winners__left-filter-bar">
-
-              {/* <div className="winners__item-container">
-                <label htmlFor="semester"></label>
-                <select
-                  name="semester"
-                  id="semester"
-                  className="winners__filter-param"
-                  value={filters.semester}
-                  onChange={(e) => setFilters({ ...filters, semester: e.target.value })}
-                >
-                  <option value="all">Semester</option>
-                  <option value="spring">Spring</option>
-                  <option value="summer">Summer</option>
-                  <option value="fall">Fall</option>
-                </select>
-              </div>
-
-              <div className="winners__item-container">
-                <label htmlFor="year"></label>
-                <select
-                  name="year"
-                  id="year"
-                  className="winners__filter-param"
-                  value={filters.year}
-                  onChange={(e) => setFilters({ ...filters, year: e.target.value })}
-                >
-                  <option value="all">Year</option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div> */}
 
               <div className="winners__item-container">
                 <label htmlFor="department"></label>
