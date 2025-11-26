@@ -7,9 +7,16 @@ import {
 } from "react-router-dom";
 import asuLogo from "./assets/asuLogo.png";
 import "./Menu.css";
-import {  Award, UsersRound, ChevronDown  } from "lucide-react";
+import {  ChevronDown  } from "lucide-react";
+
+const API_BASE_URL =
+  import.meta.env.PROD
+    ? "/api" // relative to showcase.asucapstone.com
+    : "http://localhost:3000/api"; 
+
 const Menu: React.FC = () => {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname } = location;
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   //const submenuRef = useRef<HTMLLIElement>(null);
@@ -18,8 +25,8 @@ const Menu: React.FC = () => {
   );
   const [currentYear, setCurrentYear] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
-  const location = useLocation();
   const navigate = useNavigate();
+
   const menuOptions = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -41,8 +48,7 @@ const Menu: React.FC = () => {
     marginLeft: 3,
   }
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     setToggleDropdown(false);
   },[location.pathname]);
 
@@ -60,13 +66,78 @@ const Menu: React.FC = () => {
     return semesters;
   };
 
+  const getMajorSlugFromPath = (pathname: string): string | null => {
+    // These routes are not tied to a specific major
+    if (pathname === "/" || pathname === "/about" || pathname === "/winners") {
+      return null;
+    }
+    // "/computer-science" -> "computer-science"
+      return pathname.replace(/^\//, "");
+  };
+
   const getDefaultSemester = (): { semester: "sp" | "fa"; year: string } => {
     const now = new Date();
     const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
+    const currentMonth = now.getMonth();  // 0 = Jan, 11 = Dec
+
+    // Fall if month >= Aug (7), otherwise Spring
     return currentMonth >= 7
       ? { semester: "fa", year: currentYear.toString() }
       : { semester: "sp", year: currentYear.toString() };
+  };
+
+  const getPreviousSemester = (
+    sem: "sp" | "fa",
+    year: string
+  ): { semester: "sp" | "fa"; year: string } => {
+    const numericYear = parseInt(year, 10);
+    if (sem === "sp") {
+      return { semester: "fa", year: (numericYear - 1).toString() };
+    }
+    return { semester: "sp", year };
+  };
+
+  /**
+  * Check if a given semester/year actually has survey entries.
+  * - For major pages: GET /api/survey/:major/term=:semester-:year
+  * - For home/about/winners: we just skip the check and assume "true".
+   */
+  const semesterHasEntries = async (
+    pathname: string,
+    semester: "sp" | "fa",
+    year: string
+  ): Promise<boolean> => {
+    const majorSlug = getMajorSlugFromPath(pathname);
+
+    // If there is no major (home, about, winners), skip backend check and return true.
+    if (!majorSlug) {
+      return true;
+    }
+
+    try {
+      const url = `${API_BASE_URL}/survey/${majorSlug}/term=${semester}-${year}`;
+
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.error(
+          "semesterHasEntries fetch failed:",
+          res.status,
+          res.statusText
+        );
+        return false;
+      }
+
+      const data = await res.json();
+      if (!Array.isArray(data)) {
+        console.warn("semesterHasEntries expected array, got:", data);
+        return false;
+      }
+
+      return data.length > 0;
+    } catch (err) {
+      console.error("semesterHasEntries error:", err);
+      return false;
+    }
   };
 
   const handleSemesterSelection = (semester: "sp" | "fa", year: string) => {
@@ -96,31 +167,67 @@ const Menu: React.FC = () => {
     const semesterFromUrl = searchParams.get("semester") as "sp" | "fa" | null;
     const yearFromUrl = searchParams.get("year");
 
-    if (semesterFromUrl && yearFromUrl) {
-      setCurrentSemester(semesterFromUrl);
-      setCurrentYear(yearFromUrl);
-      localStorage.setItem(
-        "selectedSemesterYear",
-        `${semesterFromUrl}-${yearFromUrl}`
-      );
-    } else {
+    const initSemester = async () => {
+      // 1) If the URL already specifies semester/year, just use it
+      if (semesterFromUrl && yearFromUrl) {
+        setCurrentSemester(semesterFromUrl);
+        setCurrentYear(yearFromUrl);
+        localStorage.setItem(
+          "selectedSemesterYear",
+          `${semesterFromUrl}-${yearFromUrl}`
+        );
+        return;
+      }
+
+      // 2) Try stored preference if it still has entries
       const stored = localStorage.getItem("selectedSemesterYear");
       if (stored) {
-        const [sem, yr] = stored.split("-");
-        setCurrentSemester(sem as "sp" | "fa");
-        setCurrentYear(yr);
-        navigate(`${pathname}?semester=${sem}&year=${yr}`, { replace: true });
-      } else {
-        const { semester, year } = getDefaultSemester();
-        setCurrentSemester(semester);
-        setCurrentYear(year);
-        localStorage.setItem("selectedSemesterYear", `${semester}-${year}`);
-        navigate(`${pathname}?semester=${semester}&year=${year}`, {
-          replace: true,
-        });
+        const [storedSem, storedYr] = stored.split("-");
+        const sem = storedSem as "sp" | "fa";
+        const yr = storedYr;
+
+        if (await semesterHasEntries(pathname, sem, yr)) {
+          setCurrentSemester(sem);
+          setCurrentYear(yr);
+          navigate(`${pathname}?semester=${sem}&year=${yr}`, { replace: true });
+          return;
+        }
       }
-    }
-  }, [location.search, pathname]);
+
+      // 3) Start from date-based "current" semester 
+      let { semester, year } = getDefaultSemester();
+
+      // 4) Walk backwards until we find a semester with entries
+      // limit loop to avoid infinite fallback
+      for (let i = 0; i < 8; i++) {
+        const hasData = await semesterHasEntries(pathname, semester, year);
+        if (hasData) {
+          setCurrentSemester(semester);
+          setCurrentYear(year);
+          localStorage.setItem("selectedSemesterYear", `${semester}-${year}`);
+          navigate(`${pathname}?semester=${semester}&year=${year}`, {
+            replace: true,
+          });
+          return;
+        }
+
+        const prev = getPreviousSemester(semester, year);
+        semester = prev.semester;
+        year = prev.year;
+      }
+
+      // 5) Final fallback: use current date-based semester even if empty
+      const fallback = getDefaultSemester();
+      setCurrentSemester(fallback.semester);
+      setCurrentYear(fallback.year);
+      navigate(
+        `${pathname}?semester=${fallback.semester}&year=${fallback.year}`,
+        { replace: true }
+      );
+    };
+
+    void initSemester();
+  }, [location.search, pathname, navigate, searchParams]);
   
   const renderSemesterDropdown = () => (
     <button className="department-button">
