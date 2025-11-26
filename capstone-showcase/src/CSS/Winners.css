@@ -1,12 +1,13 @@
 :root {
-    --primary-color: #8C1D40;
-    --secondary-color: #F5F9FC;
+  --primary-color: #8C1D40;
+  --secondary-color: #F5F9FC;
 }
-body 
-{
-    font-family: Arial, sans-serif;
-    overflow-x: hidden;
+
+body {
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
+
 .winners__form-container {
   /* background-color: white; */
   background-color: var(--secondary-color);
@@ -14,12 +15,13 @@ body
   flex-direction: column;
   box-sizing: border-box;
   min-height: calc(100vh - 73.73px);
+  
 }
 
 .winners__showcase-title {
   margin-top: 2rem;
-  color:#8C1D40; 
-  font-family: sans-serif; 
+  color: #8C1D40;
+  font-family: sans-serif;
   padding-top: 1rem;
   z-index: 1;
 }
@@ -33,6 +35,7 @@ body
   display: flex;
   justify-content: center;
 }
+
 .winners__left-filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -64,10 +67,10 @@ body
   /* box-shadow: 0 2px 12px rgba(0,0,0,0.08); */
   box-shadow: 0 0 60px rgba(50, 50, 93, 0.18);
 
-  align-items: flex-end;
   text-align: left;
   margin-bottom: 80px;
-  
+  align-items: center !important;
+
 }
 
 .winners__form .winners__item-container {
@@ -98,6 +101,7 @@ body
   background: var(--secondary-color);
   color: black;
 }
+
 .winners__department-dropdown {
   background: white;
 }
@@ -110,7 +114,7 @@ body
   gap: 12px;
 }
 
-.winners__button-container > .winners__form-button{
+.winners__button-container>.winners__form-button {
   padding: 8px 28px;
   background: white;
   color: black;
@@ -123,7 +127,7 @@ body
   transition: background 0.2s;
 }
 
-.winners__button-container > .winners__form-button:hover {
+.winners__button-container>.winners__form-button:hover {
   background: #8C1D40;
   color: white;
 }

@@ -1,4 +1,6 @@
 import { useProjects } from "../context/ProjectsProvider";
+import "../CSS/SearchandFilterControl.css";
+
 
 export default function SearchAndFilterControls() {
 

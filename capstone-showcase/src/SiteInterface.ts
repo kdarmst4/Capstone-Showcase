@@ -42,4 +42,6 @@ export interface ShowcaseEntry {
   NDA: "Yes" | "No"; 
   year: number;
   semester: "Spring" | "Summer" | "Fall" | "Winter"; 
+  teamPicturePath: string | null;
+  posterPicturePath: string | null;
 };

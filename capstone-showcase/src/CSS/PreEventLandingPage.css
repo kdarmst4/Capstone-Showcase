@@ -21,6 +21,68 @@
 .asu-logo:hover {
   transform: scale(1.05);
 }
+.pre_event_information 
+{
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.showcase_title 
+{
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #8c1d40;
+}
+.home-page-title-container 
+{
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  /* flex-direction: column; */
+}
+.showcase_event_display {
+    display: flex;
+    gap: 2rem;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: center;
+}
+.event-day_of-week
+{
+  font-weight: bold;
+  color: #8c1d40;
+  font-size: xx-large;
+  margin: 0;
+}
+.event_day_of_month
+{
+  font-weight: bold;
+  font-size: xx-large;
+  margin: 0;
+}
+.event_supp_information
+{
+  margin: 0;
+  font-size: larger;
+  color: black;
+  font-weight: bold;
+  color: #555;
+  text-align: left;
+}
+
+.event_supp_information p
+{
+  margin: 5px 0;
+}
+
 
 .header-background {
   background-image: url("../assets/mainBack.jpeg");
@@ -136,5 +198,27 @@
 {
   .pre-event-landing-page .asu-logo {
     width: 360px;
+  }
+  .showcase_title
+  {
+    font-size: 19px;
+  }
+}
+@media (max-width:950px) {
+  .home-page-title-container 
+  {
+    flex-direction: column;
+    align-items: center;
+  }
+  .showcase_title
+  {
+    font-size: 24px;
+  }
+  .event_supp_information
+  {
+    font-size: medium;
+  }
+  .showcase_event_display {
+    gap: 1rem;
   }
 }

@@ -551,6 +551,8 @@ app.get("/api/winners", async (req, res) => {
   ProjectDescription AS description,
   ProjectTitle,
   winning_pic,
+  teamPicturePath,
+  posterPicturePath,
   id,
   YEAR(submitDate) AS year,
   CASE 
@@ -560,7 +562,8 @@ app.get("/api/winners", async (req, res) => {
     WHEN MONTH(submitDate) IN (9, 10, 11) THEN 'Fall'
   END AS semester
 FROM survey_entries
-WHERE position IS NOT NULL;`;
+WHERE position IS NOT NULL
+ORDER BY submitDate DESC, position ASC;`;
   db.query(sql, (err, results) => {
     if (err) {
       console.error("Error retrieving winners data:", err);

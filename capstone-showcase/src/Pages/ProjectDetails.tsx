@@ -1,44 +1,72 @@
 import { useParams, useLocation, Link } from "react-router-dom";
 import "../ProjectDetails.css";
-import { 
-  UsersRound, Facebook, Linkedin, Twitter, 
-  Share, Medal, Calendar, GraduationCap, 
-  ChevronLeft, ChevronRight, ExternalLink 
+import {
+  UsersRound,
+  Facebook,
+  Linkedin,
+  Twitter,
+  Share,
+  Medal,
+  Calendar,
+  GraduationCap,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
 } from "lucide-react";
 import { ImageMinus } from "lucide-react";
 import Footer from "./Footer";
 import { useState, useEffect } from "react";
 import { ShowcaseEntry } from "../SiteInterface";
 
-
 export default function ProjectDetails() {
-  const { id: projectId } = useParams(); // gets "123"
-  const location = useLocation(); 
-  const {state} = useLocation();
+  const { id: projectId } = useParams();
+  const location = useLocation();
+  const locationState = location.state as ShowcaseEntry | null;
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // Prefer router state when navigating from Winners, but allow direct-link fallback
   const [winner, setWinner] = useState<ShowcaseEntry | null>(
-    (state && (state as { winner?: ShowcaseEntry }).winner) || null
+    locationState || null
   );
   console.log("Project ID from URL:", projectId);
   console.log("Winner from state:", winner);
+  const STATIC_BASE_URL = import.meta.env.PROD ? "" : "http://localhost:3000";
 
+  const API_BASE_URL = import.meta.env.PROD
+    ? "/api"
+    : "http://localhost:3000/api";
 
   // Mock images array (replace with actual images from winner object when available)
-  const projectImages = winner?.winning_pic && winner?.winning_pic.split(",") || [
-    
-  ];
+  const imgs = (winner: ShowcaseEntry| null) =>
+  {
+    let images: string[] = [];
+    if (winner && winner.winning_pic) {
+      images = winner.winning_pic.split(",").map((img) => img.trim());
+    }
+    const teamimgs = winner && winner.teamPicturePath
+      ? winner.teamPicturePath.split(",").map((img) => img.trim())
+      : [];
+    const posterimgs = winner && winner.posterPicturePath
+      ? winner.posterPicturePath.split(",").map((img) => img.trim())
+      : [];
+    images = images.concat(teamimgs, posterimgs);
+    return images;
+  }
+  const projectImages = 
+    imgs(winner);
+
 
   useEffect(() => {
     if (!winner && projectId) {
       console.log("Fetching winner data for project ID:", projectId);
-      fetch(`http://localhost:3000/api/winner/${projectId}`)
-        .then(res => res.json())
-        .then(data => {
+
+      fetch(`${API_BASE_URL}/winner/${projectId}`)
+        .then((res) => res.json())
+        .then((data) => {
           setWinner(data[0] as ShowcaseEntry);
           console.log("Winner data after fetch (if applicable):", data[0]);
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("Error fetching winner data:", err);
           setWinner(null);
         });
@@ -47,55 +75,58 @@ export default function ProjectDetails() {
   // Update Open Graph meta tags for better social sharing
   const updateOpenGraphTags = (winner: ShowcaseEntry, imageUrl?: string) => {
     const updateMetaTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
+      let tag = document.querySelector(
+        `meta[property="${property}"]`
+      ) as HTMLMetaElement;
       if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
+        tag = document.createElement("meta");
+        tag.setAttribute("property", property);
         document.head.appendChild(tag);
       }
       tag.content = content;
     };
-    
+
     const updateNameTag = (name: string, content: string) => {
-      let tag = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
+      let tag = document.querySelector(
+        `meta[name="${name}"]`
+      ) as HTMLMetaElement;
       if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute('name', name);
+        tag = document.createElement("meta");
+        tag.setAttribute("name", name);
         document.head.appendChild(tag);
       }
       tag.content = content;
     };
 
     // Open Graph tags
-    updateMetaTag('og:title', winner.ProjectTitle);
-    updateMetaTag('og:description', winner.description?.substring(0, 200) || '');
-    updateMetaTag('og:url', window.location.href);
-    updateMetaTag('og:type', 'article');
-    
+    updateMetaTag("og:title", winner.ProjectTitle);
+    updateMetaTag(
+      "og:description",
+      winner.description?.substring(0, 200) || ""
+    );
+    updateMetaTag("og:url", window.location.href);
+    updateMetaTag("og:type", "article");
+
     if (imageUrl) {
-      updateMetaTag('og:image', imageUrl);
-      updateMetaTag('og:image:width', '1200');
-      updateMetaTag('og:image:height', '630');
+      updateMetaTag("og:image", imageUrl);
+      updateMetaTag("og:image:width", "1200");
+      updateMetaTag("og:image:height", "630");
     }
-    
+
     // Twitter Card tags
-    updateNameTag('twitter:card', imageUrl ? 'summary_large_image' : 'summary');
-    updateNameTag('twitter:title', winner.ProjectTitle);
-    updateNameTag('twitter:description', winner.description?.substring(0, 200) || '');
-    
+    updateNameTag("twitter:card", imageUrl ? "summary_large_image" : "summary");
+    updateNameTag("twitter:title", winner.ProjectTitle);
+    updateNameTag(
+      "twitter:description",
+      winner.description?.substring(0, 200) || ""
+    );
+
     if (imageUrl) {
-      updateNameTag('twitter:image', imageUrl);
+      updateNameTag("twitter:image", imageUrl);
     }
   };
-      const STATIC_BASE_URL =
-    import.meta.env.PROD ? "" : "http://localhost:3000";
 
-  const API_BASE_URL =
-    import.meta.env.PROD
-      ? "/api"
-      : "http://localhost:3000/api";
-
-    const normalizePathToUrl = (path: string) => {
+  const normalizePathToUrl = (path: string) => {
     if (!path) return "";
     const trimmed = path.trim();
     if (/^https?:\/\//i.test(trimmed)) return trimmed;
@@ -113,7 +144,7 @@ export default function ProjectDetails() {
   // CONDITIONAL RENDERING COMES AFTER ALL HOOKS
   if (!winner) {
     return (
-      <div className="project-not-found" style={{color:"black"}}>
+      <div className="project-not-found" style={{ color: "black" }}>
         <h2>Project not found</h2>
         <p>The project you're looking for doesn't exist or has been removed.</p>
         <Link to="/winners" className="back-button">
@@ -128,13 +159,13 @@ export default function ProjectDetails() {
 
   // Handle image navigation
   const nextImage = () => {
-    setCurrentImageIndex((prev) => 
+    setCurrentImageIndex((prev) =>
       prev === projectImages.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => 
+    setCurrentImageIndex((prev) =>
       prev === 0 ? projectImages.length - 1 : prev - 1
     );
   };
@@ -142,61 +173,73 @@ export default function ProjectDetails() {
   // Format position for display
   const getPositionText = (position?: number) => {
     switch (position) {
-      case 1: return "1st Place";
-      case 2: return "2nd Place";
-      case 3: return "3rd Place";
-      default: return "Participant";
+      case 1:
+        return "1st Place";
+      case 2:
+        return "2nd Place";
+      case 3:
+        return "3rd Place";
+      default:
+        return "Participant";
     }
   };
 
-
-
-
-
   // Enhanced social sharing function
-  const shareProject = async (platform: string, winner: ShowcaseEntry | null) => {
+  const shareProject = async (
+    platform: string,
+    winner: ShowcaseEntry | null
+  ) => {
     if (!winner) {
       alert("No project data to share!");
       return;
     }
-  const url = window.location.origin + window.location.pathname;
+    const url = window.location.origin + window.location.pathname;
     const title = "ASU Capstone Project";
     const projectTitle = winner.ProjectTitle;
-    const description = winner.description.substring(0, 125) + '...';
+    const description = winner.description.substring(0, 125) + "...";
     const shareText = `${title}\n${projectTitle}\n\nProject Description: ${description}\n\n${url}`;
 
     switch (platform) {
-      case 'facebook':
+      case "facebook":
         window.open(
-          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`,
-          '_blank'
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            url
+          )}&quote=${encodeURIComponent(shareText)}`,
+          "_blank"
         );
         break;
-      case 'twitter':
+      case "twitter":
         window.open(
-          `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
-          '_blank'
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+            shareText
+          )}`,
+          "_blank"
         );
         break;
-      case 'linkedin':
+      case "linkedin":
         window.open(
-          `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(shareText)}`,
-          '_blank'
+          `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+            url
+          )}&summary=${encodeURIComponent(shareText)}`,
+          "_blank"
         );
         break;
-      case 'copy':
-        navigator.clipboard.writeText(shareText).then(() => {
-          alert('Project details copied to clipboard!');
-        }).catch(() => {
-          // Fallback for older browsers
-          const textArea = document.createElement('textarea');
-          textArea.value = shareText;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          alert('Project details copied to clipboard!');
-        });
+      case "copy":
+        navigator.clipboard
+          .writeText(shareText)
+          .then(() => {
+            alert("Project details copied to clipboard!");
+          })
+          .catch(() => {
+            // Fallback for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = shareText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            alert("Project details copied to clipboard!");
+          });
         break;
       default:
         console.warn(`Unsupported share platform: ${platform}`);
@@ -225,11 +268,14 @@ export default function ProjectDetails() {
               <Calendar size={18} /> {winner.semester} {winner.year}
             </div>
             <div className="department-badge">
-              <GraduationCap size={18} /> {winner.department || "Computer Science"}
+              <GraduationCap size={18} />{" "}
+              {winner.department || "Computer Science"}
             </div>
           </div>
 
-          <h1 className="project-title title-in-project-details">{winner.ProjectTitle}</h1>
+          <h1 className="project-title title-in-project-details">
+            {winner.ProjectTitle}
+          </h1>
 
           <div className="project-author">
             <UsersRound size={24} /> sponsored by {winner.Sponsor || "John Doe"}
@@ -243,12 +289,16 @@ export default function ProjectDetails() {
           <div className="gallery-image-container">
             {projectImages.length > 0 ? (
               <>
-                <img 
-                  src={normalizePathToUrl(projectImages[currentImageIndex])} 
-                  alt={`${winner.ProjectTitle} - Image ${currentImageIndex + 1}`} 
-                  className={`gallery-image ${projectImages.length <2 ? 'single-image' : ''}`}
+                <img
+                  src={normalizePathToUrl(projectImages[currentImageIndex])}
+                  alt={`${winner.ProjectTitle} - Image ${
+                    currentImageIndex + 1
+                  }`}
+                  className={`gallery-image ${
+                    projectImages.length < 2 ? "single-image" : ""
+                  }`}
                 />
-                
+
                 {projectImages.length > 1 && (
                   <div className="gallery-controls">
                     <button onClick={prevImage} className="gallery-control-btn">
@@ -299,13 +349,20 @@ export default function ProjectDetails() {
             <h2 className="section-title">Project Resources</h2>
             <div className="project-resources">
               {winner.video && (
-                <a href={winner.video} target="_blank" rel="noopener noreferrer" className="resource-link">
+                <a
+                  href={winner.video}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resource-link"
+                >
                   <ExternalLink size={18} /> Watch Demo Video
                 </a>
               )}
-             
+
               {!winner.video && (
-                <p className="no-resources">No additional resources available</p>
+                <p className="no-resources">
+                  No additional resources available
+                </p>
               )}
             </div>
           </div>
@@ -314,33 +371,33 @@ export default function ProjectDetails() {
           <div className="info-section">
             <h2 className="section-title">Share This Project</h2>
             <div className="social-icons">
-              <button 
-                onClick={() => shareProject('facebook', winner)} 
-                className="share-icon" 
+              <button
+                onClick={() => shareProject("facebook", winner)}
+                className="share-icon"
                 aria-label="Share on Facebook"
                 title="Share on Facebook"
               >
                 <Facebook size={24} />
               </button>
-              <button 
-                onClick={() => shareProject('linkedin', winner)} 
-                className="share-icon" 
+              <button
+                onClick={() => shareProject("linkedin", winner)}
+                className="share-icon"
                 aria-label="Share on LinkedIn"
                 title="Share on LinkedIn"
               >
                 <Linkedin size={24} />
               </button>
-              <button 
-                onClick={() => shareProject('twitter', winner)} 
-                className="share-icon" 
+              <button
+                onClick={() => shareProject("twitter", winner)}
+                className="share-icon"
                 aria-label="Share on Twitter"
                 title="Share on Twitter"
               >
                 <Twitter size={24} />
               </button>
-              <button 
-                onClick={() => shareProject('copy', winner)} 
-                className="share-icon" 
+              <button
+                onClick={() => shareProject("copy", winner)}
+                className="share-icon"
                 aria-label="Copy link"
                 title="Copy link to clipboard"
               >
@@ -352,13 +409,13 @@ export default function ProjectDetails() {
       </div>
 
       <div className="asu-branding">
-        <img 
-          src="https://innovationshowcase.engineering.asu.edu/wp-content/themes/pitchfork/src/endorsed-logos/asu_fultonengineering_white.png" 
-          alt="ASU Fulton Engineering" 
+        <img
+          src="https://innovationshowcase.engineering.asu.edu/wp-content/themes/pitchfork/src/endorsed-logos/asu_fultonengineering_white.png"
+          alt="ASU Fulton Engineering"
           className="asu-logo"
         />
       </div>
-      
+
       <Footer />
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMenuContext } from "../MenuContext";
 import "../CSS/PreEventLandingPage.css";
 import asuLogo from "../assets/asuLogo.png";
+import { MapPinCheck } from "lucide-react";
 import showcase from "../assets/showcase.jpg";
 import {
   capstoneDescription,
@@ -18,6 +19,21 @@ const PreEventLandingPage: React.FC = () => {
   const [, setSavedImage] = useState<string | null>(null);
   const [presentation, setPresentation] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const API_BASE_URL = import.meta.env.PROD
     ? "/api"
     : "http://localhost:3000/api";
@@ -56,6 +72,13 @@ const PreEventLandingPage: React.FC = () => {
     console.log("here is the presentation data", presentation);
   }, []);
 
+  const militaryToStandardTime = (time: string) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    const period = hours >= 12 ? "PM" : "AM";
+    const standardHours = hours % 12 || 12;
+    return `${standardHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+  };
+
   return (
     <>
       <title>ASU Capstone Showcase</title>
@@ -73,12 +96,74 @@ const PreEventLandingPage: React.FC = () => {
               alt="Showcase Event"
               className="showcase-image"
             />
+            {presentation && (
+              <div className="pre_event_information">
+                <p className="showcase_title">ASU CAPSTONE SHOWCASE EVENT</p>
+                <div className="showcase_event_display">
+                  <span className="day_span">
+                    <p className="event-day_of-week">
+                      {months[new Date(presentation.p_date).getMonth()]}
+                    </p>
+                    <p className="event_day_of_month">
+                      {presentation.p_date.slice(8, 10)}
+                    </p>
+                  </span>
+                  <span className="event_supp_information">
+                    <p>Location: {presentation.p_loca}</p>
+                    <p>
+                      Check In & Poster Pickup Time:{" "}
+                      {militaryToStandardTime(
+                        presentation.p_checking_time.slice(11, 16)
+                      )}
+                    </p>
+                    <p>
+                      {" "}
+                      Presentation Time:{" "}
+                      {militaryToStandardTime(
+                        presentation.p_presentation_time.slice(11, 16)
+                      )}
+                    </p>
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
           <section className="event-details" aria-label="Event Details Section">
             <article>
               {presentation && (
                 <>
-                  <p>
+                  {/* <div className="pre_event_information">
+                    <p className="showcase_title">
+                      ASU CAPSTONE SHOWCASE EVENT
+                    </p>
+                    <div className="showcase_event_display">
+                      <span className="day_span">
+                        <p className="event-day_of-week">
+                          {months[new Date(presentation.p_date).getMonth()]}
+                        </p>
+                        <p className="event_day_of_month">
+                          {presentation.p_date.slice(8, 10)}
+                        </p>
+                      </span>
+                      <span className="event_supp_information">
+                        <p>Location: {presentation.p_loca}</p>
+                        <p>
+                          Check In & Poster Pickup Time:{" "}
+                          {militaryToStandardTime(
+                            presentation.p_checking_time.slice(11, 16)
+                          )}
+                        </p>
+                        <p>
+                          {" "}
+                          Presentation Time:{" "}
+                          {militaryToStandardTime(
+                            presentation.p_presentation_time.slice(11, 16)
+                          )}
+                        </p>
+                      </span>
+                    </div>
+                  </div> */}
+                  {/* <p>
                     <strong>Showcase Date:</strong>{" "}
                     {presentation?.p_date.slice(0, 10)}
                     <br />
@@ -90,7 +175,7 @@ const PreEventLandingPage: React.FC = () => {
                     <strong>Event Time:</strong>{" "}
                     {presentation?.p_presentation_time.slice(11, 16)}
                     <br />
-                  </p>
+                  </p> */}
 
                   <section
                     className="pdf-section"
@@ -99,6 +184,7 @@ const PreEventLandingPage: React.FC = () => {
                       marginTop: "40px",
                       textAlign: "center",
                       color: "#333",
+                      fontSize: "24px",
                     }}
                   >
                     <h2>Event Map & Resources</h2>
@@ -117,22 +203,18 @@ const PreEventLandingPage: React.FC = () => {
                       {loading ? (
                         <p>Loading presentation details...</p>
                       ) : presentation?.file_path ? (
-                          <object
-                            data={normalizePathToUrl(
-                              presentation.file_path
-                            )}
-                            type = "application/pdf"
-                            width="100%"
-                            height="600px"
-                            style = {{border: "1px solid #ccc"}}
-                            title="Presentation"
-                          >
-                            <p>
-                              Map not available.
-                            </p>
-                          </object>
-                      ) : (
+                        <object
+                          data={normalizePathToUrl(presentation.file_path)}
+                          type="application/pdf"
+                          width="100%"
+                          height="600px"
+                          style={{ border: "1px solid #ccc" }}
+                          title="Presentation"
+                        >
                           <p>Map not available.</p>
+                        </object>
+                      ) : (
+                        <p>Map not available.</p>
                       )}
                     </div>
 
