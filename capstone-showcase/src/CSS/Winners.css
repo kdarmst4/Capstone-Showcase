@@ -15,6 +15,7 @@ body {
   flex-direction: column;
   box-sizing: border-box;
   min-height: calc(100vh - 73.73px);
+  
 }
 
 .winners__showcase-title {
