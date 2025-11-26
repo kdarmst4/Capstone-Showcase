@@ -37,8 +37,24 @@ export default function ProjectDetails() {
     : "http://localhost:3000/api";
 
   // Mock images array (replace with actual images from winner object when available)
-  const projectImages =
-    (winner?.winning_pic && winner.winning_pic.split(",")) || [];
+  const imgs = (winner: ShowcaseEntry| null) =>
+  {
+    let images: string[] = [];
+    if (winner && winner.winning_pic) {
+      images = winner.winning_pic.split(",").map((img) => img.trim());
+    }
+    const teamimgs = winner && winner.teamPicturePath
+      ? winner.teamPicturePath.split(",").map((img) => img.trim())
+      : [];
+    const posterimgs = winner && winner.posterPicturePath
+      ? winner.posterPicturePath.split(",").map((img) => img.trim())
+      : [];
+    images = images.concat(teamimgs, posterimgs);
+    return images;
+  }
+  const projectImages = 
+    imgs(winner);
+
 
   useEffect(() => {
     if (!winner && projectId) {
